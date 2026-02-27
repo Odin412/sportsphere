@@ -33,30 +33,50 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const loadUserProfile = async (authUser) => {
+    setIsLoadingAuth(true);
     try {
-      setIsLoadingAuth(true);
+      // maybeSingle() returns null instead of throwing when the profile doesn't exist yet
       const { data: profile } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', authUser.id)
-        .single();
+        .maybeSingle();
 
-      const mergedUser = { ...profile, id: authUser.id, email: authUser.email };
-      setUser(mergedUser);
+      if (profile) {
+        setUser({ ...profile, id: authUser.id, email: authUser.email });
+      } else {
+        // No profile yet — try to create one
+        const { data: newProfile } = await supabase
+          .from('profiles')
+          .insert({
+            id: authUser.id,
+            email: authUser.email,
+            full_name: authUser.user_metadata?.full_name || '',
+            avatar_url: authUser.user_metadata?.avatar_url || '',
+          })
+          .select()
+          .maybeSingle();
+
+        if (newProfile) {
+          setUser({ ...newProfile, id: authUser.id, email: authUser.email });
+        } else {
+          // INSERT may have failed because the trigger already created the profile — re-fetch
+          const { data: retried } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', authUser.id)
+            .maybeSingle();
+          setUser({ ...(retried || {}), id: authUser.id, email: authUser.email });
+        }
+      }
+    } catch (error) {
+      console.error('loadUserProfile failed:', error);
+      // Auth is valid even if profile fetch fails — set minimal user so the app can load
+      setUser({ id: authUser.id, email: authUser.email });
+    } finally {
+      // Always complete auth — the session is real regardless of profile DB state
       setIsAuthenticated(true);
       setAuthError(null);
-    } catch (error) {
-      console.error('Profile load failed:', error);
-      // User authenticated but no profile yet — create one
-      const { data: newProfile } = await supabase.from('profiles').insert({
-        id: authUser.id,
-        email: authUser.email,
-        full_name: authUser.user_metadata?.full_name || '',
-        avatar_url: authUser.user_metadata?.avatar_url || '',
-      }).select().single();
-      setUser({ ...newProfile, id: authUser.id, email: authUser.email });
-      setIsAuthenticated(true);
-    } finally {
       setIsLoadingAuth(false);
     }
   };

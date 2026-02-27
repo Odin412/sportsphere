@@ -12,22 +12,16 @@ export const AuthProvider = ({ children }) => {
   const [appPublicSettings] = useState({ id: 'sportsphere', public_settings: {} });
 
   useEffect(() => {
-    // Check current session on mount
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user) {
-        loadUserProfile(session.user);
-      } else {
-        setIsLoadingAuth(false);
-        setIsAuthenticated(false);
-      }
-    });
-
-    // Listen for auth state changes
+    // Official Supabase v2 pattern: onAuthStateChange fires INITIAL_SESSION
+    // at startup (with or without a session), SIGNED_IN on magic link / OAuth,
+    // TOKEN_REFRESHED on refresh, SIGNED_OUT on logout.
+    // This avoids the race condition where getSession() resolves before the
+    // magic-link hash is processed and the SIGNED_IN event is missed.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        if (event === 'SIGNED_IN' && session?.user) {
+        if (session?.user) {
           await loadUserProfile(session.user);
-        } else if (event === 'SIGNED_OUT') {
+        } else {
           setUser(null);
           setIsAuthenticated(false);
           setIsLoadingAuth(false);

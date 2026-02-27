@@ -33,10 +33,17 @@ export default function Login() {
   };
 
   const handleOAuth = async (provider) => {
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: { redirectTo: window.location.origin },
     });
+    if (error) {
+      if (error.message?.includes('provider is not enabled') || error.status === 400) {
+        toast.error(`${provider.charAt(0).toUpperCase() + provider.slice(1)} sign-in isn't configured yet. Use the magic link instead.`);
+      } else {
+        toast.error(error.message);
+      }
+    }
   };
 
   if (sent) {

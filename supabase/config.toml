@@ -1,0 +1,69 @@
+# Supabase local development configuration
+# Run `supabase start` to start the local stack
+# Run `supabase db push` to apply migrations to your cloud project
+# Run `supabase functions deploy` to deploy all edge functions
+
+project_id = "sportsphere"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "storage", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+shadow_port = 54320
+major_version = 15
+
+[studio]
+enabled = true
+port = 54323
+
+[inbucket]
+enabled = true
+port = 54324
+smtp_port = 54325
+pop3_port = 54326
+
+[storage]
+enabled = true
+# File size limit in bytes (50 MB)
+file_size_limit = "52428800"
+
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["https://sportsphere.vercel.app"]
+jwt_expiry = 3600
+enable_refresh_token_rotation = true
+refresh_token_reuse_interval = 10
+enable_signup = true
+# Magic link OTP expiry (1 hour)
+otp_expiry = 3600
+
+[auth.email]
+enable_signup = true
+double_confirm_changes = true
+enable_confirmations = false
+
+[auth.external.google]
+enabled = true
+client_id = "env(GOOGLE_CLIENT_ID)"
+secret = "env(GOOGLE_CLIENT_SECRET)"
+redirect_uri = ""
+
+[auth.external.github]
+enabled = true
+client_id = "env(GITHUB_CLIENT_ID)"
+secret = "env(GITHUB_CLIENT_SECRET)"
+redirect_uri = ""
+
+[functions]
+# Functions are in supabase/functions/*/index.ts
+# Deploy individually: supabase functions deploy <function-name>
+# Deploy all: supabase functions deploy
+
+[analytics]
+enabled = false

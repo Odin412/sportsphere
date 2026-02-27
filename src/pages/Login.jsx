@@ -3,7 +3,7 @@ import { supabase } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, CheckCircle, Zap, Users, Video, Trophy, TrendingUp, Shield } from "lucide-react";
+import { Loader2, Mail, ArrowLeft, Zap, Users, Video, Trophy, TrendingUp, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
@@ -23,21 +23,38 @@ const stats = [
 
 export default function Login() {
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [step, setStep] = useState("email"); // "email" | "code"
 
-  const handleMagicLink = async (e) => {
+  const handleSendCode = async (e) => {
     e.preventDefault();
     if (!email) return;
     setLoading(true);
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: { emailRedirectTo: window.location.origin },
+      options: { shouldCreateUser: true },
     });
     if (error) {
       toast.error(error.message);
     } else {
-      setSent(true);
+      setStep("code");
+    }
+    setLoading(false);
+  };
+
+  const handleVerifyCode = async (e) => {
+    e.preventDefault();
+    if (!code || code.length < 6) return;
+    setLoading(true);
+    const { error } = await supabase.auth.verifyOtp({
+      email,
+      token: code.trim(),
+      type: "email",
+    });
+    if (error) {
+      toast.error("Invalid or expired code. Check your email and try again.");
+      setCode("");
     }
     setLoading(false);
   };
@@ -49,123 +66,159 @@ export default function Login() {
     });
     if (error) {
       if (error.message?.includes("provider is not enabled") || error.status === 400) {
-        toast.error(`${provider.charAt(0).toUpperCase() + provider.slice(1)} sign-in isn't configured yet. Use the magic link instead.`);
+        toast.error(`${provider.charAt(0).toUpperCase() + provider.slice(1)} sign-in isn't configured yet. Use the email code instead.`);
       } else {
         toast.error(error.message);
       }
     }
   };
 
-  if (sent) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-red-950 p-4">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-3xl shadow-2xl p-10 text-center max-w-md w-full space-y-5"
-        >
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-            <CheckCircle className="w-9 h-9 text-green-600" />
-          </div>
-          <h2 className="text-2xl font-black text-gray-900">Check your email</h2>
-          <p className="text-gray-500">
-            We sent a magic link to <span className="font-semibold text-gray-800">{email}</span>.
-            Click it to sign in — no password needed.
+  const HeroPanel = () => (
+    <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-800 to-red-950 p-12 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: "radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-center gap-3 relative z-10"
+      >
+        <img
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png"
+          alt="Sportsphere"
+          className="w-10 h-10 object-contain"
+        />
+        <span className="text-white text-xl font-black tracking-tight">Sportsphere</span>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="relative z-10 space-y-8"
+      >
+        <div className="space-y-4">
+          <h1 className="text-5xl font-black text-white leading-tight">
+            The Sports Community<br />
+            <span className="text-red-400">Built for Athletes</span>
+          </h1>
+          <p className="text-slate-300 text-lg leading-relaxed max-w-sm">
+            Connect with coaches, stream your game, grow your audience, and unlock your full potential.
           </p>
-          <Button
-            variant="outline"
-            onClick={() => setSent(false)}
-            className="rounded-2xl w-full"
+        </div>
+        <ul className="space-y-3">
+          {features.map(({ icon: Icon, text }) => (
+            <li key={text} className="flex items-center gap-3 text-slate-200">
+              <span className="w-8 h-8 rounded-xl bg-red-800/50 flex items-center justify-center flex-shrink-0">
+                <Icon className="w-4 h-4 text-red-300" />
+              </span>
+              <span className="text-sm">{text}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="flex gap-6">
+          {stats.map(({ label, value }) => (
+            <div key={label} className="space-y-0.5">
+              <div className="text-2xl font-black text-white">{value}</div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">{label}</div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.7, delay: 0.4 }}
+        className="absolute bottom-16 right-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-white text-sm max-w-[180px] z-10"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+          <span className="text-xs text-slate-300 font-medium">Live now</span>
+        </div>
+        <p className="font-bold text-sm leading-tight">NBA Pre-season Training Analysis</p>
+        <p className="text-slate-400 text-xs mt-1">2.4K watching</p>
+      </motion.div>
+    </div>
+  );
+
+  if (step === "code") {
+    return (
+      <div className="min-h-screen lg:grid lg:grid-cols-2">
+        <HeroPanel />
+        <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="w-full max-w-sm space-y-8"
           >
-            Use a different email
-          </Button>
-        </motion.div>
+            <div className="flex flex-col items-center gap-3 lg:hidden">
+              <img
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png"
+                alt="Sportsphere"
+                className="w-14 h-14 object-contain"
+              />
+              <span className="text-2xl font-black text-slate-900">Sportsphere</span>
+            </div>
+
+            <div className="space-y-1">
+              <h2 className="text-2xl font-black text-slate-900">Check your email</h2>
+              <p className="text-slate-500 text-sm">
+                We sent a 6-digit code to <span className="font-semibold text-slate-800">{email}</span>
+              </p>
+            </div>
+
+            <form onSubmit={handleVerifyCode} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="code" className="text-sm font-semibold text-slate-700">6-digit code</Label>
+                <Input
+                  id="code"
+                  type="text"
+                  inputMode="numeric"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  placeholder="000000"
+                  className="rounded-xl h-14 border-slate-200 focus:border-red-900 focus:ring-red-900 text-center text-2xl font-mono tracking-widest"
+                  required
+                  autoFocus
+                />
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading || code.length < 6}
+                className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify & Sign In"}
+              </Button>
+            </form>
+
+            <button
+              onClick={() => { setStep("email"); setCode(""); }}
+              className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 transition-colors mx-auto"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Use a different email
+            </button>
+
+            <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
+              <Shield className="w-3 h-3" />
+              <span>Secure passwordless authentication</span>
+            </div>
+          </motion.div>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
-      {/* Left panel — hero / brand */}
-      <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-800 to-red-950 p-12 relative overflow-hidden">
-        {/* Background texture */}
-        <div className="absolute inset-0 opacity-5"
-          style={{
-            backgroundImage: "radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-
-        {/* Logo */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center gap-3 relative z-10"
-        >
-          <img
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png"
-            alt="Sportsphere"
-            className="w-10 h-10 object-contain"
-          />
-          <span className="text-white text-xl font-black tracking-tight">Sportsphere</span>
-        </motion.div>
-
-        {/* Hero text */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="relative z-10 space-y-8"
-        >
-          <div className="space-y-4">
-            <h1 className="text-5xl font-black text-white leading-tight">
-              The Sports Community<br />
-              <span className="text-red-400">Built for Athletes</span>
-            </h1>
-            <p className="text-slate-300 text-lg leading-relaxed max-w-sm">
-              Connect with coaches, stream your game, grow your audience, and unlock your full potential.
-            </p>
-          </div>
-
-          {/* Feature list */}
-          <ul className="space-y-3">
-            {features.map(({ icon: Icon, text }) => (
-              <li key={text} className="flex items-center gap-3 text-slate-200">
-                <span className="w-8 h-8 rounded-xl bg-red-800/50 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-4 h-4 text-red-300" />
-                </span>
-                <span className="text-sm">{text}</span>
-              </li>
-            ))}
-          </ul>
-
-          {/* Stats row */}
-          <div className="flex gap-6">
-            {stats.map(({ label, value }) => (
-              <div key={label} className="space-y-0.5">
-                <div className="text-2xl font-black text-white">{value}</div>
-                <div className="text-xs text-slate-400 uppercase tracking-wider">{label}</div>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Floating accent card */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="absolute bottom-16 right-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl p-4 text-white text-sm max-w-[180px] z-10"
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-xs text-slate-300 font-medium">Live now</span>
-          </div>
-          <p className="font-bold text-sm leading-tight">NBA Pre-season Training Analysis</p>
-          <p className="text-slate-400 text-xs mt-1">2.4K watching</p>
-        </motion.div>
-      </div>
+      <HeroPanel />
 
       {/* Right panel — form */}
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
@@ -190,7 +243,7 @@ export default function Login() {
             <p className="text-slate-500 text-sm">Sign in to continue to Sportsphere</p>
           </div>
 
-          <form onSubmit={handleMagicLink} className="space-y-4">
+          <form onSubmit={handleSendCode} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-sm font-semibold text-slate-700">Email address</Label>
               <Input
@@ -214,7 +267,7 @@ export default function Login() {
               ) : (
                 <>
                   <Mail className="w-4 h-4" />
-                  Send Magic Link
+                  Send Code
                 </>
               )}
             </Button>

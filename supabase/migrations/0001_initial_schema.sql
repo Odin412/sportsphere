@@ -100,7 +100,7 @@ create table if not exists org_invites (
   role text not null,
   invited_by_email text,
   status text default 'pending' check (status in ('pending','accepted','declined')),
-  token text unique default encode(gen_random_bytes(32), 'hex'),
+  token text unique default gen_random_uuid()::text,
   created_at timestamptz default now()
 );
 

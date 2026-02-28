@@ -6,6 +6,7 @@ import PostCard from "../components/feed/PostCard";
 import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
 import UpcomingStreamsSection from "../components/feed/UpcomingStreamsSection";
 import LiveNowSection from "../components/stream/LiveNowSection";
+import SportNewsWidget from "../components/feed/SportNewsWidget";
 import { Loader2, Search, Settings2, Sparkles, Users, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -164,6 +165,11 @@ export default function Feed() {
             <Settings2 className="w-4 h-4" />
           </button>
         </div>
+      )}
+
+      {/* Sports News Widget */}
+      {!searchQuery && !sportFilter && (
+        <SportNewsWidget />
       )}
 
       {/* Live Now */}

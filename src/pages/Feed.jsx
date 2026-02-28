@@ -92,7 +92,6 @@ export default function Feed() {
       if (post.sport?.toLowerCase().includes(q)) score += 30;
       if (post.content?.toLowerCase().includes(q)) score += 20;
       if (post.category?.toLowerCase().includes(q)) score += 10;
-      if (post.ai_tags?.some(t => t.toLowerCase().includes(q))) score += 15;
       return { ...post, _score: score };
     })
     .filter(post => !searchQuery || post._score > 0)
@@ -167,10 +166,8 @@ export default function Feed() {
         </div>
       )}
 
-      {/* Sports News Widget */}
-      {!searchQuery && !sportFilter && (
-        <SportNewsWidget />
-      )}
+      {/* Sports News Widget — always visible */}
+      <SportNewsWidget />
 
       {/* Live Now */}
       {!searchQuery && !sportFilter && (

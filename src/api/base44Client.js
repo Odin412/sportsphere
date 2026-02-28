@@ -175,7 +175,7 @@ const integrations = {
       const {
         data: { publicUrl },
       } = supabase.storage.from('uploads').getPublicUrl(data.path);
-      return { url: publicUrl };
+      return { file_url: publicUrl };
     },
 
     InvokeLLM: async ({ prompt, response_json_schema, add_context_from_internet }) => {

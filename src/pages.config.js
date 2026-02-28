@@ -69,6 +69,7 @@ import Feed from './pages/Feed';
 import ForYou from './pages/ForYou';
 import ForumTopic from './pages/ForumTopic';
 import Forums from './pages/Forums';
+import GetNoticed from './pages/GetNoticed';
 import GroupDetail from './pages/GroupDetail';
 import Groups from './pages/Groups';
 import Guidelines from './pages/Guidelines';
@@ -86,11 +87,13 @@ import OrgMessages from './pages/OrgMessages';
 import OrgRoster from './pages/OrgRoster';
 import OrgSessions from './pages/OrgSessions';
 import ParentView from './pages/ParentView';
+import PerformanceHub from './pages/PerformanceHub';
 import Premium from './pages/Premium';
 import Profile from './pages/Profile';
 import ProfileSettings from './pages/ProfileSettings';
 import Reels from './pages/Reels';
 import SavedContent from './pages/SavedContent';
+import ScoutingHub from './pages/ScoutingHub';
 import Search from './pages/Search';
 import SportHub from './pages/SportHub';
 import Terms from './pages/Terms';
@@ -127,6 +130,7 @@ export const PAGES = {
     "ForYou": ForYou,
     "ForumTopic": ForumTopic,
     "Forums": Forums,
+    "GetNoticed": GetNoticed,
     "GroupDetail": GroupDetail,
     "Groups": Groups,
     "Guidelines": Guidelines,
@@ -144,11 +148,13 @@ export const PAGES = {
     "OrgRoster": OrgRoster,
     "OrgSessions": OrgSessions,
     "ParentView": ParentView,
+    "PerformanceHub": PerformanceHub,
     "Premium": Premium,
     "Profile": Profile,
     "ProfileSettings": ProfileSettings,
     "Reels": Reels,
     "SavedContent": SavedContent,
+    "ScoutingHub": ScoutingHub,
     "Search": Search,
     "SportHub": SportHub,
     "Terms": Terms,

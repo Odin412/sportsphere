@@ -16,11 +16,15 @@ const SPORT_EMOJIS = {
 };
 
 const RSS_FEEDS = [
-  { url: "https://www.espn.com/espn/rss/news", sport: null, source: "ESPN" },
-  { url: "https://www.espn.com/espn/rss/nba/news", sport: "Basketball", source: "ESPN NBA" },
-  { url: "https://www.espn.com/espn/rss/nfl/news", sport: "Football", source: "ESPN NFL" },
-  { url: "https://www.espn.com/espn/rss/soccer/news", sport: "Soccer", source: "ESPN Soccer" },
-  { url: "https://www.espn.com/espn/rss/mma/news", sport: "MMA", source: "UFC" },
+  { url: "https://www.espn.com/espn/rss/news",        sport: null,         source: "ESPN" },
+  { url: "https://www.espn.com/espn/rss/nba/news",    sport: "Basketball", source: "ESPN NBA" },
+  { url: "https://www.espn.com/espn/rss/nfl/news",    sport: "Football",   source: "ESPN NFL" },
+  { url: "https://www.espn.com/espn/rss/mlb/news",    sport: "Baseball",   source: "ESPN MLB" },
+  { url: "https://www.espn.com/espn/rss/nhl/news",    sport: "Hockey",     source: "ESPN NHL" },
+  { url: "https://www.espn.com/espn/rss/soccer/news", sport: "Soccer",     source: "ESPN Soccer" },
+  { url: "https://www.espn.com/espn/rss/tennis/news", sport: "Tennis",     source: "ESPN Tennis" },
+  { url: "https://www.espn.com/espn/rss/golf/news",   sport: "Golf",       source: "ESPN Golf" },
+  { url: "https://www.espn.com/espn/rss/mma/news",    sport: "MMA",        source: "ESPN MMA" },
 ];
 
 const RSS2JSON = "https://api.rss2json.com/v1/api.json";
@@ -29,7 +33,7 @@ async function fetchAllNews() {
   const results = await Promise.allSettled(
     RSS_FEEDS.map(async (feed) => {
       const res = await fetch(
-        `${RSS2JSON}?rss_url=${encodeURIComponent(feed.url)}&count=5`,
+        `${RSS2JSON}?rss_url=${encodeURIComponent(feed.url)}&count=8`,
         { signal: AbortSignal.timeout(8000) }
       );
       const json = await res.json();
@@ -74,8 +78,8 @@ export default function SportNewsWidget() {
   const { data: news = [], isLoading } = useQuery({
     queryKey: ["sports-news"],
     queryFn: fetchAllNews,
-    staleTime: 30 * 60 * 1000,
-    refetchInterval: 30 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+    refetchInterval: 10 * 60 * 1000,
     retry: 1,
   });
 
@@ -109,7 +113,7 @@ export default function SportNewsWidget() {
         </div>
 
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-          {news.slice(0, 18).map((article) => (
+          {news.slice(0, 30).map((article) => (
             <button
               key={article.id}
               onClick={() => setSelectedArticle(article)}

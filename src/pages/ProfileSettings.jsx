@@ -16,7 +16,7 @@ import {
   ArrowLeft, Camera, Loader2, Check, Bell, Globe, Activity,
   User, Heart, MessageCircle, UserPlus, AtSign, Trophy, Radio,
   DollarSign, Lightbulb, Smartphone, Mail, Share2, FileText,
-  Instagram, Twitter, Youtube, Linkedin, Phone, Upload
+  Instagram, Twitter, Youtube, Linkedin, Phone, Upload, Music2
 } from "lucide-react";
 import { toast } from "sonner";
 import moment from "moment";
@@ -345,6 +345,7 @@ export default function ProfileSettings() {
             {[
               { key: "instagram", label: "Instagram", Icon: Instagram, prefix: "instagram.com/", placeholder: "username" },
               { key: "twitter", label: "X / Twitter", Icon: Twitter, prefix: "x.com/", placeholder: "username" },
+              { key: "tiktok", label: "TikTok", Icon: Music2, prefix: "tiktok.com/@", placeholder: "username" },
               { key: "youtube", label: "YouTube", Icon: Youtube, prefix: "", placeholder: "channel URL" },
               { key: "linkedin", label: "LinkedIn", Icon: Linkedin, prefix: "linkedin.com/in/", placeholder: "username" },
             ].map(({ key, label, Icon, placeholder }) => (

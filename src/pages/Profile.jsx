@@ -22,7 +22,7 @@ import MonetizationSetup from "../components/monetization/MonetizationSetup";
 import BadgeDisplay from "../components/gamification/BadgeDisplay";
 import FeaturedHighlight from "../components/profile/FeaturedHighlight";
 import ReelsStatsPanel from "../components/profile/ReelsStatsPanel";
-import { Instagram, Twitter, Youtube, Linkedin, Globe, MessageCircle } from "lucide-react";
+import { Instagram, Twitter, Youtube, Linkedin, Globe, Music2 } from "lucide-react";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
 const ROLES = ["athlete", "coach", "trainer", "instructor", "fan"];
@@ -307,31 +307,31 @@ export default function Profile() {
                 <div className="flex items-center gap-2 mt-3 flex-wrap">
                   {user.social_links.instagram && (
                     <a href={`https://instagram.com/${user.social_links.instagram}`} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-pink-600 hover:text-pink-700 bg-pink-50 px-2.5 py-1 rounded-full transition-colors">
+                      className="flex items-center gap-1 text-xs text-pink-400 hover:text-pink-300 bg-pink-900/30 border border-pink-800 px-2.5 py-1 rounded-full transition-colors">
                       <Instagram className="w-3 h-3" /> Instagram
                     </a>
                   )}
                   {user.social_links.twitter && (
                     <a href={`https://x.com/${user.social_links.twitter}`} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-sky-600 hover:text-sky-700 bg-sky-50 px-2.5 py-1 rounded-full transition-colors">
+                      className="flex items-center gap-1 text-xs text-sky-400 hover:text-sky-300 bg-sky-900/30 border border-sky-800 px-2.5 py-1 rounded-full transition-colors">
                       <Twitter className="w-3 h-3" /> X
-                    </a>
-                  )}
-                  {user.social_links.youtube && (
-                    <a href={user.social_links.youtube} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-red-600 hover:text-red-700 bg-red-50 px-2.5 py-1 rounded-full transition-colors">
-                      <Youtube className="w-3 h-3" /> YouTube
                     </a>
                   )}
                   {user.social_links.tiktok && (
                     <a href={`https://tiktok.com/@${user.social_links.tiktok}`} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-slate-700 hover:text-slate-900 bg-slate-100 px-2.5 py-1 rounded-full transition-colors">
-                      <MessageCircle className="w-3 h-3" /> TikTok
+                      className="flex items-center gap-1 text-xs text-gray-300 hover:text-white bg-gray-800 border border-gray-700 px-2.5 py-1 rounded-full transition-colors">
+                      <Music2 className="w-3 h-3" /> TikTok
+                    </a>
+                  )}
+                  {user.social_links.youtube && (
+                    <a href={user.social_links.youtube} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 bg-red-900/30 border border-red-800 px-2.5 py-1 rounded-full transition-colors">
+                      <Youtube className="w-3 h-3" /> YouTube
                     </a>
                   )}
                   {user.social_links.website && (
                     <a href={user.social_links.website} target="_blank" rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full transition-colors">
+                      className="flex items-center gap-1 text-xs text-emerald-400 hover:text-emerald-300 bg-emerald-900/30 border border-emerald-800 px-2.5 py-1 rounded-full transition-colors">
                       <Globe className="w-3 h-3" /> Website
                     </a>
                   )}

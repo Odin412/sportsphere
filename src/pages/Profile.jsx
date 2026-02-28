@@ -117,6 +117,12 @@ export default function Profile() {
     enabled: !!user,
   });
 
+  const { data: myFollowers = [] } = useQuery({
+    queryKey: ["my-followers", user?.email],
+    queryFn: () => base44.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
+    enabled: !!user,
+  });
+
   const { data: userPoints } = useQuery({
     queryKey: ["user-points", user?.email],
     queryFn: async () => {
@@ -233,47 +239,63 @@ export default function Profile() {
     setShowPersonalInfoDialog(false);
   };
 
-  if (!user) return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-slate-300" /></div>;
+  if (!user) return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-gray-400" /></div>;
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-8">
       {/* Profile header */}
-      <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-        <div className="h-32 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-amber-500/10" />
+      <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+        <div className="h-32 bg-gradient-to-br from-red-950 via-gray-900 to-black relative">
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600/10 to-orange-500/10" />
         </div>
         <div className="px-6 pb-6 -mt-12 relative">
           <div className="flex flex-col sm:flex-row sm:items-end gap-4">
             <div className="relative">
-              <Avatar className="w-24 h-24 ring-4 ring-white shadow-lg">
+              <Avatar className="w-24 h-24 ring-4 ring-gray-900 shadow-lg">
                 <AvatarImage src={user.avatar_url} />
-                <AvatarFallback className="bg-gradient-to-br from-orange-400 to-amber-300 text-white text-2xl font-bold">
+                <AvatarFallback className="bg-red-600 text-white text-2xl font-bold">
                   {user.full_name?.[0]?.toUpperCase()}
                 </AvatarFallback>
               </Avatar>
-              <label className="absolute bottom-0 right-0 w-8 h-8 bg-slate-900 rounded-full flex items-center justify-center cursor-pointer hover:bg-slate-700 transition-colors shadow-lg">
+              <label className="absolute bottom-0 right-0 w-8 h-8 bg-gray-800 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-colors shadow-lg">
                 {avatarUploading ? <Loader2 className="w-4 h-4 animate-spin text-white" /> : <Camera className="w-4 h-4 text-white" />}
                 <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
               </label>
             </div>
             <div className="flex-1">
-              <h1 className="text-2xl font-bold text-slate-900">{user.full_name}</h1>
-              {user.username && <p className="text-blue-600 font-medium text-sm">@{user.username}</p>}
-              <p className="text-slate-500 text-sm">{user.email}</p>
-              {user.bio && <p className="text-sm text-slate-600 mt-2 max-w-md">{user.bio}</p>}
+              <h1 className="text-2xl font-bold text-white">{user.full_name}</h1>
+              {user.username && <p className="text-red-400 font-medium text-sm">@{user.username}</p>}
+              <p className="text-gray-500 text-sm">{user.email}</p>
+              {user.bio && <p className="text-sm text-gray-400 mt-2 max-w-md">{user.bio}</p>}
+
+              {/* Follower / Following counts */}
+              <div className="flex items-center gap-4 mt-2">
+                <span className="text-sm">
+                  <span className="font-bold text-white">{myFollowers.length}</span>
+                  <span className="text-gray-500 ml-1">Followers</span>
+                </span>
+                <span className="text-sm">
+                  <span className="font-bold text-white">{followedCreators?.length || 0}</span>
+                  <span className="text-gray-500 ml-1">Following</span>
+                </span>
+                <span className="text-sm">
+                  <span className="font-bold text-white">{myPosts?.length || 0}</span>
+                  <span className="text-gray-500 ml-1">Posts</span>
+                </span>
+              </div>
 
               {/* Preferred sports + skill level */}
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {user.skill_level && (
-                  <Badge className="bg-slate-900 text-white text-xs capitalize">{user.skill_level}</Badge>
+                  <Badge className="bg-gray-800 text-white text-xs capitalize">{user.skill_level}</Badge>
                 )}
                 {(user.preferred_sports?.length > 0 ? user.preferred_sports : sportProfiles?.map(p => p.sport) || []).map(sport => (
-                  <Badge key={sport} className="bg-orange-50 text-orange-700 border border-orange-200 text-xs">{sport}</Badge>
+                  <Badge key={sport} className="bg-red-900/30 text-red-400 border border-red-800 text-xs">{sport}</Badge>
                 ))}
               </div>
 
               {/* Personal info row */}
-              <div className="flex flex-wrap gap-2 mt-2 text-xs text-slate-500">
+              <div className="flex flex-wrap gap-2 mt-2 text-xs text-gray-500">
                 {user.location && <span className="flex items-center gap-0.5"><MapPin className="w-3 h-3" />{user.location}</span>}
                 {user.age && <span>Age: {user.age}</span>}
                 {user.professional_team && <span>• 🏆 {user.professional_team}</span>}
@@ -316,21 +338,21 @@ export default function Profile() {
                 </div>
               )}
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Link to={createPageUrl("ProfileSettings")}>
-                <Button variant="outline" size="sm" className="rounded-xl gap-2">
+                <Button variant="outline" size="sm" className="rounded-xl gap-2 border-gray-700 text-gray-300 hover:bg-gray-800">
                   <Settings className="w-4 h-4" />
                   Settings
                 </Button>
               </Link>
-              <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={() => setShowPersonalInfoDialog(true)}>
+              <Button variant="outline" size="sm" className="rounded-xl gap-2 border-gray-700 text-gray-300 hover:bg-gray-800" onClick={() => setShowPersonalInfoDialog(true)}>
                 <Edit2 className="w-4 h-4" />
                 Edit
               </Button>
-              <Button variant="outline" size="sm" onClick={() => setShowMonetization(true)} className="rounded-xl gap-2 border-green-200 text-green-700 hover:bg-green-50">
+              <Button variant="outline" size="sm" onClick={() => setShowMonetization(true)} className="rounded-xl gap-2 border-green-800 text-green-400 hover:bg-green-900/30">
                 <DollarSign className="w-4 h-4" /> Monetization
               </Button>
-              <Button variant="outline" size="sm" className="rounded-xl gap-2" onClick={() => base44.auth.logout()}>
+              <Button variant="outline" size="sm" className="rounded-xl gap-2 border-gray-700 text-gray-400 hover:bg-gray-800" onClick={() => base44.auth.logout()}>
                 <LogOut className="w-4 h-4" />
                 Logout
               </Button>

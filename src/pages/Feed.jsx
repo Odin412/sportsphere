@@ -1,41 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import PostCard from "../components/feed/PostCard";
-import SportFilter from "../components/feed/SportFilter";
 import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
 import UpcomingStreamsSection from "../components/feed/UpcomingStreamsSection";
 import LiveNowSection from "../components/stream/LiveNowSection";
-import StreamRecommendations from "../components/stream/StreamRecommendations";
-import { Loader2, Search, Settings2, Sparkles, Users, Camera, Radio, Film, ChevronDown, X } from "lucide-react";
+import { Loader2, Search, Settings2, Sparkles, Users, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FeedPagination, { PAGE_SIZE } from "@/components/feed/FeedPagination";
-import { Link } from "react-router-dom";
-import { createPageUrl } from "@/utils";
+
+const SPORTS_LIST = [
+  { name: "Basketball", emoji: "🏀" },
+  { name: "Soccer", emoji: "⚽" },
+  { name: "Football", emoji: "🏈" },
+  { name: "Baseball", emoji: "⚾" },
+  { name: "Tennis", emoji: "🎾" },
+  { name: "Golf", emoji: "⛳" },
+  { name: "Swimming", emoji: "🏊" },
+  { name: "Boxing", emoji: "🥊" },
+  { name: "MMA", emoji: "🥋" },
+  { name: "Track", emoji: "🏃" },
+  { name: "Volleyball", emoji: "🏐" },
+  { name: "Hockey", emoji: "🏒" },
+  { name: "Cycling", emoji: "🚴" },
+  { name: "Yoga", emoji: "🧘" },
+  { name: "CrossFit", emoji: "💪" },
+  { name: "Softball", emoji: "🥎" },
+];
 
 export default function Feed() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [sportFilter, setSportFilter] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showPreferences, setShowPreferences] = useState(false);
   const [page, setPage] = useState(1);
   const [feedTab, setFeedTab] = useState("forYou");
-  const [showSportDropdown, setShowSportDropdown] = useState(false);
   const resetPage = () => setPage(1);
-
-  useEffect(() => {
-    if (!showSportDropdown) return;
-    const close = () => setShowSportDropdown(false);
-    document.addEventListener("mousedown", close);
-    return () => document.removeEventListener("mousedown", close);
-  }, [showSportDropdown]);
-
-  useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
-  }, []);
 
   const { data: preferences } = useQuery({
     queryKey: ["feed-preferences", user?.email],
@@ -59,47 +61,23 @@ export default function Feed() {
 
   const { data: allPosts, isLoading, refetch } = useQuery({
     queryKey: ["feed-posts", sportFilter],
-    queryFn: () => {
-      if (sportFilter) {
-        return base44.entities.Post.filter({ sport: sportFilter }, "-created_date", 50);
-      }
-      return base44.entities.Post.list("-created_date", 50);
-    },
+    queryFn: () => sportFilter
+      ? base44.entities.Post.filter({ sport: sportFilter }, "-created_date", 50)
+      : base44.entities.Post.list("-created_date", 50),
     staleTime: 60000,
     refetchInterval: 120000,
     retry: 2,
     retryDelay: 1000,
   });
 
-  // Apply user preferences filtering
   const filteredPosts = allPosts?.filter(post => {
-    // Exclude sports
-    if (preferences?.excluded_sports?.includes(post.sport)) {
-      return false;
-    }
-    
-    // If user has preferred sports, only show those
-    if (preferences?.preferred_sports?.length > 0) {
-      if (!preferences.preferred_sports.includes(post.sport)) {
-        return false;
-      }
-    }
-    
-    // Filter by content types if specified
-    if (preferences?.content_types?.length > 0) {
-      if (!preferences.content_types.includes(post.category)) {
-        return false;
-      }
-    }
-    
+    if (preferences?.excluded_sports?.includes(post.sport)) return false;
+    if (preferences?.preferred_sports?.length > 0 && !preferences.preferred_sports.includes(post.sport)) return false;
+    if (preferences?.content_types?.length > 0 && !preferences.content_types.includes(post.category)) return false;
     return true;
   });
 
-  // Following tab: only show posts from followed users, chronological
-  const followingPosts = filteredPosts?.filter(post =>
-    followedUsers?.includes(post.author_email)
-  );
-
+  const followingPosts = filteredPosts?.filter(p => followedUsers?.includes(p.author_email));
   const activePosts = feedTab === "following" ? followingPosts : filteredPosts;
 
   const searchedPosts = activePosts
@@ -122,183 +100,73 @@ export default function Feed() {
   const totalPosts = searchedPosts?.length || 0;
   const posts = searchedPosts?.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  // Get highlight reels for preferred sports
-  const highlightSports = preferences?.preferred_sports?.length > 0 
-    ? preferences.preferred_sports 
-    : ["Basketball", "Soccer", "Football", "Tennis"];
-
-  const { data: highlightReels } = useQuery({
-    queryKey: ["highlight-reels", highlightSports],
-    queryFn: async () => {
-      // Single request instead of N parallel requests to avoid rate limits
-      const allHighlights = await base44.entities.Post.filter(
-        { category: "highlight" },
-        "-created_date",
-        40
-      );
-      // Group by sport client-side
-      const bySport = {};
-      for (const post of allHighlights) {
-        if (highlightSports.includes(post.sport)) {
-          if (!bySport[post.sport]) bySport[post.sport] = [];
-          if (bySport[post.sport].length < 5) bySport[post.sport].push(post);
-        }
-      }
-      return Object.entries(bySport)
-        .map(([sport, posts]) => ({ sport, posts }))
-        .filter(r => r.posts.length > 0);
-    },
-    enabled: highlightSports.length > 0,
-    staleTime: 5 * 60 * 1000, // cache for 5 minutes
-  });
-
-  const SPORTS_LIST = [
-    { name: "Basketball", emoji: "🏀" }, { name: "Soccer", emoji: "⚽" },
-    { name: "Football", emoji: "🏈" }, { name: "Baseball", emoji: "⚾" },
-    { name: "Tennis", emoji: "🎾" }, { name: "Golf", emoji: "⛳" },
-    { name: "Swimming", emoji: "🏊" }, { name: "Boxing", emoji: "🥊" },
-    { name: "MMA", emoji: "🥋" }, { name: "Track", emoji: "🏃" },
-    { name: "Volleyball", emoji: "🏐" }, { name: "Hockey", emoji: "🏒" },
-    { name: "Cycling", emoji: "🚴" }, { name: "Yoga", emoji: "🧘" },
-    { name: "CrossFit", emoji: "💪" }, { name: "Softball", emoji: "🥎" },
-  ];
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6 space-y-4">
+    <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
 
-      {/* Search Bar */}
-      <div className="relative group">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-purple-400 group-focus-within:text-purple-600 transition-colors" />
+      {/* Search bar */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
         <Input
           value={searchQuery}
           onChange={e => { setSearchQuery(e.target.value); resetPage(); }}
-          placeholder="Search posts, users, sports... 🔍"
-          className="pl-12 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-purple-100 focus:border-purple-400 h-12 shadow-xl shadow-purple-500/10 font-medium placeholder:text-slate-400 transition-all"
+          placeholder="Search posts, athletes, sports..."
+          className="pl-10 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 h-10 focus:border-red-500 focus:ring-red-500/20"
         />
       </div>
 
-      {/* Quick Action Bar */}
-      <div className="grid grid-cols-3 gap-3">
-        {/* Post Photo/Video */}
-        <Link to={createPageUrl("CreatePost")}>
-          <button className="relative w-full overflow-hidden flex flex-col items-center justify-end gap-1.5 pt-2 pb-3 px-2 rounded-2xl bg-gradient-to-br from-[#1a3a6b] via-[#1e4d8c] to-[#0f2a52] text-white shadow-2xl shadow-blue-900/50 hover:shadow-blue-900/70 hover:scale-110 active:scale-95 transition-all duration-200 h-24 border border-white/10">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png" alt="" className="absolute inset-0 w-full h-full object-contain opacity-50 scale-[3.5] pointer-events-none select-none" />
-            {/* Icon */}
-            <div className="relative z-10 w-8 h-8 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-inner">
-              <Camera className="w-4 h-4" />
-            </div>
-            <span className="relative z-10 text-[11px] font-bold tracking-wide">Post</span>
-          </button>
-        </Link>
-
-        {/* Go Live */}
-        <Link to={createPageUrl("Live")}>
-          <button className="relative w-full overflow-hidden flex flex-col items-center justify-end gap-1.5 pt-2 pb-3 px-2 rounded-2xl bg-gradient-to-br from-[#1a3a6b] via-[#1e4d8c] to-[#0f2a52] text-white shadow-2xl shadow-blue-900/50 hover:shadow-blue-900/70 hover:scale-110 active:scale-95 transition-all duration-200 h-24 border border-white/10">
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png" alt="" className="absolute inset-0 w-full h-full object-contain opacity-50 scale-[3.5] pointer-events-none select-none" />
-            <div className="relative z-10 w-8 h-8 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-inner">
-              <Radio className="w-4 h-4" />
-            </div>
-            <span className="relative z-10 text-[11px] font-bold tracking-wide">Go Live</span>
-          </button>
-        </Link>
-
-        {/* Reels */}
-        <Link to={createPageUrl("CreateReel")}>
-          <button className="relative w-full overflow-hidden flex flex-col items-center justify-end gap-1.5 pt-2 pb-3 px-2 rounded-2xl text-white shadow-2xl shadow-indigo-700/50 hover:shadow-indigo-700/70 hover:scale-110 active:scale-95 transition-all duration-200 h-24 border border-white/10" style={{background:"linear-gradient(135deg, #0f2a52 0%, #1a3a6b 50%, #1e4d8c 100%)"}}>
-            <img src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png" alt="" className="absolute inset-0 w-full h-full object-contain opacity-50 scale-[3.5] pointer-events-none select-none" />
-            <div className="relative z-10 w-8 h-8 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20 shadow-inner">
-              <Film className="w-4 h-4" />
-            </div>
-            <span className="relative z-10 text-[11px] font-bold tracking-wide">Reels</span>
-          </button>
-        </Link>
-      </div>
-
-      {/* Sport Filter Dropdown */}
-      <div className="relative" onMouseDown={e => e.stopPropagation()}>
+      {/* Sport filter chips */}
+      <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
         <button
-          onClick={() => setShowSportDropdown(s => !s)}
-          className="w-full flex items-center justify-between px-4 py-3 rounded-2xl bg-white border-2 border-slate-200 hover:border-red-300 shadow-sm transition-all font-semibold text-slate-700"
+          onClick={() => { setSportFilter(null); resetPage(); }}
+          className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+            !sportFilter ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
+          }`}
         >
-          <span className="flex items-center gap-2">
-            {sportFilter ? (
-              <>
-                <span>{SPORTS_LIST.find(s => s.name === sportFilter)?.emoji}</span>
-                <span>{sportFilter}</span>
-              </>
-            ) : (
-              <>
-                <span>🌟</span>
-                <span>All Sports</span>
-              </>
-            )}
-          </span>
-          <div className="flex items-center gap-2">
-            {sportFilter && (
-              <button
-                onClick={e => { e.stopPropagation(); setSportFilter(null); resetPage(); setShowSportDropdown(false); }}
-                className="p-1 rounded-full hover:bg-red-100 text-red-400 transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-            <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${showSportDropdown ? "rotate-180" : ""}`} />
-          </div>
+          🌟 All
         </button>
-
-        {showSportDropdown && (
-          <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-2xl z-30 p-3">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2 px-1">Choose a Sport</p>
-            <div className="grid grid-cols-3 gap-1.5 max-h-60 overflow-y-auto">
-              <button
-                onClick={() => { setSportFilter(null); resetPage(); setShowSportDropdown(false); }}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${!sportFilter ? "bg-red-900 text-white" : "hover:bg-slate-100 text-slate-600"}`}
-              >
-                <span>🌟</span><span>All</span>
-              </button>
-              {SPORTS_LIST.map(s => (
-                <button
-                  key={s.name}
-                  onClick={() => { setSportFilter(s.name); resetPage(); setShowSportDropdown(false); }}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all ${sportFilter === s.name ? "bg-red-900 text-white" : "hover:bg-slate-100 text-slate-600"}`}
-                >
-                  <span>{s.emoji}</span><span>{s.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        {SPORTS_LIST.map(s => (
+          <button
+            key={s.name}
+            onClick={() => { setSportFilter(s.name === sportFilter ? null : s.name); resetPage(); }}
+            className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+              sportFilter === s.name ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
+            }`}
+          >
+            {s.emoji} {s.name}
+          </button>
+        ))}
       </div>
 
-      {/* Feed Tabs */}
+      {/* Feed tabs */}
       {user && (
-        <Tabs value={feedTab} onValueChange={v => { setFeedTab(v); resetPage(); }} className="w-full">
-          <TabsList className="w-full rounded-2xl bg-slate-100 h-11">
-            <TabsTrigger value="forYou" className="flex-1 rounded-xl gap-2 text-sm font-semibold">
-              <Sparkles className="w-4 h-4" /> For You
-            </TabsTrigger>
-            <TabsTrigger value="following" className="flex-1 rounded-xl gap-2 text-sm font-semibold">
-              <Users className="w-4 h-4" /> Following
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-      )}
-
-      {/* Preferences Button */}
-      {user && (
-        <div className="flex justify-end">
-          <Button
+        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800">
+          <button
+            onClick={() => { setFeedTab("forYou"); resetPage(); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${
+              feedTab === "forYou" ? "bg-red-600 text-white" : "text-gray-500 hover:text-white"
+            }`}
+          >
+            <Sparkles className="w-4 h-4" /> For You
+          </button>
+          <button
+            onClick={() => { setFeedTab("following"); resetPage(); }}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${
+              feedTab === "following" ? "bg-red-600 text-white" : "text-gray-500 hover:text-white"
+            }`}
+          >
+            <Users className="w-4 h-4" /> Following
+          </button>
+          <button
             onClick={() => setShowPreferences(true)}
-            variant="outline"
-            className="rounded-2xl gap-2 border-slate-200 hover:border-red-300 hover:bg-red-50 text-slate-600 text-sm"
+            className="p-2 rounded-lg text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
+            title="Feed Preferences"
           >
             <Settings2 className="w-4 h-4" />
-            Feed Preferences
-          </Button>
+          </button>
         </div>
       )}
 
-      {/* Live Now Section */}
+      {/* Live Now */}
       {!searchQuery && !sportFilter && (
         <LiveNowSection user={user} userPreferences={preferences} />
       )}
@@ -308,60 +176,38 @@ export default function Feed() {
         <UpcomingStreamsSection user={user} />
       )}
 
-      {/* Highlight Reels */}
-      {highlightReels?.length > 0 && !searchQuery && !sportFilter && (
-        <div className="space-y-6">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-amber-500" />
-            <h2 className="text-xl font-bold text-slate-900">Highlight Reels</h2>
-          </div>
-          {highlightReels.map(reel => (
-            <div key={reel.sport} className="space-y-3">
-              <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold text-slate-800">{reel.sport} Highlights 🔥</h3>
-                <Badge className="bg-amber-100 text-amber-700">{reel.posts.length}</Badge>
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {reel.posts.map(post => (
-                  <PostCard key={post.id} post={post} currentUser={user} onUpdate={refetch} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Regular Posts */}
+      {/* Posts */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 mb-4">
-          {feedTab === "following" ? "From People You Follow" : "Latest Posts"}
-        </h2>
         {isLoading ? (
-        <div className="flex justify-center py-20">
-          <Loader2 className="w-8 h-8 animate-spin text-slate-300" />
-        </div>
-      ) : posts?.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-6xl mb-4">{feedTab === "following" ? "👥" : "🏟️"}</p>
-          <p className="text-slate-500 font-medium">{feedTab === "following" ? "No posts from people you follow yet" : "No posts yet"}</p>
-          <p className="text-slate-400 text-sm mt-1">{feedTab === "following" ? "Follow athletes to see their content here!" : "Be the first to share something!"}</p>
-        </div>
-      ) : (
-        <div className="space-y-5">
-          {posts?.map(post => (
-            <PostCard key={post.id} post={post} currentUser={user} onUpdate={refetch} />
-          ))}
-        </div>
+          <div className="flex justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+          </div>
+        ) : posts?.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-5xl mb-4">{feedTab === "following" ? "👥" : "🏟️"}</p>
+            <p className="text-gray-400 font-medium">
+              {feedTab === "following" ? "No posts from people you follow yet" : "No posts yet"}
+            </p>
+            <p className="text-gray-600 text-sm mt-1">
+              {feedTab === "following" ? "Follow athletes to see their content here!" : "Be the first to share something!"}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {posts?.map(post => (
+              <PostCard key={post.id} post={post} currentUser={user} onUpdate={refetch} />
+            ))}
+          </div>
         )}
-        <FeedPagination total={totalPosts} page={page} onChange={p => { setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }} />
+        <FeedPagination
+          total={totalPosts}
+          page={page}
+          onChange={p => { setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}
+        />
       </div>
 
-      {/* Preferences Dialog */}
       {showPreferences && user && (
-        <FeedPreferencesDialog
-          user={user}
-          onClose={() => setShowPreferences(false)}
-        />
+        <FeedPreferencesDialog user={user} onClose={() => setShowPreferences(false)} />
       )}
     </div>
   );

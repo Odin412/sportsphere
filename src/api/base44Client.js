@@ -366,6 +366,13 @@ const entities = {
 
   // Moderation
   ModerationFlag: makeEntity('moderation_flags'),
+  Report: makeEntity('reports'),
+
+  // Comments (dedicated table)
+  Comment: makeEntity('comments'),
+
+  // Typing indicators (for messaging)
+  TypingIndicator: makeEntity('typing_indicators'),
 
   // Monetization
   Subscription: makeEntity('subscriptions'),

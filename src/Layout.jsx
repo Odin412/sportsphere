@@ -7,7 +7,7 @@ import {
   Home, User, MessageCircle, Search, Bell, Plus, Menu, X,
   Trophy, Flame, Globe, Sparkles, Radio, Activity, Bookmark,
   Crown, Video, Shield, ShieldAlert, Settings, ChevronDown,
-  ChevronUp, Compass, Zap, Eye,
+  ChevronUp, Compass, Zap, Eye, BarChart2, Crosshair,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RecommendationNotification from "./components/notifications/RecommendationNotification";
@@ -30,6 +30,8 @@ const PRIMARY_NAV = [
 const SECONDARY_NAV = [
   { name: "For You", page: "ForYou", icon: Sparkles },
   { name: "Get Noticed", page: "GetNoticed", icon: Eye },
+  { name: "Performance", page: "PerformanceHub", icon: BarChart2 },
+  { name: "Scouting Hub", page: "ScoutingHub", icon: Crosshair },
   { name: "Events", page: "Events", icon: Trophy },
   { name: "Forums", page: "Forums", icon: MessageCircle },
   { name: "Groups", page: "Groups", icon: Globe },

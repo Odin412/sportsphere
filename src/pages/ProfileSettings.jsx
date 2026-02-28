@@ -150,21 +150,33 @@ export default function ProfileSettings() {
     const file = e.target.files[0];
     if (!file) return;
     setAvatarUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    await base44.auth.updateMe({ avatar_url: file_url });
-    setUser(prev => ({ ...prev, avatar_url: file_url }));
-    setAvatarUploading(false);
-    toast.success("Profile photo updated");
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.auth.updateMe({ avatar_url: file_url });
+      setUser(prev => ({ ...prev, avatar_url: file_url }));
+      toast.success("Profile photo updated");
+    } catch (err) {
+      toast.error("Upload failed. Check Supabase storage settings.");
+      console.error("Avatar upload error:", err);
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   const handleCoverUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
     setCoverUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setForm(prev => ({ ...prev, cover_url: file_url }));
-    setCoverUploading(false);
-    toast.success("Cover photo updated");
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setForm(prev => ({ ...prev, cover_url: file_url }));
+      toast.success("Cover photo updated");
+    } catch (err) {
+      toast.error("Upload failed. Check Supabase storage settings.");
+      console.error("Cover upload error:", err);
+    } finally {
+      setCoverUploading(false);
+    }
   };
 
   const handleUsernameChange = (val) => {

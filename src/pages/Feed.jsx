@@ -7,10 +7,13 @@ import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
 import UpcomingStreamsSection from "../components/feed/UpcomingStreamsSection";
 import LiveNowSection from "../components/stream/LiveNowSection";
 import SportNewsWidget from "../components/feed/SportNewsWidget";
-import { Loader2, Search, Settings2, Sparkles, Users, X } from "lucide-react";
+import StoriesBar from "../components/feed/StoriesBar";
+import StoryViewer from "../components/feed/StoryViewer";
+import { Loader2, Search, Settings2, Sparkles, Users, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import FeedPagination, { PAGE_SIZE } from "@/components/feed/FeedPagination";
+import moment from "moment";
 
 const SPORTS_LIST = [
   { name: "Basketball", emoji: "🏀" },
@@ -31,6 +34,36 @@ const SPORTS_LIST = [
   { name: "Softball", emoji: "🥎" },
 ];
 
+const SPORT_EMOJIS_MAP = {
+  Basketball: "🏀", Soccer: "⚽", Football: "🏈", Baseball: "⚾",
+  Tennis: "🎾", Golf: "⛳", MMA: "🥋", Hockey: "🏒",
+};
+
+function InlineNewsCard({ article }) {
+  return (
+    <a
+      href={article.link}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-xl p-3 hover:border-red-800 transition-colors group no-underline"
+    >
+      <span className="text-2xl flex-shrink-0">{SPORT_EMOJIS_MAP[article.sport] || "📰"}</span>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-0.5">
+          <span className="text-[10px] font-bold text-red-500 uppercase tracking-wide">
+            {article.source}
+          </span>
+          <span className="text-[10px] text-gray-600">{moment(article.pubDate).fromNow()}</span>
+        </div>
+        <p className="text-white text-sm font-semibold line-clamp-2 group-hover:text-red-300 transition-colors leading-snug">
+          {article.title}
+        </p>
+      </div>
+      <ExternalLink className="w-3.5 h-3.5 text-gray-600 group-hover:text-red-500 flex-shrink-0 mt-1" />
+    </a>
+  );
+}
+
 export default function Feed() {
   const { user } = useAuth();
   const [sportFilter, setSportFilter] = useState(null);
@@ -38,6 +71,7 @@ export default function Feed() {
   const [showPreferences, setShowPreferences] = useState(false);
   const [page, setPage] = useState(1);
   const [feedTab, setFeedTab] = useState("forYou");
+  const [storySession, setStorySession] = useState(null);
   const resetPage = () => setPage(1);
 
   const { data: preferences } = useQuery({
@@ -71,6 +105,13 @@ export default function Feed() {
     retryDelay: 1000,
   });
 
+  // Passive read from the sports-news cache (SportNewsWidget populates it)
+  const { data: newsItems = [] } = useQuery({
+    queryKey: ["sports-news"],
+    staleTime: 10 * 60 * 1000,
+    enabled: false,
+  });
+
   const filteredPosts = allPosts?.filter(post => {
     if (preferences?.excluded_sports?.includes(post.sport)) return false;
     if (preferences?.preferred_sports?.length > 0 && !preferences.preferred_sports.includes(post.sport)) return false;
@@ -102,6 +143,16 @@ export default function Feed() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
+
+      {/* Stories bar — 24h posts with media (Instagram/FB Stories style) */}
+      {user && (
+        <StoriesBar
+          user={user}
+          onStoryClick={(items, group, markSeen) =>
+            setStorySession({ items, group, markSeen })
+          }
+        />
+      )}
 
       {/* Search bar */}
       <div className="relative">
@@ -166,7 +217,7 @@ export default function Feed() {
         </div>
       )}
 
-      {/* Sports News Widget — always visible */}
+      {/* Live ESPN news carousel */}
       <SportNewsWidget />
 
       {/* Live Now */}
@@ -179,7 +230,7 @@ export default function Feed() {
         <UpcomingStreamsSection user={user} />
       )}
 
-      {/* Posts */}
+      {/* Posts — with ESPN news cards injected every 5 posts */}
       <div>
         {isLoading ? (
           <div className="flex justify-center py-20">
@@ -197,8 +248,13 @@ export default function Feed() {
           </div>
         ) : (
           <div className="space-y-3">
-            {posts?.map(post => (
-              <PostCard key={post.id} post={post} currentUser={user} onUpdate={refetch} />
+            {posts?.map((post, idx) => (
+              <React.Fragment key={post.id}>
+                <PostCard post={post} currentUser={user} onUpdate={refetch} />
+                {(idx + 1) % 5 === 0 && newsItems[Math.floor(idx / 5)] && (
+                  <InlineNewsCard article={newsItems[Math.floor(idx / 5)]} />
+                )}
+              </React.Fragment>
             ))}
           </div>
         )}
@@ -211,6 +267,16 @@ export default function Feed() {
 
       {showPreferences && user && (
         <FeedPreferencesDialog user={user} onClose={() => setShowPreferences(false)} />
+      )}
+
+      {/* Story viewer — full-screen overlay */}
+      {storySession && (
+        <StoryViewer
+          stories={storySession.items}
+          authorGroup={storySession.group}
+          onClose={() => setStorySession(null)}
+          onMarkSeen={storySession.markSeen}
+        />
       )}
     </div>
   );

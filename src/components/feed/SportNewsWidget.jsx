@@ -27,60 +27,65 @@ const RSS_FEEDS = [
   { url: "https://www.espn.com/espn/rss/mma/news",    sport: "MMA",        source: "ESPN MMA" },
 ];
 
-const RSS2JSON = "https://api.rss2json.com/v1/api.json";
+async function fetchFeed(feed) {
+  const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
+  const res = await fetch(proxy, { signal: AbortSignal.timeout(10000) });
+  const { contents } = await res.json();
+  if (!contents) return [];
+
+  const doc = new DOMParser().parseFromString(contents, "text/xml");
+  const items = [...doc.querySelectorAll("item")].slice(0, 8);
+
+  return items.map((item) => {
+    const get = (tag) => item.querySelector(tag)?.textContent?.trim() || "";
+    const link = get("link") || get("guid");
+    return {
+      id: link,
+      title: get("title"),
+      link,
+      pubDate: get("pubDate"),
+      sport: feed.sport,
+      source: feed.source,
+      description: get("description")
+        .replace(/<[^>]*>/g, "")
+        .replace(/&amp;/g, "&")
+        .replace(/&lt;/g, "<")
+        .replace(/&gt;/g, ">")
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .substring(0, 200)
+        .trim(),
+    };
+  });
+}
 
 async function fetchAllNews() {
-  const results = await Promise.allSettled(
-    RSS_FEEDS.map(async (feed) => {
-      const res = await fetch(
-        `${RSS2JSON}?rss_url=${encodeURIComponent(feed.url)}&count=8`,
-        { signal: AbortSignal.timeout(8000) }
-      );
-      const json = await res.json();
-      if (json.status !== "ok") return [];
-      return (json.items || []).map((item) => ({
-        id: item.guid || item.link,
-        title: item.title,
-        link: item.link,
-        pubDate: item.pubDate,
-        sport: feed.sport,
-        source: feed.source,
-        description: (item.description || "")
-          .replace(/<[^>]*>/g, "")
-          .replace(/&amp;/g, "&")
-          .replace(/&lt;/g, "<")
-          .replace(/&gt;/g, ">")
-          .replace(/&quot;/g, '"')
-          .replace(/&#39;/g, "'")
-          .substring(0, 200)
-          .trim(),
-      }));
-    })
-  );
-
+  const results = await Promise.allSettled(RSS_FEEDS.map(fetchFeed));
   const allItems = results
     .filter((r) => r.status === "fulfilled")
     .flatMap((r) => r.value);
 
   const seen = new Set();
-  const unique = allItems.filter((item) => {
-    if (seen.has(item.link)) return false;
-    seen.add(item.link);
-    return true;
-  });
-
-  return unique.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+  return allItems
+    .filter((item) => {
+      if (!item.id || seen.has(item.id)) return false;
+      seen.add(item.id);
+      return true;
+    })
+    .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 }
+
+export const SPORTS_NEWS_QUERY_KEY = ["sports-news"];
 
 export default function SportNewsWidget() {
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   const { data: news = [], isLoading } = useQuery({
-    queryKey: ["sports-news"],
+    queryKey: SPORTS_NEWS_QUERY_KEY,
     queryFn: fetchAllNews,
     staleTime: 10 * 60 * 1000,
     refetchInterval: 10 * 60 * 1000,
-    retry: 1,
+    retry: 2,
   });
 
   if (isLoading) {
@@ -99,7 +104,17 @@ export default function SportNewsWidget() {
     );
   }
 
-  if (!news.length) return null;
+  if (!news.length) {
+    return (
+      <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-base">📰</span>
+          <h3 className="font-bold text-white text-xs tracking-widest uppercase">Sports News</h3>
+        </div>
+        <p className="text-gray-500 text-xs text-center py-2">Live sports news loading...</p>
+      </div>
+    );
+  }
 
   return (
     <>

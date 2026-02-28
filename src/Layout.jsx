@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 import { Home, User, MessageCircle, Search, Bell, Plus, Menu, X, Trophy, Flame, Globe, Sparkles, Radio, Activity, Bookmark, Crown, Video, Shield, ShieldAlert, Settings, Youtube, Film } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +13,7 @@ import SupportChatWidget from "./components/messages/SupportChatWidget";
 import PushNotificationBanner from "./components/notifications/PushNotificationBanner";
 
 export default function Layout({ children, currentPageName }) {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [language, setLanguage] = useState(() => {
@@ -29,24 +30,20 @@ export default function Layout({ children, currentPageName }) {
   }, [language]);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
-  }, []);
-
-  useEffect(() => {
     if (!user) return;
-    base44.entities.Conversation.filter({ unread_by: user.email }).then(convos => {
-      setUnreadCount(convos.length);
-    });
-  }, [user]);
+    base44.entities.Conversation.filter({ unread_by: user.email })
+      .then(convos => setUnreadCount(convos.length))
+      .catch(() => {});
+  }, [user?.email]);
 
   const [notifCount, setNotifCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
-    base44.entities.Notification.filter({ recipient_email: user.email, is_read: false }).then(notifs => {
-      setNotifCount(notifs.length);
-    });
-  }, [user]);
+    base44.entities.Notification.filter({ recipient_email: user.email, is_read: false })
+      .then(notifs => setNotifCount(notifs.length))
+      .catch(() => {});
+  }, [user?.email]);
 
   const navItems = [
     { name: "Moderation", page: "ModerationQueue", icon: ShieldAlert },

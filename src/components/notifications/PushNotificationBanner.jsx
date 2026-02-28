@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/api/base44Client";
 import { Heart, MessageCircle, UserPlus, AtSign, Bell, Radio, DollarSign, Trophy, X, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -30,25 +30,29 @@ export default function PushNotificationBanner({ user }) {
   useEffect(() => {
     if (!user) return;
 
-    const unsub = base44.entities.Notification.subscribe((event) => {
-      if (
-        event.type === "create" &&
-        event.data?.recipient_email === user.email &&
-        CRITICAL_TYPES.includes(event.data?.type) &&
-        !seenIds.current.has(event.id)
-      ) {
-        seenIds.current.add(event.id);
-        const notif = { ...event.data, id: event.id };
-        setToasts(prev => [notif, ...prev].slice(0, 3));
+    const channel = supabase
+      .channel(`push-notifications-${user.id}`)
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'notifications' },
+        (payload) => {
+          const notif = payload.new;
+          if (
+            notif.recipient_email === user.email &&
+            CRITICAL_TYPES.includes(notif.type) &&
+            !seenIds.current.has(notif.id)
+          ) {
+            seenIds.current.add(notif.id);
+            setToasts(prev => [notif, ...prev].slice(0, 3));
+            setTimeout(() => {
+              setToasts(prev => prev.filter(t => t.id !== notif.id));
+            }, 5000);
+          }
+        }
+      )
+      .subscribe();
 
-        // Auto-dismiss after 5s
-        setTimeout(() => {
-          setToasts(prev => prev.filter(t => t.id !== event.id));
-        }, 5000);
-      }
-    });
-
-    return unsub;
+    return () => { supabase.removeChannel(channel); };
   }, [user]);
 
   const dismiss = (id) => setToasts(prev => prev.filter(t => t.id !== id));

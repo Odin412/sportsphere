@@ -3,7 +3,7 @@ import { supabase } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, ArrowLeft, Zap, Users, Video, Trophy, TrendingUp, Shield } from "lucide-react";
+import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
@@ -22,39 +22,43 @@ const stats = [
 ];
 
 export default function Login() {
+  const [tab, setTab] = useState("signin"); // "signin" | "signup"
   const [email, setEmail] = useState("");
-  const [code, setCode] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState("email"); // "email" | "code"
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleSendCode = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    if (!email) return;
+    if (!email || !password) return;
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOtp({
-      email,
-      options: { shouldCreateUser: true },
-    });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      toast.error(error.message);
-    } else {
-      setStep("code");
+      toast.error(error.message === "Invalid login credentials"
+        ? "Incorrect email or password."
+        : error.message);
     }
     setLoading(false);
   };
 
-  const handleVerifyCode = async (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!code || code.length < 6) return;
+    if (!email || !password || !fullName) return;
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return;
+    }
     setLoading(true);
-    const { error } = await supabase.auth.verifyOtp({
+    const { error } = await supabase.auth.signUp({
       email,
-      token: code.trim(),
-      type: "email",
+      password,
+      options: { data: { full_name: fullName } },
     });
     if (error) {
-      toast.error("Invalid or expired code. Check your email and try again.");
-      setCode("");
+      toast.error(error.message);
+    } else {
+      toast.success("Account created! You're now signed in.");
     }
     setLoading(false);
   };
@@ -65,11 +69,7 @@ export default function Login() {
       options: { redirectTo: window.location.origin },
     });
     if (error) {
-      if (error.message?.includes("provider is not enabled") || error.status === 400) {
-        toast.error(`${provider.charAt(0).toUpperCase() + provider.slice(1)} sign-in isn't configured yet. Use the email code instead.`);
-      } else {
-        toast.error(error.message);
-      }
+      toast.error(`${provider} sign-in isn't configured yet.`);
     }
   };
 
@@ -146,87 +146,16 @@ export default function Login() {
     </div>
   );
 
-  if (step === "code") {
-    return (
-      <div className="min-h-screen lg:grid lg:grid-cols-2">
-        <HeroPanel />
-        <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="w-full max-w-sm space-y-8"
-          >
-            <div className="flex flex-col items-center gap-3 lg:hidden">
-              <img
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/698f6f4f4e61dd2806b88ed2/15137601c_392DC896-FFC0-4491-BCB6-20C0C160BF03.png"
-                alt="Sportsphere"
-                className="w-14 h-14 object-contain"
-              />
-              <span className="text-2xl font-black text-slate-900">Sportsphere</span>
-            </div>
-
-            <div className="space-y-1">
-              <h2 className="text-2xl font-black text-slate-900">Check your email</h2>
-              <p className="text-slate-500 text-sm">
-                We sent a 6-digit code to <span className="font-semibold text-slate-800">{email}</span>
-              </p>
-            </div>
-
-            <form onSubmit={handleVerifyCode} className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="code" className="text-sm font-semibold text-slate-700">6-digit code</Label>
-                <Input
-                  id="code"
-                  type="text"
-                  inputMode="numeric"
-                  value={code}
-                  onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
-                  placeholder="000000"
-                  className="rounded-xl h-14 border-slate-200 focus:border-red-900 focus:ring-red-900 text-center text-2xl font-mono tracking-widest"
-                  required
-                  autoFocus
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={loading || code.length < 6}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
-              >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Verify & Sign In"}
-              </Button>
-            </form>
-
-            <button
-              onClick={() => { setStep("email"); setCode(""); }}
-              className="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-800 transition-colors mx-auto"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Use a different email
-            </button>
-
-            <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
-              <Shield className="w-3 h-3" />
-              <span>Secure passwordless authentication</span>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       <HeroPanel />
 
-      {/* Right panel — form */}
       <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="w-full max-w-sm space-y-8"
+          className="w-full max-w-sm space-y-6"
         >
           {/* Mobile logo */}
           <div className="flex flex-col items-center gap-3 lg:hidden">
@@ -238,47 +167,145 @@ export default function Login() {
             <span className="text-2xl font-black text-slate-900">Sportsphere</span>
           </div>
 
-          <div className="space-y-1">
-            <h2 className="text-2xl font-black text-slate-900">Welcome back</h2>
-            <p className="text-slate-500 text-sm">Sign in to continue to Sportsphere</p>
+          {/* Tab switcher */}
+          <div className="flex rounded-xl bg-slate-100 p-1">
+            <button
+              onClick={() => setTab("signin")}
+              className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
+                tab === "signin" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => setTab("signup")}
+              className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
+                tab === "signup" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700"
+              }`}
+            >
+              Create Account
+            </button>
           </div>
 
-          <form onSubmit={handleSendCode} className="space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm font-semibold text-slate-700">Email address</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="rounded-xl h-12 border-slate-200 focus:border-red-900 focus:ring-red-900"
-                required
-              />
-            </div>
+          {tab === "signin" ? (
+            <form onSubmit={handleSignIn} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="email" className="text-sm font-semibold text-slate-700">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="pl-9 rounded-xl h-12 border-slate-200"
+                    required
+                  />
+                </div>
+              </div>
 
-            <Button
-              type="submit"
-              disabled={loading || !email}
-              className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold gap-2 text-sm"
-            >
-              {loading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Mail className="w-4 h-4" />
-                  Send Code
-                </>
-              )}
-            </Button>
-          </form>
+              <div className="space-y-1.5">
+                <Label htmlFor="password" className="text-sm font-semibold text-slate-700">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="pl-9 pr-10 rounded-xl h-12 border-slate-200"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading || !email || !password}
+                className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="fullName" className="text-sm font-semibold text-slate-700">Full Name</Label>
+                <Input
+                  id="fullName"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Your name"
+                  className="rounded-xl h-12 border-slate-200"
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-700">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Input
+                    id="emailSignup"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="pl-9 rounded-xl h-12 border-slate-200"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-700">Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <Input
+                    id="passwordSignup"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Min. 6 characters"
+                    className="pl-9 pr-10 rounded-xl h-12 border-slate-200"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={loading || !email || !password || !fullName}
+                className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
+              >
+                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
+              </Button>
+            </form>
+          )}
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-slate-100" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-3 text-slate-400 font-medium">or continue with</span>
+              <span className="bg-white px-3 text-slate-400 font-medium">or</span>
             </div>
           </div>
 
@@ -298,7 +325,7 @@ export default function Login() {
           </Button>
 
           <p className="text-center text-xs text-slate-400">
-            By signing in, you agree to our{" "}
+            By continuing, you agree to our{" "}
             <a href="/Terms" className="text-red-800 hover:underline font-medium">Terms of Service</a>
             {" "}and{" "}
             <a href="/Guidelines" className="text-red-800 hover:underline font-medium">Community Guidelines</a>.
@@ -306,7 +333,7 @@ export default function Login() {
 
           <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
             <Shield className="w-3 h-3" />
-            <span>Secure passwordless authentication</span>
+            <span>Secure authentication</span>
           </div>
         </motion.div>
       </div>

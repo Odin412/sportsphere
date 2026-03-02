@@ -31,6 +31,29 @@ const categoryIcons = {
   other: "💬",
 };
 
+const STATUS_GRADIENTS = {
+  Basketball: "from-orange-600 to-red-700",
+  Soccer:     "from-green-600 to-teal-700",
+  Football:   "from-amber-700 to-yellow-800",
+  Baseball:   "from-blue-700 to-indigo-800",
+  Tennis:     "from-yellow-500 to-orange-600",
+  Swimming:   "from-cyan-600 to-blue-700",
+  Golf:       "from-emerald-600 to-green-700",
+  Track:      "from-red-600 to-pink-700",
+  Hockey:     "from-slate-600 to-blue-800",
+  MMA:        "from-red-800 to-rose-900",
+  CrossFit:   "from-violet-600 to-purple-700",
+  default:    "from-gray-700 to-gray-800",
+};
+
+const POST_REACTIONS = [
+  { emoji: "❤️", label: "Love" },
+  { emoji: "🔥", label: "Fire" },
+  { emoji: "💪", label: "Respect" },
+  { emoji: "😂", label: "LOL" },
+  { emoji: "😮", label: "Wow" },
+];
+
 export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const [liked, setLiked] = useState(post.likes?.includes(currentUser?.email));
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
@@ -51,6 +74,9 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [commentsDisabled, setCommentsDisabled] = useState(post.comments_disabled || false);
   const [following, setFollowing] = useState(false);
+  const reactionKey = `reaction-${post.id}-${currentUser?.email}`;
+  const [myReaction, setMyReaction] = useState(() => (typeof window !== "undefined" ? localStorage.getItem(reactionKey) : null));
+  const [showReactionPicker, setShowReactionPicker] = useState(false);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -100,6 +126,42 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
         message: "liked your post",
       }).catch(() => {});
     }
+  };
+
+  const handleReaction = async (emoji) => {
+    if (!currentUser) return;
+    if (myReaction === emoji) {
+      setMyReaction(null);
+      localStorage.removeItem(reactionKey);
+      setLiked(false);
+      setLikeCount(prev => Math.max(0, prev - 1));
+      await base44.entities.Post.update(post.id, {
+        likes: (post.likes || []).filter(e => e !== currentUser.email),
+      }).catch(() => {});
+    } else {
+      const wasLiked = liked;
+      setMyReaction(emoji);
+      localStorage.setItem(reactionKey, emoji);
+      if (!wasLiked) {
+        setLiked(true);
+        setLikeCount(prev => prev + 1);
+        await base44.entities.Post.update(post.id, {
+          likes: [...(post.likes || []), currentUser.email],
+        }).catch(() => {});
+        if (post.author_email !== currentUser.email) {
+          await base44.entities.Notification.create({
+            recipient_email: post.author_email,
+            actor_email: currentUser.email,
+            actor_name: currentUser.full_name,
+            actor_avatar: currentUser.avatar_url,
+            type: "like",
+            post_id: post.id,
+            message: "reacted to your post",
+          }).catch(() => {});
+        }
+      }
+    }
+    setShowReactionPicker(false);
   };
 
   const handleFollow = async () => {
@@ -360,22 +422,39 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
       )}
 
       {/* Post content text */}
-      {post.content && (
-        <div className={post.is_premium && !hasAccess ? "relative" : ""}>
-          {post.is_premium && !hasAccess && (
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 z-10" />
-          )}
-          <p className={`px-4 pb-3 text-sm text-gray-200 leading-relaxed whitespace-pre-wrap ${
-            post.is_premium && !hasAccess ? "line-clamp-2 blur-sm" : ""
-          }`}>
-            {post.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
-              part.startsWith('@') ? (
-                <span key={i} className="text-red-400 font-medium">{part}</span>
-              ) : part
+      {post.content && (() => {
+        const isStatusCard = !post.media_urls?.length && (post.content?.length || 0) < 220 && !(post.is_premium && !hasAccess);
+        const gradient = STATUS_GRADIENTS[post.sport] || STATUS_GRADIENTS.default;
+        if (isStatusCard) {
+          return (
+            <div className={`bg-gradient-to-br ${gradient} mx-4 mb-3 rounded-2xl p-6 flex items-center justify-center min-h-[120px]`}>
+              <p className="text-white text-lg font-semibold text-center leading-relaxed">
+                {post.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
+                  part.startsWith('@') ? (
+                    <span key={i} className="underline underline-offset-2">{part}</span>
+                  ) : part
+                )}
+              </p>
+            </div>
+          );
+        }
+        return (
+          <div className={post.is_premium && !hasAccess ? "relative" : ""}>
+            {post.is_premium && !hasAccess && (
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 z-10" />
             )}
-          </p>
-        </div>
-      )}
+            <p className={`px-4 pb-3 text-sm text-gray-200 leading-relaxed whitespace-pre-wrap ${
+              post.is_premium && !hasAccess ? "line-clamp-2 blur-sm" : ""
+            }`}>
+              {post.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
+                part.startsWith('@') ? (
+                  <span key={i} className="text-red-400 font-medium">{part}</span>
+                ) : part
+              )}
+            </p>
+          </div>
+        );
+      })()}
 
       {/* AI Summary */}
       {hasVideoContent() && hasAccess && (
@@ -446,11 +525,36 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
       {/* Action bar */}
       <div className="flex items-center justify-between px-4 py-3 border-t border-gray-800">
         <div className="flex items-center gap-5">
-          {/* Like */}
-          <button onClick={handleLike} className="flex items-center gap-1.5 group">
-            <Heart className={`w-5 h-5 transition-all ${liked ? "fill-red-500 text-red-500 scale-110" : "text-gray-500 group-hover:text-white"}`} />
-            <span className={`text-sm font-medium ${liked ? "text-red-500" : "text-gray-500"}`}>{likeCount}</span>
-          </button>
+          {/* Emoji Reaction */}
+          <div
+            className="relative"
+            onMouseEnter={() => currentUser && setShowReactionPicker(true)}
+            onMouseLeave={() => setShowReactionPicker(false)}
+          >
+            <button
+              onClick={() => currentUser ? handleReaction(myReaction || "❤️") : undefined}
+              className="flex items-center gap-1.5 group"
+            >
+              <span className={`text-lg transition-all ${liked ? "scale-110" : "grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100"}`}>
+                {myReaction || "❤️"}
+              </span>
+              <span className={`text-sm font-medium ${liked ? "text-red-400" : "text-gray-500"}`}>{likeCount}</span>
+            </button>
+            {showReactionPicker && currentUser && (
+              <div className="absolute bottom-8 left-0 bg-gray-800 border border-gray-700 rounded-2xl px-2 py-1.5 flex gap-1 z-20 shadow-xl">
+                {POST_REACTIONS.map(r => (
+                  <button
+                    key={r.emoji}
+                    onClick={() => handleReaction(r.emoji)}
+                    title={r.label}
+                    className={`text-xl hover:scale-125 transition-transform p-1 rounded-xl ${myReaction === r.emoji ? "bg-gray-700 ring-1 ring-gray-500" : "hover:bg-gray-700"}`}
+                  >
+                    {r.emoji}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Comment */}
           <button

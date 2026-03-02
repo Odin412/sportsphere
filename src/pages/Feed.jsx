@@ -12,6 +12,9 @@ import StoryViewer from "../components/feed/StoryViewer";
 import { Loader2, Search, Settings2, Sparkles, Users, ExternalLink } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "@/utils";
 import FeedPagination, { PAGE_SIZE } from "@/components/feed/FeedPagination";
 import moment from "moment";
 
@@ -152,6 +155,26 @@ export default function Feed() {
             setStorySession({ items, group, markSeen })
           }
         />
+      )}
+
+      {/* Quick-post prompt bar */}
+      {user && (
+        <Link to={createPageUrl("CreatePost")}>
+          <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-2xl p-3 hover:border-red-600 transition-all cursor-pointer group">
+            <Avatar className="w-9 h-9 flex-shrink-0">
+              <AvatarImage src={user.avatar_url} />
+              <AvatarFallback className="bg-red-900 text-white text-sm font-bold">{user.full_name?.[0] || "?"}</AvatarFallback>
+            </Avatar>
+            <span className="text-gray-500 text-sm group-hover:text-gray-300 transition-colors flex-1">
+              What's happening in sports? 🔥
+            </span>
+            <div className="flex items-center gap-3 text-gray-600 text-lg">
+              <span title="Photo">📸</span>
+              <span title="Video">🎬</span>
+              <span title="Status">💬</span>
+            </div>
+          </div>
+        </Link>
       )}
 
       {/* Search bar */}

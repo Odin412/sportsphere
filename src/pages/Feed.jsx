@@ -9,14 +9,11 @@ import LiveNowSection from "../components/stream/LiveNowSection";
 import SportNewsWidget from "../components/feed/SportNewsWidget";
 import StoriesBar from "../components/feed/StoriesBar";
 import StoryViewer from "../components/feed/StoryViewer";
-import { Loader2, Search, Settings2, Sparkles, Users, ExternalLink } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Loader2, Settings2, Sparkles, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import FeedPagination, { PAGE_SIZE } from "@/components/feed/FeedPagination";
-import moment from "moment";
 
 const SPORTS_LIST = [
   { name: "Basketball", emoji: "🏀" },
@@ -37,40 +34,11 @@ const SPORTS_LIST = [
   { name: "Softball", emoji: "🥎" },
 ];
 
-const SPORT_EMOJIS_MAP = {
-  Basketball: "🏀", Soccer: "⚽", Football: "🏈", Baseball: "⚾",
-  Tennis: "🎾", Golf: "⛳", MMA: "🥋", Hockey: "🏒",
-};
 
-function InlineNewsCard({ article }) {
-  return (
-    <a
-      href={article.link}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="flex items-start gap-3 bg-gray-900 border border-gray-800 rounded-xl p-3 hover:border-red-800 transition-colors group no-underline"
-    >
-      <span className="text-2xl flex-shrink-0">{SPORT_EMOJIS_MAP[article.sport] || "📰"}</span>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2 mb-0.5">
-          <span className="text-[10px] font-bold text-red-500 uppercase tracking-wide">
-            {article.source}
-          </span>
-          <span className="text-[10px] text-gray-600">{moment(article.pubDate).fromNow()}</span>
-        </div>
-        <p className="text-white text-sm font-semibold line-clamp-2 group-hover:text-red-300 transition-colors leading-snug">
-          {article.title}
-        </p>
-      </div>
-      <ExternalLink className="w-3.5 h-3.5 text-gray-600 group-hover:text-red-500 flex-shrink-0 mt-1" />
-    </a>
-  );
-}
 
 export default function Feed() {
   const { user } = useAuth();
   const [sportFilter, setSportFilter] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const [showPreferences, setShowPreferences] = useState(false);
   const [page, setPage] = useState(1);
   const [feedTab, setFeedTab] = useState("forYou");
@@ -108,12 +76,6 @@ export default function Feed() {
     retryDelay: 1000,
   });
 
-  // Passive read from the sports-news cache (SportNewsWidget populates it)
-  const { data: newsItems = [] } = useQuery({
-    queryKey: ["sports-news"],
-    staleTime: 10 * 60 * 1000,
-    enabled: false,
-  });
 
   const filteredPosts = allPosts?.filter(post => {
     if (preferences?.excluded_sports?.includes(post.sport)) return false;
@@ -125,133 +87,96 @@ export default function Feed() {
   const followingPosts = filteredPosts?.filter(p => followedUsers?.includes(p.author_email));
   const activePosts = feedTab === "following" ? followingPosts : filteredPosts;
 
-  const searchedPosts = activePosts
-    ?.map(post => {
-      if (!searchQuery) return { ...post, _score: 0 };
-      const q = searchQuery.toLowerCase();
-      let score = 0;
-      if (post.author_name?.toLowerCase() === q) score += 100;
-      if (post.sport?.toLowerCase() === q) score += 80;
-      if (post.author_name?.toLowerCase().includes(q)) score += 40;
-      if (post.sport?.toLowerCase().includes(q)) score += 30;
-      if (post.content?.toLowerCase().includes(q)) score += 20;
-      if (post.category?.toLowerCase().includes(q)) score += 10;
-      return { ...post, _score: score };
-    })
-    .filter(post => !searchQuery || post._score > 0)
-    .sort((a, b) => searchQuery ? b._score - a._score : 0);
-
-  const totalPosts = searchedPosts?.length || 0;
-  const posts = searchedPosts?.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const totalPosts = activePosts?.length || 0;
+  const posts = activePosts?.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-4 space-y-3">
+    <div className="max-w-[1140px] mx-auto px-4 py-4">
+      <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_296px] lg:gap-6 lg:items-start">
 
-      {/* Stories bar — 24h posts with media (Instagram/FB Stories style) */}
-      {user && (
-        <StoriesBar
-          user={user}
-          onStoryClick={(items, group, markSeen) =>
-            setStorySession({ items, group, markSeen })
-          }
-        />
-      )}
+        {/* ── LEFT COLUMN — main feed ───────────────────────────────── */}
+        <div className="space-y-3">
 
-      {/* Quick-post prompt bar */}
-      {user && (
-        <Link to={createPageUrl("CreatePost")}>
-          <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-2xl p-3 hover:border-red-600 transition-all cursor-pointer group">
-            <Avatar className="w-9 h-9 flex-shrink-0">
-              <AvatarImage src={user.avatar_url} />
-              <AvatarFallback className="bg-red-900 text-white text-sm font-bold">{user.full_name?.[0] || "?"}</AvatarFallback>
-            </Avatar>
-            <span className="text-gray-500 text-sm group-hover:text-gray-300 transition-colors flex-1">
-              What's happening in sports? 🔥
-            </span>
-            <div className="flex items-center gap-3 text-gray-600 text-lg">
-              <span title="Photo">📸</span>
-              <span title="Video">🎬</span>
-              <span title="Status">💬</span>
-            </div>
+          {/* Stories bar — 24h posts with media (Instagram/FB Stories style) */}
+          {user && (
+            <StoriesBar
+              user={user}
+              onStoryClick={(items, group, markSeen) =>
+                setStorySession({ items, group, markSeen })
+              }
+            />
+          )}
+
+          {/* Quick-post prompt bar */}
+          {user && (
+            <Link to={createPageUrl("CreatePost")}>
+              <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-2xl p-3 hover:border-red-600 transition-all cursor-pointer group">
+                <Avatar className="w-9 h-9 flex-shrink-0">
+                  <AvatarImage src={user.avatar_url} />
+                  <AvatarFallback className="bg-red-900 text-white text-sm font-bold">{user.full_name?.[0] || "?"}</AvatarFallback>
+                </Avatar>
+                <span className="text-gray-500 text-sm group-hover:text-gray-300 transition-colors flex-1">
+                  What's happening in sports? 🔥
+                </span>
+                <div className="flex items-center gap-3 text-gray-600 text-lg">
+                  <span title="Photo">📸</span>
+                  <span title="Video">🎬</span>
+                  <span title="Status">💬</span>
+                </div>
+              </div>
+            </Link>
+          )}
+
+          {/* Combined tab + sport filter row */}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 items-center">
+            <button
+              onClick={() => { setFeedTab("forYou"); resetPage(); }}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${feedTab === "forYou" ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+            >
+              <Sparkles className="w-3.5 h-3.5" /> For You
+            </button>
+            <button
+              onClick={() => { setFeedTab("following"); resetPage(); }}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${feedTab === "following" ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+            >
+              <Users className="w-3.5 h-3.5" /> Following
+            </button>
+            {user && (
+              <button
+                onClick={() => setShowPreferences(true)}
+                className="flex-shrink-0 p-1.5 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-all"
+                title="Feed Preferences"
+              >
+                <Settings2 className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <div className="w-px h-5 bg-gray-700 flex-shrink-0 mx-0.5" />
+            <button
+              onClick={() => { setSportFilter(null); resetPage(); }}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${!sportFilter ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+            >
+              🌟 All
+            </button>
+            {SPORTS_LIST.map(s => (
+              <button
+                key={s.name}
+                onClick={() => { setSportFilter(s.name === sportFilter ? null : s.name); resetPage(); }}
+                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${sportFilter === s.name ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+              >
+                {s.emoji} {s.name}
+              </button>
+            ))}
           </div>
-        </Link>
-      )}
 
-      {/* Search bar */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
-        <Input
-          value={searchQuery}
-          onChange={e => { setSearchQuery(e.target.value); resetPage(); }}
-          placeholder="Search posts, athletes, sports..."
-          className="pl-10 rounded-xl bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 h-10 focus:border-red-500 focus:ring-red-500/20"
-        />
-      </div>
+          {/* Live Now */}
+          {!sportFilter && (
+            <LiveNowSection user={user} userPreferences={preferences} />
+          )}
 
-      {/* Sport filter chips */}
-      <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
-        <button
-          onClick={() => { setSportFilter(null); resetPage(); }}
-          className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
-            !sportFilter ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
-          }`}
-        >
-          🌟 All
-        </button>
-        {SPORTS_LIST.map(s => (
-          <button
-            key={s.name}
-            onClick={() => { setSportFilter(s.name === sportFilter ? null : s.name); resetPage(); }}
-            className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
-              sportFilter === s.name ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
-            }`}
-          >
-            {s.emoji} {s.name}
-          </button>
-        ))}
-      </div>
-
-      {/* Feed tabs */}
-      {user && (
-        <div className="flex gap-1 bg-gray-900 rounded-xl p-1 border border-gray-800">
-          <button
-            onClick={() => { setFeedTab("forYou"); resetPage(); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${
-              feedTab === "forYou" ? "bg-red-600 text-white" : "text-gray-500 hover:text-white"
-            }`}
-          >
-            <Sparkles className="w-4 h-4" /> For You
-          </button>
-          <button
-            onClick={() => { setFeedTab("following"); resetPage(); }}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-sm font-semibold transition-all ${
-              feedTab === "following" ? "bg-red-600 text-white" : "text-gray-500 hover:text-white"
-            }`}
-          >
-            <Users className="w-4 h-4" /> Following
-          </button>
-          <button
-            onClick={() => setShowPreferences(true)}
-            className="p-2 rounded-lg text-gray-500 hover:text-white hover:bg-gray-800 transition-all"
-            title="Feed Preferences"
-          >
-            <Settings2 className="w-4 h-4" />
-          </button>
-        </div>
-      )}
-
-      {/* Live ESPN news carousel */}
-      <SportNewsWidget />
-
-      {/* Live Now */}
-      {!searchQuery && !sportFilter && (
-        <LiveNowSection user={user} userPreferences={preferences} />
-      )}
-
-      {/* Upcoming Streams */}
-      {!searchQuery && !sportFilter && (
-        <UpcomingStreamsSection user={user} />
-      )}
+          {/* Upcoming Streams */}
+          {!sportFilter && (
+            <UpcomingStreamsSection user={user} />
+          )}
 
       {/* Posts — with ESPN news cards injected every 5 posts */}
       <div>
@@ -271,13 +196,8 @@ export default function Feed() {
           </div>
         ) : (
           <div className="space-y-3">
-            {posts?.map((post, idx) => (
-              <React.Fragment key={post.id}>
-                <PostCard post={post} currentUser={user} onUpdate={refetch} />
-                {(idx + 1) % 5 === 0 && newsItems[Math.floor(idx / 5)] && (
-                  <InlineNewsCard article={newsItems[Math.floor(idx / 5)]} />
-                )}
-              </React.Fragment>
+            {posts?.map((post) => (
+              <PostCard key={post.id} post={post} currentUser={user} onUpdate={refetch} />
             ))}
           </div>
         )}
@@ -287,6 +207,17 @@ export default function Feed() {
           onChange={p => { setPage(p); window.scrollTo({ top: 0, behavior: "smooth" }); }}
         />
       </div>
+
+        </div>{/* end left column */}
+
+        {/* ── RIGHT COLUMN — sticky news sidebar (desktop only) ────── */}
+        <div className="hidden lg:block">
+          <div className="sticky top-16 max-h-[calc(100vh-72px)] overflow-y-auto no-scrollbar space-y-3">
+            <SportNewsWidget compact={true} />
+          </div>
+        </div>
+
+      </div>{/* end grid */}
 
       {showPreferences && user && (
         <FeedPreferencesDialog user={user} onClose={() => setShowPreferences(false)} />

@@ -77,7 +77,7 @@ async function fetchAllNews() {
 
 export const SPORTS_NEWS_QUERY_KEY = ["sports-news"];
 
-export default function SportNewsWidget() {
+export default function SportNewsWidget({ compact = false }) {
   const [selectedArticle, setSelectedArticle] = useState(null);
 
   const { data: news = [], isLoading } = useQuery({
@@ -95,11 +95,19 @@ export default function SportNewsWidget() {
           <span className="text-base">📰</span>
           <h3 className="font-bold text-white text-xs tracking-widest uppercase">Sports News</h3>
         </div>
-        <div className="flex gap-3 overflow-x-auto no-scrollbar">
-          {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="w-36 flex-shrink-0 bg-gray-800 rounded-xl h-28 animate-pulse" />
-          ))}
-        </div>
+        {compact ? (
+          <div className="space-y-2">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-14 bg-gray-800 rounded-xl animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="flex gap-3 overflow-x-auto no-scrollbar">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="w-36 flex-shrink-0 bg-gray-800 rounded-xl h-28 animate-pulse" />
+            ))}
+          </div>
+        )}
       </div>
     );
   }
@@ -116,6 +124,69 @@ export default function SportNewsWidget() {
     );
   }
 
+  /* ── Compact vertical mode (sidebar) ─────────────────────────── */
+  if (compact) {
+    return (
+      <>
+        <div className="bg-gray-900 rounded-2xl border border-gray-800 overflow-hidden">
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-gray-800">
+            <span className="text-sm">📰</span>
+            <h3 className="font-bold text-white text-xs tracking-widest uppercase flex-1">Sports News</h3>
+            <span className="text-[10px] bg-red-600 text-white px-1.5 py-0.5 rounded font-bold">LIVE</span>
+          </div>
+          <div className="divide-y divide-gray-800">
+            {news.slice(0, 10).map((article) => (
+              <button
+                key={article.id}
+                onClick={() => setSelectedArticle(article)}
+                className="flex items-start gap-3 px-4 py-3 hover:bg-gray-800 transition-colors group w-full text-left"
+              >
+                <span className="text-lg flex-shrink-0">{SPORT_EMOJIS[article.sport] || "🏆"}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white text-xs font-semibold line-clamp-2 group-hover:text-red-300 leading-snug transition-colors">
+                    {article.title}
+                  </p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">{article.source} · {moment(article.pubDate).fromNow()}</p>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {selectedArticle && (
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
+            onClick={() => setSelectedArticle(null)}
+          >
+            <div
+              className="bg-gray-900 rounded-2xl border border-gray-800 p-6 max-w-md w-full max-h-[80vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xl">{SPORT_EMOJIS[selectedArticle.sport] || "🏆"}</span>
+                <span className="text-xs text-gray-500 font-semibold">{selectedArticle.source}</span>
+                <span className="text-xs text-gray-600 ml-auto">{moment(selectedArticle.pubDate).fromNow()}</span>
+              </div>
+              <h2 className="text-white font-bold text-lg leading-snug mb-3">{selectedArticle.title}</h2>
+              {selectedArticle.description && (
+                <p className="text-gray-400 text-sm leading-relaxed mb-5">{selectedArticle.description}</p>
+              )}
+              <a href={selectedArticle.link} target="_blank" rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-xl px-4 py-3 text-sm font-semibold transition-colors w-full justify-center">
+                <ExternalLink className="w-4 h-4" /> Read Full Article
+              </a>
+              <button onClick={() => setSelectedArticle(null)}
+                className="mt-3 text-gray-500 hover:text-white text-sm w-full text-center transition-colors py-2">
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  /* ── Default horizontal carousel mode (inline) ───────────────── */
   return (
     <>
       <div className="bg-gray-900 rounded-2xl p-4 border border-gray-800">

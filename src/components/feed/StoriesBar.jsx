@@ -46,7 +46,7 @@ export default function StoriesBar({ user, onStoryClick }) {
         acc[key] = {
           author_email: key,
           author_name: s.author_name,
-          author_avatar: s.author_avatar_url,
+          author_avatar: s.author_avatar,
           items: [],
         };
       }

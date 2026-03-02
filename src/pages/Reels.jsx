@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import ReelCard from "../components/reels/ReelCard";
-import { Loader2, Sparkles, Settings, Plus } from "lucide-react";
+import { Loader2, Sparkles, Settings, Plus, Play, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
 import { Link } from "react-router-dom";
@@ -11,7 +11,9 @@ import { createPageUrl } from "@/utils";
 export default function Reels() {
   const [user, setUser] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [activeReelIndex, setActiveReelIndex] = useState(null); // null = grid, number = fullscreen
   const [showPreferences, setShowPreferences] = useState(false);
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -158,11 +160,14 @@ export default function Reels() {
   }, [recommendedContent, liveStreams, preferences]);
 
   useEffect(() => {
+    if (activeReelIndex === null) return; // only active in fullscreen mode
     const handleKeyDown = (e) => {
       if (e.key === "ArrowUp" && currentIndex > 0) {
         setCurrentIndex(prev => prev - 1);
       } else if (e.key === "ArrowDown" && currentIndex < feedItems.length - 1) {
         setCurrentIndex(prev => prev + 1);
+      } else if (e.key === "Escape") {
+        setActiveReelIndex(null);
       }
     };
 
@@ -181,72 +186,139 @@ export default function Reels() {
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("reelSwipeNext", handleSwipeNext);
     window.addEventListener("reelSwipePrev", handleSwipePrev);
-    
+
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("reelSwipeNext", handleSwipeNext);
       window.removeEventListener("reelSwipePrev", handleSwipePrev);
     };
-  }, [currentIndex, feedItems.length]);
+  }, [currentIndex, feedItems.length, activeReelIndex]);
 
   if (postsLoading) {
     return (
-      <div className="h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
-      </div>
-    );
-  }
-
-  if (feedItems.length === 0) {
-    return (
-      <div className="h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center text-slate-500">
-          <Sparkles className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>No content available yet</p>
-        </div>
+      <div className="max-w-2xl mx-auto px-4 py-8 flex justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
       </div>
     );
   }
 
   return (
-    <div className="fixed inset-0 bg-slate-950 overflow-hidden">
-      <div className="h-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide">
-        {feedItems.map((item, index) => (
-          <div key={item.id} className="snap-start h-screen">
-            <ReelCard 
-              item={item} 
-              currentUser={user}
-              isActive={index === currentIndex}
-            />
+    <>
+      {/* ── GRID VIEW (default) ─────────────────────────────────────── */}
+      {activeReelIndex === null && (
+        <div className="max-w-2xl mx-auto px-4 py-4">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <h1 className="text-xl font-black text-white">Reels</h1>
+              {user && (
+                <button
+                  onClick={() => setShowPreferences(true)}
+                  className="p-1.5 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-all"
+                  title="Feed Preferences"
+                >
+                  <Settings className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+            {user && (
+              <Link to={createPageUrl("CreateReel")}>
+                <Button className="bg-red-600 hover:bg-red-700 text-white rounded-xl gap-2 text-sm font-bold">
+                  <Plus className="w-4 h-4" /> Create
+                </Button>
+              </Link>
+            )}
           </div>
-        ))}
-      </div>
 
-      {/* Top controls */}
-      {user && (
-        <div className="fixed top-4 left-4 z-50 flex items-center gap-2">
-          <div className="bg-slate-900/80 backdrop-blur-xl border border-cyan-500/30 rounded-2xl px-4 py-2 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-cyan-400 animate-pulse" />
-            <span className="text-sm font-bold text-cyan-400">For You</span>
-          </div>
-          <Button
-            onClick={() => setShowPreferences(true)}
-            size="icon"
-            className="bg-slate-900/80 backdrop-blur-xl border border-cyan-500/30 hover:bg-slate-800"
-          >
-            <Settings className="w-4 h-4 text-cyan-400" />
-          </Button>
+          {feedItems.length === 0 ? (
+            <div className="text-center py-20 text-gray-600">
+              <Sparkles className="w-12 h-12 mx-auto mb-3 opacity-30" />
+              <p>No content available yet</p>
+            </div>
+          ) : (
+            /* 2-column reel grid */
+            <div className="grid grid-cols-2 gap-1.5">
+              {feedItems.map((item, idx) => {
+                const src = item.media_urls?.[0];
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => { setActiveReelIndex(idx); setCurrentIndex(idx); }}
+                    className="relative aspect-[9/16] bg-gray-900 rounded-xl overflow-hidden group cursor-pointer text-left"
+                  >
+                    {src ? (
+                      <video
+                        src={src}
+                        className="w-full h-full object-cover"
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-3">
+                        <p className="text-white text-xs font-semibold text-center line-clamp-5 leading-snug">{item.content}</p>
+                      </div>
+                    )}
+                    {/* Gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                    {/* Sport badge */}
+                    {item.sport && (
+                      <div className="absolute top-2 left-2">
+                        <span className="bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">
+                          {item.sport}
+                        </span>
+                      </div>
+                    )}
+                    {/* Bottom info */}
+                    <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                      <p className="text-white text-xs font-semibold truncate">{item.author_name?.split(" ")[0]}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-white/80 text-[10px]">❤️ {item.likes?.length || 0}</span>
+                        <span className="text-white/80 text-[10px]">💬 {item.comments_count || 0}</span>
+                      </div>
+                    </div>
+                    {/* Play icon on hover */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                        <Play className="w-6 h-6 text-white fill-white" />
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
-      {/* Create Reel Button */}
-      {user && (
-        <Link to={createPageUrl("CreateReel")} className="fixed top-4 right-4 z-50">
-          <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-2xl gap-2 shadow-xl font-bold">
-            <Plus className="w-4 h-4" />
-            Create Reel
-          </Button>
-        </Link>
+      {/* ── FULLSCREEN PLAYER (modal on click) ─────────────────────── */}
+      {activeReelIndex !== null && (
+        <div className="fixed inset-0 bg-black z-[200]">
+          {/* Back button */}
+          <button
+            onClick={() => setActiveReelIndex(null)}
+            className="absolute top-4 left-4 z-[210] bg-black/60 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+
+          {/* Full-screen scroll player */}
+          <div
+            ref={scrollRef}
+            className="h-full overflow-y-scroll snap-y snap-mandatory scrollbar-hide"
+          >
+            {feedItems.map((item, index) => (
+              <div key={item.id} className="snap-start h-screen">
+                <ReelCard
+                  item={item}
+                  currentUser={user}
+                  isActive={index === currentIndex}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
       {/* Preferences Dialog */}
@@ -256,6 +328,6 @@ export default function Reels() {
           onClose={() => setShowPreferences(false)}
         />
       )}
-    </div>
+    </>
   );
 }

@@ -7,11 +7,26 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, SlidersHorizontal } from "lucide-react";
+import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, SlidersHorizontal, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import moment from "moment";
 import { debounce } from "lodash";
+
+const STATUS_GRADIENTS = {
+  Basketball: "from-orange-600 to-red-700",
+  Soccer:     "from-green-600 to-teal-700",
+  Football:   "from-amber-700 to-yellow-800",
+  Baseball:   "from-blue-700 to-indigo-800",
+  Tennis:     "from-yellow-500 to-orange-600",
+  Swimming:   "from-cyan-600 to-blue-700",
+  Golf:       "from-emerald-600 to-green-700",
+  Track:      "from-red-600 to-pink-700",
+  Hockey:     "from-slate-600 to-blue-800",
+  MMA:        "from-red-800 to-rose-900",
+  CrossFit:   "from-violet-600 to-purple-700",
+  default:    "from-gray-700 to-gray-800",
+};
 
 const TABS = [
   { id: "all", label: "All", icon: Search },
@@ -74,6 +89,14 @@ export default function SearchPage() {
     queryKey: ["search-challenges", debouncedQuery],
     queryFn: () => base44.entities.Challenge.list("-created_date", 100),
     enabled: debouncedQuery.length >= 1,
+  });
+
+  // Explore grid — shown before typing (Instagram Explore-style)
+  const { data: explorePosts = [] } = useQuery({
+    queryKey: ["explore-grid"],
+    queryFn: () => base44.entities.Post.list("-created_date", 48),
+    staleTime: 5 * 60 * 1000,
+    enabled: !debouncedQuery,
   });
 
   const isLoading = loadingPosts || loadingUsers || loadingStreams || loadingChallenges;
@@ -180,7 +203,7 @@ export default function SearchPage() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all ${
                     activeTab === tab.id
-                      ? "bg-cyan-600 text-white shadow-lg shadow-cyan-600/30"
+                      ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
                       : "bg-slate-800/60 text-slate-400 hover:bg-slate-700/60 hover:text-white"
                   }`}
                 >
@@ -195,11 +218,44 @@ export default function SearchPage() {
           </div>
         )}
 
-        {/* Empty state */}
+        {/* Instagram-style explore grid — shown before typing */}
         {!debouncedQuery && (
-          <div className="text-center py-20 text-slate-500">
-            <Search className="w-16 h-16 mx-auto mb-4 opacity-20" />
-            <p className="text-lg">Start typing to search</p>
+          <div>
+            <p className="text-slate-500 text-xs uppercase tracking-widest font-semibold mb-3 px-1">Explore</p>
+            <div className="grid grid-cols-3 gap-0.5 rounded-xl overflow-hidden">
+              {explorePosts.map((post) => {
+                const hasMedia = post.media_urls?.length > 0;
+                const isVideo = hasMedia && (post.media_urls[0]?.includes('.mp4') || post.media_urls[0]?.includes('.mov') || post.media_urls[0]?.includes('video'));
+                const gradient = STATUS_GRADIENTS[post.sport] || STATUS_GRADIENTS.default;
+                return (
+                  <Link key={post.id} to={createPageUrl("UserProfile") + `?email=${post.author_email}`}>
+                    <div className="relative aspect-square overflow-hidden bg-gray-900 group cursor-pointer">
+                      {hasMedia && !isVideo && (
+                        <img src={post.media_urls[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                      )}
+                      {hasMedia && isVideo && (
+                        <div className="w-full h-full bg-black relative">
+                          <video src={post.media_urls[0]} className="w-full h-full object-cover" muted playsInline />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <Play className="w-7 h-7 text-white/90 drop-shadow-lg fill-white" />
+                          </div>
+                        </div>
+                      )}
+                      {!hasMedia && (
+                        <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center p-2`}>
+                          <p className="text-white text-[10px] font-semibold text-center line-clamp-4 leading-snug">{post.content}</p>
+                        </div>
+                      )}
+                      {/* Hover overlay */}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                        <span className="text-white text-xs font-bold">❤️ {post.likes?.length || 0}</span>
+                        <span className="text-white text-xs font-bold">💬 {post.comments_count || 0}</span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         )}
 

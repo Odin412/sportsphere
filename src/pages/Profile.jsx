@@ -44,6 +44,7 @@ export default function Profile() {
   const [showPersonalInfoDialog, setShowPersonalInfoDialog] = useState(false);
   const [personalInfo, setPersonalInfo] = useState({});
   const [showMonetization, setShowMonetization] = useState(false);
+  const [gridPost, setGridPost] = useState(null);
 
   useEffect(() => {
     base44.auth.me().then(u => {
@@ -844,21 +845,77 @@ export default function Profile() {
         <ReelsStatsPanel posts={myPosts || []} isOwnProfile={true} />
       </div>
 
-      {/* My Posts */}
+      {/* My Posts — Instagram 3-col grid */}
       <div>
-        <h2 className="text-lg font-bold text-slate-900 mb-4">My Posts</h2>
+        <h2 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <Film className="w-5 h-5 text-orange-500" />
+          My Posts
+          <span className="text-sm font-normal text-slate-400 ml-1">({myPosts?.length || 0})</span>
+        </h2>
         {myPosts?.length === 0 ? (
           <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-8 text-center">
             <p className="text-slate-400 text-sm">You haven't posted anything yet</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {myPosts?.map(post => (
-              <PostCard key={post.id} post={post} currentUser={user} onDelete={() => queryClient.invalidateQueries({ queryKey: ["my-posts"] })} />
-            ))}
+          <div className="grid grid-cols-3 gap-0.5 rounded-2xl overflow-hidden">
+            {myPosts?.map(post => {
+              const media = post.media_urls?.[0];
+              const isVideo = !!media?.match(/\.(mp4|webm|ogg|mov)/i);
+              return (
+                <button
+                  key={post.id}
+                  onClick={() => setGridPost(post)}
+                  className="aspect-square bg-gray-800 overflow-hidden relative group"
+                >
+                  {media ? (
+                    isVideo ? (
+                      <video src={media} className="w-full h-full object-cover" muted />
+                    ) : (
+                      <img src={media} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200" />
+                    )
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center p-2 bg-gray-900 hover:bg-gray-800 transition-colors">
+                      <p className="text-[10px] text-gray-300 line-clamp-4 text-center leading-tight">{post.content}</p>
+                    </div>
+                  )}
+                  {isVideo && (
+                    <div className="absolute top-1.5 right-1.5">
+                      <Film className="w-3 h-3 text-white drop-shadow" />
+                    </div>
+                  )}
+                  {post.likes?.length > 0 && (
+                    <div className="absolute bottom-1 left-1 text-[9px] text-white font-bold drop-shadow">
+                      ❤️ {post.likes.length}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
           </div>
         )}
       </div>
+
+      {/* Grid post modal */}
+      {gridPost && (
+        <div
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
+          onClick={() => setGridPost(null)}
+        >
+          <div className="w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()}>
+            <PostCard
+              post={gridPost}
+              currentUser={user}
+              onDelete={() => { setGridPost(null); queryClient.invalidateQueries({ queryKey: ["my-posts"] }); }}
+            />
+            <button
+              onClick={() => setGridPost(null)}
+              className="mt-2 w-full text-center text-gray-400 hover:text-white text-sm py-2 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -114,6 +114,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
         status: "accepted",
       });
       setFollowing(true);
+      await base44.entities.Notification.create({
+        recipient_email: post.author_email,
+        actor_email: currentUser.email,
+        actor_name: currentUser.full_name,
+        actor_avatar: currentUser.avatar_url,
+        type: "follow",
+        message: "started following you",
+      }).catch(() => {});
     }
   };
 

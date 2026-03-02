@@ -60,7 +60,8 @@ export default function Layout({ children, currentPageName }) {
   const location = useLocation();
   const [moreOpen, setMoreOpen] = useState(false);
 
-  if (currentPageName === "Login") return <>{children}</>;
+  const STANDALONE_PAGES = ["Login", "Admin", "AdminUsers", "AdminContent", "AdminAnalytics", "AdminSettings"];
+  if (STANDALONE_PAGES.includes(currentPageName)) return <>{children}</>;
 
   const isActive = (page) => currentPageName === page;
 

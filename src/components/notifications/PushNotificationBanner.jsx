@@ -27,6 +27,13 @@ export default function PushNotificationBanner({ user }) {
   const [toasts, setToasts] = useState([]);
   const seenIds = useRef(new Set());
 
+  // Request browser notification permission once on mount
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission();
+    }
+  }, []);
+
   useEffect(() => {
     if (!user) return;
 
@@ -47,6 +54,16 @@ export default function PushNotificationBanner({ user }) {
             setTimeout(() => {
               setToasts(prev => prev.filter(t => t.id !== notif.id));
             }, 5000);
+
+            // Fire native OS notification when tab is in background
+            if ('Notification' in window && Notification.permission === 'granted' && document.visibilityState === 'hidden') {
+              new Notification(`Sportsphere — ${notif.actor_name || 'Someone'}`, {
+                body: notif.message || '',
+                icon: notif.actor_avatar || '/favicon.ico',
+                badge: '/favicon.ico',
+                tag: notif.id, // deduplicates OS notifications
+              });
+            }
           }
         }
       )

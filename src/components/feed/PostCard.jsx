@@ -198,6 +198,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     }
   };
 
+  const deleteComment = async (commentId) => {
+    await base44.entities.Comment.delete(commentId).catch(() => {});
+    setComments(prev => prev.filter(c => c.id !== commentId));
+    await base44.entities.Post.update(post.id, {
+      comments_count: Math.max(0, (post.comments_count || 1) - 1),
+    }).catch(() => {});
+  };
+
   const isVideo = (url) => url && (url.includes('.mp4') || url.includes('.mov') || url.includes('.webm') || url.includes('video'));
 
   const submitReport = async () => {
@@ -498,7 +506,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
           ) : (
             <div className="space-y-3 max-h-72 overflow-y-auto">
               {comments.map(c => (
-                <div key={c.id} className="flex gap-2.5">
+                <div key={c.id} className="flex gap-2.5 group/comment">
                   <Avatar className="w-7 h-7 ring-1 ring-gray-700">
                     <AvatarImage src={c.author_avatar} />
                     <AvatarFallback className="text-xs bg-gray-800 text-gray-300">{c.author_name?.[0]}</AvatarFallback>
@@ -513,6 +521,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                       )}
                     </p>
                   </div>
+                  {c.author_email === currentUser?.email && (
+                    <button
+                      onClick={() => deleteComment(c.id)}
+                      className="opacity-0 group-hover/comment:opacity-100 text-gray-600 hover:text-red-400 transition-all flex-shrink-0 self-center"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

@@ -22,6 +22,7 @@ import MonetizationSetup from "../components/monetization/MonetizationSetup";
 import BadgeDisplay from "../components/gamification/BadgeDisplay";
 import FeaturedHighlight from "../components/profile/FeaturedHighlight";
 import ReelsStatsPanel from "../components/profile/ReelsStatsPanel";
+import EarningsPanel from "../components/profile/EarningsPanel";
 import { Instagram, Twitter, Youtube, Linkedin, Globe, Music2 } from "lucide-react";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
@@ -833,6 +834,17 @@ export default function Profile() {
             stats={statEntries?.filter(s => s.sport === viewingStatsProfile.sport)}
             sport={viewingStatsProfile.sport}
           />
+        </div>
+      )}
+
+      {/* Creator Earnings */}
+      {(user?.subscription_price > 0 || user?.is_accepting_donations) && (
+        <div>
+          <h2 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+            <DollarSign className="w-5 h-5 text-green-600" />
+            My Earnings
+          </h2>
+          <EarningsPanel user={user} />
         </div>
       )}
 

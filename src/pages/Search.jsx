@@ -54,7 +54,7 @@ export default function SearchPage() {
 
   const { data: posts = [], isLoading: loadingPosts } = useQuery({
     queryKey: ["search-posts", debouncedQuery],
-    queryFn: () => base44.entities.Post.list("-created_date", 100),
+    queryFn: () => base44.entities.Post.list("-created_date", 200),
     enabled: debouncedQuery.length >= 1,
   });
 
@@ -220,6 +220,13 @@ export default function SearchPage() {
           </div>
         )}
 
+        {/* Result summary */}
+        {debouncedQuery && !isLoading && totalResults > 0 && (
+          <p className="text-slate-400 text-sm px-1">
+            <span className="text-white font-semibold">{totalResults}</span> result{totalResults !== 1 ? "s" : ""} for &ldquo;<span className="text-cyan-400">{debouncedQuery}</span>&rdquo;
+          </p>
+        )}
+
         {/* Results */}
         {debouncedQuery && !isLoading && totalResults > 0 && (
           <div className="space-y-8">
@@ -269,7 +276,11 @@ export default function SearchPage() {
                 </div>
 
                 {filteredPosts.length === 0 ? (
-                  <p className="text-slate-500 text-sm">No posts found</p>
+                  <div className="text-center py-8 text-slate-500">
+                    <FileText className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                    <p className="text-sm">No posts match your search</p>
+                    <p className="text-xs mt-1 opacity-60">Try a different term or remove filters</p>
+                  </div>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-3">
                     {filteredPosts.slice(0, activeTab === "all" ? 4 : 20).map((post) => (
@@ -343,7 +354,11 @@ export default function SearchPage() {
                 </div>
 
                 {uniqueUsers.length === 0 ? (
-                  <p className="text-slate-500 text-sm">No users found</p>
+                  <div className="text-center py-8 text-slate-500">
+                    <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                    <p className="text-sm">No athletes or coaches match your search</p>
+                    <p className="text-xs mt-1 opacity-60">Try searching by name, sport, or role</p>
+                  </div>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-3">
                     {uniqueUsers.slice(0, activeTab === "all" ? 4 : 20).map((profile) => (
@@ -412,7 +427,11 @@ export default function SearchPage() {
                 </div>
 
                 {filteredStreams.length === 0 ? (
-                  <p className="text-slate-500 text-sm">No streams found</p>
+                  <div className="text-center py-8 text-slate-500">
+                    <Radio className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                    <p className="text-sm">No streams match your search</p>
+                    <p className="text-xs mt-1 opacity-60">Try searching by title, host, or sport</p>
+                  </div>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-3">
                     {filteredStreams.slice(0, activeTab === "all" ? 4 : 20).map((stream) => (
@@ -487,7 +506,11 @@ export default function SearchPage() {
                 </div>
 
                 {filteredChallenges.length === 0 ? (
-                  <p className="text-slate-500 text-sm">No challenges found</p>
+                  <div className="text-center py-8 text-slate-500">
+                    <Trophy className="w-8 h-8 mx-auto mb-2 opacity-30" />
+                    <p className="text-sm">No challenges match your search</p>
+                    <p className="text-xs mt-1 opacity-60">Try a different sport or status filter</p>
+                  </div>
                 ) : (
                   <div className="grid md:grid-cols-2 gap-3">
                     {filteredChallenges.slice(0, activeTab === "all" ? 4 : 20).map((challenge) => (

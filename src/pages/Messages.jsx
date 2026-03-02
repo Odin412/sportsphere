@@ -378,6 +378,10 @@ export default function Messages() {
                         isMine={msg.sender_email === user.email}
                         preferredLanguage={preferredLanguage}
                         allParticipants={selectedConversation?.participants}
+                        onDelete={(id) => queryClient.setQueryData(
+                          ["conv-messages", selectedConv],
+                          (prev) => prev?.filter(m => m.id !== id)
+                        )}
                       />
                     ))
                   )}

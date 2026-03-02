@@ -75,6 +75,7 @@ export default function Live() {
   const [thumbnailUrl, setThumbnailUrl] = useState("");
   const [liveMode, setLiveMode] = useState("live"); // "live" | "upload"
   const [goingLive, setGoingLive] = useState(false);
+  const [createdStream, setCreatedStream] = useState(null);
   const [tab, setTab] = useState("live");
   const [filters, setFilters] = useState({ query: "", sport: "all", sort: "recent" });
 
@@ -201,6 +202,7 @@ export default function Live() {
     setShowGoLive(false);
     setLiveData({ title: "", description: "", sport: "", is_premium: false, price: 0, stream_url: "" });
     setVodFile(null); setVodUrl(""); setThumbnailFile(null); setThumbnailUrl("");
+    if (!isVod) setCreatedStream(stream);
     refetch();
   };
 
@@ -219,9 +221,51 @@ export default function Live() {
     refetch();
   };
 
+  // Copy stream link helper
+  const copyStreamLink = (streamId) => {
+    const url = `${window.location.origin}${createPageUrl("ViewLive")}?id=${streamId}`;
+    navigator.clipboard.writeText(url).catch(() => {});
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50">
       <div className="max-w-6xl mx-auto px-4 py-6 space-y-5">
+
+        {/* You're Live! guidance panel */}
+        {createdStream && (
+          <div className="bg-gradient-to-r from-green-600 to-emerald-500 rounded-2xl p-5 text-white shadow-xl">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-2">
+                  <Radio className="w-5 h-5 animate-pulse" />
+                  <h3 className="font-black text-lg">You're Live! 🎉</h3>
+                </div>
+                <p className="text-green-100 text-sm mb-3">Your stream <strong>"{createdStream.title}"</strong> is live. Share the link so people can watch.</p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => copyStreamLink(createdStream.id)}
+                    className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
+                  >
+                    📋 Copy Stream Link
+                  </button>
+                  <Link
+                    to={createPageUrl("ViewLive") + `?id=${createdStream.id}`}
+                    className="flex items-center gap-2 bg-white text-green-700 hover:bg-green-50 rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
+                  >
+                    <Eye className="w-4 h-4" /> View Your Stream
+                  </Link>
+                </div>
+                <p className="text-green-200 text-xs mt-3">
+                  📡 <strong>Broadcasting software?</strong> Paste your RTMP stream URL into the Stream URL field when creating a stream, or use OBS / StreamYard pointed to your stream endpoint.
+                </p>
+              </div>
+              <button onClick={() => setCreatedStream(null)} className="text-white/70 hover:text-white p-1 flex-shrink-0">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Hero */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-orange-500 p-6 md:p-8 text-white">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Loader2, Languages, CheckCheck, Check, ExternalLink } from "lucide-react";
+import { Loader2, Languages, CheckCheck, Check, ExternalLink, Trash2 } from "lucide-react";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -34,10 +34,17 @@ function SharedPostPreview({ post }) {
   );
 }
 
-export default function MessageBubble({ msg, isMine, preferredLanguage, allParticipants }) {
+export default function MessageBubble({ msg, isMine, preferredLanguage, allParticipants, onDelete }) {
   const [translated, setTranslated] = useState(null);
   const [translating, setTranslating] = useState(false);
   const [showOriginal, setShowOriginal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    setDeleting(true);
+    await base44.entities.Message.delete(msg.id).catch(() => {});
+    onDelete?.(msg.id);
+  };
 
   const handleTranslate = async () => {
     if (translated) { setShowOriginal(prev => !prev); return; }
@@ -57,7 +64,7 @@ export default function MessageBubble({ msg, isMine, preferredLanguage, allParti
   const allRead = allParticipants && readers.length >= (allParticipants.filter(p => p !== msg.sender_email).length);
 
   return (
-    <div className={`flex gap-2 ${isMine ? "justify-end" : "justify-start"}`}>
+    <div className={`flex gap-2 group/msg ${isMine ? "justify-end" : "justify-start"}`}>
       {!isMine && (
         <Avatar className="w-7 h-7 mt-1 flex-shrink-0">
           <AvatarFallback className="bg-slate-200 text-xs">{msg.sender_name?.[0]}</AvatarFallback>
@@ -116,6 +123,16 @@ export default function MessageBubble({ msg, isMine, preferredLanguage, allParti
             <span className={`text-[10px] ${allRead ? "text-blue-500" : "text-slate-400"}`} title={allRead ? "Read" : "Delivered"}>
               {allRead ? <CheckCheck className="w-3 h-3" /> : <Check className="w-3 h-3" />}
             </span>
+          )}
+          {isMine && (
+            <button
+              onClick={handleDelete}
+              disabled={deleting}
+              className="opacity-0 group-hover/msg:opacity-100 text-slate-400 hover:text-red-400 transition-all"
+              title="Delete message"
+            >
+              {deleting ? <Loader2 className="w-3 h-3 animate-spin" /> : <Trash2 className="w-3 h-3" />}
+            </button>
           )}
         </div>
       </div>

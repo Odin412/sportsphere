@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, Medal, Crown, Flame, Calendar, Clock } from "lucide-react";
+import { motion } from "framer-motion";
 
 const SPORTS_CHIPS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Hockey", "MMA", "Golf"];
 
@@ -119,7 +120,12 @@ export default function Leaderboard() {
   const myEntry = leaderboard.find(u => u.user_email === user?.email);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="max-w-4xl mx-auto px-4 py-6 space-y-6"
+    >
       {/* Header */}
       <div className="bg-gradient-to-r from-red-900 to-red-800 rounded-3xl p-8 text-white shadow-2xl">
         <div className="flex items-center gap-3 mb-3">
@@ -231,9 +237,8 @@ export default function Leaderboard() {
           </h2>
           {leaderboard.length === 0 ? (
             <div className="text-center py-12 text-gray-400">
-              <Clock className="w-10 h-10 mx-auto mb-3 opacity-40" />
-              <p className="font-medium">No activity yet for this period</p>
-              <p className="text-sm mt-1">Post content to appear on the leaderboard!</p>
+              <p className="font-medium">Rankings update weekly.</p>
+              <p className="text-sm mt-1">Stay active to climb — consistency wins.</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -273,6 +278,6 @@ export default function Leaderboard() {
           )}
         </CardContent>
       </Card>
-    </div>
+    </motion.div>
   );
 }

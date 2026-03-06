@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { motion } from "framer-motion";
+import { SkeletonReelGrid } from "@/components/ui/SkeletonCard";
 
 export default function Reels() {
   const [user, setUser] = useState(null);
@@ -196,8 +198,8 @@ export default function Reels() {
 
   if (postsLoading) {
     return (
-      <div className="max-w-2xl mx-auto px-4 py-8 flex justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+      <div className="max-w-2xl mx-auto px-4 py-8">
+        <SkeletonReelGrid />
       </div>
     );
   }
@@ -206,7 +208,12 @@ export default function Reels() {
     <>
       {/* ── GRID VIEW (default) ─────────────────────────────────────── */}
       {activeReelIndex === null && (
-        <div className="max-w-2xl mx-auto px-4 py-4">
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.2 }}
+          className="max-w-2xl mx-auto px-4 py-4"
+        >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -231,9 +238,13 @@ export default function Reels() {
           </div>
 
           {feedItems.length === 0 ? (
-            <div className="text-center py-20 text-gray-600">
-              <Sparkles className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>No content available yet</p>
+            <div className="flex flex-col items-center justify-center py-20 text-center px-6">
+              <div className="text-4xl mb-4">🎬</div>
+              <p className="text-white font-bold text-lg">The court is quiet.</p>
+              <p className="text-gray-400 text-sm mt-1 mb-5">Drop the first reel in your sport and set the tone.</p>
+              <Link to={createPageUrl("CreateReel")} className="bg-red-600 hover:bg-red-700 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors">
+                Create a Reel
+              </Link>
             </div>
           ) : (
             /* 2-column reel grid */
@@ -289,7 +300,7 @@ export default function Reels() {
               })}
             </div>
           )}
-        </div>
+        </motion.div>
       )}
 
       {/* ── FULLSCREEN PLAYER (modal on click) ─────────────────────── */}

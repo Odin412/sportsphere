@@ -16,6 +16,7 @@ import SportHubGrid from "../components/stream/SportHubGrid";
 import EventCard from "../components/events/EventCard";
 import CreateEventDialog from "../components/events/CreateEventDialog";
 import PostCard from "../components/feed/PostCard";
+import { motion } from "framer-motion";
 
 const EVENT_TYPES = ["All", "Competition", "Workshop", "Meetup", "Training", "Tournament", "Other"];
 
@@ -132,6 +133,25 @@ export default function Explore() {
       : base44.entities.SportProfile.list("-created_date", 100),
   });
 
+  // Trending hashtags
+  const { data: recentPosts = [] } = useQuery({
+    queryKey: ["trending-hashtags"],
+    queryFn: () => base44.entities.Post.list("-created_date", 50),
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const trendingTags = useMemo(() => {
+    const counts = {};
+    recentPosts.forEach(p => {
+      const tags = (p.content || "").match(/#\w+/g) || [];
+      tags.forEach(t => { counts[t] = (counts[t] || 0) + 1; });
+    });
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 10)
+      .map(([tag, count]) => ({ tag, count }));
+  }, [recentPosts]);
+
   // Events
   const { data: allEvents, isLoading: loadingEvents, refetch: refetchEvents } = useQuery({
     queryKey: ["all-events"],
@@ -222,7 +242,12 @@ export default function Explore() {
   });
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-6 space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="max-w-5xl mx-auto px-4 py-6 space-y-6"
+    >
       {/* Header */}
       <div className="relative overflow-hidden bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-400 rounded-3xl p-8 text-white shadow-2xl">
         <img
@@ -249,6 +274,23 @@ export default function Explore() {
           className="pl-12 h-12 rounded-2xl bg-white border-slate-200 text-sm focus:ring-2 focus:ring-orange-200 shadow-sm"
         />
       </div>
+
+      {trendingTags.length > 0 && (
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <TrendingUp className="w-4 h-4 text-cyan-400" />
+            <h3 className="text-sm font-bold text-white">Trending</h3>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            {trendingTags.map(({ tag, count }) => (
+              <Link key={tag} to={`${createPageUrl("Search")}?q=${encodeURIComponent(tag)}`}
+                className="flex-shrink-0 px-3 py-1.5 bg-slate-800 hover:bg-cyan-900 text-cyan-400 rounded-full text-xs font-bold border border-slate-700 hover:border-cyan-500 transition-all whitespace-nowrap">
+                {tag} <span className="text-slate-500 ml-1">{count}</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
 
       <Tabs defaultValue="trending" className="space-y-4">
         <TabsList className="bg-white border border-slate-100 p-1 rounded-xl w-full grid grid-cols-5">
@@ -280,9 +322,9 @@ export default function Explore() {
           {loadingPosts ? (
             <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-orange-300" /></div>
           ) : searchedPosts.length === 0 ? (
-            <div className="text-center py-16 bg-white rounded-2xl border border-slate-100">
-              <p className="text-5xl mb-3">🔍</p>
-              <p className="text-slate-500 font-medium">No posts found</p>
+            <div className="text-center py-10">
+              <p className="text-gray-500 font-medium">Nothing trending here yet. 🔍</p>
+              <p className="text-gray-400 text-sm mt-1">Try a different sport or check back later.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -311,9 +353,9 @@ export default function Explore() {
           {loadingProfiles || loadingPosts ? (
             <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-orange-300" /></div>
           ) : popularAthletes.length === 0 ? (
-            <div className="text-center py-12 bg-white rounded-2xl border border-slate-100">
-              <p className="text-5xl mb-3">🏅</p>
-              <p className="text-slate-500 font-medium">No athletes found</p>
+            <div className="text-center py-10">
+              <p className="text-gray-500 font-medium">No athletes in this sport yet.</p>
+              <p className="text-gray-400 text-sm mt-1">Scout another sport or be the first to represent.</p>
             </div>
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
@@ -349,9 +391,9 @@ export default function Explore() {
             </div>
           )}
           {emergingSports.length === 0 && (
-            <div className="text-center py-12 bg-white rounded-2xl border border-slate-100">
-              <p className="text-5xl mb-3">📊</p>
-              <p className="text-slate-500">No sport data yet</p>
+            <div className="text-center py-10">
+              <p className="text-gray-500 font-medium">This sport hasn't made its mark here yet.</p>
+              <p className="text-gray-400 text-sm mt-1">Post something and own it.</p>
             </div>
           )}
         </TabsContent>
@@ -426,6 +468,6 @@ export default function Explore() {
         currentUser={user}
         onSuccess={refetchEvents}
       />
-    </div>
+    </motion.div>
   );
 }

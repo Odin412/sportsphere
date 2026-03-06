@@ -7,6 +7,8 @@ import { Search, Plus, Users, MapPin, TrendingUp, Loader2 } from "lucide-react";
 import GroupCard from "../components/groups/GroupCard";
 import CreateGroupDialog from "../components/groups/CreateGroupDialog";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+import { SkeletonCard } from "@/components/ui/SkeletonCard";
 
 const CATEGORIES = [
   { value: "all", label: "All Groups" },
@@ -46,7 +48,12 @@ export default function Groups() {
   const myGroups = groups?.filter(g => g.members?.includes(user?.email));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50"
+    >
       <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
         {/* Hero */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6 md:p-8 text-white">
@@ -121,14 +128,13 @@ export default function Groups() {
             {categoryFilter === "all" ? "Discover Groups" : CATEGORIES.find(c => c.value === categoryFilter)?.label}
           </h2>
           {isLoading ? (
-            <div className="flex justify-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-slate-300" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}
             </div>
           ) : groups?.length === 0 ? (
-            <div className="text-center py-20 bg-white rounded-2xl border border-slate-100">
-              <Users className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-              <p className="text-slate-500 font-medium">No groups found</p>
-              <p className="text-slate-400 text-sm mt-1">Try a different search or create one!</p>
+            <div className="text-center py-12 text-gray-500">
+              <p className="font-medium">You haven't joined any groups yet.</p>
+              <p className="text-sm mt-1">Find your sport community in <button className="text-orange-500 font-medium">Groups</button>.</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -140,12 +146,12 @@ export default function Groups() {
         </div>
       </div>
 
-      <CreateGroupDialog 
+      <CreateGroupDialog
         open={showCreateDialog}
         onOpenChange={setShowCreateDialog}
         user={user}
         onSuccess={refetch}
       />
-    </div>
+    </motion.div>
   );
 }

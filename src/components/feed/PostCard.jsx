@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
-import { Heart, MessageCircle, Share2, Play, MoreHorizontal, Bookmark, Flag, AlertTriangle, Star, Eye, Crown, Sparkles, ZoomIn, Trash2, UserPlus, UserCheck } from "lucide-react";
+import { Heart, MessageCircle, Share2, Play, MoreHorizontal, Bookmark, Flag, AlertTriangle, Star, Eye, Crown, ZoomIn, Trash2, UserPlus, UserCheck, EyeOff, Ban } from "lucide-react";
 import SharePostDialog from "../messages/SharePostDialog";
 import MediaViewer from "./MediaViewer";
 import ContentSummary from "../content/ContentSummary";
 import { toast } from "sonner";
+import { awardPoints } from "../gamification/PointsHelper";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -14,6 +15,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -68,7 +70,6 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const [submittingReport, setSubmittingReport] = useState(false);
   const [isHighlighted, setIsHighlighted] = useState(false);
   const [hasAccess, setHasAccess] = useState(false);
-  const [generatingSummary, setGeneratingSummary] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerStartIndex, setViewerStartIndex] = useState(0);
   const [showShareDialog, setShowShareDialog] = useState(false);
@@ -77,6 +78,9 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const reactionKey = `reaction-${post.id}-${currentUser?.email}`;
   const [myReaction, setMyReaction] = useState(() => (typeof window !== "undefined" ? localStorage.getItem(reactionKey) : null));
   const [showReactionPicker, setShowReactionPicker] = useState(false);
+  const [replyingTo, setReplyingTo] = useState(null);
+  const [replyText, setReplyText] = useState("");
+  const [expandedReplies, setExpandedReplies] = useState({});
 
   useEffect(() => {
     if (!currentUser) return;
@@ -115,16 +119,20 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     setLiked(!liked);
     setLikeCount(prev => liked ? prev - 1 : prev + 1);
     await base44.entities.Post.update(post.id, { likes: newLikes });
-    if (!liked && post.author_email !== currentUser.email) {
-      await base44.entities.Notification.create({
-        recipient_email: post.author_email,
-        actor_email: currentUser.email,
-        actor_name: currentUser.full_name,
-        actor_avatar: currentUser.avatar_url,
-        type: "like",
-        post_id: post.id,
-        message: "liked your post",
-      }).catch(() => {});
+    if (!liked) {
+      if (post.author_email !== currentUser.email) {
+        await base44.entities.Notification.create({
+          recipient_email: post.author_email,
+          actor_email: currentUser.email,
+          actor_name: currentUser.full_name,
+          actor_avatar: currentUser.avatar_url,
+          type: "like",
+          post_id: post.id,
+          message: "liked your post",
+        }).catch(() => {});
+      }
+      // Award points to liker for engagement
+      awardPoints(currentUser.email, "LIKE_GIVEN").catch(() => {});
     }
   };
 
@@ -260,6 +268,25 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     }
   };
 
+  const addReply = async (parentCommentId) => {
+    if (!replyText.trim()) return;
+    try {
+      const reply = await base44.entities.Comment.create({
+        post_id: post.id,
+        parent_comment_id: parentCommentId,
+        author_id: currentUser.id,
+        author_email: currentUser.email,
+        author_name: currentUser.full_name,
+        author_avatar: currentUser.avatar_url,
+        content: replyText,
+      });
+      setComments(prev => [...prev, reply]);
+      setExpandedReplies(prev => ({ ...prev, [parentCommentId]: true }));
+      setReplyText("");
+      setReplyingTo(null);
+    } catch (_) {}
+  };
+
   const deleteComment = async (commentId) => {
     await base44.entities.Comment.delete(commentId).catch(() => {});
     setComments(prev => prev.filter(c => c.id !== commentId));
@@ -300,24 +327,24 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     }
   };
 
-  const generateSummary = async () => {
-    if (!hasVideoContent()) return;
-    setGeneratingSummary(true);
-    try {
-      const summary = await base44.integrations.Core.InvokeLLM({
-        prompt: `Summarize this sports video post in 3-4 concise sentences.\nTitle: ${post.content}\nSport: ${post.sport || "General"}\nCategory: ${post.category || "Unknown"}`,
-      });
-      await base44.entities.Post.update(post.id, { ai_summary: summary });
-      post.ai_summary = summary;
-      if (onUpdate) onUpdate();
-    } catch (_) {}
-    setGeneratingSummary(false);
-  };
-
   const hasVideoContent = () => post.media_urls?.some(isVideo);
 
+  const renderContent = (text) => {
+    if (!text) return null;
+    const parts = text.split(/(#\w+)/g);
+    return parts.map((part, i) =>
+      /^#\w+$/.test(part) ? (
+        <Link key={i} to={`${createPageUrl("Search")}?q=${encodeURIComponent(part)}`}
+          className="text-cyan-400 hover:text-cyan-300 font-medium"
+          onClick={e => e.stopPropagation()}>
+          {part}
+        </Link>
+      ) : part
+    );
+  };
+
   return (
-    <article className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800">
+    <article className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800 hover:scale-[1.002] transition-transform duration-200">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3">
         <Link to={createPageUrl("UserProfile") + `?email=${post.author_email}`} className="flex items-center gap-3 group">
@@ -368,11 +395,6 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-gray-900 border-gray-700">
-                {hasVideoContent() && !post.ai_summary && (
-                  <DropdownMenuItem onClick={generateSummary} disabled={generatingSummary} className="gap-2 text-gray-300 hover:text-white">
-                    <Sparkles className="w-4 h-4" /> Generate Summary
-                  </DropdownMenuItem>
-                )}
                 {currentUser.email === post.author_email && (
                   <>
                     <DropdownMenuItem
@@ -405,6 +427,39 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                     <Flag className="w-4 h-4" /> Report Post
                   </DropdownMenuItem>
                 )}
+                {currentUser?.email !== post.author_email && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        // Mute — hide this user's posts from feed without unfollowing
+                        await base44.entities.MutedUser.create({
+                          muter_email: currentUser.email,
+                          muted_email: post.author_email,
+                          muted_name: post.author_name,
+                        }).catch(() => {});
+                        toast.info(`Muted ${post.author_name}`);
+                      }}
+                      className="gap-2 text-gray-600"
+                    >
+                      <EyeOff className="w-4 h-4" /> Mute {post.author_name?.split(" ")[0]}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        if (!confirm(`Block ${post.author_name}? Their content will be hidden from you.`)) return;
+                        await base44.entities.BlockedUser.create({
+                          blocker_email: currentUser.email,
+                          blocked_email: post.author_email,
+                          blocked_name: post.author_name,
+                        }).catch(() => {});
+                        toast.success(`Blocked ${post.author_name}`);
+                      }}
+                      className="gap-2 text-red-600 focus:text-red-600"
+                    >
+                      <Ban className="w-4 h-4" /> Block {post.author_name?.split(" ")[0]}
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           )}
@@ -429,8 +484,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
           return (
             <div className={`bg-gradient-to-br ${gradient} mx-4 mb-3 rounded-2xl p-6 flex items-center justify-center min-h-[120px]`}>
               <p className="text-white text-lg font-semibold text-center leading-relaxed">
-                {post.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
-                  part.startsWith('@') ? (
+                {post.content.split(/(#\w+|@\w+(?:\s+\w+)*)/g).map((part, i) =>
+                  /^#\w+$/.test(part) ? (
+                    <Link key={i} to={`${createPageUrl("Search")}?q=${encodeURIComponent(part)}`}
+                      className="text-cyan-300 hover:text-cyan-200 font-medium underline underline-offset-2"
+                      onClick={e => e.stopPropagation()}>
+                      {part}
+                    </Link>
+                  ) : part.startsWith('@') ? (
                     <span key={i} className="underline underline-offset-2">{part}</span>
                   ) : part
                 )}
@@ -446,8 +507,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
             <p className={`px-4 pb-3 text-sm text-gray-200 leading-relaxed whitespace-pre-wrap ${
               post.is_premium && !hasAccess ? "line-clamp-2 blur-sm" : ""
             }`}>
-              {post.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
-                part.startsWith('@') ? (
+              {post.content.split(/(#\w+|@\w+(?:\s+\w+)*)/g).map((part, i) =>
+                /^#\w+$/.test(part) ? (
+                  <Link key={i} to={`${createPageUrl("Search")}?q=${encodeURIComponent(part)}`}
+                    className="text-cyan-400 hover:text-cyan-300 font-medium"
+                    onClick={e => e.stopPropagation()}>
+                    {part}
+                  </Link>
+                ) : part.startsWith('@') ? (
                   <span key={i} className="text-red-400 font-medium">{part}</span>
                 ) : part
               )}
@@ -459,7 +526,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
       {/* AI Summary */}
       {hasVideoContent() && hasAccess && (
         <div className="px-4 pb-3">
-          <ContentSummary content={post} type="post" showButton={!post.ai_summary} />
+          <ContentSummary content={post} />
         </div>
       )}
 
@@ -607,36 +674,115 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
           </div>
           {loadingComments ? (
             <div className="text-center py-4 text-sm text-gray-500">Loading...</div>
-          ) : (
-            <div className="space-y-3 max-h-72 overflow-y-auto">
-              {comments.map(c => (
-                <div key={c.id} className="flex gap-2.5 group/comment">
-                  <Avatar className="w-7 h-7 ring-1 ring-gray-700">
-                    <AvatarImage src={c.author_avatar} />
-                    <AvatarFallback className="text-xs bg-gray-800 text-gray-300">{c.author_name?.[0]}</AvatarFallback>
-                  </Avatar>
-                  <div className="bg-gray-800 rounded-xl px-3 py-2 flex-1 border border-gray-700">
-                    <p className="text-xs font-semibold text-white">{c.author_name}</p>
-                    <p className="text-sm text-gray-300 mt-0.5">
-                      {c.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
-                        part.startsWith('@') ? (
-                          <span key={i} className="text-red-400 font-medium">{part}</span>
-                        ) : part
-                      )}
-                    </p>
-                  </div>
-                  {c.author_email === currentUser?.email && (
-                    <button
-                      onClick={() => deleteComment(c.id)}
-                      className="opacity-0 group-hover/comment:opacity-100 text-gray-600 hover:text-red-400 transition-all flex-shrink-0 self-center"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          ) : (() => {
+            const topLevel = comments.filter(c => !c.parent_comment_id);
+            const replyMap = comments.reduce((acc, c) => {
+              if (c.parent_comment_id) {
+                acc[c.parent_comment_id] = [...(acc[c.parent_comment_id] || []), c];
+              }
+              return acc;
+            }, {});
+            return (
+              <div className="space-y-3 max-h-72 overflow-y-auto">
+                {topLevel.map(c => {
+                  const replies = replyMap[c.id] || [];
+                  const isExpanded = expandedReplies[c.id];
+                  return (
+                    <div key={c.id}>
+                      <div className="flex gap-2.5 group/comment">
+                        <Avatar className="w-7 h-7 ring-1 ring-gray-700">
+                          <AvatarImage src={c.author_avatar} />
+                          <AvatarFallback className="text-xs bg-gray-800 text-gray-300">{c.author_name?.[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="bg-gray-800 rounded-xl px-3 py-2 border border-gray-700">
+                            <p className="text-xs font-semibold text-white">{c.author_name}</p>
+                            <p className="text-sm text-gray-300 mt-0.5">
+                              {c.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
+                                part.startsWith('@') ? (
+                                  <span key={i} className="text-red-400 font-medium">{part}</span>
+                                ) : part
+                              )}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-3 mt-1 px-1">
+                            {currentUser && (
+                              <button
+                                onClick={() => { setReplyingTo(replyingTo === c.id ? null : c.id); setReplyText(""); }}
+                                className="text-xs text-gray-500 hover:text-red-400 font-medium transition-colors"
+                              >
+                                Reply
+                              </button>
+                            )}
+                            {replies.length > 0 && (
+                              <button
+                                onClick={() => setExpandedReplies(prev => ({ ...prev, [c.id]: !prev[c.id] }))}
+                                className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
+                              >
+                                {isExpanded ? `▴ Hide replies` : `▾ ${replies.length} ${replies.length === 1 ? "reply" : "replies"}`}
+                              </button>
+                            )}
+                            {c.author_email === currentUser?.email && (
+                              <button
+                                onClick={() => deleteComment(c.id)}
+                                className="text-xs text-gray-600 hover:text-red-400 transition-colors ml-auto"
+                              >
+                                <Trash2 className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
+
+                          {/* Inline reply input */}
+                          {replyingTo === c.id && (
+                            <div className="flex gap-2 mt-2">
+                              <input
+                                autoFocus
+                                value={replyText}
+                                onChange={e => setReplyText(e.target.value)}
+                                onKeyDown={e => e.key === "Enter" && !e.shiftKey && addReply(c.id)}
+                                placeholder={`Reply to ${c.author_name}...`}
+                                className="flex-1 text-xs bg-gray-800 text-white placeholder:text-gray-500 rounded-xl px-3 py-2 border border-gray-700 focus:ring-1 focus:ring-red-500/40 outline-none"
+                              />
+                              <button
+                                onClick={() => addReply(c.id)}
+                                className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-xl font-semibold transition-colors"
+                              >
+                                Post
+                              </button>
+                            </div>
+                          )}
+
+                          {/* Nested replies */}
+                          {isExpanded && replies.map(reply => (
+                            <div key={reply.id} className="flex gap-2 mt-2 ml-3 pl-3 border-l-2 border-gray-700 group/reply">
+                              <Avatar className="w-6 h-6 ring-1 ring-gray-700 flex-shrink-0">
+                                <AvatarImage src={reply.author_avatar} />
+                                <AvatarFallback className="text-xs bg-gray-800 text-gray-400">{reply.author_name?.[0]}</AvatarFallback>
+                              </Avatar>
+                              <div className="flex-1 min-w-0">
+                                <div className="bg-gray-800/70 rounded-xl px-3 py-1.5 border border-gray-700/50">
+                                  <p className="text-xs font-semibold text-white">{reply.author_name}</p>
+                                  <p className="text-xs text-gray-300 mt-0.5">{reply.content}</p>
+                                </div>
+                              </div>
+                              {reply.author_email === currentUser?.email && (
+                                <button
+                                  onClick={() => deleteComment(reply.id)}
+                                  className="opacity-0 group-hover/reply:opacity-100 text-gray-600 hover:text-red-400 transition-all flex-shrink-0 self-center"
+                                >
+                                  <Trash2 className="w-3 h-3" />
+                                </button>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       )}
 

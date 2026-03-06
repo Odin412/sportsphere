@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { base44 } from "@/api/base44Client";
 import moment from "moment";
 
-export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen }) {
+const IMAGE_DURATION = 5000;
+const VIDEO_DURATION = 10000;
+
+export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen, user }) {
   const [index, setIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [myReaction, setMyReaction] = useState(null);
+  const timerRef = useRef(null);
+  const intervalRef = useRef(null);
+  const videoRef = useRef(null);
+  // Stable refs so effects can always call latest versions without stale closures
+  const goNextRef = useRef(null);
+  const goPrevRef = useRef(null);
 
   const current = stories[index];
-
-  // Mark current story as seen whenever index changes
-  useEffect(() => {
-    if (current?.id) onMarkSeen(current.id);
-  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Keyboard navigation
-  useEffect(() => {
-    const handler = (e) => {
-      if (e.key === "Escape") onClose();
-      if (e.key === "ArrowRight") goNext();
-      if (e.key === "ArrowLeft") goPrev();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
+  const isOwn = current?.author_email === user?.email;
+  const media = current?.media_urls?.[0];
+  const isVideo = !!media?.match(/\.(mp4|webm|ogg|mov)/i);
+  const DURATION = isVideo ? VIDEO_DURATION : IMAGE_DURATION;
 
   const goNext = () => {
     if (index < stories.length - 1) {
@@ -36,8 +36,71 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen 
     if (index > 0) setIndex((i) => i - 1);
   };
 
-  const media = current?.media_urls?.[0];
-  const isVideo = !!media?.match(/\.(mp4|webm|ogg|mov)/i);
+  goNextRef.current = goNext;
+  goPrevRef.current = goPrev;
+
+  const handleReact = (emoji) => {
+    setMyReaction((prev) => (prev === emoji ? null : emoji));
+  };
+
+  // Track story view and increment view count when active story changes
+  useEffect(() => {
+    if (!current?.id || !user?.email) return;
+    base44.entities.Post.update(current.id, {
+      views: (current.views || 0) + 1,
+    }).catch(() => {});
+  }, [current?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reset reaction when story changes
+  useEffect(() => {
+    setMyReaction(null);
+  }, [current?.id]);
+
+  // Auto-advance timer + animated progress bar
+  useEffect(() => {
+    // Stop any video from the previous story
+    if (videoRef.current) {
+      videoRef.current.pause();
+      videoRef.current.currentTime = 0;
+    }
+
+    // Mark current story as seen
+    if (current?.id) onMarkSeen(current.id);
+
+    // Reset progress and clear old timers
+    setProgress(0);
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    const startTime = Date.now();
+
+    intervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min((elapsed / DURATION) * 100, 100);
+      setProgress(pct);
+      if (pct >= 100) clearInterval(intervalRef.current);
+    }, 50);
+
+    timerRef.current = setTimeout(() => {
+      goNextRef.current();
+    }, DURATION);
+
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Keyboard navigation — uses refs so no stale closure on index
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") goNextRef.current?.();
+      if (e.key === "ArrowLeft") goPrevRef.current?.();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!current) return null;
 
@@ -50,19 +113,23 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen 
         className="relative w-full max-w-sm h-screen flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Progress bars */}
+        {/* Animated progress bars */}
         <div className="absolute top-3 left-3 right-3 flex gap-1 z-20">
           {stories.map((_, i) => (
-            <div
-              key={i}
-              className={`h-0.5 flex-1 rounded-full transition-all ${
-                i < index
-                  ? "bg-white"
-                  : i === index
-                  ? "bg-white"
-                  : "bg-white/30"
-              }`}
-            />
+            <div key={i} className="h-0.5 flex-1 rounded-full bg-white/30 overflow-hidden">
+              <div
+                className="h-full bg-white rounded-full"
+                style={{
+                  width:
+                    i < index
+                      ? "100%"
+                      : i === index
+                      ? `${progress}%`
+                      : "0%",
+                  transition: i === index ? "none" : undefined,
+                }}
+              />
+            </div>
           ))}
         </div>
 
@@ -87,6 +154,13 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen 
               {current.sport}
             </span>
           )}
+          {/* Viewer count — only shown to story author */}
+          {isOwn && (current.views || 0) > 0 && (
+            <div className="flex items-center gap-1 text-white/70 text-xs ml-1">
+              <Eye className="w-3 h-3" />
+              <span>{current.views}</span>
+            </div>
+          )}
         </div>
 
         {/* Close button */}
@@ -102,10 +176,10 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen 
           {media ? (
             isVideo ? (
               <video
+                ref={videoRef}
                 key={media}
                 src={media}
                 autoPlay
-                loop
                 muted
                 playsInline
                 className="max-w-full max-h-full object-contain"
@@ -137,7 +211,26 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen 
           </div>
         )}
 
-        {/* Navigation arrows (visible on desktop) */}
+        {/* Story emoji reactions — shown to viewers (not the story author) */}
+        {user && !isOwn && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/50 backdrop-blur-xl rounded-full px-4 py-2 border border-white/10">
+            {["❤️", "🔥", "😮", "👏", "💪"].map((emoji) => (
+              <button
+                key={emoji}
+                onClick={() => handleReact(emoji)}
+                className={`text-xl transition-transform hover:scale-125 active:scale-150 ${
+                  myReaction === emoji
+                    ? "scale-110 opacity-100"
+                    : "opacity-75 hover:opacity-100"
+                }`}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Navigation arrows (desktop) */}
         {index > 0 && (
           <button
             onClick={goPrev}

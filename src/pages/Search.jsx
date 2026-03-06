@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, SlidersHorizontal, Play } from "lucide-react";
+import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, Clock, SlidersHorizontal, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import moment from "moment";
@@ -53,6 +53,24 @@ export default function SearchPage() {
   const [challengeSport, setChallengeSport] = useState("all");
   const [challengeStatus, setChallengeStatus] = useState("all");
 
+  const [searchHistory, setSearchHistory] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("ss_search_history") || "[]"); }
+    catch { return []; }
+  });
+
+  const saveToHistory = (q) => {
+    if (!q.trim()) return;
+    const updated = [q.trim(), ...searchHistory.filter(h => h !== q.trim())].slice(0, 10);
+    setSearchHistory(updated);
+    localStorage.setItem("ss_search_history", JSON.stringify(updated));
+  };
+
+  const removeFromHistory = (item) => {
+    const updated = searchHistory.filter(h => h !== item);
+    setSearchHistory(updated);
+    localStorage.setItem("ss_search_history", JSON.stringify(updated));
+  };
+
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
@@ -66,6 +84,13 @@ export default function SearchPage() {
     setQuery(e.target.value);
     debouncedSetQuery(e.target.value);
   };
+
+  useEffect(() => {
+    if (debouncedQuery.trim()) {
+      saveToHistory(debouncedQuery.trim());
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery]);
 
   const { data: posts = [], isLoading: loadingPosts } = useQuery({
     queryKey: ["search-posts", debouncedQuery],
@@ -215,6 +240,28 @@ export default function SearchPage() {
                 </button>
               );
             })}
+          </div>
+        )}
+
+        {/* Recent search history — shown before typing */}
+        {!query && searchHistory.length > 0 && (
+          <div className="space-y-1 mt-2">
+            <p className="text-xs font-bold text-slate-500 uppercase tracking-wide px-1">Recent</p>
+            {searchHistory.map(item => (
+              <div key={item}
+                className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-800 cursor-pointer group"
+                onClick={() => { setQuery(item); debouncedSetQuery(item); }}>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-3.5 h-3.5 text-slate-500" />
+                  <span className="text-sm text-slate-300">{item}</span>
+                </div>
+                <button
+                  onClick={e => { e.stopPropagation(); removeFromHistory(item); }}
+                  className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-white transition-all p-1">
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            ))}
           </div>
         )}
 

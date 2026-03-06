@@ -14,6 +14,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import FeedPagination, { PAGE_SIZE } from "@/components/feed/FeedPagination";
+import { motion } from "framer-motion";
+import { SkeletonPostCard } from "@/components/ui/SkeletonCard";
 
 const SPORTS_LIST = [
   { name: "Basketball", emoji: "🏀" },
@@ -91,7 +93,12 @@ export default function Feed() {
   const posts = activePosts?.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   return (
-    <div className="max-w-[1140px] mx-auto px-4 py-4">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="max-w-[1140px] mx-auto px-4 py-4"
+    >
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_296px] lg:gap-6 lg:items-start">
 
         {/* ── LEFT COLUMN — main feed ───────────────────────────────── */}
@@ -181,8 +188,8 @@ export default function Feed() {
       {/* Posts — with ESPN news cards injected every 5 posts */}
       <div>
         {isLoading ? (
-          <div className="flex justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-gray-600" />
+          <div className="space-y-4 px-4">
+            {[...Array(3)].map((_, i) => <SkeletonPostCard key={i} />)}
           </div>
         ) : posts?.length === 0 ? (
           <div className="text-center py-20">
@@ -230,8 +237,9 @@ export default function Feed() {
           authorGroup={storySession.group}
           onClose={() => setStorySession(null)}
           onMarkSeen={storySession.markSeen}
+          user={user}
         />
       )}
-    </div>
+    </motion.div>
   );
 }

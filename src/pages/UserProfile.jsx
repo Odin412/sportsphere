@@ -13,6 +13,7 @@ import { createPageUrl } from "../utils";
 import PostCard from "../components/feed/PostCard";
 import ReelsStatsPanel from "../components/profile/ReelsStatsPanel";
 import SubscriptionTiers from "../components/monetization/SubscriptionTiers";
+import FollowerListModal from "../components/social/FollowerListModal";
 
 export default function UserProfile() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -25,6 +26,7 @@ export default function UserProfile() {
   const [sending, setSending] = useState(false);
   const [followStatus, setFollowStatus] = useState(null); // null | "pending" | "accepted"
   const [gridPost, setGridPost] = useState(null);
+  const [showFollowerList, setShowFollowerList] = useState(null); // null | "followers" | "following"
 
   useEffect(() => {
     base44.auth.me().then(setCurrentUser).catch(() => {});
@@ -188,8 +190,14 @@ export default function UserProfile() {
               <h1 className="text-xl font-bold text-slate-900">{displayName}</h1>
               {profile?.location && <p className="text-sm text-slate-500">{profile.location}</p>}
               <div className="flex gap-4 mt-2 text-sm text-slate-500">
-                <span><strong className="text-slate-800">{followerCount?.length ?? 0}</strong> followers</span>
-                <span><strong className="text-slate-800">{followingCount?.length ?? 0}</strong> following</span>
+                <button onClick={() => setShowFollowerList("followers")} className="text-center hover:opacity-75 transition-opacity">
+                  <p className="font-black text-gray-900">{followerCount?.length ?? 0}</p>
+                  <p className="text-xs text-gray-500">Followers</p>
+                </button>
+                <button onClick={() => setShowFollowerList("following")} className="text-center hover:opacity-75 transition-opacity">
+                  <p className="font-black text-gray-900">{followingCount?.length ?? 0}</p>
+                  <p className="text-xs text-gray-500">Following</p>
+                </button>
                 <span><strong className="text-slate-800">{posts?.length ?? 0}</strong> posts</span>
               </div>
             </div>
@@ -438,6 +446,14 @@ export default function UserProfile() {
             </button>
           </div>
         </div>
+      )}
+
+      {showFollowerList && (
+        <FollowerListModal
+          profileEmail={profileEmail}
+          mode={showFollowerList}
+          onClose={() => setShowFollowerList(null)}
+        />
       )}
 
       {/* Advice Dialog */}

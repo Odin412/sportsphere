@@ -15,6 +15,8 @@ import moment from "moment";
 import { toast } from "sonner";
 import CreateEventDialog from "../components/events/CreateEventDialog";
 import AIEventRecommendations from "../components/events/AIEventRecommendations";
+import { motion } from "framer-motion";
+import { SkeletonEventCard } from "@/components/ui/SkeletonCard";
 
 const SPORTS = ["All Sports", "Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
 
@@ -45,19 +47,28 @@ function EventCard({ event, currentUser, onUpdate }) {
   const handleRSVP = async () => {
     if (!currentUser) { toast.error("Please login to register"); return; }
     setLoading(true);
-    const newAttendees = isRSVPd
-      ? (event.attendees || []).filter(e => e !== currentUser.email)
-      : [...(event.attendees || []), currentUser.email];
+    try {
+      const newAttendees = isRSVPd
+        ? (event.attendees || []).filter(e => e !== currentUser.email)
+        : [...(event.attendees || []), currentUser.email];
 
-    if (!isRSVPd && event.max_attendees && newAttendees.length > event.max_attendees) {
-      toast.error("Event is full"); setLoading(false); return;
+      if (!isRSVPd && event.max_attendees && newAttendees.length > event.max_attendees) {
+        toast.error("Event is full"); setLoading(false); return;
+      }
+      await base44.entities.Event.update(event.id, { attendees: newAttendees });
+      setIsRSVPd(!isRSVPd);
+      setAttendeeCount(newAttendees.length);
+      if (!isRSVPd && event.price > 0) {
+        toast.success("Added to interest list! Ticket purchase coming soon — you'll be contacted with payment details.");
+      } else {
+        toast.success(isRSVPd ? "Registration cancelled" : "Successfully registered!");
+      }
+      onUpdate?.();
+    } catch (error) {
+      toast.error("Registration failed. Please try again.");
+    } finally {
+      setLoading(false);
     }
-    await base44.entities.Event.update(event.id, { attendees: newAttendees });
-    setIsRSVPd(!isRSVPd);
-    setAttendeeCount(newAttendees.length);
-    toast.success(isRSVPd ? "Registration cancelled" : "Successfully registered!");
-    onUpdate?.();
-    setLoading(false);
   };
 
   const addToCalendar = () => {
@@ -173,7 +184,7 @@ function EventCard({ event, currentUser, onUpdate }) {
                   : "bg-gradient-to-r from-red-900 to-red-800 hover:from-red-800 hover:to-red-700 text-white shadow"
               }`}
             >
-              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : isRSVPd ? <><CheckCircle2 className="w-4 h-4 mr-1" />Registered</> : isFull ? "Event Full" : "Register"}
+              {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : isRSVPd ? <><CheckCircle2 className="w-4 h-4 mr-1" />Registered</> : isFull ? "Event Full" : event.price > 0 ? `Get Tickets ($${event.price})` : "Register"}
             </Button>
             <Button
               onClick={addToCalendar}
@@ -264,7 +275,12 @@ export default function Events() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="max-w-6xl mx-auto px-4 py-6 space-y-6"
+    >
       {/* Hero */}
       <div className="bg-gradient-to-br from-red-900 via-red-800 to-red-900 rounded-3xl p-8 text-white shadow-2xl relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_50%,white_0%,transparent_60%)]" />
@@ -411,7 +427,9 @@ export default function Events() {
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-gray-300" /></div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[...Array(3)].map((_, i) => <SkeletonEventCard key={i} />)}
+            </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-20 bg-white rounded-2xl border border-gray-200">
               <p className="text-5xl mb-3">📅</p>
@@ -482,6 +500,6 @@ export default function Events() {
       </Tabs>
 
       <CreateEventDialog open={showCreate} onOpenChange={setShowCreate} currentUser={user} onSuccess={refetch} />
-    </div>
+    </motion.div>
   );
 }

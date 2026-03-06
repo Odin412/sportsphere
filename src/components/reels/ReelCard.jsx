@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
-import { Heart, MessageCircle, Share2, Radio, Crown, Play, Pause, Bookmark, Info, MoreVertical } from "lucide-react";
+import { Heart, MessageCircle, Share2, Radio, Crown, Play, Pause, Bookmark, Info, MoreVertical, Gauge, Music } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,9 @@ export default function ReelCard({ item, currentUser, isActive }) {
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [commentsDisabled, setCommentsDisabled] = useState(item.comments_disabled || false);
   const [showHeartAnim, setShowHeartAnim] = useState(false);
+  const [speed, setSpeed] = useState(1);
+  const [showSpeedPicker, setShowSpeedPicker] = useState(false);
+  const SPEEDS = [0.5, 0.75, 1, 1.5, 2];
 
   // Check if content is saved
   const { data: savedContent } = useQuery({
@@ -183,6 +186,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
             src={item.media_urls[0]}
             isActive={isActive}
             onDoubleTap={handleDoubleTap}
+            playbackRate={speed}
             className="absolute inset-0"
           />
         ) : (
@@ -266,6 +270,12 @@ export default function ReelCard({ item, currentUser, isActive }) {
                 <span className="text-white text-sm font-bold">{item.sport}</span>
               </div>
             )}
+            {item.audio_name && (
+              <div className="flex items-center gap-1.5 mt-1">
+                <Music className="w-3 h-3 text-white animate-spin" style={{ animationDuration: "3s" }} />
+                <span className="text-white text-xs truncate max-w-[160px]">{item.audio_name}</span>
+              </div>
+            )}
           </div>
 
           {/* Action Buttons */}
@@ -328,6 +338,33 @@ export default function ReelCard({ item, currentUser, isActive }) {
                     <Info className="w-6 h-6 text-white" />
                   </div>
                 </button>
+              )}
+
+              {/* Speed control */}
+              {!isStream && item.media_urls?.some(u => u.includes('.mp4') || u.includes('.mov') || u.includes('.webm')) && (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowSpeedPicker(prev => !prev)}
+                    className="flex flex-col items-center gap-1 group"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-black/40 backdrop-blur-xl border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <span className="text-white text-xs font-black">{speed}x</span>
+                    </div>
+                  </button>
+                  {showSpeedPicker && (
+                    <div className="absolute bottom-16 right-0 bg-gray-900/95 backdrop-blur-xl rounded-2xl border border-white/10 overflow-hidden">
+                      {SPEEDS.map(s => (
+                        <button
+                          key={s}
+                          onClick={() => { setSpeed(s); setShowSpeedPicker(false); }}
+                          className={}
+                        >
+                          {s}x
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
 
               {/* Author-only: turn off comments */}

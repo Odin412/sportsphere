@@ -4,8 +4,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion, VideoOff } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { toast } from "sonner";
 import TipButton from "../components/monetization/TipButton";
@@ -22,6 +22,7 @@ export default function ViewLive() {
   const urlParams = new URLSearchParams(window.location.search);
   const streamId = urlParams.get("id");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState("");
   const [hasAccess, setHasAccess] = useState(false);
@@ -160,6 +161,13 @@ export default function ViewLive() {
   const isHost = stream?.host_email === user?.email;
   const isLive = stream?.status === "live";
 
+  const formatDuration = (start, end) => {
+    if (!start || !end) return "";
+    const mins = Math.floor((new Date(end) - new Date(start)) / 60000);
+    if (mins < 60) return `${mins}m`;
+    return `${Math.floor(mins / 60)}h ${mins % 60}m`;
+  };
+
   // Start camera when host is viewing their own live stream with no external URL
   useEffect(() => {
     if (!isHost || !isLive || stream?.stream_url) return;
@@ -266,6 +274,37 @@ export default function ViewLive() {
                     {!isLive && (
                       <div className="absolute top-3 left-3">
                         <Badge className="bg-slate-600 text-white font-bold text-xs px-3 py-1">ENDED</Badge>
+                      </div>
+                    )}
+
+                    {/* Stream End Card */}
+                    {stream && !isLive && (
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/95 backdrop-blur-sm z-30 gap-5 text-center p-8 rounded-2xl">
+                        <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
+                          <VideoOff className="w-8 h-8 text-red-400" />
+                        </div>
+                        <div>
+                          <h2 className="text-2xl font-black text-white mb-1">Stream Ended</h2>
+                          {stream.started_at && stream.ended_at && (
+                            <p className="text-slate-400 text-sm">Duration: {formatDuration(stream.started_at, stream.ended_at)}</p>
+                          )}
+                        </div>
+                        {!isHost && stream.host_email && user && (
+                          <button
+                            onClick={async () => {
+                              try {
+                                await base44.entities.Follow.create({ follower_email: user.email, following_email: stream.host_email, status: "accepted" });
+                                toast.success(`Following ${stream.host_name || "creator"}!`);
+                              } catch(e) { toast.error("Could not follow"); }
+                            }}
+                            className="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl transition-colors">
+                            Follow {stream.host_name || "Creator"}
+                          </button>
+                        )}
+                        <button onClick={() => navigate(-1)}
+                          className="px-5 py-2.5 border border-slate-600 text-slate-300 hover:text-white font-medium rounded-xl transition-colors text-sm">
+                          Back to Streams
+                        </button>
                       </div>
                     )}
                   </div>

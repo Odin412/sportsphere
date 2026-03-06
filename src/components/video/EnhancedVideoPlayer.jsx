@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Play, Pause } from "lucide-react";
 
-export default function EnhancedVideoPlayer({ 
-  src, 
-  onDoubleTap, 
-  isActive, 
-  className = "" 
+export default function EnhancedVideoPlayer({
+  src,
+  onDoubleTap,
+  isActive,
+  playbackRate = 1,
+  className = ""
 }) {
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -34,6 +35,13 @@ export default function EnhancedVideoPlayer({
       }
     }
   }, [isActive]);
+
+  // Apply playback rate changes
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.playbackRate = playbackRate;
+    }
+  }, [playbackRate]);
 
   const handleTimeUpdate = () => {
     if (videoRef.current) {

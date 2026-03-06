@@ -15,6 +15,8 @@ import { createPageUrl } from "../utils";
 import { Switch } from "@/components/ui/switch";
 import StreamSearch from "../components/discover/StreamSearch";
 import moment from "moment";
+import { motion } from "framer-motion";
+import { SkeletonCard } from "@/components/ui/SkeletonCard";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
 
@@ -228,7 +230,12 @@ export default function Live() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50">
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50"
+    >
       <div className="max-w-6xl mx-auto px-4 py-6 space-y-5">
 
         {/* You're Live! guidance panel */}
@@ -532,12 +539,22 @@ export default function Live() {
 
           <TabsContent value="live" className="mt-4">
             {loadingLive ? (
-              <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-slate-300" /></div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}
+              </div>
             ) : filteredLive.length === 0 ? (
-              <div className="text-center py-14 bg-white rounded-2xl border border-slate-100">
-                <VideoOff className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-                <p className="text-slate-400 font-medium">{filters.query || filters.sport !== "all" ? "No streams match your filters" : "No one is live right now"}</p>
-                <p className="text-slate-400 text-sm mt-1">Be the first to go live!</p>
+              <div className="text-center py-16 text-gray-400">
+                {filters.query || filters.sport !== "all" ? (
+                  <>
+                    <p className="font-bold text-base">No streams match your filters.</p>
+                    <p className="text-sm mt-1">Try adjusting your search or sport filter.</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="font-bold text-base">No one's live right now.</p>
+                    <p className="text-sm mt-1">Be the first to go live in your sport.</p>
+                  </>
+                )}
               </div>
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -548,7 +565,9 @@ export default function Live() {
 
           <TabsContent value="past" className="mt-4">
             {loadingPast ? (
-              <div className="flex justify-center py-12"><Loader2 className="w-8 h-8 animate-spin text-slate-300" /></div>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}
+              </div>
             ) : filteredPast.length === 0 ? (
               <div className="text-center py-14 bg-white rounded-2xl border border-slate-100">
                 <VideoOff className="w-12 h-12 text-slate-200 mx-auto mb-3" />
@@ -562,6 +581,6 @@ export default function Live() {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </motion.div>
   );
 }

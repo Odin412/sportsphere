@@ -257,20 +257,22 @@ export default function Messages() {
               {convsLoading ? (
                 <div className="flex justify-center py-12"><Loader2 className="w-6 h-6 animate-spin text-slate-300" /></div>
               ) : filteredConversations?.length === 0 ? (
-                <div className="text-center py-12 px-4">
-                  <MessageCircle className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-                  <p className="text-slate-400 text-sm">
-                    {conversations?.length === 0 ? "No conversations yet" : "No results found"}
-                  </p>
-                  {conversations?.length === 0 && (
+                conversations?.length === 0 ? (
+                  <div className="text-center py-12 px-4">
+                    <MessageCircle className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+                    <p className="text-slate-400 text-sm">No conversations yet</p>
                     <button
                       onClick={() => setShowNewChat(true)}
                       className="mt-3 text-sm text-orange-500 hover:text-orange-600 font-medium"
                     >
                       Start a new chat
                     </button>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-sm text-gray-500 px-4">
+                    Nobody by that name. Check spelling or find them in <Link to={createPageUrl("Explore")} className="text-orange-500 hover:underline font-medium">Explore</Link>.
+                  </div>
+                )
               ) : (
                 filteredConversations?.map(conv => (
                   <button

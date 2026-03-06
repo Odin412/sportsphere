@@ -3,9 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Send, Pin, AlertTriangle } from "lucide-react";
+import { Send, Pin, AlertTriangle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import moment from "moment";
+import { useQueryClient } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
 import ChatModeration from "./ChatModeration";
 import ChatFAQ from "./ChatFAQ";
 import ModerationSuggestions from "./ModerationSuggestions";
@@ -14,14 +16,32 @@ import ModerationDashboard from "./ModerationDashboard";
 export default function StreamChat({ messages, user, isHost, message, setMessage, onSend, onPin, streamTitle = "", streamDescription = "", streamId = "" }) {
   const [chatTab, setChatTab] = useState("messages");
   const [moderationAction, setModerationAction] = useState(null);
+  const [pinnedMsgId, setPinnedMsgId] = useState(null);
+  const [bannedEmails, setBannedEmails] = useState([]);
   const bottomRef = useRef(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages?.length]);
 
+  const deleteMessage = async (msgId) => {
+    try {
+      await base44.entities.LiveChat.delete(msgId);
+      queryClient.invalidateQueries({ queryKey: ["stream-chat", streamId] });
+      toast.success("Message deleted");
+    } catch(e) { toast.error("Could not delete message"); }
+  };
+
+  const banUser = (email) => {
+    if (window.confirm(`Ban ${email} from this stream?`)) {
+      setBannedEmails(prev => [...prev, email]);
+      toast.success(`${email} banned from stream`);
+    }
+  };
+
   const pinnedMessages = messages?.filter(m => m.is_pinned) || [];
-  const regularMessages = messages?.filter(m => !m.is_pinned) || [];
+  const regularMessages = messages?.filter(m => !m.is_pinned && !bannedEmails.includes(m.sender_email)) || [];
 
   return (
     <div className="flex flex-col h-full">
@@ -72,6 +92,20 @@ export default function StreamChat({ messages, user, isHost, message, setMessage
             </div>
           )}
 
+          {/* Local pinned message banner */}
+          {pinnedMsgId && (() => {
+            const pinned = messages?.find(m => m.id === pinnedMsgId);
+            return pinned ? (
+              <div className="flex items-start gap-2 p-2 bg-yellow-500/10 border border-yellow-500/30 rounded-xl mb-2 mx-2">
+                <Pin className="w-3 h-3 text-yellow-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-xs font-bold text-yellow-400">{pinned.sender_name}</span>
+                  <p className="text-xs text-slate-300">{pinned.message}</p>
+                </div>
+              </div>
+            ) : null;
+          })()}
+
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 space-y-3">
             {regularMessages.length === 0 && pinnedMessages.length === 0 && (
@@ -105,12 +139,38 @@ export default function StreamChat({ messages, user, isHost, message, setMessage
                     <p className="text-sm text-slate-700 break-words leading-snug">{msg.message}</p>
                   </div>
                   {isHost && (
-                    <button
-                      onClick={() => onPin(msg)}
-                      className="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-amber-500 transition-all flex-shrink-0"
-                    >
-                      <Pin className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="opacity-0 group-hover:opacity-100 flex gap-1 ml-auto transition-opacity flex-shrink-0">
+                      <button
+                        onClick={() => onPin(msg)}
+                        title="Pin (persistent)"
+                        className="p-1 rounded text-slate-300 hover:text-amber-500 transition-all"
+                      >
+                        <Pin className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => setPinnedMsgId(prev => prev === msg.id ? null : msg.id)}
+                        title="Pin locally"
+                        className={`p-1 rounded ${pinnedMsgId === msg.id ? "text-yellow-400" : "text-slate-500 hover:text-yellow-400"}`}
+                      >
+                        <Pin className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={() => deleteMessage(msg.id)}
+                        title="Delete"
+                        className="p-1 rounded text-slate-500 hover:text-red-400"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                      {msg.sender_email !== user?.email && (
+                        <button
+                          onClick={() => banUser(msg.sender_email)}
+                          title="Ban"
+                          className="p-1 rounded text-slate-500 hover:text-orange-400 text-xs"
+                        >
+                          🚫
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               );

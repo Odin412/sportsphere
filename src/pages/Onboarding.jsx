@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { createPageUrl } from "@/utils";
-import { Shield, Users, Dumbbell, Heart, ArrowRight, Loader2, Check, Camera } from "lucide-react";
+import { Shield, Users, Dumbbell, Heart, ArrowRight, Loader2, Check, Camera, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
+import AvatarPicker from "@/components/profile/AvatarPicker";
 
 const ROLES = [
   { value: "admin", label: "Team Admin / Coach", description: "Create and manage a team organization", icon: Shield, color: "border-red-300 bg-red-50 text-red-900" },
@@ -22,6 +23,7 @@ export default function Onboarding() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedSports, setSelectedSports] = useState([]);
   const [avatarUploading, setAvatarUploading] = useState(false);
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false);
   const [profile, setProfile] = useState({ full_name: "", position: "", phone: "", avatar_url: "" });
   const [org, setOrg] = useState({ name: "", sport: "", location: "", description: "" });
   const [loading, setLoading] = useState(false);
@@ -52,6 +54,25 @@ export default function Onboarding() {
     }
   };
 
+  const handleAvatarPicked = async (result) => {
+    // result is either a string URL (from RPM) or { file, previewUrl } (from upload)
+    if (typeof result === "string") {
+      // Ready Player Me PNG URL — use directly
+      setProfile(p => ({ ...p, avatar_url: result }));
+    } else if (result?.file) {
+      // File upload — upload to storage
+      setAvatarUploading(true);
+      try {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file: result.file });
+        setProfile(p => ({ ...p, avatar_url: file_url }));
+      } catch (err) {
+        console.error("Avatar upload failed:", err);
+      } finally {
+        setAvatarUploading(false);
+      }
+    }
+  };
+
   const handleFinish = async () => {
     setLoading(true);
     try {
@@ -61,6 +82,7 @@ export default function Onboarding() {
       await base44.auth.updateMe({
         full_name: profile.full_name,
         preferred_sports: selectedSports,
+        onboarding_complete: true,
         ...(profile.avatar_url ? { avatar_url: profile.avatar_url } : {}),
       }).catch(() => {});
 
@@ -187,11 +209,15 @@ export default function Onboarding() {
               <p className="text-gray-500 text-sm mt-1">Tell us a bit about yourself</p>
             </div>
             <div className="space-y-4 bg-white rounded-2xl p-5 shadow-md">
-              {/* Avatar upload */}
-              <div className="flex justify-center">
+              {/* Avatar picker */}
+              <div className="flex flex-col items-center gap-2">
                 <div className="relative">
                   <div className="w-20 h-20 rounded-full bg-gray-200 overflow-hidden border-4 border-white shadow-lg">
-                    {profile.avatar_url ? (
+                    {avatarUploading ? (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                        <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
+                      </div>
+                    ) : profile.avatar_url ? (
                       <img src={profile.avatar_url} className="w-full h-full object-cover" alt="avatar" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-gray-400">
@@ -199,15 +225,29 @@ export default function Onboarding() {
                       </div>
                     )}
                   </div>
-                  <label className="absolute bottom-0 right-0 w-7 h-7 bg-red-600 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-red-700 transition-colors">
-                    {avatarUploading
-                      ? <Loader2 className="w-3.5 h-3.5 animate-spin text-white" />
-                      : <Camera className="w-3.5 h-3.5 text-white" />
-                    }
-                    <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
-                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowAvatarPicker(true)}
+                    className="absolute bottom-0 right-0 w-7 h-7 bg-red-600 rounded-full flex items-center justify-center shadow-lg hover:bg-red-700 transition-colors"
+                  >
+                    <Camera className="w-3.5 h-3.5 text-white" />
+                  </button>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAvatarPicker(true)}
+                  className="flex items-center gap-1.5 text-xs text-purple-600 hover:text-purple-800 font-semibold transition-colors"
+                >
+                  <Sparkles className="w-3 h-3" /> Create 3D Avatar
+                </button>
               </div>
+
+              {showAvatarPicker && (
+                <AvatarPicker
+                  onSelect={handleAvatarPicked}
+                  onClose={() => setShowAvatarPicker(false)}
+                />
+              )}
 
               <div>
                 <Label className="text-sm font-semibold mb-1.5 block">Full Name</Label>

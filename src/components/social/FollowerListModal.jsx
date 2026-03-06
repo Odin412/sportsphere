@@ -18,7 +18,7 @@ import { createPageUrl } from "@/utils";
 export default function FollowerListModal({ profileEmail, mode, onClose }) {
   const [search, setSearch] = useState("");
 
-  const { data: follows = [], isLoading } = useQuery({
+  const { data: follows = [], isLoading: loadingFollows } = useQuery({
     queryKey: ["follow-list", profileEmail, mode],
     queryFn: () =>
       mode === "followers"
@@ -27,12 +27,33 @@ export default function FollowerListModal({ profileEmail, mode, onClose }) {
     enabled: !!profileEmail,
   });
 
-  // For each follow record, get the relevant user email + name
-  const users = follows.map(f => ({
-    email: mode === "followers" ? f.follower_email : f.following_email,
-    name: mode === "followers" ? (f.follower_name || f.follower_email) : (f.following_name || f.following_email),
-    avatar: mode === "followers" ? f.follower_avatar : f.following_avatar,
-  }));
+  // Collect the emails we need to look up
+  const emails = follows.map(f => mode === "followers" ? f.follower_email : f.following_email);
+
+  // Fetch SportProfiles for all those emails
+  const { data: profiles = [], isLoading: loadingProfiles } = useQuery({
+    queryKey: ["follow-profiles", emails.join(",")],
+    queryFn: () => base44.entities.SportProfile.list("-created_date", 200),
+    enabled: emails.length > 0,
+    select: (all) => {
+      const emailSet = new Set(emails);
+      return all.filter(p => emailSet.has(p.user_email));
+    },
+  });
+
+  const profileByEmail = Object.fromEntries(profiles.map(p => [p.user_email, p]));
+
+  const users = follows.map(f => {
+    const email = mode === "followers" ? f.follower_email : f.following_email;
+    const prof = profileByEmail[email];
+    return {
+      email,
+      name: prof?.user_name || email,
+      avatar: prof?.avatar_url || null,
+    };
+  });
+
+  const isLoading = loadingFollows || loadingProfiles;
 
   const filtered = users.filter(u =>
     !search || u.name?.toLowerCase().includes(search.toLowerCase()) || u.email?.toLowerCase().includes(search.toLowerCase())

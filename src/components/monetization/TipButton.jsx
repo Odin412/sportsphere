@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DollarSign, Heart } from "lucide-react";
+import { DollarSign, Heart, AlertTriangle } from "lucide-react";
+
+const STRIPE_CONFIGURED = !!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 import { toast } from "sonner";
 
 const PRESET_AMOUNTS = [5, 10, 25, 50, 100];
@@ -127,6 +129,12 @@ export default function TipButton({ creator, contextType, contextId, variant = "
               <Heart className="w-4 h-4 mr-2" />
               Send Tip
             </Button>
+            {!STRIPE_CONFIGURED && (
+              <div className="flex items-start gap-2 bg-amber-900/30 border border-amber-500/30 rounded-xl px-3 py-2">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <p className="text-amber-300 text-xs">Dev mode — no charge processed. Add Stripe keys to enable real payments.</p>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

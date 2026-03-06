@@ -20,7 +20,7 @@ export default function StoriesBar({ user, onStoryClick }) {
     queryKey: ["stories-24h"],
     queryFn: async () => {
       const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-      const posts = await base44.entities.Post.list("-created_date", 150);
+      const posts = await base44.entities.Post.list("-created_date", 50);
       return posts.filter(
         (p) => p.media_urls?.length > 0 && p.created_date >= cutoff
       );

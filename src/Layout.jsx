@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Home, User, MessageCircle, Search, Bell, Plus, Menu, X,
   Trophy, Flame, Globe, Sparkles, Radio, Activity, Bookmark,
@@ -59,6 +60,32 @@ export default function Layout({ children, currentPageName }) {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [moreOpen, setMoreOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  // Unread notification count for bell badge
+  const { data: unreadCount = 0 } = useQuery({
+    queryKey: ["unread-notifications", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return 0;
+      const notifs = await base44.entities.Notification.filter({
+        recipient_email: user.email,
+        is_read: false,
+      });
+      return notifs.length;
+    },
+    enabled: !!user?.email,
+    staleTime: 30000,
+  });
+
+  // Real-time subscription to invalidate count on new notifications
+  useEffect(() => {
+    if (!user?.email) return;
+    const unsub = base44.entities.Notification.subscribeToChanges(
+      { recipient_email: user.email },
+      () => queryClient.invalidateQueries({ queryKey: ["unread-notifications", user.email] })
+    );
+    return () => unsub?.();
+  }, [user?.email]);
 
   const STANDALONE_PAGES = ["Login", "Admin", "AdminUsers", "AdminContent", "AdminAnalytics", "AdminSettings"];
   if (STANDALONE_PAGES.includes(currentPageName)) return <>{children}</>;
@@ -89,6 +116,11 @@ export default function Layout({ children, currentPageName }) {
         <div className="flex items-center gap-3">
           <Link to={createPageUrl("Notifications")} className="relative p-2 rounded-xl hover:bg-gray-800 transition-colors">
             <Bell className="w-5 h-5 text-gray-300" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center px-1 leading-none">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </Link>
           {user && (
             <Link to={createPageUrl("Profile")}>

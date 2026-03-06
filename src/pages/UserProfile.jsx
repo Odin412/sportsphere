@@ -367,7 +367,7 @@ export default function UserProfile() {
       {/* Subscription Tiers */}
       {currentUser && currentUser.email !== profileEmail && (
         <SubscriptionTiers
-          creator={{ email: profileEmail, name: profile.user_name }}
+          creator={{ email: profileEmail, name: profile?.user_name }}
           currentUser={currentUser}
         />
       )}

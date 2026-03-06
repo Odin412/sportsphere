@@ -11,6 +11,8 @@ import { ImagePlus, Video, X, Loader2, ArrowLeft, Crown, Sliders, MessageCircle 
 import { Link } from "react-router-dom";
 import AIPostGenerator from "../components/feed/AIPostGenerator";
 import VideoEditor from "../components/video/VideoEditor";
+import { awardPoints } from "../components/gamification/PointsHelper";
+import { toast } from "sonner";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
 const CATEGORIES = [
@@ -45,21 +47,25 @@ export default function CreatePost() {
   const handleMediaAdd = async (e) => {
     const files = Array.from(e.target.files);
     setUploading(true);
-    
-    const newPreviews = [];
-    const newUrls = [];
-    
-    for (const file of files) {
-      const preview = URL.createObjectURL(file);
-      newPreviews.push({ url: preview, type: file.type.startsWith("video") ? "video" : "image" });
-      
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      newUrls.push(file_url);
+    try {
+      const newPreviews = [];
+      const newUrls = [];
+
+      for (const file of files) {
+        const preview = URL.createObjectURL(file);
+        newPreviews.push({ url: preview, type: file.type.startsWith("video") ? "video" : "image" });
+
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        newUrls.push(file_url);
+      }
+
+      setMediaPreviews(prev => [...prev, ...newPreviews]);
+      setMediaFiles(prev => [...prev, ...newUrls]);
+    } catch (error) {
+      toast.error("Failed to upload file. Please try again.");
+    } finally {
+      setUploading(false);
     }
-    
-    setMediaPreviews(prev => [...prev, ...newPreviews]);
-    setMediaFiles(prev => [...prev, ...newUrls]);
-    setUploading(false);
   };
 
   const removeMedia = (index) => {
@@ -95,70 +101,79 @@ export default function CreatePost() {
       }
     }
     
-    // Extract mentions
-    const mentionRegex = /@(\w+(?:\s+\w+)*)/g;
-    const mentions = [...content.matchAll(mentionRegex)].map(m => m[1]);
-    
-    const hasVideo = mediaPreviews.some(m => m.type === "video");
-    const hasImage = mediaPreviews.some(m => m.type === "image");
+    try {
+      // Extract mentions
+      const mentionRegex = /@(\w+(?:\s+\w+)*)/g;
+      const mentions = [...content.matchAll(mentionRegex)].map(m => m[1]);
 
-    // Upload custom thumbnails if set
-    const finalMediaUrls = [...mediaFiles];
-    let thumbnailUrl = undefined;
-    for (const [idxStr, meta] of Object.entries(videoMeta)) {
-      if (meta.thumbnailFile) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: meta.thumbnailFile });
-        thumbnailUrl = file_url;
-      }
-    }
+      const hasVideo = mediaPreviews.some(m => m.type === "video");
+      const hasImage = mediaPreviews.some(m => m.type === "image");
 
-    // Collect chapters from all video meta
-    const allChapters = Object.values(videoMeta).flatMap(m => m.chapters || []);
-    const allTrimInfo = Object.entries(videoMeta)
-      .filter(([, m]) => m.trimStart !== undefined)
-      .map(([i, m]) => ({ index: parseInt(i), startTime: m.trimStart, endTime: m.trimEnd }));
-
-    const post = await base44.entities.Post.create({
-      author_email: user.email,
-      author_name: user.full_name,
-      author_avatar: user.avatar_url,
-      content,
-      sport: sport || undefined,
-      category: category || undefined,
-      media_urls: finalMediaUrls,
-      media_type: hasVideo && hasImage ? "mixed" : hasVideo ? "video" : hasImage ? "image" : undefined,
-      thumbnail_url: thumbnailUrl,
-      video_chapters: allChapters.length > 0 ? allChapters : undefined,
-      video_trim: allTrimInfo.length > 0 ? allTrimInfo : undefined,
-      likes: [],
-      comments_count: 0,
-      views: 0,
-      shares: 0,
-      mentioned_users: mentions.length > 0 ? mentions : [],
-      is_premium: isPremium,
-      comments_disabled: commentsDisabled,
-    });
-    
-    // Notify mentioned users
-    if (mentions.length > 0) {
-      const allUsers = await base44.entities.User.list();
-      for (const mention of mentions) {
-        const mentionedUser = allUsers.find(u => u.full_name?.toLowerCase() === mention.toLowerCase());
-        if (mentionedUser && mentionedUser.email !== user.email) {
-          await base44.entities.Notification.create({
-            recipient_email: mentionedUser.email,
-            actor_email: user.email,
-            actor_name: user.full_name,
-            actor_avatar: user.avatar_url,
-            type: "mention",
-            post_id: post.id,
-            message: "mentioned you in a post",
-          });
+      // Upload custom thumbnails if set
+      const finalMediaUrls = [...mediaFiles];
+      let thumbnailUrl = undefined;
+      for (const [idxStr, meta] of Object.entries(videoMeta)) {
+        if (meta.thumbnailFile) {
+          const { file_url } = await base44.integrations.Core.UploadFile({ file: meta.thumbnailFile });
+          thumbnailUrl = file_url;
         }
       }
+
+      // Collect chapters from all video meta
+      const allChapters = Object.values(videoMeta).flatMap(m => m.chapters || []);
+      const allTrimInfo = Object.entries(videoMeta)
+        .filter(([, m]) => m.trimStart !== undefined)
+        .map(([i, m]) => ({ index: parseInt(i), startTime: m.trimStart, endTime: m.trimEnd }));
+
+      const post = await base44.entities.Post.create({
+        author_email: user.email,
+        author_name: user.full_name,
+        author_avatar: user.avatar_url,
+        content,
+        sport: sport || undefined,
+        category: category || undefined,
+        media_urls: finalMediaUrls,
+        media_type: hasVideo && hasImage ? "mixed" : hasVideo ? "video" : hasImage ? "image" : undefined,
+        thumbnail_url: thumbnailUrl,
+        video_chapters: allChapters.length > 0 ? allChapters : undefined,
+        video_trim: allTrimInfo.length > 0 ? allTrimInfo : undefined,
+        likes: [],
+        comments_count: 0,
+        views: 0,
+        shares: 0,
+        mentioned_users: mentions.length > 0 ? mentions : [],
+        is_premium: isPremium,
+        comments_disabled: commentsDisabled,
+      });
+
+      // Notify mentioned users (fire-and-forget — don't block navigation)
+      if (mentions.length > 0) {
+        base44.entities.User.list().then(allUsers => {
+          for (const mention of mentions) {
+            const mentionedUser = allUsers.find(u => u.full_name?.toLowerCase() === mention.toLowerCase());
+            if (mentionedUser && mentionedUser.email !== user.email) {
+              base44.entities.Notification.create({
+                recipient_email: mentionedUser.email,
+                actor_email: user.email,
+                actor_name: user.full_name,
+                actor_avatar: user.avatar_url,
+                type: "mention",
+                post_id: post.id,
+                message: "mentioned you in a post",
+              }).catch(() => {});
+            }
+          }
+        }).catch(() => {});
+      }
+
+      // Award points for creating a post (fire-and-forget)
+      awardPoints(user.email, "POST_CREATED").catch(() => {});
+
+      navigate(createPageUrl("Feed"));
+    } catch (error) {
+      toast.error("Failed to publish post. Please try again.");
+      setPosting(false);
     }
-    
-    navigate(createPageUrl("Feed"));
   };
 
   return (

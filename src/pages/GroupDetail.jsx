@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Users, Calendar, MessageSquare, Settings, ArrowLeft, UserPlus, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
+import { toast } from "sonner";
 import GroupPostCard from "../components/groups/GroupPostCard";
 import CreatePostDialog from "../components/groups/CreatePostDialog";
 import EventCard from "../components/groups/EventCard";
@@ -20,6 +25,10 @@ export default function GroupDetail() {
   const [user, setUser] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
+  const [showEditGroup, setShowEditGroup] = useState(false);
+  const [editGroupData, setEditGroupData] = useState({});
+  const [savingGroup, setSavingGroup] = useState(false);
+  const [joining, setJoining] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -47,40 +56,75 @@ export default function GroupDetail() {
   const isAdmin = group?.admins?.includes(user?.email);
 
   const joinGroup = async () => {
-    // Check if membership fee required
-    if (group.membership_fee > 0) {
-      // Create transaction
-      await base44.entities.Transaction.create({
-        from_email: user.email,
-        to_email: group.creator_email,
-        type: "group_membership",
-        amount: group.membership_fee,
-        status: "completed",
-        group_id: groupId,
+    setJoining(true);
+    try {
+      if (group.membership_fee > 0) {
+        await base44.entities.Transaction.create({
+          from_email: user.email,
+          to_email: group.creator_email,
+          type: "group_membership",
+          amount: group.membership_fee,
+          status: "completed",
+          group_id: groupId,
+        });
+        await base44.entities.Notification.create({
+          recipient_email: group.creator_email,
+          actor_email: user.email,
+          actor_name: user.full_name,
+          actor_avatar: user.avatar_url,
+          type: "follow",
+          message: `joined ${group.name} (paid $${group.membership_fee})`,
+        });
+      }
+      await base44.entities.Group.update(groupId, {
+        members: [...(group.members || []), user.email],
       });
-
-      // Notify group creator
-      await base44.entities.Notification.create({
-        recipient_email: group.creator_email,
-        actor_email: user.email,
-        actor_name: user.full_name,
-        actor_avatar: user.avatar_url,
-        type: "follow",
-        message: `joined ${group.name} (paid $${group.membership_fee})`,
-      });
+      queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+      toast.success("Joined group!");
+    } catch (error) {
+      toast.error("Failed to join group. Please try again.");
+    } finally {
+      setJoining(false);
     }
-
-    await base44.entities.Group.update(groupId, {
-      members: [...(group.members || []), user.email],
-    });
-    queryClient.invalidateQueries({ queryKey: ["group", groupId] });
   };
 
   const leaveGroup = async () => {
-    await base44.entities.Group.update(groupId, {
-      members: group.members.filter(m => m !== user.email),
+    try {
+      await base44.entities.Group.update(groupId, {
+        members: group.members.filter(m => m !== user.email),
+      });
+      queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+    } catch (error) {
+      toast.error("Failed to leave group. Please try again.");
+    }
+  };
+
+  const openEditGroup = () => {
+    setEditGroupData({
+      name: group.name || "",
+      description: group.description || "",
+      sport: group.sport || "",
+      location: group.location || "",
     });
-    queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+    setShowEditGroup(true);
+  };
+
+  const handleSaveGroup = async () => {
+    if (!editGroupData.name?.trim()) {
+      toast.error("Group name is required.");
+      return;
+    }
+    setSavingGroup(true);
+    try {
+      await base44.entities.Group.update(groupId, editGroupData);
+      queryClient.invalidateQueries({ queryKey: ["group", groupId] });
+      setShowEditGroup(false);
+      toast.success("Group updated!");
+    } catch (error) {
+      toast.error("Failed to update group. Please try again.");
+    } finally {
+      setSavingGroup(false);
+    }
   };
 
   if (isLoading) {
@@ -137,14 +181,20 @@ export default function GroupDetail() {
               </div>
               {user && (
                 <div className="flex gap-2">
+                  {isAdmin && (
+                    <Button onClick={openEditGroup} variant="outline" size="sm" className="rounded-xl gap-2 border-slate-200 text-slate-600 hover:bg-slate-50">
+                      <Settings className="w-4 h-4" />
+                      Edit Group
+                    </Button>
+                  )}
                   {isMember ? (
                     <Button onClick={leaveGroup} variant="outline" className="rounded-xl">
                       Leave Group
                     </Button>
                   ) : (
-                    <Button onClick={joinGroup} className="rounded-xl bg-gradient-to-r from-orange-500 to-amber-400 text-white gap-2">
-                      <UserPlus className="w-4 h-4" />
-                      Join Group
+                    <Button onClick={joinGroup} disabled={joining} className="rounded-xl bg-gradient-to-r from-orange-500 to-amber-400 text-white gap-2">
+                      {joining ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
+                      {joining ? "Joining…" : "Join Group"}
                     </Button>
                   )}
                 </div>
@@ -275,6 +325,69 @@ export default function GroupDetail() {
         user={user}
         onSuccess={refetchEvents}
       />
+
+      {/* Edit Group Dialog */}
+      <Dialog open={showEditGroup} onOpenChange={setShowEditGroup}>
+        <DialogContent className="sm:max-w-md rounded-2xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Settings className="w-5 h-5 text-slate-500" />
+              Edit Group Settings
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 mt-2">
+            <div className="space-y-1.5">
+              <Label className="text-xs text-slate-500">Group Name *</Label>
+              <Input
+                value={editGroupData.name || ""}
+                onChange={e => setEditGroupData(d => ({ ...d, name: e.target.value }))}
+                className="rounded-xl"
+                placeholder="Group name"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label className="text-xs text-slate-500">Description</Label>
+              <Textarea
+                value={editGroupData.description || ""}
+                onChange={e => setEditGroupData(d => ({ ...d, description: e.target.value }))}
+                className="rounded-xl resize-none"
+                rows={3}
+                placeholder="What is this group about?"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label className="text-xs text-slate-500">Sport</Label>
+                <Input
+                  value={editGroupData.sport || ""}
+                  onChange={e => setEditGroupData(d => ({ ...d, sport: e.target.value }))}
+                  className="rounded-xl"
+                  placeholder="e.g. Basketball"
+                />
+              </div>
+              <div className="space-y-1.5">
+                <Label className="text-xs text-slate-500">Location</Label>
+                <Input
+                  value={editGroupData.location || ""}
+                  onChange={e => setEditGroupData(d => ({ ...d, location: e.target.value }))}
+                  className="rounded-xl"
+                  placeholder="e.g. Los Angeles"
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 pt-1">
+              <Button onClick={() => setShowEditGroup(false)} variant="outline" className="flex-1 rounded-xl">Cancel</Button>
+              <Button
+                onClick={handleSaveGroup}
+                disabled={savingGroup}
+                className="flex-1 rounded-xl bg-gradient-to-r from-orange-500 to-amber-400 text-white"
+              >
+                {savingGroup ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Changes"}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -24,6 +24,7 @@ import FeaturedHighlight from "../components/profile/FeaturedHighlight";
 import ReelsStatsPanel from "../components/profile/ReelsStatsPanel";
 import EarningsPanel from "../components/profile/EarningsPanel";
 import { Instagram, Twitter, Youtube, Linkedin, Globe, Music2 } from "lucide-react";
+import { toast } from "sonner";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
 const ROLES = ["athlete", "coach", "trainer", "instructor", "fan"];
@@ -144,10 +145,16 @@ export default function Profile() {
     const file = e.target.files[0];
     if (!file) return;
     setAvatarUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    await base44.auth.updateMe({ avatar_url: file_url });
-    setUser(prev => ({ ...prev, avatar_url: file_url }));
-    setAvatarUploading(false);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await base44.auth.updateMe({ avatar_url: file_url });
+      setUser(prev => ({ ...prev, avatar_url: file_url }));
+      toast.success("Photo updated!");
+    } catch (error) {
+      toast.error("Failed to upload photo. Please try again.");
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   const openNewProfile = () => {
@@ -164,24 +171,36 @@ export default function Profile() {
 
   const saveSportProfile = async () => {
     setSaving(true);
-    if (editingProfile) {
-      await base44.entities.SportProfile.update(editingProfile.id, formData);
-    } else {
-      await base44.entities.SportProfile.create({
-        ...formData,
-        user_email: user.email,
-        user_name: user.full_name,
-        avatar_url: user.avatar_url,
-      });
+    try {
+      if (editingProfile) {
+        await base44.entities.SportProfile.update(editingProfile.id, formData);
+      } else {
+        await base44.entities.SportProfile.create({
+          ...formData,
+          user_email: user.email,
+          user_name: user.full_name,
+          avatar_url: user.avatar_url,
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ["my-sport-profiles"] });
+      setShowProfileForm(false);
+      toast.success(editingProfile ? "Sport profile updated!" : "Sport profile added!");
+    } catch (error) {
+      toast.error("Failed to save sport profile. Please try again.");
+    } finally {
+      setSaving(false);
     }
-    queryClient.invalidateQueries({ queryKey: ["my-sport-profiles"] });
-    setShowProfileForm(false);
-    setSaving(false);
   };
 
   const deleteProfile = async (id) => {
-    await base44.entities.SportProfile.delete(id);
-    queryClient.invalidateQueries({ queryKey: ["my-sport-profiles"] });
+    if (!confirm("Delete this sport profile?")) return;
+    try {
+      await base44.entities.SportProfile.delete(id);
+      queryClient.invalidateQueries({ queryKey: ["my-sport-profiles"] });
+      toast.success("Sport profile deleted.");
+    } catch (error) {
+      toast.error("Failed to delete profile. Please try again.");
+    }
   };
 
   const handleSaveStats = async (statsData) => {
@@ -236,9 +255,14 @@ export default function Profile() {
   };
 
   const savePersonalInfo = async () => {
-    await base44.auth.updateMe(personalInfo);
-    setUser(prev => ({ ...prev, ...personalInfo }));
-    setShowPersonalInfoDialog(false);
+    try {
+      await base44.auth.updateMe(personalInfo);
+      setUser(prev => ({ ...prev, ...personalInfo }));
+      setShowPersonalInfoDialog(false);
+      toast.success("Profile updated!");
+    } catch (error) {
+      toast.error("Failed to save changes. Please try again.");
+    }
   };
 
   if (!user) return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-gray-400" /></div>;

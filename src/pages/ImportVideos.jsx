@@ -30,19 +30,22 @@ export default function ImportVideos() {
 
   const handleSearch = async (pageToken = null) => {
     setLoading(true);
-    const query = searchQuery.trim() || sport;
-    
-    const { data } = await base44.functions.invoke('fetchExternalVideos', {
-      sport,
-      query,
-      source: 'youtube',
-      limit: 12,
-      pageToken
-    });
-
-    setVideos(data.videos || []);
-    setNextPageToken(data.nextPageToken || null);
-    setLoading(false);
+    try {
+      const query = searchQuery.trim() || sport;
+      const { data } = await base44.functions.invoke('fetchExternalVideos', {
+        sport,
+        query,
+        source: 'youtube',
+        limit: 12,
+        pageToken
+      });
+      setVideos(data.videos || []);
+      setNextPageToken(data.nextPageToken || null);
+    } catch (error) {
+      toast.error("Failed to search videos. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImport = async (video) => {
@@ -50,23 +53,25 @@ export default function ImportVideos() {
       toast.error("Please login to import videos");
       return;
     }
-
-    const externalVideo = await base44.entities.ExternalVideo.create({
-      user_email: user.email,
-      source: 'youtube',
-      platform_id: video.platform_id,
-      title: video.title,
-      description: video.description,
-      thumbnail: video.thumbnail,
-      embed_url: video.embed_url,
-      video_url: video.video_url,
-      sport: video.sport,
-      category,
-      channel: video.channel,
-      published_at: video.published_at
-    });
-
-    toast.success(`"${video.title}" imported!`);
+    try {
+      await base44.entities.ExternalVideo.create({
+        user_email: user.email,
+        source: 'youtube',
+        platform_id: video.platform_id,
+        title: video.title,
+        description: video.description,
+        thumbnail: video.thumbnail,
+        embed_url: video.embed_url,
+        video_url: video.video_url,
+        sport: video.sport,
+        category,
+        channel: video.channel,
+        published_at: video.published_at
+      });
+      toast.success(`"${video.title}" imported!`);
+    } catch (error) {
+      toast.error("Failed to import video. Please try again.");
+    }
   };
 
   const toggleLike = (videoId) => {

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Crown, Check } from "lucide-react";
+import { Crown, Check, AlertTriangle } from "lucide-react";
+
+const STRIPE_CONFIGURED = !!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 import { toast } from "sonner";
 
 export default function SubscribeButton({ creatorEmail, creatorName, price, currentUser }) {
@@ -76,13 +78,21 @@ export default function SubscribeButton({ creatorEmail, creatorName, price, curr
   }
 
   return (
-    <Button
-      onClick={handleSubscribe}
-      disabled={loading}
-      className="rounded-xl gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg"
-    >
-      <Crown className="w-4 h-4" />
-      Subscribe ${price}/mo
-    </Button>
+    <div className="space-y-2">
+      <Button
+        onClick={handleSubscribe}
+        disabled={loading}
+        className="rounded-xl gap-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg"
+      >
+        <Crown className="w-4 h-4" />
+        {loading ? "Processing..." : `Subscribe $${price}/mo`}
+      </Button>
+      {!STRIPE_CONFIGURED && (
+        <div className="flex items-center gap-1.5 text-[11px] text-amber-400/80">
+          <AlertTriangle className="w-3 h-3 flex-shrink-0" />
+          <span>Dev mode — no charge. Add Stripe keys to enable payments.</span>
+        </div>
+      )}
+    </div>
   );
 }

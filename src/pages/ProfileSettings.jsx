@@ -192,12 +192,17 @@ export default function ProfileSettings() {
   const handleSaveIdentity = async () => {
     if (usernameError) return;
     setSaving(true);
-    await base44.auth.updateMe(form);
-    setUser(prev => ({ ...prev, ...form }));
-    setSaved(true);
-    setSaving(false);
-    setTimeout(() => setSaved(false), 2000);
-    toast.success("Profile saved!");
+    try {
+      await base44.auth.updateMe(form);
+      setUser(prev => ({ ...prev, ...form }));
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+      toast.success("Profile saved!");
+    } catch (error) {
+      toast.error("Failed to save profile. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleSaveLanguage = () => {
@@ -209,15 +214,20 @@ export default function ProfileSettings() {
 
   const handleSaveNotifs = async () => {
     setSavingNotifs(true);
-    const data = { user_email: user.email, ...notifPrefs };
-    if (existingNotifPrefs) {
-      await base44.entities.NotificationPreferences.update(existingNotifPrefs.id, data);
-    } else {
-      await base44.entities.NotificationPreferences.create(data);
+    try {
+      const data = { user_email: user.email, ...notifPrefs };
+      if (existingNotifPrefs) {
+        await base44.entities.NotificationPreferences.update(existingNotifPrefs.id, data);
+      } else {
+        await base44.entities.NotificationPreferences.create(data);
+      }
+      queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
+      toast.success("Notification preferences saved!");
+    } catch (error) {
+      toast.error("Failed to save notification preferences. Please try again.");
+    } finally {
+      setSavingNotifs(false);
     }
-    queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
-    toast.success("Notification preferences saved!");
-    setSavingNotifs(false);
   };
 
   const toggleNotif = (key, channel) => {

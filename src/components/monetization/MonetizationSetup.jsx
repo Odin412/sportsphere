@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -13,18 +13,36 @@ export default function MonetizationSetup({ open, onOpenChange, user, onSuccess 
   const [acceptingDonations, setAcceptingDonations] = useState(user?.is_accepting_donations || false);
   const [saving, setSaving] = useState(false);
 
-  const handleSave = async () => {
-    setSaving(true);
-    
-    await base44.auth.updateMe({
-      subscription_price: subscriptionPrice,
-      is_accepting_donations: acceptingDonations,
-    });
+  // Sync state when user prop updates (e.g. after parent re-fetches)
+  useEffect(() => {
+    setSubscriptionPrice(user?.subscription_price || 0);
+    setAcceptingDonations(user?.is_accepting_donations || false);
+  }, [user?.subscription_price, user?.is_accepting_donations]);
 
-    setSaving(false);
-    toast.success("Monetization settings updated!");
-    onOpenChange(false);
-    onSuccess?.();
+  const handleSave = async () => {
+    if (subscriptionPrice < 0) {
+      toast.error("Subscription price cannot be negative.");
+      return;
+    }
+    if (subscriptionPrice > 0 && subscriptionPrice < 1) {
+      toast.error("Minimum subscription price is $1.00.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      await base44.auth.updateMe({
+        subscription_price: subscriptionPrice,
+        is_accepting_donations: acceptingDonations,
+      });
+      toast.success("Monetization settings updated!");
+      onOpenChange(false);
+      onSuccess?.();
+    } catch (error) {
+      toast.error("Failed to save settings. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (

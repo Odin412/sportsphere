@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft, ThumbsUp, MessageCircle, Eye, Send, Flag } from "lucide-react";
+import { ArrowLeft, ThumbsUp, MessageCircle, Eye, Send, Flag, Trash2, Pencil, Check, X as XIcon } from "lucide-react";
 import moment from "moment";
 import { toast } from "sonner";
 import { awardPoints } from "../components/gamification/PointsHelper";
@@ -27,6 +27,9 @@ export default function ForumTopic() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [replyContent, setReplyContent] = useState("");
+  const [editingReplyId, setEditingReplyId] = useState(null);
+  const [editContent, setEditContent] = useState("");
+  const [visibleCount, setVisibleCount] = useState(20);
   const topicId = new URLSearchParams(window.location.search).get("id");
 
   useEffect(() => {
@@ -57,20 +60,76 @@ export default function ForumTopic() {
     if (!user || !topic) return;
     const likes = topic.likes || [];
     const hasLiked = likes.includes(user.email);
-    await base44.entities.Forum.update(topic.id, {
-      likes: hasLiked ? likes.filter(e => e !== user.email) : [...likes, user.email]
-    });
-    queryClient.invalidateQueries({ queryKey: ["forum"] });
+    try {
+      await base44.entities.Forum.update(topic.id, {
+        likes: hasLiked ? likes.filter(e => e !== user.email) : [...likes, user.email]
+      });
+      queryClient.invalidateQueries({ queryKey: ["forum"] });
+    } catch (error) {
+      toast.error("Failed to update like.");
+    }
   };
 
   const handleLikeReply = async (reply) => {
     if (!user) return;
     const likes = reply.likes || [];
     const hasLiked = likes.includes(user.email);
-    await base44.entities.ForumReply.update(reply.id, {
-      likes: hasLiked ? likes.filter(e => e !== user.email) : [...likes, user.email]
-    });
-    queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
+    try {
+      await base44.entities.ForumReply.update(reply.id, {
+        likes: hasLiked ? likes.filter(e => e !== user.email) : [...likes, user.email]
+      });
+      queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
+    } catch (error) {
+      toast.error("Failed to update like.");
+    }
+  };
+
+  const handleDeleteReply = async (reply) => {
+    if (!window.confirm("Delete this reply?")) return;
+    try {
+      await base44.entities.ForumReply.delete(reply.id);
+      await base44.entities.Forum.update(topicId, {
+        replies_count: Math.max(0, (topic.replies_count || 1) - 1),
+      });
+      queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
+      queryClient.invalidateQueries({ queryKey: ["forum"] });
+      toast.success("Reply deleted");
+    } catch {
+      toast.error("Failed to delete reply");
+    }
+  };
+
+  const handleEditReply = (reply) => {
+    setEditingReplyId(reply.id);
+    setEditContent(reply.content);
+  };
+
+  const handleSaveEdit = async (reply) => {
+    if (!editContent.trim()) return;
+    try {
+      await base44.entities.ForumReply.update(reply.id, { content: editContent });
+      queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
+      setEditingReplyId(null);
+      toast.success("Reply updated");
+    } catch {
+      toast.error("Failed to update reply");
+    }
+  };
+
+  const handleFlagReply = async (reply) => {
+    try {
+      await base44.entities.Report.create({
+        reporter_email: user.email,
+        reporter_name: user.full_name,
+        content_type: "forum_reply",
+        content_id: reply.id,
+        reason: "inappropriate",
+        details: `Forum reply in topic: ${topic?.title}`,
+      });
+      toast.success("Reply reported. Our team will review it.");
+    } catch {
+      toast.error("Failed to report reply");
+    }
   };
 
   const handlePostReply = async () => {
@@ -220,7 +279,7 @@ export default function ForumTopic() {
         <h2 className="text-xl font-bold text-gray-900">
           {replies.length} {replies.length === 1 ? "Reply" : "Replies"}
         </h2>
-        {replies.map(reply => (
+        {replies.slice(0, visibleCount).map(reply => (
           <Card key={reply.id} className="border-gray-200">
             <CardContent className="p-6">
               <div className="flex gap-4">
@@ -239,21 +298,73 @@ export default function ForumTopic() {
                     </Link>
                     <span className="text-sm text-gray-400">{moment(reply.created_date).fromNow()}</span>
                   </div>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap mb-3">{reply.content}</p>
-                  <Button
-                    onClick={() => handleLikeReply(reply)}
-                    variant="ghost"
-                    size="sm"
-                    className={user && reply.likes?.includes(user.email) ? "text-red-900" : "text-gray-500"}
-                  >
-                    <ThumbsUp className="w-4 h-4 mr-1" />
-                    {reply.likes?.length || 0}
-                  </Button>
+
+                  {/* Edit mode */}
+                  {editingReplyId === reply.id ? (
+                    <div className="space-y-2">
+                      <Textarea
+                        value={editContent}
+                        onChange={e => setEditContent(e.target.value)}
+                        className="border-gray-300 resize-none"
+                        rows={3}
+                      />
+                      <div className="flex gap-2">
+                        <Button size="sm" onClick={() => handleSaveEdit(reply)} className="bg-green-600 hover:bg-green-700 h-7 text-xs">
+                          <Check className="w-3 h-3 mr-1" /> Save
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => setEditingReplyId(null)} className="h-7 text-xs">
+                          <XIcon className="w-3 h-3 mr-1" /> Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-gray-700 leading-relaxed whitespace-pre-wrap mb-3">{reply.content}</p>
+                  )}
+
+                  <div className="flex items-center gap-1 flex-wrap">
+                    <Button
+                      onClick={() => handleLikeReply(reply)}
+                      variant="ghost"
+                      size="sm"
+                      className={user && reply.likes?.includes(user.email) ? "text-red-900" : "text-gray-500"}
+                    >
+                      <ThumbsUp className="w-4 h-4 mr-1" />
+                      {reply.likes?.length || 0}
+                    </Button>
+                    {/* Own reply: edit + delete */}
+                    {user && reply.author_email === user.email && editingReplyId !== reply.id && (
+                      <>
+                        <Button size="sm" variant="ghost" onClick={() => handleEditReply(reply)} className="text-gray-400 hover:text-blue-600 h-7 px-2">
+                          <Pencil className="w-3.5 h-3.5" />
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => handleDeleteReply(reply)} className="text-gray-400 hover:text-red-600 h-7 px-2">
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </>
+                    )}
+                    {/* Others' replies: flag */}
+                    {user && reply.author_email !== user.email && (
+                      <Button size="sm" variant="ghost" onClick={() => handleFlagReply(reply)} className="text-gray-400 hover:text-orange-500 h-7 px-2 ml-auto">
+                        <Flag className="w-3.5 h-3.5" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
         ))}
+
+        {/* Load more */}
+        {replies.length > visibleCount && (
+          <Button
+            variant="outline"
+            className="w-full border-gray-300 text-gray-600"
+            onClick={() => setVisibleCount(c => c + 20)}
+          >
+            Load {Math.min(20, replies.length - visibleCount)} more replies
+          </Button>
+        )}
       </div>
     </div>
   );

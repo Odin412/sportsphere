@@ -39,7 +39,7 @@ function getGroupLabel(group) {
     like: "liked your post",
     comment: "commented on your post",
     follow: "followed you",
-    stream_live: "is live now 🔴",
+    live_stream: "is live now 🔴",
   }[group.type] || "interacted with you";
   if (count === 1) return group.message || `${first} ${verb}`;
   if (count === 2) return `${first} and ${second} ${verb}`;
@@ -70,17 +70,17 @@ export default function Notifications() {
     base44.auth.me().then(setUser).catch(() => {});
   }, []);
 
-  // Real-time subscription for new notifications
+  // Real-time subscription for new notifications (graceful fallback if not supported)
   useEffect(() => {
     if (!user) return;
-
-    const unsubscribe = base44.entities.Notification.subscribe((event) => {
-      if (event.type === "create" && event.data.recipient_email === user.email) {
-        queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      }
-    });
-
-    return unsubscribe;
+    try {
+      const unsubscribe = base44.entities.Notification.subscribe((event) => {
+        if (event.type === "create" && event.data.recipient_email === user.email) {
+          queryClient.invalidateQueries({ queryKey: ["notifications"] });
+        }
+      });
+      return unsubscribe;
+    } catch (_) {}
   }, [user, queryClient]);
 
   const { data: allNotifications, isLoading } = useQuery({
@@ -303,7 +303,10 @@ export default function Notifications() {
                 >
                   <Link
                     to={getNotificationLink(group)}
-                    onClick={() => !group.is_read && markAsReadMutation.mutate(group.id)}
+                    onClick={() => {
+                      const unread = group.members.filter(m => !m.is_read);
+                      unread.forEach(m => markAsReadMutation.mutate(m.id));
+                    }}
                     className="block p-4"
                   >
                     <div className="flex gap-4">
@@ -379,7 +382,7 @@ export default function Notifications() {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                deleteNotification(group.id);
+                                group.members.forEach(m => deleteNotification(m.id));
                               }}
                               className="p-1 hover:bg-slate-800 rounded-lg transition-colors"
                             >

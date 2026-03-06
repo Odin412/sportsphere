@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Crown, Check, Sparkles, Zap, TrendingUp, MessageCircle } from "lucide-react";
+import { Crown, Check, Sparkles, Zap, TrendingUp, MessageCircle, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "../utils";
@@ -109,8 +109,16 @@ export default function Premium() {
                   className="bg-gradient-to-r from-amber-600 via-orange-600 to-amber-600 hover:from-amber-500 hover:via-orange-500 hover:to-amber-500 text-white text-lg py-6 px-12 shadow-xl shadow-amber-500/50"
                 >
                   <Crown className="w-5 h-5 mr-2" />
-                  Subscribe Now
+                  {loading ? "Activating..." : "Subscribe Now"}
                 </Button>
+                {!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY && (
+                  <div className="flex items-start gap-2 bg-amber-900/30 border border-amber-500/30 rounded-xl px-4 py-3 text-left mt-3">
+                    <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-amber-300 text-xs">
+                      <span className="font-semibold">Dev mode:</span> Subscription activated without payment. Add <code className="bg-amber-900/50 px-1 rounded">VITE_STRIPE_PUBLISHABLE_KEY</code> to .env to enable real billing via Stripe.
+                    </p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

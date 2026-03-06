@@ -61,16 +61,21 @@ export default function NotificationSettingsDialog({ user, onClose }) {
 
   const handleSave = async () => {
     setSaving(true);
-    const data = { user_email: user.email, ...prefs };
-    if (existingPrefs) {
-      await base44.entities.NotificationPreferences.update(existingPrefs.id, data);
-    } else {
-      await base44.entities.NotificationPreferences.create(data);
+    try {
+      const data = { user_email: user.email, ...prefs };
+      if (existingPrefs) {
+        await base44.entities.NotificationPreferences.update(existingPrefs.id, data);
+      } else {
+        await base44.entities.NotificationPreferences.create(data);
+      }
+      queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
+      toast.success("Notification preferences saved!");
+      onClose();
+    } catch (error) {
+      toast.error("Failed to save preferences. Please try again.");
+    } finally {
+      setSaving(false);
     }
-    queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
-    toast.success("Notification preferences saved!");
-    setSaving(false);
-    onClose();
   };
 
   return (

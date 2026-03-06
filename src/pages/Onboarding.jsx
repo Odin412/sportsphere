@@ -85,6 +85,8 @@ export default function Onboarding() {
         onboarding_complete: true,
         ...(profile.avatar_url ? { avatar_url: profile.avatar_url } : {}),
       }).catch(() => {});
+      // localStorage fallback for missing onboarding_complete DB column
+      if (user?.id) localStorage.setItem(`ob_${user.id}`, '1');
 
       if (selectedRole === "admin") {
         const createdOrg = await base44.entities.Organization.create({

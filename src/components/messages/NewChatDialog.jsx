@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Search, MessageCircle, Users, X, Check } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 
 export default function NewChatDialog({ user, onSelectConversation, onClose }) {
   const [search, setSearch] = useState("");
@@ -48,34 +49,39 @@ export default function NewChatDialog({ user, onSelectConversation, onClose }) {
     if (selected.length === 0) return;
     setCreating(true);
 
-    const participants = [user.email, ...selected.map(p => p.user_email)];
-    const participantNames = [user.full_name || user.email, ...selected.map(p => p.user_name || p.user_email)];
-    const participantAvatars = [user.avatar_url || "", ...selected.map(p => p.avatar_url || "")];
+    try {
+      const participants = [user.email, ...selected.map(p => p.user_email)];
+      const participantNames = [user.full_name || user.email, ...selected.map(p => p.user_name || p.user_email)];
+      const participantAvatars = [user.avatar_url || "", ...selected.map(p => p.avatar_url || "")];
 
-    // For DM, check for existing conversation
-    if (selected.length === 1) {
-      const existing = await base44.entities.Conversation.list("-updated_date", 50);
-      const found = existing.find(c =>
-        c.participants?.includes(user.email) && c.participants?.includes(selected[0].user_email) && c.participants?.length === 2
-      );
-      if (found) {
-        onSelectConversation(found.id);
-        onClose();
-        return;
+      // For DM, check for existing conversation
+      if (selected.length === 1) {
+        const existing = await base44.entities.Conversation.list("-updated_date", 50);
+        const found = existing.find(c =>
+          c.participants?.includes(user.email) && c.participants?.includes(selected[0].user_email) && c.participants?.length === 2
+        );
+        if (found) {
+          onSelectConversation(found.id);
+          onClose();
+          return;
+        }
       }
+
+      const conv = await base44.entities.Conversation.create({
+        participants,
+        participant_names: participantNames,
+        participant_avatars: participantAvatars,
+        group_name: selected.length > 1 ? (groupName.trim() || participantNames.slice(1).join(", ")) : undefined,
+        is_group: selected.length > 1,
+      });
+
+      onSelectConversation(conv.id);
+      onClose();
+    } catch (error) {
+      toast.error("Failed to start conversation. Please try again.");
+    } finally {
+      setCreating(false);
     }
-
-    const conv = await base44.entities.Conversation.create({
-      participants,
-      participant_names: participantNames,
-      participant_avatars: participantAvatars,
-      group_name: selected.length > 1 ? (groupName.trim() || participantNames.slice(1).join(", ")) : undefined,
-      is_group: selected.length > 1,
-    });
-
-    onSelectConversation(conv.id);
-    setCreating(false);
-    onClose();
   };
 
   return (

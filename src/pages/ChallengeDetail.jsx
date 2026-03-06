@@ -5,12 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, Users, Calendar, Trophy, Target, Loader2, Share2, CheckCircle2, Flame } from "lucide-react";
+import { ArrowLeft, Users, Calendar, Trophy, Target, Loader2, Share2, CheckCircle2, Flame, Medal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import moment from "moment";
 import PostChallengeUpdateDialog from "../components/challenges/PostChallengeUpdateDialog";
 import ChallengeUpdateCard from "../components/challenges/ChallengeUpdateCard";
+import { awardPoints } from "../components/gamification/PointsHelper";
+import { toast } from "sonner";
 
 export default function ChallengeDetail() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -18,6 +20,8 @@ export default function ChallengeDetail() {
   const queryClient = useQueryClient();
   const [user, setUser] = useState(null);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
+  const [activeTab, setActiveTab] = useState("updates"); // "updates" | "leaderboard"
+  const [joining, setJoining] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -45,34 +49,42 @@ export default function ChallengeDetail() {
   const hasJoined = !!myParticipation;
 
   const handleJoinChallenge = async () => {
-    await base44.entities.ChallengeParticipant.create({
-      challenge_id: challengeId,
-      user_email: user.email,
-      user_name: user.full_name,
-      user_avatar: user.avatar_url,
-      status: "active",
-      joined_date: new Date().toISOString(),
-    });
-
-    await base44.entities.Challenge.update(challengeId, {
-      participants_count: (challenge.participants_count || 0) + 1,
-    });
-
-    // Notify challenge creator
-    if (challenge.creator_email && challenge.creator_email !== user.email) {
-      await base44.entities.Notification.create({
-        recipient_email: challenge.creator_email,
-        actor_email: user.email,
-        actor_name: user.full_name,
-        actor_avatar: user.avatar_url,
-        type: "challenge_joined",
+    setJoining(true);
+    try {
+      await base44.entities.ChallengeParticipant.create({
         challenge_id: challengeId,
-        message: `joined your challenge "${challenge.title}"`,
+        user_email: user.email,
+        user_name: user.full_name,
+        user_avatar: user.avatar_url,
+        status: "active",
+        joined_date: new Date().toISOString(),
       });
-    }
 
-    queryClient.invalidateQueries({ queryKey: ["challenge-participants"] });
-    queryClient.invalidateQueries({ queryKey: ["challenge"] });
+      await base44.entities.Challenge.update(challengeId, {
+        participants_count: (challenge.participants_count || 0) + 1,
+      });
+
+      // Notify challenge creator
+      if (challenge.creator_email && challenge.creator_email !== user.email) {
+        await base44.entities.Notification.create({
+          recipient_email: challenge.creator_email,
+          actor_email: user.email,
+          actor_name: user.full_name,
+          actor_avatar: user.avatar_url,
+          type: "challenge_joined",
+          challenge_id: challengeId,
+          message: `joined your challenge "${challenge.title}"`,
+        });
+      }
+
+      queryClient.invalidateQueries({ queryKey: ["challenge-participants"] });
+      queryClient.invalidateQueries({ queryKey: ["challenge"] });
+      toast.success("Joined challenge!");
+    } catch (error) {
+      toast.error("Failed to join challenge. Please try again.");
+    } finally {
+      setJoining(false);
+    }
   };
 
   const handleLeaveChallenge = async () => {
@@ -191,9 +203,10 @@ export default function ChallengeDetail() {
             {user && !hasJoined && (
               <Button
                 onClick={handleJoinChallenge}
+                disabled={joining}
                 className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold h-12 rounded-2xl"
               >
-                Join Challenge
+                {joining ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Joining…</> : "Join Challenge"}
               </Button>
             )}
             {user && hasJoined && (
@@ -234,28 +247,117 @@ export default function ChallengeDetail() {
         </div>
       </div>
 
-      {/* Updates Feed */}
-      <div>
-        <h2 className="text-2xl font-bold text-slate-200 mb-4 flex items-center gap-2">
-          <Trophy className="w-6 h-6 text-amber-500" />
-          Progress Updates
-        </h2>
-        {updates?.length === 0 ? (
-          <div className="text-center py-12 bg-slate-800/80 rounded-3xl border border-slate-700">
-            <p className="text-slate-400">No updates yet. Be the first to share your progress!</p>
-          </div>
-        ) : (
-          <div className="space-y-4">
-            {updates?.map(update => (
-              <ChallengeUpdateCard
-                key={update.id}
-                update={update}
-                currentUser={user}
-              />
-            ))}
-          </div>
-        )}
+      {/* Tab Selector */}
+      <div className="flex gap-2 border-b border-slate-700 pb-1">
+        <button
+          onClick={() => setActiveTab("updates")}
+          className={`px-5 py-2 rounded-t-xl text-sm font-bold transition-colors ${
+            activeTab === "updates"
+              ? "bg-cyan-600 text-white"
+              : "text-slate-400 hover:text-white"
+          }`}
+        >
+          <Trophy className="w-4 h-4 inline mr-1" /> Progress Updates
+        </button>
+        <button
+          onClick={() => setActiveTab("leaderboard")}
+          className={`px-5 py-2 rounded-t-xl text-sm font-bold transition-colors ${
+            activeTab === "leaderboard"
+              ? "bg-amber-600 text-white"
+              : "text-slate-400 hover:text-white"
+          }`}
+        >
+          <Medal className="w-4 h-4 inline mr-1" /> Leaderboard
+        </button>
       </div>
+
+      {/* Updates Feed */}
+      {activeTab === "updates" && (
+        <div>
+          {updates?.length === 0 ? (
+            <div className="text-center py-12 bg-slate-800/80 rounded-3xl border border-slate-700">
+              <p className="text-slate-400">No updates yet. Be the first to share your progress!</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {updates?.map(update => (
+                <ChallengeUpdateCard
+                  key={update.id}
+                  update={update}
+                  currentUser={user}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Leaderboard Tab */}
+      {activeTab === "leaderboard" && (
+        <div className="space-y-3">
+          {!participants?.length ? (
+            <div className="text-center py-12 bg-slate-800/80 rounded-3xl border border-slate-700">
+              <p className="text-slate-400">No participants yet. Be the first to join!</p>
+            </div>
+          ) : (
+            (() => {
+              // Count updates per participant for ranking
+              const updatesByUser = (updates || []).reduce((acc, u) => {
+                const key = u.user_email || u.author_email;
+                acc[key] = (acc[key] || 0) + 1;
+                return acc;
+              }, {});
+
+              const ranked = [...participants]
+                .sort((a, b) => {
+                  const aPct = a.progress_percentage || 0;
+                  const bPct = b.progress_percentage || 0;
+                  if (bPct !== aPct) return bPct - aPct;
+                  return (updatesByUser[b.user_email] || 0) - (updatesByUser[a.user_email] || 0);
+                })
+                .slice(0, 10);
+
+              const medals = ["🥇", "🥈", "🥉"];
+
+              return ranked.map((p, i) => (
+                <div
+                  key={p.id}
+                  className={`flex items-center gap-4 p-4 rounded-2xl border ${
+                    i === 0
+                      ? "bg-amber-900/20 border-amber-500/40"
+                      : i === 1
+                      ? "bg-slate-700/40 border-slate-500/40"
+                      : i === 2
+                      ? "bg-orange-900/20 border-orange-500/40"
+                      : "bg-slate-800/60 border-slate-700"
+                  }`}
+                >
+                  <span className="text-2xl w-8 text-center flex-shrink-0">
+                    {medals[i] || `#${i + 1}`}
+                  </span>
+                  <Avatar className="w-10 h-10 flex-shrink-0">
+                    <AvatarImage src={p.user_avatar} />
+                    <AvatarFallback className="bg-slate-600 text-white text-sm">
+                      {p.user_name?.[0]?.toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-200 text-sm truncate">{p.user_name}</p>
+                    <div className="flex items-center gap-3 mt-1">
+                      <Progress value={p.progress_percentage || 0} className="h-1.5 flex-1 max-w-[120px]" />
+                      <span className="text-xs text-cyan-400 font-semibold">{p.progress_percentage || 0}%</span>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-xs text-slate-400">{updatesByUser[p.user_email] || 0} updates</p>
+                    <p className="text-xs text-slate-500">{p.days_completed || 0} days</p>
+                  </div>
+                </div>
+              ));
+            })()
+          )}
+        </div>
+      )}
 
       {/* Post Update Dialog */}
       {showUpdateDialog && user && (

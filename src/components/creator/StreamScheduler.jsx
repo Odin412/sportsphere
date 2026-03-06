@@ -39,47 +39,60 @@ export default function StreamScheduler({ user }) {
   const save = async () => {
     if (!form.title || !form.scheduled_at) return toast.error("Title and date are required");
     setSaving(true);
-    await base44.entities.ScheduledStream.create({
-      ...form,
-      host_email: user.email,
-      host_name: user.full_name,
-      host_avatar: user.avatar_url,
-      price: parseFloat(form.price) || 0,
-      rsvp_emails: [],
-      status: "upcoming",
-    });
-    qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
-    setShowForm(false);
-    setForm({ title: "", description: "", sport: "", scheduled_at: "", duration_minutes: 60, is_premium: false, price: 0 });
-    toast.success("Stream scheduled!");
-    setSaving(false);
+    try {
+      await base44.entities.ScheduledStream.create({
+        ...form,
+        host_email: user.email,
+        host_name: user.full_name,
+        host_avatar: user.avatar_url,
+        price: parseFloat(form.price) || 0,
+        rsvp_emails: [],
+        status: "upcoming",
+      });
+      qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
+      setShowForm(false);
+      setForm({ title: "", description: "", sport: "", scheduled_at: "", duration_minutes: 60, is_premium: false, price: 0 });
+      toast.success("Stream scheduled!");
+    } catch (error) {
+      toast.error("Failed to schedule stream. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const notifyFollowers = async (stream) => {
     if (!followers.length) return toast.info("You have no followers yet");
     setNotifying(stream.id);
-    // Send notification to each follower
-    const notifications = followers.map(f => ({
-      recipient_email: f.follower_email,
-      type: "stream_scheduled",
-      title: `${user.full_name} scheduled a live stream`,
-      message: `"${stream.title}" - ${moment(stream.scheduled_at).format("MMM D [at] h:mm A")}`,
-      actor_email: user.email,
-      actor_name: user.full_name,
-      actor_avatar: user.avatar_url,
-      is_read: false,
-    }));
-    await base44.entities.Notification.bulkCreate(notifications);
-    await base44.entities.ScheduledStream.update(stream.id, { notified_followers: true });
-    qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
-    toast.success(`Notified ${followers.length} followers!`);
-    setNotifying(null);
+    try {
+      const notifications = followers.map(f => ({
+        recipient_email: f.follower_email,
+        type: "stream_scheduled",
+        title: `${user.full_name} scheduled a live stream`,
+        message: `"${stream.title}" - ${moment(stream.scheduled_at).format("MMM D [at] h:mm A")}`,
+        actor_email: user.email,
+        actor_name: user.full_name,
+        actor_avatar: user.avatar_url,
+        is_read: false,
+      }));
+      await base44.entities.Notification.bulkCreate(notifications);
+      await base44.entities.ScheduledStream.update(stream.id, { notified_followers: true });
+      qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
+      toast.success(`Notified ${followers.length} followers!`);
+    } catch (error) {
+      toast.error("Failed to notify followers. Please try again.");
+    } finally {
+      setNotifying(null);
+    }
   };
 
   const cancel = async (id) => {
-    await base44.entities.ScheduledStream.update(id, { status: "cancelled" });
-    qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
-    toast.success("Stream cancelled");
+    try {
+      await base44.entities.ScheduledStream.update(id, { status: "cancelled" });
+      qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
+      toast.success("Stream cancelled");
+    } catch (error) {
+      toast.error("Failed to cancel stream. Please try again.");
+    }
   };
 
   const upcoming = scheduled.filter(s => s.status === "upcoming" && new Date(s.scheduled_at) > new Date());

@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Heart, Loader2 } from "lucide-react";
+import { Heart, Loader2, AlertTriangle } from "lucide-react";
+
+const STRIPE_CONFIGURED = !!import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;
 import { toast } from "sonner";
 
 export default function DonateButton({ recipientEmail, recipientName, currentUser }) {
@@ -119,6 +121,12 @@ export default function DonateButton({ recipientEmail, recipientName, currentUse
             >
               {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : `Send $${amount || 0}`}
             </Button>
+            {!STRIPE_CONFIGURED && (
+              <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
+                <AlertTriangle className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
+                <p className="text-amber-700 text-xs">Dev mode — no charge processed. Add Stripe keys to enable real payments.</p>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>

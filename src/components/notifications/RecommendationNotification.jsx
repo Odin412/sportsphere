@@ -28,10 +28,14 @@ export default function RecommendationNotification({ user }) {
   const { data: events } = useQuery({
     queryKey: ["upcoming-events"],
     queryFn: async () => {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      const allEvents = await base44.entities.Event.list("-date", 10);
-      return allEvents.filter(e => new Date(e.date) >= new Date() && new Date(e.date) <= tomorrow);
+      const now = new Date();
+      const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+      // Fetch ascending by date so upcoming events come first
+      const allEvents = await base44.entities.Event.list("date", 20);
+      return allEvents.filter(e => {
+        const d = new Date(e.date);
+        return d >= now && d <= tomorrow;
+      });
     },
     enabled: !!user,
     refetchInterval: 60000, // Check every minute
@@ -83,6 +87,11 @@ export default function RecommendationNotification({ user }) {
         const alreadyNotified = localStorage.getItem(notifKey);
         
         if (!alreadyNotified) {
+          // Clean up old event notification keys to prevent localStorage bloat
+          const allKeys = Object.keys(localStorage).filter(k => k.startsWith("event_notif_"));
+          if (allKeys.length > 100) {
+            allKeys.slice(0, allKeys.length - 100).forEach(k => localStorage.removeItem(k));
+          }
           toast.custom(
             (t) => (
               <Link to={createPageUrl("Explore") + "?tab=events"}>

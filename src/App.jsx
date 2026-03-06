@@ -24,11 +24,12 @@ const OnboardingRedirect = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Redirect new users (no onboarding_complete flag) to the onboarding page
-    // Skip if already on Onboarding or Login pages
+    if (!user) return;
+    // localStorage fallback for missing onboarding_complete DB column
+    const localDone = localStorage.getItem(`ob_${user.id}`) === '1';
+    const isDone = user.onboarding_complete || localDone;
     if (
-      user &&
-      !user.onboarding_complete &&
+      !isDone &&
       !location.pathname.includes('Onboarding') &&
       !location.pathname.includes('login')
     ) {

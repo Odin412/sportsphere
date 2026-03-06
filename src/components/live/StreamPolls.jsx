@@ -44,14 +44,19 @@ function ActivePoll({ poll, user, isHost, onClose }) {
   const vote = async (optionId) => {
     if (!user) return toast.error("Log in to vote");
     setVoting(true);
-    const updatedOptions = poll.options.map(o => ({
-      ...o,
-      votes: o.id === optionId ? [...(o.votes || []), user.email] : (o.votes || [])
-    }));
-    await base44.entities.StreamPoll.update(poll.id, { options: updatedOptions });
-    qc.invalidateQueries({ queryKey: ["stream-polls", poll.stream_id] });
-    setVoting(false);
-    toast.success("Vote cast!");
+    try {
+      const updatedOptions = poll.options.map(o => ({
+        ...o,
+        votes: o.id === optionId ? [...(o.votes || []), user.email] : (o.votes || [])
+      }));
+      await base44.entities.StreamPoll.update(poll.id, { options: updatedOptions });
+      qc.invalidateQueries({ queryKey: ["stream-polls", poll.stream_id] });
+      toast.success("Vote cast!");
+    } catch (error) {
+      toast.error("Failed to cast vote. Please try again.");
+    } finally {
+      setVoting(false);
+    }
   };
 
   const endPoll = async () => {
@@ -108,18 +113,23 @@ function CreatePollForm({ streamId, user, onCreated }) {
     const filled = options.filter(o => o.trim());
     if (filled.length < 2) return toast.error("Add at least 2 options");
     setCreating(true);
-    await base44.entities.StreamPoll.create({
-      stream_id: streamId,
-      creator_email: user.email,
-      question: question.trim(),
-      options: filled.map((text, i) => ({ id: String(i + 1), text: text.trim(), votes: [] })),
-      is_active: true,
-    });
-    qc.invalidateQueries({ queryKey: ["stream-polls", streamId] });
-    toast.success("Poll launched! 🗳️");
-    setQuestion(""); setOptions(["", ""]);
-    setCreating(false);
-    onCreated?.();
+    try {
+      await base44.entities.StreamPoll.create({
+        stream_id: streamId,
+        creator_email: user.email,
+        question: question.trim(),
+        options: filled.map((text, i) => ({ id: String(i + 1), text: text.trim(), votes: [] })),
+        is_active: true,
+      });
+      qc.invalidateQueries({ queryKey: ["stream-polls", streamId] });
+      toast.success("Poll launched! 🗳️");
+      setQuestion(""); setOptions(["", ""]);
+      onCreated?.();
+    } catch (error) {
+      toast.error("Failed to create poll. Please try again.");
+    } finally {
+      setCreating(false);
+    }
   };
 
   return (

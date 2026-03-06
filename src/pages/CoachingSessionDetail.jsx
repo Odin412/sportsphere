@@ -10,8 +10,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ArrowLeft, Calendar, Clock, Users, DollarSign, Video, Loader2, Send, MessageCircle, HelpCircle, Download, FileText } from "lucide-react";
+import { ArrowLeft, Calendar, Clock, Users, DollarSign, Video, Loader2, Send, MessageCircle, HelpCircle, Download, FileText, PlayCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import VideoFormAnalysis from "../components/org/VideoFormAnalysis";
 import { createPageUrl } from "../utils";
 import moment from "moment";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ export default function CoachingSessionDetail() {
   const [selectedSlot, setSelectedSlot] = useState("");
   const [bookingNotes, setBookingNotes] = useState("");
   const [isBooking, setIsBooking] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => {});
@@ -51,9 +53,16 @@ export default function CoachingSessionDetail() {
     enabled: !!sessionId && session?.is_one_on_one,
   });
 
+  const { data: athleteVideos = [] } = useQuery({
+    queryKey: ["coach-review-videos", session?.sport],
+    queryFn: () => base44.entities.AthleteVideo.filter({ sport: session.sport, coach_reviewed: false }),
+    enabled: !!session?.sport && isHost,
+  });
+
   const isRegistered = session?.participants?.includes(user?.email);
   const hasAccess = !session?.is_paid || isRegistered || session?.host_email === user?.email;
   const isFull = session?.max_participants && session?.participants?.length >= session?.max_participants;
+  const isHost = session?.host_email === user?.email;
 
   const handleRegister = async () => {
     if (!user) {
@@ -61,33 +70,40 @@ export default function CoachingSessionDetail() {
       return;
     }
 
-    if (session.is_paid) {
-      // Create transaction
-      await base44.entities.Transaction.create({
-        from_email: user.email,
-        to_email: session.host_email,
-        type: "coaching_session",
-        amount: session.price,
-        status: "completed",
+    setIsRegistering(true);
+    try {
+      if (session.is_paid) {
+        // Create transaction
+        await base44.entities.Transaction.create({
+          from_email: user.email,
+          to_email: session.host_email,
+          type: "coaching_session",
+          amount: session.price,
+          status: "completed",
+        });
+      }
+
+      await base44.entities.CoachingSession.update(sessionId, {
+        participants: [...(session.participants || []), user.email],
       });
+
+      // Notify host
+      await base44.entities.Notification.create({
+        recipient_email: session.host_email,
+        actor_email: user.email,
+        actor_name: user.full_name,
+        actor_avatar: user.avatar_url,
+        type: "subscription",
+        message: `registered for your coaching session: ${session.title}`,
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["coaching-session"] });
+      toast.success("Successfully registered!");
+    } catch (error) {
+      toast.error("Failed to register. Please try again.");
+    } finally {
+      setIsRegistering(false);
     }
-
-    await base44.entities.CoachingSession.update(sessionId, {
-      participants: [...(session.participants || []), user.email],
-    });
-
-    // Notify host
-    await base44.entities.Notification.create({
-      recipient_email: session.host_email,
-      actor_email: user.email,
-      actor_name: user.full_name,
-      actor_avatar: user.avatar_url,
-      type: "subscription",
-      message: `registered for your coaching session: ${session.title}`,
-    });
-
-    queryClient.invalidateQueries({ queryKey: ["coaching-session"] });
-    toast.success("Successfully registered!");
   };
 
   const handleBookSlot = async () => {
@@ -136,19 +152,21 @@ export default function CoachingSessionDetail() {
 
   const handleSendMessage = async () => {
     if (!message.trim() || !user) return;
-
-    await base44.entities.SessionMessage.create({
-      session_id: sessionId,
-      sender_email: user.email,
-      sender_name: user.full_name,
-      sender_avatar: user.avatar_url,
-      message: message.trim(),
-      is_question: isQuestion,
-    });
-
-    setMessage("");
-    setIsQuestion(false);
-    queryClient.invalidateQueries({ queryKey: ["session-messages"] });
+    try {
+      await base44.entities.SessionMessage.create({
+        session_id: sessionId,
+        sender_email: user.email,
+        sender_name: user.full_name,
+        sender_avatar: user.avatar_url,
+        message: message.trim(),
+        is_question: isQuestion,
+      });
+      setMessage("");
+      setIsQuestion(false);
+      queryClient.invalidateQueries({ queryKey: ["session-messages"] });
+    } catch (error) {
+      toast.error("Failed to send message. Please try again.");
+    }
   };
 
   if (isLoading || !session) {
@@ -283,10 +301,10 @@ export default function CoachingSessionDetail() {
               {user && !isRegistered && session.status === "scheduled" && !session.is_one_on_one && (
                 <Button
                   onClick={handleRegister}
-                  disabled={isFull}
+                  disabled={isFull || isRegistering}
                   className="w-full bg-gradient-to-r from-red-900 to-red-800 hover:from-red-800 hover:to-red-700 h-12"
                 >
-                  {isFull ? "Session Full" : session.is_paid ? `Register for $${session.price}` : "Register for Free"}
+                  {isRegistering ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Registering…</> : isFull ? "Session Full" : session.is_paid ? `Register for $${session.price}` : "Register for Free"}
                 </Button>
               )}
 
@@ -362,6 +380,43 @@ export default function CoachingSessionDetail() {
               )}
             </CardContent>
           </Card>
+          {/* Videos to Review — Coach Only */}
+          {isHost && (
+            <Card className="bg-white border-gray-200">
+              <CardContent className="p-4">
+                <h3 className="font-bold text-gray-900 mb-4 flex items-center gap-2">
+                  <PlayCircle className="w-5 h-5 text-purple-600" />
+                  Videos to Review
+                  {athleteVideos.length > 0 && (
+                    <span className="ml-auto text-xs bg-red-100 text-red-700 font-bold px-2 py-0.5 rounded-full">
+                      {athleteVideos.length} pending
+                    </span>
+                  )}
+                </h3>
+                {athleteVideos.length === 0 ? (
+                  <p className="text-sm text-gray-400 text-center py-4">No pending videos for {session.sport || "this session"}</p>
+                ) : (
+                  <div className="space-y-4 max-h-[500px] overflow-y-auto">
+                    {athleteVideos.map(video => (
+                      <div key={video.id} className="border border-gray-200 rounded-xl p-3 space-y-2">
+                        <div className="flex items-start gap-2">
+                          <Video className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <div className="min-w-0">
+                            <p className="font-semibold text-sm text-gray-900 truncate">{video.title}</p>
+                            <p className="text-xs text-gray-500">{video.athlete_name} · {moment(video.created_date).fromNow()}</p>
+                          </div>
+                        </div>
+                        {video.video_url && (
+                          <video src={video.video_url} controls className="w-full rounded-lg max-h-40 bg-black" />
+                        )}
+                        <VideoFormAnalysis video={video} />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 

@@ -431,13 +431,13 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      onClick={async () => {
-                        // Mute — hide this user's posts from feed without unfollowing
-                        await base44.entities.MutedUser.create({
-                          muter_email: currentUser.email,
-                          muted_email: post.author_email,
-                          muted_name: post.author_name,
-                        }).catch(() => {});
+                      onClick={() => {
+                        // Mute — stored locally since no DB table exists yet
+                        const key = `ss_muted_${currentUser.email}`;
+                        const muted = JSON.parse(localStorage.getItem(key) || "[]");
+                        if (!muted.includes(post.author_email)) {
+                          localStorage.setItem(key, JSON.stringify([...muted, post.author_email]));
+                        }
                         toast.info(`Muted ${post.author_name}`);
                       }}
                       className="gap-2 text-gray-600"
@@ -445,13 +445,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                       <EyeOff className="w-4 h-4" /> Mute {post.author_name?.split(" ")[0]}
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                      onClick={async () => {
+                      onClick={() => {
                         if (!confirm(`Block ${post.author_name}? Their content will be hidden from you.`)) return;
-                        await base44.entities.BlockedUser.create({
-                          blocker_email: currentUser.email,
-                          blocked_email: post.author_email,
-                          blocked_name: post.author_name,
-                        }).catch(() => {});
+                        // Block — stored locally since no DB table exists yet
+                        const key = `ss_blocked_${currentUser.email}`;
+                        const blocked = JSON.parse(localStorage.getItem(key) || "[]");
+                        if (!blocked.includes(post.author_email)) {
+                          localStorage.setItem(key, JSON.stringify([...blocked, post.author_email]));
+                        }
                         toast.success(`Blocked ${post.author_name}`);
                       }}
                       className="gap-2 text-red-600 focus:text-red-600"

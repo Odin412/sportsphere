@@ -1,10 +1,35 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { MessageSquare, Eye, Heart } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 
-export default function RecommendedForums({ topics = [] }) {
+export default function RecommendedForums({ topics: propTopics }) {
+  const { user } = useAuth();
+  const userSports = user?.preferred_sports || [];
+
+  const { data: fetchedTopics = [] } = useQuery({
+    queryKey: ["recommended-forums", userSports.join(",")],
+    queryFn: async () => {
+      const all = await base44.entities.ForumTopic.list("-created_date", 30);
+      return all.sort((a, b) => {
+        // Prioritize sport matches, then by engagement (likes + replies)
+        const aMatch = userSports.includes(a.sport) ? 100 : 0;
+        const bMatch = userSports.includes(b.sport) ? 100 : 0;
+        const aScore = aMatch + (a.likes?.length || 0) + (a.replies_count || 0) * 2;
+        const bScore = bMatch + (b.likes?.length || 0) + (b.replies_count || 0) * 2;
+        return bScore - aScore;
+      });
+    },
+    enabled: !propTopics?.length && !!user,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const topics = propTopics?.length ? propTopics : fetchedTopics;
+
   if (!topics.length) return null;
 
   return (

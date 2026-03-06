@@ -1,18 +1,40 @@
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import { Dumbbell, Clock, BarChart } from "lucide-react";
+import { Dumbbell, Clock } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useAuth } from "@/lib/AuthContext";
 
-export default function RecommendedPrograms({ programs = [] }) {
+const difficultyColor = {
+  beginner: "bg-green-500/20 text-green-300",
+  intermediate: "bg-yellow-500/20 text-yellow-300",
+  advanced: "bg-orange-500/20 text-orange-300",
+  expert: "bg-red-500/20 text-red-300",
+};
+
+export default function RecommendedPrograms({ programs: propPrograms }) {
+  const { user } = useAuth();
+  const userSports = user?.preferred_sports || [];
+
+  const { data: fetchedPrograms = [] } = useQuery({
+    queryKey: ["recommended-programs", userSports.join(",")],
+    queryFn: async () => {
+      const all = await base44.entities.TrainingProgram.list("-created_date", 20);
+      return all.sort((a, b) => {
+        const aMatch = userSports.includes(a.sport) ? 1 : 0;
+        const bMatch = userSports.includes(b.sport) ? 1 : 0;
+        return bMatch - aMatch;
+      });
+    },
+    enabled: !propPrograms?.length && !!user,
+    staleTime: 5 * 60 * 1000,
+  });
+
+  const programs = propPrograms?.length ? propPrograms : fetchedPrograms;
+
   if (!programs.length) return null;
-
-  const difficultyColor = {
-    beginner: "bg-green-500/20 text-green-300",
-    intermediate: "bg-yellow-500/20 text-yellow-300",
-    advanced: "bg-orange-500/20 text-orange-300",
-    expert: "bg-red-500/20 text-red-300",
-  };
 
   return (
     <div className="space-y-3">
@@ -24,7 +46,7 @@ export default function RecommendedPrograms({ programs = [] }) {
         {programs.slice(0, 4).map(program => (
           <Link
             key={program.id}
-            to={createPageUrl("Profile")}
+            to={createPageUrl("MyTraining")}
             className="block bg-slate-800/80 border border-slate-700 hover:border-orange-500/50 rounded-2xl p-4 transition-all hover:scale-[1.01]"
           >
             <p className="font-bold text-white text-sm">{program.name}</p>

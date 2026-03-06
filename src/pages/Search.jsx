@@ -8,7 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, Clock, SlidersHorizontal, Play } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import moment from "moment";
 import { debounce } from "lodash";
@@ -38,8 +38,9 @@ const TABS = [
 
 export default function SearchPage() {
   const [user, setUser] = useState(null);
-  const [query, setQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const [searchParams] = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get("q") || "");
+  const [debouncedQuery, setDebouncedQuery] = useState(() => searchParams.get("q") || "");
   const [activeTab, setActiveTab] = useState("all");
 
   // Per-type filters

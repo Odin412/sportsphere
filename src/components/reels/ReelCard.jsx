@@ -357,7 +357,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
                         <button
                           key={s}
                           onClick={() => { setSpeed(s); setShowSpeedPicker(false); }}
-                          className={}
+                          className={`w-full px-4 py-2.5 text-left text-sm transition-colors ${s === speed ? "text-white font-black bg-white/10" : "text-slate-300 hover:bg-white/10"}`}
                         >
                           {s}x
                         </button>

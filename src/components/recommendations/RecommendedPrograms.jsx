@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { Dumbbell, Clock } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 
 const difficultyColor = {
@@ -21,7 +21,7 @@ export default function RecommendedPrograms({ programs: propPrograms }) {
   const { data: fetchedPrograms = [] } = useQuery({
     queryKey: ["recommended-programs", userSports.join(",")],
     queryFn: async () => {
-      const all = await base44.entities.TrainingProgram.list("-created_date", 20);
+      const all = await db.entities.TrainingProgram.list("-created_date", 20);
       return all.sort((a, b) => {
         const aMatch = userSports.includes(a.sport) ? 1 : 0;
         const bMatch = userSports.includes(b.sport) ? 1 : 0;

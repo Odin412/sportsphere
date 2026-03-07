@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,8 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Calendar, Clock, Users, DollarSign, Video, Loader2, Send, MessageCircle, HelpCircle, Download, FileText, PlayCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import VideoFormAnalysis from "../components/org/VideoFormAnalysis";
-import { createPageUrl } from "../utils";
+import VideoFormAnalysis from "@/components/org/VideoFormAnalysis";
+import { createPageUrl } from "@/utils";
 import moment from "moment";
 import { toast } from "sonner";
 
@@ -31,31 +31,31 @@ export default function CoachingSessionDetail() {
   const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: session, isLoading } = useQuery({
     queryKey: ["coaching-session", sessionId],
-    queryFn: () => base44.entities.CoachingSession.filter({ id: sessionId }).then(res => res[0]),
+    queryFn: () => db.entities.CoachingSession.filter({ id: sessionId }).then(res => res[0]),
     enabled: !!sessionId,
   });
 
   const { data: messages = [] } = useQuery({
     queryKey: ["session-messages", sessionId],
-    queryFn: () => base44.entities.SessionMessage.filter({ session_id: sessionId }, "-created_date"),
+    queryFn: () => db.entities.SessionMessage.filter({ session_id: sessionId }, "-created_date"),
     enabled: !!sessionId,
     refetchInterval: session?.status === "live" ? 3000 : false,
   });
 
   const { data: bookings = [] } = useQuery({
     queryKey: ["session-bookings", sessionId],
-    queryFn: () => base44.entities.SessionBooking.filter({ session_id: sessionId }),
+    queryFn: () => db.entities.SessionBooking.filter({ session_id: sessionId }),
     enabled: !!sessionId && session?.is_one_on_one,
   });
 
   const { data: athleteVideos = [] } = useQuery({
     queryKey: ["coach-review-videos", session?.sport],
-    queryFn: () => base44.entities.AthleteVideo.filter({ sport: session.sport, coach_reviewed: false }),
+    queryFn: () => db.entities.AthleteVideo.filter({ sport: session.sport, coach_reviewed: false }),
     enabled: !!session?.sport && isHost,
   });
 
@@ -74,7 +74,7 @@ export default function CoachingSessionDetail() {
     try {
       if (session.is_paid) {
         // Create transaction
-        await base44.entities.Transaction.create({
+        await db.entities.Transaction.create({
           from_email: user.email,
           to_email: session.host_email,
           type: "coaching_session",
@@ -83,12 +83,12 @@ export default function CoachingSessionDetail() {
         });
       }
 
-      await base44.entities.CoachingSession.update(sessionId, {
+      await db.entities.CoachingSession.update(sessionId, {
         participants: [...(session.participants || []), user.email],
       });
 
       // Notify host
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: session.host_email,
         actor_email: user.email,
         actor_name: user.full_name,
@@ -110,7 +110,7 @@ export default function CoachingSessionDetail() {
     if (!selectedSlot || !user) return;
     setIsBooking(true);
     try {
-      await base44.entities.SessionBooking.create({
+      await db.entities.SessionBooking.create({
         session_id: sessionId,
         coach_email: session.host_email,
         client_email: user.email,
@@ -123,7 +123,7 @@ export default function CoachingSessionDetail() {
       });
 
       if (session.is_paid && session.price > 0) {
-        await base44.entities.Transaction.create({
+        await db.entities.Transaction.create({
           from_email: user.email,
           to_email: session.host_email,
           type: "coaching_session",
@@ -132,7 +132,7 @@ export default function CoachingSessionDetail() {
         });
       }
 
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: session.host_email,
         actor_email: user.email,
         actor_name: user.full_name,
@@ -153,7 +153,7 @@ export default function CoachingSessionDetail() {
   const handleSendMessage = async () => {
     if (!message.trim() || !user) return;
     try {
-      await base44.entities.SessionMessage.create({
+      await db.entities.SessionMessage.create({
         session_id: sessionId,
         sender_email: user.email,
         sender_name: user.full_name,

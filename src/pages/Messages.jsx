@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Send, ArrowLeft, Loader2, MessageCircle, User, Plus, Search, ImagePlus, X, Play, Languages, Users, Video } from "lucide-react";
-import NewChatDialog from "../components/messages/NewChatDialog";
-import MessageBubble from "../components/messages/MessageBubble";
-import VoiceRecorder from "../components/messages/VoiceRecorder";
-import VideoCallModal from "../components/messages/VideoCallModal";
+import NewChatDialog from "@/components/messages/NewChatDialog";
+import MessageBubble from "@/components/messages/MessageBubble";
+import VoiceRecorder from "@/components/messages/VoiceRecorder";
+import VideoCallModal from "@/components/messages/VideoCallModal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import moment from "moment";
 
 const LANGUAGES = [
@@ -45,13 +45,13 @@ export default function Messages() {
   const typingTimeoutRef = useRef(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin());
+    db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
   }, []);
 
   const { data: conversations, isLoading: convsLoading } = useQuery({
     queryKey: ["my-conversations", user?.email],
     queryFn: async () => {
-      const all = await base44.entities.Conversation.list("-updated_date", 50);
+      const all = await db.entities.Conversation.list("-updated_date", 50);
       return all.filter(c => c.participants?.includes(user.email));
     },
     enabled: !!user,
@@ -59,19 +59,19 @@ export default function Messages() {
 
   const { data: messages, isLoading: msgsLoading, refetch: refetchMessages } = useQuery({
     queryKey: ["conv-messages", selectedConv],
-    queryFn: () => base44.entities.Message.filter({ conversation_id: selectedConv }, "created_date", 100),
+    queryFn: () => db.entities.Message.filter({ conversation_id: selectedConv }, "created_date", 100),
     enabled: !!selectedConv,
   });
 
   // Real-time subscription for messages
   useEffect(() => {
     if (!selectedConv) return;
-    const unsubscribe = base44.entities.Message.subscribe((event) => {
+    const unsubscribe = db.entities.Message.subscribe((event) => {
       if (event.data?.conversation_id === selectedConv) {
         refetchMessages();
         // Mark as read when new message arrives
         if (event.data.sender_email !== user?.email) {
-          base44.entities.Message.update(event.id, {
+          db.entities.Message.update(event.id, {
             read_by: [...(event.data.read_by || []), user?.email].filter((v, i, a) => a.indexOf(v) === i),
           });
         }
@@ -83,7 +83,7 @@ export default function Messages() {
   // Real-time typing indicators
   useEffect(() => {
     if (!selectedConv || !user) return;
-    const unsubscribe = base44.entities.TypingIndicator.subscribe((event) => {
+    const unsubscribe = db.entities.TypingIndicator.subscribe((event) => {
       if (event.data?.conversation_id === selectedConv && event.data?.user_email !== user.email) {
         if (event.type === "delete") {
           setTypingUsers(prev => prev.filter(e => e !== event.data.user_email));
@@ -148,10 +148,10 @@ export default function Messages() {
     setSending(true);
     let media_url = null;
     if (mediaFile) {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file: mediaFile });
+      const { file_url } = await db.integrations.Core.UploadFile({ file: mediaFile });
       media_url = file_url;
     }
-    await base44.entities.Message.create({
+    await db.entities.Message.create({
       conversation_id: selectedConv,
       sender_email: user.email,
       sender_name: user.full_name,
@@ -160,7 +160,7 @@ export default function Messages() {
       media_type: mediaType,
     });
     const lastMsg = media_url ? (newMessage.trim() ? newMessage : `📎 ${mediaType === "video" ? "Video" : "Image"}`) : newMessage;
-    await base44.entities.Conversation.update(selectedConv, {
+    await db.entities.Conversation.update(selectedConv, {
       last_message: lastMsg,
       last_message_time: new Date().toISOString(),
       unread_by: selectedConversation.participants.filter(p => p !== user.email),
@@ -171,8 +171,8 @@ export default function Messages() {
     setSending(false);
     // Remove typing indicator
     if (selectedConv && user) {
-      const ind = await base44.entities.TypingIndicator.filter({ conversation_id: selectedConv, user_email: user.email });
-      if (ind.length > 0) await base44.entities.TypingIndicator.delete(ind[0].id);
+      const ind = await db.entities.TypingIndicator.filter({ conversation_id: selectedConv, user_email: user.email });
+      if (ind.length > 0) await db.entities.TypingIndicator.delete(ind[0].id);
     }
   };
 
@@ -181,22 +181,22 @@ export default function Messages() {
     if (!selectedConv || !user) return;
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
     // Upsert typing indicator
-    const indicators = await base44.entities.TypingIndicator.filter({ conversation_id: selectedConv, user_email: user.email });
+    const indicators = await db.entities.TypingIndicator.filter({ conversation_id: selectedConv, user_email: user.email });
     if (indicators.length > 0) {
-      await base44.entities.TypingIndicator.update(indicators[0].id, { updated_at: new Date().toISOString() });
+      await db.entities.TypingIndicator.update(indicators[0].id, { updated_at: new Date().toISOString() });
     } else {
-      await base44.entities.TypingIndicator.create({ conversation_id: selectedConv, user_email: user.email, user_name: user.full_name, updated_at: new Date().toISOString() });
+      await db.entities.TypingIndicator.create({ conversation_id: selectedConv, user_email: user.email, user_name: user.full_name, updated_at: new Date().toISOString() });
     }
     // Clear typing indicator after 4s of inactivity
     typingTimeoutRef.current = setTimeout(async () => {
-      const ind = await base44.entities.TypingIndicator.filter({ conversation_id: selectedConv, user_email: user.email });
-      if (ind.length > 0) await base44.entities.TypingIndicator.delete(ind[0].id);
+      const ind = await db.entities.TypingIndicator.filter({ conversation_id: selectedConv, user_email: user.email });
+      if (ind.length > 0) await db.entities.TypingIndicator.delete(ind[0].id);
     }, 4000);
   };
 
   const markAsRead = async () => {
     if (!selectedConversation || !selectedConversation.unread_by?.includes(user.email)) return;
-    await base44.entities.Conversation.update(selectedConv, {
+    await db.entities.Conversation.update(selectedConv, {
       unread_by: selectedConversation.unread_by.filter(e => e !== user.email),
     });
     queryClient.invalidateQueries({ queryKey: ["my-conversations"] });

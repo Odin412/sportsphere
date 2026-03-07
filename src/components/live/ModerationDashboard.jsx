@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ export default function ModerationDashboard({ streamId, isHost }) {
   const loadModerationData = async () => {
     try {
       // Fetch all messages from stream
-      const messages = await base44.entities.LiveChat.filter(
+      const messages = await db.entities.LiveChat.filter(
         { stream_id: streamId },
         '-created_date',
         200
@@ -34,7 +34,7 @@ export default function ModerationDashboard({ streamId, isHost }) {
       setFlaggedMessages(flagged);
 
       // Fetch moderation actions taken
-      const actions = await base44.entities.Notification.filter(
+      const actions = await db.entities.Notification.filter(
         { type: 'moderation_action' },
         '-created_date',
         50
@@ -68,7 +68,7 @@ export default function ModerationDashboard({ streamId, isHost }) {
 
   const handleUserAction = async (userEmail, action) => {
     try {
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: userEmail,
         type: 'moderation_action',
         message: `You received a ${action} for violating community guidelines`,
@@ -77,7 +77,7 @@ export default function ModerationDashboard({ streamId, isHost }) {
       });
 
       // Record action in history
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: userEmail,
         type: 'moderation_action',
         message: `Host applied: ${action}`,
@@ -94,7 +94,7 @@ export default function ModerationDashboard({ streamId, isHost }) {
 
   const handleDeleteMessage = async (messageId) => {
     try {
-      await base44.entities.LiveChat.delete(messageId);
+      await db.entities.LiveChat.delete(messageId);
       toast.success('Message deleted');
       await loadModerationData();
     } catch (error) {

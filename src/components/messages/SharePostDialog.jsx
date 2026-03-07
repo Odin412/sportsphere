@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,7 +13,7 @@ export default function SharePostDialog({ post, user, onClose }) {
   const { data: conversations, isLoading } = useQuery({
     queryKey: ["my-conversations", user?.email],
     queryFn: async () => {
-      const all = await base44.entities.Conversation.list("-updated_date", 50);
+      const all = await db.entities.Conversation.list("-updated_date", 50);
       return all.filter(c => c.participants?.includes(user.email));
     },
     enabled: !!user,
@@ -35,9 +35,9 @@ export default function SharePostDialog({ post, user, onClose }) {
     setSending(conv.id);
     // Increment share count
     if (post.id) {
-      await base44.entities.Post.update(post.id, { shares: (post.shares || 0) + 1 });
+      await db.entities.Post.update(post.id, { shares: (post.shares || 0) + 1 });
     }
-    await base44.entities.Message.create({
+    await db.entities.Message.create({
       conversation_id: conv.id,
       sender_email: user.email,
       sender_name: user.full_name,
@@ -51,7 +51,7 @@ export default function SharePostDialog({ post, user, onClose }) {
         sport: post.sport,
       },
     });
-    await base44.entities.Conversation.update(conv.id, {
+    await db.entities.Conversation.update(conv.id, {
       last_message: `📎 Shared a post`,
       last_message_time: new Date().toISOString(),
       unread_by: conv.participants.filter(p => p !== user.email),

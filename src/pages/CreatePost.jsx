@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -9,9 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { ImagePlus, Video, X, Loader2, ArrowLeft, Crown, Sliders, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import AIPostGenerator from "../components/feed/AIPostGenerator";
-import VideoEditor from "../components/video/VideoEditor";
-import { awardPoints } from "../components/gamification/PointsHelper";
+import AIPostGenerator from "@/components/feed/AIPostGenerator";
+import VideoEditor from "@/components/video/VideoEditor";
+import { awardPoints } from "@/components/gamification/PointsHelper";
 import { toast } from "sonner";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
@@ -41,7 +41,7 @@ export default function CreatePost() {
   const [videoMeta, setVideoMeta] = useState({}); // index -> { trimStart, trimEnd, thumbnailFile, thumbnailPreview, chapters, filter, textOverlays }
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin());
+    db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
   }, []);
 
   const handleMediaAdd = async (e) => {
@@ -55,7 +55,7 @@ export default function CreatePost() {
         const preview = URL.createObjectURL(file);
         newPreviews.push({ url: preview, type: file.type.startsWith("video") ? "video" : "image" });
 
-        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        const { file_url } = await db.integrations.Core.UploadFile({ file });
         newUrls.push(file_url);
       }
 
@@ -80,7 +80,7 @@ export default function CreatePost() {
     // AI Content moderation check
     if (content.trim()) {
       try {
-        const modResult = await base44.functions.invoke("moderateContent", {
+        const modResult = await db.functions.invoke("moderateContent", {
           content_type: "post",
           content_id: `draft_${Date.now()}`,
           content_text: content,
@@ -114,7 +114,7 @@ export default function CreatePost() {
       let thumbnailUrl = undefined;
       for (const [idxStr, meta] of Object.entries(videoMeta)) {
         if (meta.thumbnailFile) {
-          const { file_url } = await base44.integrations.Core.UploadFile({ file: meta.thumbnailFile });
+          const { file_url } = await db.integrations.Core.UploadFile({ file: meta.thumbnailFile });
           thumbnailUrl = file_url;
         }
       }
@@ -125,7 +125,7 @@ export default function CreatePost() {
         .filter(([, m]) => m.trimStart !== undefined)
         .map(([i, m]) => ({ index: parseInt(i), startTime: m.trimStart, endTime: m.trimEnd }));
 
-      const post = await base44.entities.Post.create({
+      const post = await db.entities.Post.create({
         author_email: user.email,
         author_name: user.full_name,
         author_avatar: user.avatar_url,
@@ -148,11 +148,11 @@ export default function CreatePost() {
 
       // Notify mentioned users (fire-and-forget — don't block navigation)
       if (mentions.length > 0) {
-        base44.entities.User.list().then(allUsers => {
+        db.entities.User.list().then(allUsers => {
           for (const mention of mentions) {
             const mentionedUser = allUsers.find(u => u.full_name?.toLowerCase() === mention.toLowerCase());
             if (mentionedUser && mentionedUser.email !== user.email) {
-              base44.entities.Notification.create({
+              db.entities.Notification.create({
                 recipient_email: mentionedUser.email,
                 actor_email: user.email,
                 actor_name: user.full_name,

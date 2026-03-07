@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Upload, Video, Loader2, CheckCircle, Tag, X, Sliders } from "lucide-react";
 import { toast } from "sonner";
@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import VideoEditor from "../components/video/VideoEditor";
+import VideoEditor from "@/components/video/VideoEditor";
 
 const VISIBILITY_OPTIONS = [
   { value: "coaches_only", label: "Coaches Only" },
@@ -29,18 +29,18 @@ export default function UploadVideo() {
   const [videoMeta, setVideoMeta] = useState({ thumbnailFile: null, thumbnailPreview: null, chapters: [], trimStart: undefined, trimEnd: undefined });
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) setOrgId(memberships[0].organization_id);
     }).catch(() => {});
   }, []);
 
   const { data: membership } = useQuery({
     queryKey: ["my-membership", user?.email],
-    queryFn: () => base44.entities.OrgMember.filter({ user_email: user.email }).then(r => r[0]),
+    queryFn: () => db.entities.OrgMember.filter({ user_email: user.email }).then(r => r[0]),
     enabled: !!user,
   });
 
@@ -55,13 +55,13 @@ export default function UploadVideo() {
     if (!videoFile || !form.title || !orgId) return;
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file: videoFile });
+      const { file_url } = await db.integrations.Core.UploadFile({ file: videoFile });
       let thumbnailUrl = undefined;
       if (videoMeta.thumbnailFile) {
-        const { file_url: thumb_url } = await base44.integrations.Core.UploadFile({ file: videoMeta.thumbnailFile });
+        const { file_url: thumb_url } = await db.integrations.Core.UploadFile({ file: videoMeta.thumbnailFile });
         thumbnailUrl = thumb_url;
       }
-      await base44.entities.AthleteVideo.create({
+      await db.entities.AthleteVideo.create({
         organization_id: orgId,
         athlete_email: user.email,
         athlete_name: user.full_name,

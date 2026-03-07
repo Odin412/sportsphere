@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Eye, Heart, MessageCircle, Film, TrendingUp, BarChart3, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 
 function StatBox({ icon: Icon, label, value, color }) {
   return (
@@ -131,7 +131,7 @@ export default function ReelsStatsPanel({ posts = [], isOwnProfile = false, onDe
                     onClick={async (e) => {
                       e.stopPropagation();
                       if (!confirm("Delete this reel?")) return;
-                      await base44.entities.Post.delete(reel.id);
+                      await db.entities.Post.delete(reel.id);
                       setLocalDeleted(prev => [...prev, reel.id]);
                       if (onDelete) onDelete(reel.id);
                     }}

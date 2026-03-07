@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Crown, Check, AlertTriangle } from "lucide-react";
 
@@ -12,7 +12,7 @@ export default function SubscribeButton({ creatorEmail, creatorName, price, curr
 
   useEffect(() => {
     if (!currentUser) return;
-    base44.entities.CreatorSubscription.filter({
+    db.entities.CreatorSubscription.filter({
       subscriber_email: currentUser.email,
       creator_email: creatorEmail,
       status: "active"
@@ -32,7 +32,7 @@ export default function SubscribeButton({ creatorEmail, creatorName, price, curr
       const endDate = new Date();
       endDate.setMonth(endDate.getMonth() + 1);
 
-      await base44.entities.CreatorSubscription.create({
+      await db.entities.CreatorSubscription.create({
         subscriber_email: currentUser.email,
         creator_email: creatorEmail,
         amount: price,
@@ -41,7 +41,7 @@ export default function SubscribeButton({ creatorEmail, creatorName, price, curr
       });
 
       // Create transaction record
-      await base44.entities.Transaction.create({
+      await db.entities.Transaction.create({
         from_email: currentUser.email,
         to_email: creatorEmail,
         type: "subscription",
@@ -50,7 +50,7 @@ export default function SubscribeButton({ creatorEmail, creatorName, price, curr
       });
 
       // Send notification
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: creatorEmail,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,

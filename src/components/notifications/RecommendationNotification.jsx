@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Sparkles, Radio, Calendar, Users } from "lucide-react";
@@ -14,13 +14,13 @@ export default function RecommendationNotification({ user }) {
 
   const { data: follows = [] } = useQuery({
     queryKey: ["follows", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user,
   });
 
   const { data: liveStreams } = useQuery({
     queryKey: ["new-live-streams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }),
     enabled: !!user,
     refetchInterval: 30000, // Check every 30s
   });
@@ -31,7 +31,7 @@ export default function RecommendationNotification({ user }) {
       const now = new Date();
       const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
       // Fetch ascending by date so upcoming events come first
-      const allEvents = await base44.entities.Event.list("date", 20);
+      const allEvents = await db.entities.Event.list("date", 20);
       return allEvents.filter(e => {
         const d = new Date(e.date);
         return d >= now && d <= tomorrow;

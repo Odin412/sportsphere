@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Sparkles, TrendingUp, Radio, Calendar, Users, Loader2, Play, Crown, Filter, Search, Mail, Star } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import moment from "moment";
-import ContentDigest from "../components/discover/ContentDigest";
+import ContentDigest from "@/components/discover/ContentDigest";
 
 export default function Discover() {
   const [user, setUser] = useState(null);
@@ -23,19 +23,19 @@ export default function Discover() {
   const [sortBy, setSortBy] = useState("relevance");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: follows = [] } = useQuery({
     queryKey: ["follows", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user,
   });
 
   const { data: preferences } = useQuery({
     queryKey: ["preferences", user?.email],
     queryFn: async () => {
-      const prefs = await base44.entities.FeedPreferences.filter({ user_email: user.email });
+      const prefs = await db.entities.FeedPreferences.filter({ user_email: user.email });
       return prefs[0];
     },
     enabled: !!user,
@@ -43,14 +43,14 @@ export default function Discover() {
 
   const { data: sportProfiles = [] } = useQuery({
     queryKey: ["my-profiles", user?.email],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: user.email }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
   const { data: viewedPosts = [] } = useQuery({
     queryKey: ["viewed-posts", user?.email],
     queryFn: async () => {
-      const posts = await base44.entities.Post.list("-updated_date", 50);
+      const posts = await db.entities.Post.list("-updated_date", 50);
       return posts.filter(p => p.views > 0);
     },
     enabled: !!user,
@@ -65,10 +65,10 @@ export default function Discover() {
     setLoadingRecs(true);
     try {
       const [liveStreams, events, groups, posts] = await Promise.all([
-        base44.entities.LiveStream.filter({ status: "live" }),
-        base44.entities.Event.list("-date", 20),
-        base44.entities.Group.list("-created_date", 20),
-        base44.entities.Post.list("-created_date", 30)
+        db.entities.LiveStream.filter({ status: "live" }),
+        db.entities.Event.list("-date", 20),
+        db.entities.Group.list("-created_date", 20),
+        db.entities.Post.list("-created_date", 30)
       ]);
 
       const followedCreators = follows.map(f => f.following_email);
@@ -105,7 +105,7 @@ Based on the user's interests, provide personalized recommendations. Return a JS
   "reasoning": "<brief explanation of why these recommendations fit>"
 }`;
 
-      const aiResponse = await base44.integrations.Core.InvokeLLM({
+      const aiResponse = await db.integrations.Core.InvokeLLM({
         prompt: prompt,
         response_json_schema: {
           type: "object",

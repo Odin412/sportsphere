@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function FeedPreferencesDialog({ user, onClose }) {
   const { data: preferences } = useQuery({
     queryKey: ["feed-preferences", user?.email],
     queryFn: async () => {
-      const prefs = await base44.entities.FeedPreferences.filter({ user_email: user.email });
+      const prefs = await db.entities.FeedPreferences.filter({ user_email: user.email });
       return prefs[0] || null;
     },
     enabled: !!user,
@@ -36,13 +36,13 @@ export default function FeedPreferencesDialog({ user, onClose }) {
 
   const { data: follows = [] } = useQuery({
     queryKey: ["user-follows", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user,
   });
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["all-users-for-follow"],
-    queryFn: () => base44.entities.SportProfile.list("-created_date", 50),
+    queryFn: () => db.entities.SportProfile.list("-created_date", 50),
   });
 
   useEffect(() => {
@@ -65,9 +65,9 @@ export default function FeedPreferencesDialog({ user, onClose }) {
       };
 
       if (preferences) {
-        await base44.entities.FeedPreferences.update(preferences.id, data);
+        await db.entities.FeedPreferences.update(preferences.id, data);
       } else {
-        await base44.entities.FeedPreferences.create(data);
+        await db.entities.FeedPreferences.create(data);
       }
 
       queryClient.invalidateQueries({ queryKey: ["feed-preferences"] });
@@ -107,7 +107,7 @@ export default function FeedPreferencesDialog({ user, onClose }) {
   const handleUnfollow = async (email) => {
     const follow = follows.find(f => f.following_email === email);
     if (follow) {
-      await base44.entities.Follow.delete(follow.id);
+      await db.entities.Follow.delete(follow.id);
       queryClient.invalidateQueries({ queryKey: ["user-follows"] });
       toast.success("Unfollowed");
     }

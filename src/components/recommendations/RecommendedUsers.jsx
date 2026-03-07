@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { Users, UserPlus } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { toast } from "sonner";
 
@@ -17,14 +17,14 @@ export default function RecommendedUsers({ profiles: propProfiles, currentUser: 
 
   const { data: allProfiles = [] } = useQuery({
     queryKey: ["all-profiles-for-suggestions"],
-    queryFn: () => base44.entities.User.list(),
+    queryFn: () => db.entities.User.list(),
     enabled: !propProfiles?.length && !!currentUser,
     staleTime: 5 * 60 * 1000,
   });
 
   const { data: myFollows = [] } = useQuery({
     queryKey: ["my-follows", currentUser?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: currentUser.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: currentUser.email }),
     enabled: !propProfiles?.length && !!currentUser?.email,
     staleTime: 60000,
   });
@@ -55,12 +55,12 @@ export default function RecommendedUsers({ profiles: propProfiles, currentUser: 
     if (requested[profile.user_email]) return;
     setRequested(prev => ({ ...prev, [profile.user_email]: true }));
     try {
-      await base44.entities.Follow.create({
+      await db.entities.Follow.create({
         follower_email: currentUser.email,
         following_email: profile.user_email,
         status: "pending",
       });
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: profile.user_email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,

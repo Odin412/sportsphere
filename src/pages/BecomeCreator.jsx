@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -34,7 +34,7 @@ export default function BecomeCreator() {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(u => {
+    db.auth.me().then(u => {
       setUser(u);
       setEnabled(!!u.is_creator);
       setLoading(false);
@@ -43,7 +43,7 @@ export default function BecomeCreator() {
 
   const handleBecomeCreator = async () => {
     setEnabling(true);
-    await base44.auth.updateMe({ is_creator: true });
+    await db.auth.updateMe({ is_creator: true });
     setEnabled(true);
     setEnabling(false);
   };

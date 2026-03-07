@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DollarSign, TrendingUp, Heart, Users, Loader2 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
@@ -9,14 +9,14 @@ import moment from "moment";
 export default function EarningsPanel({ user }) {
   const { data: tips = [], isLoading: loadingTips } = useQuery({
     queryKey: ["my-tips-received", user?.email],
-    queryFn: () => base44.entities.Tip.filter({ recipient_email: user.email }, "-created_date", 50),
+    queryFn: () => db.entities.Tip.filter({ recipient_email: user.email }, "-created_date", 50),
     enabled: !!user?.email,
     staleTime: 2 * 60 * 1000,
   });
 
   const { data: transactions = [], isLoading: loadingTx } = useQuery({
     queryKey: ["my-transactions-received", user?.email],
-    queryFn: () => base44.entities.Transaction.filter({ recipient_email: user.email }, "-created_date", 50),
+    queryFn: () => db.entities.Transaction.filter({ recipient_email: user.email }, "-created_date", 50),
     enabled: !!user?.email,
     staleTime: 2 * 60 * 1000,
   });

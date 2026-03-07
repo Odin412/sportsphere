@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,31 +31,31 @@ export default function CreatorAnalytics({ user, timeRange = 30 }) {
 
   const { data: streams = [], isLoading: loadStreams } = useQuery({
     queryKey: ["creator-streams-analytics", user?.email],
-    queryFn: () => base44.entities.LiveStream.filter({ host_email: user.email }, "-started_at", 60),
+    queryFn: () => db.entities.LiveStream.filter({ host_email: user.email }, "-started_at", 60),
     enabled: !!user,
   });
 
   const { data: followers = [] } = useQuery({
     queryKey: ["creator-followers-analytics", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ following_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ following_email: user.email }),
     enabled: !!user,
   });
 
   const { data: subscribers = [] } = useQuery({
     queryKey: ["creator-subs-analytics", user?.email],
-    queryFn: () => base44.entities.CreatorSubscription.filter({ creator_email: user.email }),
+    queryFn: () => db.entities.CreatorSubscription.filter({ creator_email: user.email }),
     enabled: !!user,
   });
 
   const { data: transactions = [] } = useQuery({
     queryKey: ["creator-tx-analytics", user?.email],
-    queryFn: () => base44.entities.Transaction.filter({ to_email: user.email, status: "completed" }),
+    queryFn: () => db.entities.Transaction.filter({ to_email: user.email, status: "completed" }),
     enabled: !!user,
   });
 
   const { data: posts = [] } = useQuery({
     queryKey: ["creator-posts-analytics", user?.email],
-    queryFn: () => base44.entities.Post.filter({ author_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.Post.filter({ author_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 

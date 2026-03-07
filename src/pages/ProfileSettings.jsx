@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -99,7 +99,7 @@ export default function ProfileSettings() {
   const [savingNotifs, setSavingNotifs] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(u => {
+    db.auth.me().then(u => {
       setUser(u);
       setForm({
         full_name: u.full_name || "",
@@ -114,14 +114,14 @@ export default function ProfileSettings() {
         contact_phone: u.contact_phone || "",
         contact_preferences: u.contact_preferences || { allow_messages: true, allow_email_contact: false, allow_phone_contact: false },
       });
-    }).catch(() => base44.auth.redirectToLogin());
+    }).catch(() => db.auth.redirectToLogin());
   }, []);
 
   // Fetch notification preferences
   const { data: existingNotifPrefs } = useQuery({
     queryKey: ["notification-preferences", user?.email],
     queryFn: async () => {
-      const res = await base44.entities.NotificationPreferences.filter({ user_email: user.email });
+      const res = await db.entities.NotificationPreferences.filter({ user_email: user.email });
       return res[0] || null;
     },
     enabled: !!user,
@@ -133,13 +133,13 @@ export default function ProfileSettings() {
   // Activity history
   const { data: myPosts, isLoading: postsLoading } = useQuery({
     queryKey: ["my-posts-settings", user?.email],
-    queryFn: () => base44.entities.Post.filter({ author_email: user.email }, "-created_date", 30),
+    queryFn: () => db.entities.Post.filter({ author_email: user.email }, "-created_date", 30),
     enabled: !!user && activeTab === "activity",
   });
 
   const { data: sharedMessages, isLoading: sharesLoading } = useQuery({
     queryKey: ["my-shared-posts", user?.email],
-    queryFn: () => base44.entities.Message.filter({ sender_email: user.email }, "-created_date", 50),
+    queryFn: () => db.entities.Message.filter({ sender_email: user.email }, "-created_date", 50),
     enabled: !!user && activeTab === "activity",
   });
 
@@ -151,8 +151,8 @@ export default function ProfileSettings() {
     if (!file) return;
     setAvatarUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await base44.auth.updateMe({ avatar_url: file_url });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
+      await db.auth.updateMe({ avatar_url: file_url });
       setUser(prev => ({ ...prev, avatar_url: file_url }));
       toast.success("Profile photo updated");
     } catch (err) {
@@ -168,7 +168,7 @@ export default function ProfileSettings() {
     if (!file) return;
     setCoverUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setForm(prev => ({ ...prev, cover_url: file_url }));
       toast.success("Cover photo updated");
     } catch (err) {
@@ -193,7 +193,7 @@ export default function ProfileSettings() {
     if (usernameError) return;
     setSaving(true);
     try {
-      await base44.auth.updateMe(form);
+      await db.auth.updateMe(form);
       setUser(prev => ({ ...prev, ...form }));
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
@@ -217,9 +217,9 @@ export default function ProfileSettings() {
     try {
       const data = { user_email: user.email, ...notifPrefs };
       if (existingNotifPrefs) {
-        await base44.entities.NotificationPreferences.update(existingNotifPrefs.id, data);
+        await db.entities.NotificationPreferences.update(existingNotifPrefs.id, data);
       } else {
-        await base44.entities.NotificationPreferences.create(data);
+        await db.entities.NotificationPreferences.create(data);
       }
       queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
       toast.success("Notification preferences saved!");

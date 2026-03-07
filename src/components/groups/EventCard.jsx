@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users, Check } from "lucide-react";
 import moment from "moment";
@@ -14,7 +14,7 @@ export default function EventCard({ event, currentUser, onUpdate }) {
       : [...(event.attendees || []), currentUser.email];
     
     setIsAttending(!isAttending);
-    await base44.entities.Event.update(event.id, { attendees: newAttendees });
+    await db.entities.Event.update(event.id, { attendees: newAttendees });
     onUpdate?.();
   };
 

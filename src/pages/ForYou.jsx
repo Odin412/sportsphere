@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Sparkles, TrendingUp, Loader2, RefreshCw, Brain, Users, Heart, MessageCircle, UserCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
-import PostCard from "../components/feed/PostCard";
+import { createPageUrl } from "@/utils";
+import PostCard from "@/components/feed/PostCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import RecommendedCoaches from "../components/recommendations/RecommendedCoaches";
-import RecommendedEvents from "../components/recommendations/RecommendedEvents";
-import RecommendedForums from "../components/recommendations/RecommendedForums";
-import RecommendedUsers from "../components/recommendations/RecommendedUsers";
-import RecommendedPrograms from "../components/recommendations/RecommendedPrograms";
-import AIStreamRecommendations from "../components/recommendations/AIStreamRecommendations";
-import { getAIRankedPosts } from "../components/feed/AIFeedRanker";
+import RecommendedCoaches from "@/components/recommendations/RecommendedCoaches";
+import RecommendedEvents from "@/components/recommendations/RecommendedEvents";
+import RecommendedForums from "@/components/recommendations/RecommendedForums";
+import RecommendedUsers from "@/components/recommendations/RecommendedUsers";
+import RecommendedPrograms from "@/components/recommendations/RecommendedPrograms";
+import AIStreamRecommendations from "@/components/recommendations/AIStreamRecommendations";
+import { getAIRankedPosts } from "@/components/feed/AIFeedRanker";
 
 function ScoreReason({ post }) {
   const reasons = [];
@@ -40,7 +40,7 @@ function FollowedUserActivity({ follows, user }) {
     queryKey: ["followed-activity", followedEmails.join(",")],
     queryFn: async () => {
       if (!followedEmails.length) return [];
-      const posts = await base44.entities.Post.list("-created_date", 100);
+      const posts = await db.entities.Post.list("-created_date", 100);
       return posts
         .filter(p => followedEmails.includes(p.author_email))
         .slice(0, 5);
@@ -128,30 +128,30 @@ export default function ForYou() {
   const [useAI, setUseAI] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: preferences } = useQuery({
     queryKey: ["feed-preferences", user?.email],
-    queryFn: () => base44.entities.FeedPreferences.filter({ user_email: user.email }).then(r => r[0]),
+    queryFn: () => db.entities.FeedPreferences.filter({ user_email: user.email }).then(r => r[0]),
     enabled: !!user,
   });
 
   const { data: follows } = useQuery({
     queryKey: ["follows", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user,
   });
 
   const { data: myProfiles } = useQuery({
     queryKey: ["my-sport-profiles", user?.email],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: user.email }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
   const { data: likedPosts } = useQuery({
     queryKey: ["liked-posts", user?.email],
-    queryFn: () => base44.entities.Post.list("-created_date", 100).then(posts =>
+    queryFn: () => db.entities.Post.list("-created_date", 100).then(posts =>
       posts.filter(p => p.likes?.includes(user.email))
     ),
     enabled: !!user,
@@ -187,7 +187,7 @@ export default function ForYou() {
   const { data: recommendedPosts, isLoading: postsLoading } = useQuery({
     queryKey: ["recommended-posts", refreshKey, user?.email],
     queryFn: async () => {
-      const posts = await base44.entities.Post.list("-created_date", 150);
+      const posts = await db.entities.Post.list("-created_date", 150);
       if (!user) return posts.slice(0, 20);
       const followedEmails = follows?.map(f => f.following_email) || [];
       const allSports = [...new Set([...userSports])];
@@ -222,7 +222,7 @@ export default function ForYou() {
   const { data: trendingPosts } = useQuery({
     queryKey: ["trending-posts", refreshKey],
     queryFn: async () => {
-      const posts = await base44.entities.Post.list("-created_date", 100);
+      const posts = await db.entities.Post.list("-created_date", 100);
       const dayAgo = Date.now() - 24 * 60 * 60 * 1000;
       return posts
         .filter(p => new Date(p.created_date).getTime() > dayAgo)
@@ -235,7 +235,7 @@ export default function ForYou() {
   const { data: recommendedSessions } = useQuery({
     queryKey: ["recommended-sessions", userSports.join(",")],
     queryFn: async () => {
-      const sessions = await base44.entities.CoachingSession.list("-created_date", 50);
+      const sessions = await db.entities.CoachingSession.list("-created_date", 50);
       const upcoming = sessions.filter(s => s.status === "scheduled");
       if (!userSports.length) return upcoming.slice(0, 4);
       const matched = upcoming.filter(s => userSports.includes(s.sport));
@@ -248,7 +248,7 @@ export default function ForYou() {
   const { data: recommendedEvents } = useQuery({
     queryKey: ["recommended-events", userSports.join(","), userLocation],
     queryFn: async () => {
-      const events = await base44.entities.Event.list("-created_date", 100);
+      const events = await db.entities.Event.list("-created_date", 100);
       const future = events.filter(e => new Date(e.date) > new Date());
       const scored = future.map(e => {
         let score = 0;
@@ -265,7 +265,7 @@ export default function ForYou() {
   const { data: recommendedForums } = useQuery({
     queryKey: ["recommended-forums", userSports.join(",")],
     queryFn: async () => {
-      const forums = await base44.entities.Forum.list("-created_date", 100);
+      const forums = await db.entities.Forum.list("-created_date", 100);
       const scored = forums.map(f => {
         let score = 0;
         if (userSports.includes(f.sport)) score += 50;
@@ -284,7 +284,7 @@ export default function ForYou() {
     queryKey: ["recommended-users", userSports.join(","), user?.email],
     queryFn: async () => {
       const followedEmails = new Set(follows?.map(f => f.following_email) || []);
-      const profiles = await base44.entities.SportProfile.list("-created_date", 200);
+      const profiles = await db.entities.SportProfile.list("-created_date", 200);
       const myLevels = new Set(myProfiles?.map(p => p.level).filter(Boolean) || []);
       const others = profiles.filter(p => p.user_email !== user.email && !followedEmails.has(p.user_email));
       const scored = others.map(p => {
@@ -305,7 +305,7 @@ export default function ForYou() {
   const { data: recommendedPrograms } = useQuery({
     queryKey: ["recommended-programs", userSports.join(",")],
     queryFn: async () => {
-      const programs = await base44.entities.TrainingProgram.list("-created_date", 50);
+      const programs = await db.entities.TrainingProgram.list("-created_date", 50);
       if (!userSports.length) return programs.slice(0, 4);
       const matched = programs.filter(p => userSports.includes(p.sport));
       const rest = programs.filter(p => !userSports.includes(p.sport));

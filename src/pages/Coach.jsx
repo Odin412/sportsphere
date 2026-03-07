@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -8,8 +8,8 @@ import { Send, Sparkles, Loader2, Plus, MessageSquare, Video, X, Zap } from "luc
 import ReactMarkdown from "react-markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import PremiumGate from "../components/premium/PremiumGate";
-import VideoFormAnalysis from "../components/coaching/VideoFormAnalysis";
+import PremiumGate from "@/components/premium/PremiumGate";
+import VideoFormAnalysis from "@/components/coaching/VideoFormAnalysis";
 
 export default function CoachPage() {
   const [user, setUser] = useState(null);
@@ -27,12 +27,12 @@ export default function CoachPage() {
   const videoInputRef = useRef(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   useEffect(() => {
     if (!user) return;
-    base44.agents.listConversations({ agent_name: "coach" }).then(convos => {
+    db.agents.listConversations({ agent_name: "coach" }).then(convos => {
       setConversations(convos);
       if (convos.length > 0 && !currentConversation) {
         loadConversation(convos[0].id);
@@ -48,20 +48,20 @@ export default function CoachPage() {
 
   useEffect(() => {
     if (!currentConversation) return;
-    const unsubscribe = base44.agents.subscribeToConversation(currentConversation.id, (data) => {
+    const unsubscribe = db.agents.subscribeToConversation(currentConversation.id, (data) => {
       setMessages(data.messages);
     });
     return unsubscribe;
   }, [currentConversation?.id]);
 
   const loadConversation = async (convId) => {
-    const conv = await base44.agents.getConversation(convId);
+    const conv = await db.agents.getConversation(convId);
     setCurrentConversation(conv);
     setMessages(conv.messages || []);
   };
 
   const createNewConversation = async () => {
-    const conv = await base44.agents.createConversation({
+    const conv = await db.agents.createConversation({
       agent_name: "coach",
       metadata: {
         name: "New Coaching Session",
@@ -83,11 +83,11 @@ export default function CoachPage() {
       };
 
       if (videoFile) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: videoFile });
+        const { file_url } = await db.integrations.Core.UploadFile({ file: videoFile });
         messageData.file_urls = [file_url];
       }
 
-      await base44.agents.addMessage(currentConversation, messageData);
+      await db.agents.addMessage(currentConversation, messageData);
       setInput("");
       setVideoFile(null);
       setVideoPreview(null);

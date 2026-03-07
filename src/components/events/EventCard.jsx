@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Calendar, MapPin, Users, Clock, DollarSign, Video, ExternalLink, Download } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -44,7 +44,7 @@ export default function EventCard({ event, currentUser, onUpdate }) {
       return;
     }
 
-    await base44.entities.Event.update(event.id, { attendees: newAttendees });
+    await db.entities.Event.update(event.id, { attendees: newAttendees });
     setIsRSVPd(!isRSVPd);
     setAttendeeCount(newAttendees.length);
     toast.success(isRSVPd ? "RSVP cancelled" : "RSVP confirmed!");

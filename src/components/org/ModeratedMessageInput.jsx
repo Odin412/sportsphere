@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Send, Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ export default function ModeratedMessageInput({ onSend, placeholder = "Type a me
     setFlagged(false);
 
     // AI moderation check
-    const moderationResult = await base44.integrations.Core.InvokeLLM({
+    const moderationResult = await db.integrations.Core.InvokeLLM({
       prompt: `You are a content moderation system for a sports training platform used by athletes (including minors), coaches, and parents.
 
 Analyze this message for policy violations:

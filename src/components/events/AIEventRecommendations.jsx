@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Sparkles, Loader2, RefreshCw, MapPin, Calendar, Users, DollarSign, Video, CheckCircle2, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,7 +17,7 @@ function RecommendedEventCard({ event, match, currentUser, onRSVP }) {
     const newAttendees = isRSVPd
       ? (event.attendees || []).filter(e => e !== currentUser.email)
       : [...(event.attendees || []), currentUser.email];
-    await base44.entities.Event.update(event.id, { attendees: newAttendees });
+    await db.entities.Event.update(event.id, { attendees: newAttendees });
     setIsRSVPd(!isRSVPd);
     toast.success(isRSVPd ? "Registration cancelled" : "Successfully registered!");
     onRSVP?.();
@@ -127,9 +127,9 @@ export default function AIEventRecommendations({ user, allEvents, onRSVP }) {
 
     // Gather context about the user
     const [sportProfiles, attendedEvents, feedPrefs] = await Promise.all([
-      base44.entities.SportProfile.filter({ user_email: user.email }),
-      base44.entities.Event.filter({ attendees: user.email }),
-      base44.entities.FeedPreferences.filter({ user_email: user.email }),
+      db.entities.SportProfile.filter({ user_email: user.email }),
+      db.entities.Event.filter({ attendees: user.email }),
+      db.entities.FeedPreferences.filter({ user_email: user.email }),
     ]);
 
     const userSports = sportProfiles.map(p => p.sport).filter(Boolean);
@@ -163,7 +163,7 @@ export default function AIEventRecommendations({ user, allEvents, onRSVP }) {
       attendees: e.attendees?.length || 0,
     }));
 
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are a sports event recommendation engine. Given a user's profile and a list of upcoming events, recommend the TOP 6 most relevant events for them.
 
 USER PROFILE:

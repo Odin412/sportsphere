@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -12,17 +12,17 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Plus, Edit2, Trophy, MapPin, Clock, Star, Trash2, Loader2, Camera, LogOut, Settings, TrendingUp, BarChart3, Dumbbell, Sparkles, DollarSign, Crown, Award, Zap, Film, Radio, Video, Users } from "lucide-react";
-import PostCard from "../components/feed/PostCard";
-import StatInputDialog from "../components/stats/StatInputDialog";
-import StatsChart from "../components/stats/StatsChart";
-import ProgramCard from "../components/training/ProgramCard";
-import ProgramDialog from "../components/training/ProgramDialog";
-import ProgramDetailDialog from "../components/training/ProgramDetailDialog";
-import MonetizationSetup from "../components/monetization/MonetizationSetup";
-import BadgeDisplay from "../components/gamification/BadgeDisplay";
-import FeaturedHighlight from "../components/profile/FeaturedHighlight";
-import ReelsStatsPanel from "../components/profile/ReelsStatsPanel";
-import EarningsPanel from "../components/profile/EarningsPanel";
+import PostCard from "@/components/feed/PostCard";
+import StatInputDialog from "@/components/stats/StatInputDialog";
+import StatsChart from "@/components/stats/StatsChart";
+import ProgramCard from "@/components/training/ProgramCard";
+import ProgramDialog from "@/components/training/ProgramDialog";
+import ProgramDetailDialog from "@/components/training/ProgramDetailDialog";
+import MonetizationSetup from "@/components/monetization/MonetizationSetup";
+import BadgeDisplay from "@/components/gamification/BadgeDisplay";
+import FeaturedHighlight from "@/components/profile/FeaturedHighlight";
+import ReelsStatsPanel from "@/components/profile/ReelsStatsPanel";
+import EarningsPanel from "@/components/profile/EarningsPanel";
 import { Instagram, Twitter, Youtube, Linkedin, Globe, Music2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -49,7 +49,7 @@ export default function Profile() {
   const [gridPost, setGridPost] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(u => {
+    db.auth.me().then(u => {
       setUser(u);
       setPersonalInfo({
         full_name: u.full_name || "",
@@ -64,18 +64,18 @@ export default function Profile() {
         college: u.college || "",
         professional_team: u.professional_team || "",
       });
-    }).catch(() => base44.auth.redirectToLogin());
+    }).catch(() => db.auth.redirectToLogin());
   }, []);
 
   const { data: sportProfiles, isLoading: profilesLoading } = useQuery({
     queryKey: ["my-sport-profiles", user?.email],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: user.email }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
   const { data: myPosts } = useQuery({
     queryKey: ["my-posts", user?.email],
-    queryFn: () => base44.entities.Post.filter({ author_email: user.email }, "-created_date", 20),
+    queryFn: () => db.entities.Post.filter({ author_email: user.email }, "-created_date", 20),
     enabled: !!user,
   });
 
@@ -83,53 +83,53 @@ export default function Profile() {
     queryKey: ["my-stats", user?.email, viewingStatsProfile?.id],
     queryFn: () => {
       if (viewingStatsProfile) {
-        return base44.entities.StatEntry.filter({ sport_profile_id: viewingStatsProfile.id }, "-date", 50);
+        return db.entities.StatEntry.filter({ sport_profile_id: viewingStatsProfile.id }, "-date", 50);
       }
-      return base44.entities.StatEntry.filter({ user_email: user.email }, "-date", 50);
+      return db.entities.StatEntry.filter({ user_email: user.email }, "-date", 50);
     },
     enabled: !!user,
   });
 
   const { data: myPrograms } = useQuery({
     queryKey: ["my-programs", user?.email],
-    queryFn: () => base44.entities.TrainingProgram.filter({ creator_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.TrainingProgram.filter({ creator_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
   const { data: highlights } = useQuery({
     queryKey: ["my-highlights", user?.email],
-    queryFn: () => base44.entities.Highlight.filter({ user_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.Highlight.filter({ user_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
   const { data: subscriptions } = useQuery({
     queryKey: ["my-subscriptions", user?.email],
-    queryFn: () => base44.entities.Subscription.filter({ subscriber_email: user.email, status: "active" }),
+    queryFn: () => db.entities.Subscription.filter({ subscriber_email: user.email, status: "active" }),
     enabled: !!user,
   });
 
   const { data: myStreams } = useQuery({
     queryKey: ["my-streams", user?.email],
-    queryFn: () => base44.entities.LiveStream.filter({ host_email: user.email }, "-created_date", 20),
+    queryFn: () => db.entities.LiveStream.filter({ host_email: user.email }, "-created_date", 20),
     enabled: !!user,
   });
 
   const { data: followedCreators } = useQuery({
     queryKey: ["my-following", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email, status: "accepted" }),
     enabled: !!user,
   });
 
   const { data: myFollowers = [] } = useQuery({
     queryKey: ["my-followers", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
     enabled: !!user,
   });
 
   const { data: userPoints } = useQuery({
     queryKey: ["user-points", user?.email],
     queryFn: async () => {
-      const points = await base44.entities.UserPoints.filter({ user_email: user.email });
+      const points = await db.entities.UserPoints.filter({ user_email: user.email });
       return points[0] || null;
     },
     enabled: !!user,
@@ -137,7 +137,7 @@ export default function Profile() {
 
   const { data: userBadges = [] } = useQuery({
     queryKey: ["user-badges", user?.email],
-    queryFn: () => base44.entities.UserBadge.filter({ user_email: user.email }, "-earned_date"),
+    queryFn: () => db.entities.UserBadge.filter({ user_email: user.email }, "-earned_date"),
     enabled: !!user,
   });
 
@@ -146,8 +146,8 @@ export default function Profile() {
     if (!file) return;
     setAvatarUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await base44.auth.updateMe({ avatar_url: file_url });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
+      await db.auth.updateMe({ avatar_url: file_url });
       setUser(prev => ({ ...prev, avatar_url: file_url }));
       toast.success("Photo updated!");
     } catch (error) {
@@ -173,9 +173,9 @@ export default function Profile() {
     setSaving(true);
     try {
       if (editingProfile) {
-        await base44.entities.SportProfile.update(editingProfile.id, formData);
+        await db.entities.SportProfile.update(editingProfile.id, formData);
       } else {
-        await base44.entities.SportProfile.create({
+        await db.entities.SportProfile.create({
           ...formData,
           user_email: user.email,
           user_name: user.full_name,
@@ -195,7 +195,7 @@ export default function Profile() {
   const deleteProfile = async (id) => {
     if (!confirm("Delete this sport profile?")) return;
     try {
-      await base44.entities.SportProfile.delete(id);
+      await db.entities.SportProfile.delete(id);
       queryClient.invalidateQueries({ queryKey: ["my-sport-profiles"] });
       toast.success("Sport profile deleted.");
     } catch (error) {
@@ -204,7 +204,7 @@ export default function Profile() {
   };
 
   const handleSaveStats = async (statsData) => {
-    await base44.entities.StatEntry.create({
+    await db.entities.StatEntry.create({
       user_email: user.email,
       sport_profile_id: selectedProfileForStats.id,
       sport: selectedProfileForStats.sport,
@@ -225,7 +225,7 @@ export default function Profile() {
   };
 
   const handleSaveProgram = async (programData) => {
-    await base44.entities.TrainingProgram.create(programData);
+    await db.entities.TrainingProgram.create(programData);
     queryClient.invalidateQueries({ queryKey: ["my-programs"] });
     setShowProgramDialog(false);
   };
@@ -235,16 +235,16 @@ export default function Profile() {
     const newFollowers = isFollowing
       ? program.followers.filter(e => e !== user.email)
       : [...(program.followers || []), user.email];
-    await base44.entities.TrainingProgram.update(program.id, { followers: newFollowers });
+    await db.entities.TrainingProgram.update(program.id, { followers: newFollowers });
     queryClient.invalidateQueries({ queryKey: ["my-programs"] });
   };
 
   const toggleHighlight = async (itemType, itemId, itemData) => {
     const existing = highlights?.find(h => h.item_type === itemType && h.item_id === itemId);
     if (existing) {
-      await base44.entities.Highlight.delete(existing.id);
+      await db.entities.Highlight.delete(existing.id);
     } else {
-      await base44.entities.Highlight.create({
+      await db.entities.Highlight.create({
         user_email: user.email,
         item_type: itemType,
         item_id: itemId,
@@ -256,7 +256,7 @@ export default function Profile() {
 
   const savePersonalInfo = async () => {
     try {
-      await base44.auth.updateMe(personalInfo);
+      await db.auth.updateMe(personalInfo);
       setUser(prev => ({ ...prev, ...personalInfo }));
       setShowPersonalInfoDialog(false);
       toast.success("Profile updated!");
@@ -378,7 +378,7 @@ export default function Profile() {
               <Button variant="outline" size="sm" onClick={() => setShowMonetization(true)} className="rounded-xl gap-2 border-green-800 text-green-400 hover:bg-green-900/30">
                 <DollarSign className="w-4 h-4" /> Monetization
               </Button>
-              <Button variant="outline" size="sm" className="rounded-xl gap-2 border-gray-700 text-gray-400 hover:bg-gray-800" onClick={() => base44.auth.logout()}>
+              <Button variant="outline" size="sm" className="rounded-xl gap-2 border-gray-700 text-gray-400 hover:bg-gray-800" onClick={() => db.auth.logout()}>
                 <LogOut className="w-4 h-4" />
                 Logout
               </Button>
@@ -442,7 +442,7 @@ export default function Profile() {
       {/* My Streams / VODs */}
       {myStreams?.length > 0 && (
         <div>
-          <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <Radio className="w-5 h-5 text-red-500" />
             My Streams & VODs
           </h2>
@@ -478,7 +478,7 @@ export default function Profile() {
                   onClick={async (e) => {
                     e.preventDefault();
                     if (!confirm("Delete this stream?")) return;
-                    await base44.entities.LiveStream.delete(stream.id);
+                    await db.entities.LiveStream.delete(stream.id);
                     queryClient.invalidateQueries({ queryKey: ["my-streams"] });
                   }}
                   className="absolute top-3 right-3 p-1.5 rounded-lg bg-white/80 opacity-0 group-hover:opacity-100 hover:bg-red-50 transition-all"
@@ -494,7 +494,7 @@ export default function Profile() {
       {/* Followed Creators */}
       {followedCreators?.length > 0 && (
         <div>
-          <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-blue-500" />
             Following ({followedCreators.length})
           </h2>
@@ -539,7 +539,7 @@ export default function Profile() {
       {/* All Badges */}
       {userBadges.length > 0 && (
         <div>
-          <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
             <Trophy className="w-5 h-5 text-amber-500" />
             My Badges
           </h2>
@@ -553,7 +553,7 @@ export default function Profile() {
       {/* Sport Profiles */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-slate-900">My Sport Profiles</h2>
+          <h2 className="text-lg font-bold text-white">My Sport Profiles</h2>
           <Button onClick={openNewProfile} className="rounded-xl gap-2 bg-slate-900 hover:bg-slate-800" size="sm">
             <Plus className="w-4 h-4" />
             Add Sport
@@ -761,7 +761,7 @@ export default function Profile() {
       {/* Training Programs */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Dumbbell className="w-5 h-5 text-orange-500" />
             Training Programs
           </h2>
@@ -808,13 +808,13 @@ export default function Profile() {
         open={showMonetization}
         onOpenChange={setShowMonetization}
         user={user}
-        onSuccess={() => base44.auth.me().then(setUser)}
+        onSuccess={() => db.auth.me().then(setUser)}
       />
 
       {/* Highlights */}
       {highlights?.length > 0 && (
         <div>
-          <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2 mb-4">
+          <h2 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-amber-500" />
             Highlights
           </h2>
@@ -834,7 +834,7 @@ export default function Profile() {
       {viewingStatsProfile && (
         <div>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-slate-900">{viewingStatsProfile.sport} Analytics</h2>
+            <h2 className="text-lg font-bold text-white">{viewingStatsProfile.sport} Analytics</h2>
             <div className="flex gap-2">
               <Button
                 onClick={() => openStatsInput(viewingStatsProfile)}
@@ -864,7 +864,7 @@ export default function Profile() {
       {/* Creator Earnings */}
       {(user?.subscription_price > 0 || user?.is_accepting_donations) && (
         <div>
-          <h2 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <h2 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
             <DollarSign className="w-5 h-5 text-green-600" />
             My Earnings
           </h2>
@@ -874,7 +874,7 @@ export default function Profile() {
 
       {/* Reels Stats */}
       <div>
-        <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
           <Film className="w-5 h-5 text-blue-600" />
           My Reels
         </h2>
@@ -883,7 +883,7 @@ export default function Profile() {
 
       {/* My Posts — Instagram 3-col grid */}
       <div>
-        <h2 className="text-lg font-bold text-slate-900 mb-3 flex items-center gap-2">
+        <h2 className="text-lg font-bold text-white mb-3 flex items-center gap-2">
           <Film className="w-5 h-5 text-orange-500" />
           My Posts
           <span className="text-sm font-normal text-slate-400 ml-1">({myPosts?.length || 0})</span>

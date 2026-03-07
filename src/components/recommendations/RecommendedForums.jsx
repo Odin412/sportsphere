@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { MessageSquare, Eye, Heart } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function RecommendedForums({ topics: propTopics }) {
@@ -14,7 +14,7 @@ export default function RecommendedForums({ topics: propTopics }) {
   const { data: fetchedTopics = [] } = useQuery({
     queryKey: ["recommended-forums", userSports.join(",")],
     queryFn: async () => {
-      const all = await base44.entities.ForumTopic.list("-created_date", 30);
+      const all = await db.entities.ForumTopic.list("-created_date", 30);
       return all.sort((a, b) => {
         // Prioritize sport matches, then by engagement (likes + replies)
         const aMatch = userSports.includes(a.sport) ? 100 : 0;

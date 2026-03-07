@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Music, Scissors, Zap, ChevronDown, ChevronUp, Loader2, Check, Hash, Wand2 } from "lucide-react";
@@ -41,7 +41,7 @@ export default function AIReelAssistant({ sport, category, videoFile, caption, o
 
   const generateHighlightSuggestion = async () => {
     setLoadingHighlight(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are an expert sports video editor. A user has uploaded a video reel for the sport "${sport || "general sports"}" in the category "${category || "general"}". Their caption is: "${caption || "no caption"}".
 
 Generate specific highlight reel suggestions including:
@@ -72,7 +72,7 @@ Return a JSON with these fields:
 
   const generateEditingSuggestions = async () => {
     setLoadingEditing(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are a professional sports video editor. Generate specific editing suggestions for a "${sport || "sports"}" reel in the "${category || "general"}" category.
 
 Return JSON with:
@@ -98,7 +98,7 @@ Return JSON with:
 
   const generateCaption = async () => {
     setLoadingCaption(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are an expert social media content creator for sports content. Create an engaging, viral-worthy caption for a "${sport || "sports"}" reel in the "${category || "general"}" category.
 
 Current caption (if any): "${caption || "no caption yet"}"
@@ -131,7 +131,7 @@ Return JSON with:
 
   const generateHashtags = async () => {
     setLoadingHashtags(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are a social media expert specializing in sports content. Generate relevant hashtags for a "${sport || "sports"}" reel in the "${category || "general"}" category.
 
 Current caption: "${caption || "no caption"}"

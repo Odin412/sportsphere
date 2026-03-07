@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,7 +31,7 @@ export default function MonetizationSetup({ open, onOpenChange, user, onSuccess 
 
     setSaving(true);
     try {
-      await base44.auth.updateMe({
+      await db.auth.updateMe({
         subscription_price: subscriptionPrice,
         is_accepting_donations: acceptingDonations,
       });

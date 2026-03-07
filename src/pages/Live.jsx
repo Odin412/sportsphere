@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,9 +11,9 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Radio, Eye, VideoOff, Loader2, PlayCircle, Users, Crown, Clock, Sparkles, Search, X, Filter, Upload, Settings2, Zap, Shield, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Switch } from "@/components/ui/switch";
-import StreamSearch from "../components/discover/StreamSearch";
+import StreamSearch from "@/components/discover/StreamSearch";
 import moment from "moment";
 import { motion } from "framer-motion";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
@@ -81,42 +81,42 @@ export default function Live() {
   const [tab, setTab] = useState("live");
   const [filters, setFilters] = useState({ query: "", sport: "all", sort: "recent" });
 
-  useEffect(() => { base44.auth.me().then(setUser).catch(() => {}); }, []);
+  useEffect(() => { db.auth.me().then(setUser).catch(() => {}); }, []);
 
   const { data: liveStreams, isLoading: loadingLive, refetch } = useQuery({
     queryKey: ["live-streams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }, "-started_at"),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }, "-started_at"),
     refetchInterval: 5000,
   });
 
   const { data: pastStreams, isLoading: loadingPast } = useQuery({
     queryKey: ["past-streams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "ended" }, "-ended_at", 60),
+    queryFn: () => db.entities.LiveStream.filter({ status: "ended" }, "-ended_at", 60),
   });
 
   const { data: myActiveStream } = useQuery({
     queryKey: ["my-stream", user?.email],
-    queryFn: () => base44.entities.LiveStream.filter({ host_email: user.email, status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ host_email: user.email, status: "live" }),
     enabled: !!user,
     refetchInterval: 3000,
   });
 
   const { data: follows = [] } = useQuery({
     queryKey: ["follows-live", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email, status: "accepted" }),
     enabled: !!user,
   });
 
   // Followers of the current user (people to notify when going live)
   const { data: myFollowers = [] } = useQuery({
     queryKey: ["my-followers-live", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
     enabled: !!user,
   });
 
   const { data: preferences } = useQuery({
     queryKey: ["prefs-live", user?.email],
-    queryFn: async () => { const p = await base44.entities.FeedPreferences.filter({ user_email: user.email }); return p[0]; },
+    queryFn: async () => { const p = await db.entities.FeedPreferences.filter({ user_email: user.email }); return p[0]; },
     enabled: !!user,
   });
 
@@ -153,7 +153,7 @@ export default function Live() {
     if (!file) return;
     setVodFile(file);
     setVodUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await db.integrations.Core.UploadFile({ file });
     setVodUrl(file_url);
     setVodUploading(false);
   };
@@ -162,7 +162,7 @@ export default function Live() {
     const file = e.target.files[0];
     if (!file) return;
     setThumbnailFile(file);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    const { file_url } = await db.integrations.Core.UploadFile({ file });
     setThumbnailUrl(file_url);
   };
 
@@ -170,7 +170,7 @@ export default function Live() {
     if (!liveData.title.trim()) return;
     setGoingLive(true);
     const isVod = liveMode === "upload";
-    const stream = await base44.entities.LiveStream.create({
+    const stream = await db.entities.LiveStream.create({
       host_email: user.email, host_name: user.full_name, host_avatar: user.avatar_url,
       title: liveData.title, description: liveData.description, sport: liveData.sport,
       is_premium: liveData.is_premium, price: parseFloat(liveData.price) || 0,
@@ -187,7 +187,7 @@ export default function Live() {
     if (!isVod && myFollowers.length > 0) {
       await Promise.all(
         myFollowers.map(f =>
-          base44.entities.Notification.create({
+          db.entities.Notification.create({
             recipient_email: f.follower_email,
             actor_email: user.email,
             actor_name: user.full_name,
@@ -211,15 +211,15 @@ export default function Live() {
   const endStream = async () => {
     if (!myActiveStream?.[0]) return;
     const stream = myActiveStream[0];
-    const chatMessages = await base44.entities.LiveChat.filter({ stream_id: stream.id }, "-created_date", 100);
+    const chatMessages = await db.entities.LiveChat.filter({ stream_id: stream.id }, "-created_date", 100);
     const chatContext = chatMessages.map(m => `${m.sender_name}: ${m.message}`).join("\n");
     let summary = "";
     try {
-      summary = await base44.integrations.Core.InvokeLLM({
+      summary = await db.integrations.Core.InvokeLLM({
         prompt: `Summarize this live sports stream in 3-4 sentences. Title: ${stream.title}. Sport: ${stream.sport}. Chat: ${chatContext || "No chat messages"}`,
       });
     } catch (e) {}
-    await base44.entities.LiveStream.update(stream.id, { status: "ended", ended_at: new Date().toISOString(), ai_summary: summary });
+    await db.entities.LiveStream.update(stream.id, { status: "ended", ended_at: new Date().toISOString(), ai_summary: summary });
     refetch();
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -115,13 +115,13 @@ export default function SubscriptionPlans({ user }) {
 
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ["subscription-plans", user?.email],
-    queryFn: () => base44.entities.SubscriptionPlan.filter({ creator_email: user.email }),
+    queryFn: () => db.entities.SubscriptionPlan.filter({ creator_email: user.email }),
     enabled: !!user,
   });
 
   const { data: subscribers = [] } = useQuery({
     queryKey: ["all-subscribers", user?.email],
-    queryFn: () => base44.entities.CreatorSubscription.filter({ creator_email: user.email, status: "active" }),
+    queryFn: () => db.entities.CreatorSubscription.filter({ creator_email: user.email, status: "active" }),
     enabled: !!user,
   });
 
@@ -132,10 +132,10 @@ export default function SubscriptionPlans({ user }) {
 
   const createPlan = async (data) => {
     if (editing) {
-      await base44.entities.SubscriptionPlan.update(editing.id, data);
+      await db.entities.SubscriptionPlan.update(editing.id, data);
       toast.success("Plan updated!");
     } else {
-      await base44.entities.SubscriptionPlan.create({ ...data, creator_email: user.email, subscriber_count: 0 });
+      await db.entities.SubscriptionPlan.create({ ...data, creator_email: user.email, subscriber_count: 0 });
       toast.success("Plan created!");
     }
     qc.invalidateQueries({ queryKey: ["subscription-plans"] });
@@ -144,12 +144,12 @@ export default function SubscriptionPlans({ user }) {
   };
 
   const toggleActive = async (plan) => {
-    await base44.entities.SubscriptionPlan.update(plan.id, { is_active: !plan.is_active });
+    await db.entities.SubscriptionPlan.update(plan.id, { is_active: !plan.is_active });
     qc.invalidateQueries({ queryKey: ["subscription-plans"] });
   };
 
   const deletePlan = async (id) => {
-    await base44.entities.SubscriptionPlan.delete(id);
+    await db.entities.SubscriptionPlan.delete(id);
     qc.invalidateQueries({ queryKey: ["subscription-plans"] });
     toast.success("Plan deleted");
   };

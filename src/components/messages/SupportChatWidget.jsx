@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { MessageCircle, X, Send, Loader2, Bot, ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function SupportChatWidget({ user }) {
 
   useEffect(() => {
     if (!conversation) return;
-    const unsub = base44.agents.subscribeToConversation(conversation.id, (data) => {
+    const unsub = db.agents.subscribeToConversation(conversation.id, (data) => {
       setMessages(data.messages || []);
     });
     return unsub;
@@ -31,14 +31,14 @@ export default function SupportChatWidget({ user }) {
   const openChat = async () => {
     setOpen(true);
     if (conversation) return;
-    const convo = await base44.agents.createConversation({
+    const convo = await db.agents.createConversation({
       agent_name: "support_bot",
       metadata: { name: "SportHub Support" },
     });
     setMessages(convo.messages || []);
     setConversation(convo);
     // Send a welcome prompt
-    await base44.agents.addMessage(convo, {
+    await db.agents.addMessage(convo, {
       role: "user",
       content: "__init__",
     });
@@ -49,7 +49,7 @@ export default function SupportChatWidget({ user }) {
     const text = input.trim();
     setInput("");
     setSending(true);
-    await base44.agents.addMessage(conversation, { role: "user", content: text });
+    await db.agents.addMessage(conversation, { role: "user", content: text });
     setSending(false);
   };
 

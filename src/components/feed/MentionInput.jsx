@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +29,7 @@ export default function MentionInput({ value, onChange, placeholder, className }
   }, [value, cursorPosition]);
 
   const searchUsers = async (query) => {
-    const users = await base44.entities.User.list();
+    const users = await db.entities.User.list();
     const filtered = users.filter(u => 
       u.full_name?.toLowerCase().includes(query.toLowerCase()) ||
       u.email?.toLowerCase().includes(query.toLowerCase())

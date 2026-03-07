@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { AlertTriangle, Loader2, Shield, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -16,7 +16,7 @@ export default function ChatModeration({ messages, streamId, isHost }) {
     const analyzeChatDebounce = setTimeout(async () => {
       setLoading(true);
       try {
-        const result = await base44.functions.invoke('analyzeChat', {
+        const result = await db.functions.invoke('analyzeChat', {
           action: 'moderate',
           messages: messages.map(m => ({
             id: m.id,
@@ -38,7 +38,7 @@ export default function ChatModeration({ messages, streamId, isHost }) {
 
   const handleDeleteMessage = async (messageId) => {
     try {
-      await base44.entities.LiveChat.delete(messageId);
+      await db.entities.LiveChat.delete(messageId);
       setFlaggedMessages(f => f.filter(m => m.message_id !== messageId));
       toast.success('Message deleted');
     } catch (error) {

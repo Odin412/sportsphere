@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export default function CreateChallengeDialog({ user, onClose }) {
     if (!file) return;
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setFormData({ ...formData, image_url: file_url });
     } catch (error) {
       toast.error("Failed to upload image");
@@ -57,7 +57,7 @@ export default function CreateChallengeDialog({ user, onClose }) {
 
       const status = new Date() >= startDate ? "active" : "upcoming";
 
-      await base44.entities.Challenge.create({
+      await db.entities.Challenge.create({
         ...formData,
         creator_email: user.email,
         creator_name: user.full_name,

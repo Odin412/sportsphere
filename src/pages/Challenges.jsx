@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, Trophy, Users, Calendar, Target, Flame, TrendingUp, Loader2 } from "lucide-react";
-import CreateChallengeDialog from "../components/challenges/CreateChallengeDialog";
+import CreateChallengeDialog from "@/components/challenges/CreateChallengeDialog";
 import moment from "moment";
 
 export default function Challenges() {
@@ -16,24 +16,24 @@ export default function Challenges() {
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: challenges, isLoading } = useQuery({
     queryKey: ["challenges", filter],
     queryFn: async () => {
       if (filter === "my-challenges") {
-        return base44.entities.Challenge.filter({ creator_email: user.email }, "-created_date");
+        return db.entities.Challenge.filter({ creator_email: user.email }, "-created_date");
       } else if (filter === "joined") {
-        const myParticipations = await base44.entities.ChallengeParticipant.filter({ user_email: user.email });
+        const myParticipations = await db.entities.ChallengeParticipant.filter({ user_email: user.email });
         const challengeIds = myParticipations.map(p => p.challenge_id);
-        const allChallenges = await base44.entities.Challenge.list("-created_date");
+        const allChallenges = await db.entities.Challenge.list("-created_date");
         return allChallenges.filter(c => challengeIds.includes(c.id));
       } else if (filter === "active") {
-        const all = await base44.entities.Challenge.list("-created_date");
+        const all = await db.entities.Challenge.list("-created_date");
         return all.filter(c => c.status === "active");
       }
-      return base44.entities.Challenge.list("-created_date", 50);
+      return db.entities.Challenge.list("-created_date", 50);
     },
     enabled: (filter !== "my-challenges" && filter !== "joined") || !!user,
   });

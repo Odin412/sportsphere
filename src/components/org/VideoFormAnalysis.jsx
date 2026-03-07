@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Sparkles, Loader2, CheckCircle, AlertCircle, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ export default function VideoFormAnalysis({ video }) {
 
   const runAnalysis = async () => {
     setAnalyzing(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are an expert sports biomechanics coach analyzing an athlete's training video.
 
 Video Title: ${video.title}
@@ -41,7 +41,7 @@ Be specific, technical yet accessible, and constructive. Format clearly with sec
     });
 
     // Save results to the video record
-    await base44.entities.AthleteVideo.update(video.id, {
+    await db.entities.AthleteVideo.update(video.id, {
       ai_summary: result.overall_assessment,
       ai_tags: result.detected_tags || [],
     });

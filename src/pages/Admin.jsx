@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -62,33 +62,33 @@ function ChartTooltip({ active, payload, label }) {
 export default function Admin() {
   const { data: allProfiles = [], isLoading: profilesLoading } = useQuery({
     queryKey: ["admin-profiles"],
-    queryFn: () => base44.entities.User.list("-created_at", 500),
+    queryFn: () => db.entities.User.list("-created_at", 500),
   });
 
   const { data: allPosts = [], isLoading: postsLoading } = useQuery({
     queryKey: ["admin-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 200),
+    queryFn: () => db.entities.Post.list("-created_date", 200),
   });
 
   const { data: allStreams = [] } = useQuery({
     queryKey: ["admin-streams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }),
     refetchInterval: 30000,
   });
 
   const { data: allFlags = [] } = useQuery({
     queryKey: ["admin-flags"],
-    queryFn: () => base44.entities.ModerationFlag.list("-created_date", 50),
+    queryFn: () => db.entities.ModerationFlag.list("-created_date", 50),
   });
 
   const { data: allTxns = [] } = useQuery({
     queryKey: ["admin-txns"],
-    queryFn: () => base44.entities.Transaction.list("-created_date", 200),
+    queryFn: () => db.entities.Transaction.list("-created_date", 200),
   });
 
   const { data: allReports = [] } = useQuery({
     queryKey: ["admin-reports"],
-    queryFn: () => base44.entities.Report.list("-created_date", 20),
+    queryFn: () => db.entities.Report.list("-created_date", 20),
   });
 
   // ── Derived metrics ──────────────────────────────────────────────────────

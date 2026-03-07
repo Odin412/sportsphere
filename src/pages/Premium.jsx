@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Crown, Check, Sparkles, Zap, TrendingUp, MessageCircle, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 
 export default function Premium() {
   const [user, setUser] = useState(null);
@@ -13,7 +13,7 @@ export default function Premium() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const isPremium = user?.is_premium && user?.premium_expires && new Date(user.premium_expires) > new Date();
@@ -25,7 +25,7 @@ export default function Premium() {
       const expiryDate = new Date();
       expiryDate.setMonth(expiryDate.getMonth() + 1);
       
-      await base44.auth.updateMe({
+      await db.auth.updateMe({
         is_premium: true,
         premium_expires: expiryDate.toISOString()
       });
@@ -42,7 +42,7 @@ export default function Premium() {
   const handleCancel = async () => {
     setLoading(true);
     try {
-      await base44.auth.updateMe({
+      await db.auth.updateMe({
         is_premium: false,
         premium_expires: null
       });

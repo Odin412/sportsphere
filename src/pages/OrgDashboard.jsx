@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -16,13 +16,13 @@ export default function OrgDashboard() {
   const [showSetup, setShowSetup] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: org, refetch: refetchOrg } = useQuery({
     queryKey: ["my-org", user?.email],
     queryFn: async () => {
-      const orgs = await base44.entities.Organization.filter({ owner_email: user.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       return orgs[0] || null;
     },
     enabled: !!user,
@@ -31,7 +31,7 @@ export default function OrgDashboard() {
   const { data: myMembership } = useQuery({
     queryKey: ["my-membership", user?.email],
     queryFn: async () => {
-      const memberships = await base44.entities.OrgMember.filter({ user_email: user.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       return memberships[0] || null;
     },
     enabled: !!user,
@@ -41,20 +41,20 @@ export default function OrgDashboard() {
 
   const { data: members } = useQuery({
     queryKey: ["org-members", orgId],
-    queryFn: () => base44.entities.OrgMember.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.OrgMember.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: plans } = useQuery({
     queryKey: ["org-plans", orgId],
-    queryFn: () => base44.entities.TrainingPlan.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.TrainingPlan.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: sessions } = useQuery({
     queryKey: ["org-sessions", orgId],
     queryFn: async () => {
-      const all = await base44.entities.TrainingSession.filter({ organization_id: orgId });
+      const all = await db.entities.TrainingSession.filter({ organization_id: orgId });
       const upcoming = all.filter(
         (s) => new Date(s.scheduled_date) >= new Date() && s.status === "scheduled"
       );
@@ -65,7 +65,7 @@ export default function OrgDashboard() {
 
   const { data: videos } = useQuery({
     queryKey: ["org-videos", orgId],
-    queryFn: () => base44.entities.AthleteVideo.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.AthleteVideo.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 

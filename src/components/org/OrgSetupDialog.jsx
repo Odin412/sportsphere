@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export default function OrgSetupDialog({ user, onClose, onCreated }) {
   const handleCreate = async () => {
     if (!form.name) return;
     setLoading(true);
-    const org = await base44.entities.Organization.create({
+    const org = await db.entities.Organization.create({
       ...form,
       owner_email: user.email,
       subscription_plan: "free",
@@ -25,7 +25,7 @@ export default function OrgSetupDialog({ user, onClose, onCreated }) {
       max_athletes: 10,
     });
     // Auto-add creator as admin member
-    await base44.entities.OrgMember.create({
+    await db.entities.OrgMember.create({
       organization_id: org.id,
       user_email: user.email,
       user_name: user.full_name,

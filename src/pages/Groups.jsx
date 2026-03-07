@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Plus, Users, MapPin, TrendingUp, Loader2 } from "lucide-react";
-import GroupCard from "../components/groups/GroupCard";
-import CreateGroupDialog from "../components/groups/CreateGroupDialog";
+import GroupCard from "@/components/groups/GroupCard";
+import CreateGroupDialog from "@/components/groups/CreateGroupDialog";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
@@ -26,12 +26,12 @@ export default function Groups() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: allGroups, isLoading, refetch } = useQuery({
     queryKey: ["groups"],
-    queryFn: () => base44.entities.Group.list("-created_date", 100),
+    queryFn: () => db.entities.Group.list("-created_date", 100),
   });
 
   const groups = allGroups?.filter(group => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -26,25 +26,25 @@ export default function TrainingPlanDetail() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setRole("admin"); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) setRole(memberships[0].role);
     }).catch(() => {});
   }, []);
 
   const { data: plan, isLoading } = useQuery({
     queryKey: ["training-plan", planId],
-    queryFn: () => base44.entities.TrainingPlan.filter({ id: planId }).then(r => r[0]),
+    queryFn: () => db.entities.TrainingPlan.filter({ id: planId }).then(r => r[0]),
     enabled: !!planId,
     onSuccess: (data) => { if (data) setNotes(data.notes || ""); },
   });
 
   const saveNotes = async () => {
     setSavingNotes(true);
-    await base44.entities.TrainingPlan.update(planId, { notes });
+    await db.entities.TrainingPlan.update(planId, { notes });
     qc.invalidateQueries(["training-plan", planId]);
     setSavingNotes(false);
     setEditingNotes(false);
@@ -52,7 +52,7 @@ export default function TrainingPlanDetail() {
 
   const updateStatus = async (status) => {
     setUpdatingStatus(true);
-    await base44.entities.TrainingPlan.update(planId, { status });
+    await db.entities.TrainingPlan.update(planId, { status });
     qc.invalidateQueries(["training-plan", planId]);
     qc.invalidateQueries(["training-plans"]);
     setUpdatingStatus(false);

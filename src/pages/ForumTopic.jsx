@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ThumbsUp, MessageCircle, Eye, Send, Flag, Trash2, Pencil, Check, X as XIcon } from "lucide-react";
 import moment from "moment";
 import { toast } from "sonner";
-import { awardPoints } from "../components/gamification/PointsHelper";
+import { awardPoints } from "@/components/gamification/PointsHelper";
 
 const CATEGORIES = [
   { value: "training_tips", label: "Training Tips", icon: "💪" },
@@ -33,15 +33,15 @@ export default function ForumTopic() {
   const topicId = new URLSearchParams(window.location.search).get("id");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: topic } = useQuery({
     queryKey: ["forum", topicId],
     queryFn: async () => {
-      const topics = await base44.entities.Forum.filter({ id: topicId });
+      const topics = await db.entities.Forum.filter({ id: topicId });
       if (topics[0]) {
-        await base44.entities.Forum.update(topics[0].id, {
+        await db.entities.Forum.update(topics[0].id, {
           views: (topics[0].views || 0) + 1
         });
       }
@@ -52,7 +52,7 @@ export default function ForumTopic() {
 
   const { data: replies = [] } = useQuery({
     queryKey: ["forum-replies", topicId],
-    queryFn: () => base44.entities.ForumReply.filter({ forum_id: topicId }, "created_date"),
+    queryFn: () => db.entities.ForumReply.filter({ forum_id: topicId }, "created_date"),
     enabled: !!topicId,
   });
 
@@ -61,7 +61,7 @@ export default function ForumTopic() {
     const likes = topic.likes || [];
     const hasLiked = likes.includes(user.email);
     try {
-      await base44.entities.Forum.update(topic.id, {
+      await db.entities.Forum.update(topic.id, {
         likes: hasLiked ? likes.filter(e => e !== user.email) : [...likes, user.email]
       });
       queryClient.invalidateQueries({ queryKey: ["forum"] });
@@ -75,7 +75,7 @@ export default function ForumTopic() {
     const likes = reply.likes || [];
     const hasLiked = likes.includes(user.email);
     try {
-      await base44.entities.ForumReply.update(reply.id, {
+      await db.entities.ForumReply.update(reply.id, {
         likes: hasLiked ? likes.filter(e => e !== user.email) : [...likes, user.email]
       });
       queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
@@ -87,8 +87,8 @@ export default function ForumTopic() {
   const handleDeleteReply = async (reply) => {
     if (!window.confirm("Delete this reply?")) return;
     try {
-      await base44.entities.ForumReply.delete(reply.id);
-      await base44.entities.Forum.update(topicId, {
+      await db.entities.ForumReply.delete(reply.id);
+      await db.entities.Forum.update(topicId, {
         replies_count: Math.max(0, (topic.replies_count || 1) - 1),
       });
       queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
@@ -107,7 +107,7 @@ export default function ForumTopic() {
   const handleSaveEdit = async (reply) => {
     if (!editContent.trim()) return;
     try {
-      await base44.entities.ForumReply.update(reply.id, { content: editContent });
+      await db.entities.ForumReply.update(reply.id, { content: editContent });
       queryClient.invalidateQueries({ queryKey: ["forum-replies"] });
       setEditingReplyId(null);
       toast.success("Reply updated");
@@ -118,7 +118,7 @@ export default function ForumTopic() {
 
   const handleFlagReply = async (reply) => {
     try {
-      await base44.entities.Report.create({
+      await db.entities.Report.create({
         reporter_email: user.email,
         reporter_name: user.full_name,
         content_type: "forum_reply",
@@ -136,7 +136,7 @@ export default function ForumTopic() {
     if (!replyContent.trim() || !user) return;
 
     try {
-      await base44.entities.ForumReply.create({
+      await db.entities.ForumReply.create({
         forum_id: topicId,
         author_email: user.email,
         author_name: user.full_name,
@@ -145,13 +145,13 @@ export default function ForumTopic() {
         likes: [],
       });
 
-      await base44.entities.Forum.update(topicId, {
+      await db.entities.Forum.update(topicId, {
         replies_count: (topic.replies_count || 0) + 1,
         last_activity: new Date().toISOString(),
       });
 
       if (topic.author_email !== user.email) {
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: topic.author_email,
           actor_email: user.email,
           actor_name: user.full_name,

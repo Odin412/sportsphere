@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Calendar, Plus, Loader2, MapPin, Video, Clock, Users, CheckCircle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,25 +25,25 @@ export default function OrgSessions() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setRole("admin"); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) { setOrgId(memberships[0].organization_id); setRole(memberships[0].role); }
     }).catch(() => {});
   }, []);
 
   const { data: sessions, isLoading } = useQuery({
     queryKey: ["org-sessions-all", orgId],
-    queryFn: () => base44.entities.TrainingSession.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.TrainingSession.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: athletes } = useQuery({
     queryKey: ["org-athletes", orgId],
     queryFn: async () => {
-      const members = await base44.entities.OrgMember.filter({ organization_id: orgId });
+      const members = await db.entities.OrgMember.filter({ organization_id: orgId });
       return members.filter(m => m.role === "athlete");
     },
     enabled: !!orgId,
@@ -55,7 +55,7 @@ export default function OrgSessions() {
   const createSession = async () => {
     if (!form.title || !form.scheduled_date) return;
     setSaving(true);
-    await base44.entities.TrainingSession.create({
+    await db.entities.TrainingSession.create({
       organization_id: orgId,
       coach_email: user.email,
       coach_name: user.full_name,
@@ -70,7 +70,7 @@ export default function OrgSessions() {
   };
 
   const markComplete = async (session) => {
-    await base44.entities.TrainingSession.update(session.id, { status: "completed" });
+    await db.entities.TrainingSession.update(session.id, { status: "completed" });
     qc.invalidateQueries(["org-sessions-all"]);
   };
 

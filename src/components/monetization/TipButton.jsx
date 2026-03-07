@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -26,9 +26,9 @@ export default function TipButton({ creator, contextType, contextId, variant = "
 
     setLoading(true);
     try {
-      const currentUser = await base44.auth.me();
+      const currentUser = await db.auth.me();
       
-      await base44.entities.Tip.create({
+      await db.entities.Tip.create({
         from_email: currentUser.email,
         to_email: creator.email,
         amount: tipAmount,
@@ -39,7 +39,7 @@ export default function TipButton({ creator, contextType, contextId, variant = "
       });
 
       // Create notification
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: creator.email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,

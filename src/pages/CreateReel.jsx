@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
@@ -11,9 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Upload, Film, X, Loader2, Image, Plus, Layers, MessageCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "react-router-dom";
-import AIReelAssistant from "../components/reels/AIReelAssistant";
-import VideoEditor from "../components/video/VideoEditor";
-import AudioEffectsPanel from "../components/video/AudioEffectsPanel";
+import AIReelAssistant from "@/components/reels/AIReelAssistant";
+import VideoEditor from "@/components/video/VideoEditor";
+import AudioEffectsPanel from "@/components/video/AudioEffectsPanel";
 import { toast } from "sonner";
 
 const SPORTS = ["Basketball","Soccer","Football","Baseball","Tennis","Golf","Swimming","Boxing","MMA","Track","Volleyball","Hockey","Cycling","Yoga","CrossFit"];
@@ -84,19 +84,19 @@ export default function CreateReel() {
     setError("");
 
     try {
-      const user = await base44.auth.me();
+      const user = await db.auth.me();
 
       // Upload all clips
       const videoUrls = [];
       for (const clip of clips) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: clip.file });
+        const { file_url } = await db.integrations.Core.UploadFile({ file: clip.file });
         videoUrls.push(file_url);
       }
 
       // Upload thumbnail
       let thumbUrl = null;
       if (thumbnailFile) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: thumbnailFile });
+        const { file_url } = await db.integrations.Core.UploadFile({ file: thumbnailFile });
         thumbUrl = file_url;
       }
 
@@ -118,7 +118,7 @@ export default function CreateReel() {
         volume: audioData.volume
       } : null;
 
-      await base44.entities.Post.create({
+      await db.entities.Post.create({
         author_email: user.email,
         author_name: user.full_name,
         author_avatar: user.avatar_url,

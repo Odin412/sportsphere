@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion, VideoOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
-import TipButton from "../components/monetization/TipButton";
-import ContentSummary from "../components/content/ContentSummary";
-import StreamChat from "../components/live/StreamChat";
-import LiveReactions from "../components/live/LiveReactions";
-import StreamPolls from "../components/live/StreamPolls";
-import StreamQA from "../components/live/StreamQA";
-import StreamSummaryPanel from "../components/live/StreamSummaryPanel";
-import HighlightClipGenerator from "../components/live/HighlightClipGenerator";
+import TipButton from "@/components/monetization/TipButton";
+import ContentSummary from "@/components/content/ContentSummary";
+import StreamChat from "@/components/live/StreamChat";
+import LiveReactions from "@/components/live/LiveReactions";
+import StreamPolls from "@/components/live/StreamPolls";
+import StreamQA from "@/components/live/StreamQA";
+import StreamSummaryPanel from "@/components/live/StreamSummaryPanel";
+import HighlightClipGenerator from "@/components/live/HighlightClipGenerator";
 import moment from "moment";
 
 export default function ViewLive() {
@@ -36,19 +36,19 @@ export default function ViewLive() {
   const [cameraError, setCameraError] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: stream, isLoading } = useQuery({
     queryKey: ["stream", streamId],
-    queryFn: () => base44.entities.LiveStream.filter({ id: streamId }).then(s => s[0]),
+    queryFn: () => db.entities.LiveStream.filter({ id: streamId }).then(s => s[0]),
     enabled: !!streamId,
     refetchInterval: 8000,
   });
 
   const { data: messages, refetch: refetchChat } = useQuery({
     queryKey: ["stream-chat", streamId],
-    queryFn: () => base44.entities.LiveChat.filter({ stream_id: streamId }, "created_date", 100),
+    queryFn: () => db.entities.LiveChat.filter({ stream_id: streamId }, "created_date", 100),
     enabled: !!streamId && hasAccess,
     refetchInterval: 2000,
   });
@@ -56,7 +56,7 @@ export default function ViewLive() {
   // Real-time subscription to new chat messages
   useEffect(() => {
     if (!streamId || !hasAccess) return;
-    const unsub = base44.entities.LiveChat.subscribe((event) => {
+    const unsub = db.entities.LiveChat.subscribe((event) => {
       if (event.data?.stream_id === streamId) {
         queryClient.invalidateQueries({ queryKey: ["stream-chat", streamId] });
       }
@@ -67,7 +67,7 @@ export default function ViewLive() {
   // Check follow status
   useEffect(() => {
     if (!user || !stream) return;
-    base44.entities.Follow.filter({ follower_email: user.email, following_email: stream.host_email, status: "accepted" })
+    db.entities.Follow.filter({ follower_email: user.email, following_email: stream.host_email, status: "accepted" })
       .then(f => setIsFollowing(f.length > 0));
   }, [user, stream]);
 
@@ -78,10 +78,10 @@ export default function ViewLive() {
       if (stream.host_email === user.email) { setHasAccess(true); setCheckingAccess(false); return; }
       if (!stream.is_premium && (!stream.price || stream.price === 0)) { setHasAccess(true); setCheckingAccess(false); return; }
       if (stream.is_premium) {
-        const subs = await base44.entities.Subscription.filter({ subscriber_email: user.email, creator_email: stream.host_email, status: "active" });
+        const subs = await db.entities.Subscription.filter({ subscriber_email: user.email, creator_email: stream.host_email, status: "active" });
         setHasAccess(subs.length > 0);
       } else if (stream.price > 0) {
-        const txs = await base44.entities.Transaction.filter({ from_email: user.email, to_email: stream.host_email, type: "ppv" });
+        const txs = await db.entities.Transaction.filter({ from_email: user.email, to_email: stream.host_email, type: "ppv" });
         setHasAccess(txs.some(t => t.stream_id === streamId));
       }
       setCheckingAccess(false);
@@ -94,11 +94,11 @@ export default function ViewLive() {
     if (!stream || !user || !hasAccess) return;
     const viewers = stream.viewers || [];
     if (!viewers.includes(user.email)) {
-      base44.entities.LiveStream.update(streamId, { viewers: [...viewers, user.email] });
+      db.entities.LiveStream.update(streamId, { viewers: [...viewers, user.email] });
     }
     setViewerCount((stream.viewers?.length || 0) + 1);
     return () => {
-      base44.entities.LiveStream.update(streamId, {
+      db.entities.LiveStream.update(streamId, {
         viewers: (stream.viewers || []).filter(e => e !== user.email)
       });
     };
@@ -106,11 +106,11 @@ export default function ViewLive() {
 
   const handlePayment = async () => {
     if (!user) { toast.error("Please login to purchase access"); return; }
-    await base44.entities.Transaction.create({
+    await db.entities.Transaction.create({
       from_email: user.email, to_email: stream.host_email,
       type: "ppv", amount: stream.price, status: "completed", stream_id: streamId,
     });
-    await base44.entities.Notification.create({
+    await db.entities.Notification.create({
       recipient_email: stream.host_email, actor_email: user.email,
       actor_name: user.full_name, actor_avatar: user.avatar_url,
       type: "follow", message: `purchased access to your live stream ($${stream.price})`,
@@ -122,13 +122,13 @@ export default function ViewLive() {
   const handleFollow = async () => {
     if (!user) return;
     if (isFollowing) {
-      const follows = await base44.entities.Follow.filter({ follower_email: user.email, following_email: stream.host_email });
-      if (follows[0]) await base44.entities.Follow.delete(follows[0].id);
+      const follows = await db.entities.Follow.filter({ follower_email: user.email, following_email: stream.host_email });
+      if (follows[0]) await db.entities.Follow.delete(follows[0].id);
       setIsFollowing(false);
       toast.success("Unfollowed");
     } else {
-      await base44.entities.Follow.create({ follower_email: user.email, following_email: stream.host_email, status: "accepted" });
-      await base44.entities.Notification.create({
+      await db.entities.Follow.create({ follower_email: user.email, following_email: stream.host_email, status: "accepted" });
+      await db.entities.Notification.create({
         recipient_email: stream.host_email, actor_email: user.email,
         actor_name: user.full_name, type: "follow", message: "started following you",
       });
@@ -141,7 +141,7 @@ export default function ViewLive() {
     if (!message.trim() || !user) return;
     const trimmed = message.trim();
     setMessage("");
-    await base44.entities.LiveChat.create({
+    await db.entities.LiveChat.create({
       stream_id: streamId,
       sender_email: user.email,
       sender_name: user.full_name,
@@ -154,7 +154,7 @@ export default function ViewLive() {
 
   const togglePin = async (msg) => {
     if (stream.host_email !== user?.email) return;
-    await base44.entities.LiveChat.update(msg.id, { is_pinned: !msg.is_pinned });
+    await db.entities.LiveChat.update(msg.id, { is_pinned: !msg.is_pinned });
     queryClient.invalidateQueries({ queryKey: ["stream-chat", streamId] });
   };
 
@@ -293,7 +293,7 @@ export default function ViewLive() {
                           <button
                             onClick={async () => {
                               try {
-                                await base44.entities.Follow.create({ follower_email: user.email, following_email: stream.host_email, status: "accepted" });
+                                await db.entities.Follow.create({ follower_email: user.email, following_email: stream.host_email, status: "accepted" });
                                 toast.success(`Following ${stream.host_name || "creator"}!`);
                               } catch(e) { toast.error("Could not follow"); }
                             }}

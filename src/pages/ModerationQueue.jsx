@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -143,12 +143,12 @@ export default function ModerationQueue() {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: flags = [], isLoading, refetch } = useQuery({
     queryKey: ["moderation-flags", tab],
-    queryFn: () => base44.entities.ModerationFlag.filter(
+    queryFn: () => db.entities.ModerationFlag.filter(
       tab === "all" ? {} : { status: tab },
       "-created_date",
       100
@@ -158,7 +158,7 @@ export default function ModerationQueue() {
   });
 
   const handleDecision = async (flag, action, note) => {
-    await base44.entities.ModerationFlag.update(flag.id, {
+    await db.entities.ModerationFlag.update(flag.id, {
       status: action,
       reviewed_by: user.email,
       review_note: note || undefined,
@@ -167,9 +167,9 @@ export default function ModerationQueue() {
     // If removing, delete the actual content
     if (action === "removed") {
       if (flag.content_type === "post") {
-        await base44.entities.Post.delete(flag.content_id).catch(() => {});
+        await db.entities.Post.delete(flag.content_id).catch(() => {});
       } else if (flag.content_type === "comment") {
-        await base44.entities.Comment.delete(flag.content_id).catch(() => {});
+        await db.entities.Comment.delete(flag.content_id).catch(() => {});
       }
       toast.success("Content removed.");
     } else if (action === "approved") {

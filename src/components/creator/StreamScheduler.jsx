@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,13 +26,13 @@ export default function StreamScheduler({ user }) {
 
   const { data: scheduled = [], isLoading } = useQuery({
     queryKey: ["scheduled-streams", user?.email],
-    queryFn: () => base44.entities.ScheduledStream.filter({ host_email: user.email }, "scheduled_at"),
+    queryFn: () => db.entities.ScheduledStream.filter({ host_email: user.email }, "scheduled_at"),
     enabled: !!user,
   });
 
   const { data: followers = [] } = useQuery({
     queryKey: ["followers-for-notify", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
     enabled: !!user,
   });
 
@@ -40,7 +40,7 @@ export default function StreamScheduler({ user }) {
     if (!form.title || !form.scheduled_at) return toast.error("Title and date are required");
     setSaving(true);
     try {
-      await base44.entities.ScheduledStream.create({
+      await db.entities.ScheduledStream.create({
         ...form,
         host_email: user.email,
         host_name: user.full_name,
@@ -74,8 +74,8 @@ export default function StreamScheduler({ user }) {
         actor_avatar: user.avatar_url,
         is_read: false,
       }));
-      await base44.entities.Notification.bulkCreate(notifications);
-      await base44.entities.ScheduledStream.update(stream.id, { notified_followers: true });
+      await db.entities.Notification.bulkCreate(notifications);
+      await db.entities.ScheduledStream.update(stream.id, { notified_followers: true });
       qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
       toast.success(`Notified ${followers.length} followers!`);
     } catch (error) {
@@ -87,7 +87,7 @@ export default function StreamScheduler({ user }) {
 
   const cancel = async (id) => {
     try {
-      await base44.entities.ScheduledStream.update(id, { status: "cancelled" });
+      await db.entities.ScheduledStream.update(id, { status: "cancelled" });
       qc.invalidateQueries({ queryKey: ["scheduled-streams"] });
       toast.success("Stream cancelled");
     } catch (error) {

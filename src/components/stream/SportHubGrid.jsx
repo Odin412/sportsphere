@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -23,18 +23,18 @@ const MAJOR_SPORTS = [
 export default function SportHubGrid() {
   const { data: liveStreams = [] } = useQuery({
     queryKey: ["allLiveStreams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }),
     refetchInterval: 10000,
   });
 
   const { data: posts = [] } = useQuery({
     queryKey: ["allPosts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 100),
+    queryFn: () => db.entities.Post.list("-created_date", 100),
   });
 
   const { data: scheduledStreams = [] } = useQuery({
     queryKey: ["allScheduledStreams"],
-    queryFn: () => base44.entities.ScheduledStream.filter({ status: "upcoming" }, "-scheduled_at", 50),
+    queryFn: () => db.entities.ScheduledStream.filter({ status: "upcoming" }, "-scheduled_at", 50),
   });
 
   const sportStats = useMemo(() => {

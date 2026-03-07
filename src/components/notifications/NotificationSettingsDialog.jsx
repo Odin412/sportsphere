@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -45,7 +45,7 @@ export default function NotificationSettingsDialog({ user, onClose }) {
   const { data: existingPrefs } = useQuery({
     queryKey: ["notification-preferences", user?.email],
     queryFn: async () => {
-      const res = await base44.entities.NotificationPreferences.filter({ user_email: user.email });
+      const res = await db.entities.NotificationPreferences.filter({ user_email: user.email });
       return res[0] || null;
     },
     enabled: !!user,
@@ -64,9 +64,9 @@ export default function NotificationSettingsDialog({ user, onClose }) {
     try {
       const data = { user_email: user.email, ...prefs };
       if (existingPrefs) {
-        await base44.entities.NotificationPreferences.update(existingPrefs.id, data);
+        await db.entities.NotificationPreferences.update(existingPrefs.id, data);
       } else {
-        await base44.entities.NotificationPreferences.create(data);
+        await db.entities.NotificationPreferences.create(data);
       }
       queryClient.invalidateQueries({ queryKey: ["notification-preferences"] });
       toast.success("Notification preferences saved!");

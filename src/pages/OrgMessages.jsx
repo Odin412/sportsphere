@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MessageCircle, Loader2 } from "lucide-react";
 import ModeratedMessageInput from "@/components/org/ModeratedMessageInput";
@@ -23,18 +23,18 @@ export default function OrgMessages() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setMembership({ role: "admin" }); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) { setOrgId(memberships[0].organization_id); setMembership(memberships[0]); }
     }).catch(() => {});
   }, []);
 
   const { data: messages, isLoading } = useQuery({
     queryKey: ["org-messages", orgId, channel],
-    queryFn: () => base44.entities.OrgMessage.filter({ organization_id: orgId, channel }),
+    queryFn: () => db.entities.OrgMessage.filter({ organization_id: orgId, channel }),
     enabled: !!orgId,
     refetchInterval: 5000,
   });
@@ -112,7 +112,7 @@ export default function OrgMessages() {
               onSend={(msg) => {
                 const sendIt = async () => {
                   if (!orgId || !user) return;
-                  await base44.entities.OrgMessage.create({
+                  await db.entities.OrgMessage.create({
                     organization_id: orgId,
                     sender_email: user.email,
                     sender_name: user.full_name,

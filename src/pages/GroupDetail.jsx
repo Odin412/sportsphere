@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,12 +11,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Users, Calendar, MessageSquare, Settings, ArrowLeft, UserPlus, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
-import GroupPostCard from "../components/groups/GroupPostCard";
-import CreatePostDialog from "../components/groups/CreatePostDialog";
-import EventCard from "../components/groups/EventCard";
-import CreateEventDialog from "../components/groups/CreateEventDialog";
+import GroupPostCard from "@/components/groups/GroupPostCard";
+import CreatePostDialog from "@/components/groups/CreatePostDialog";
+import EventCard from "@/components/groups/EventCard";
+import CreateEventDialog from "@/components/groups/CreateEventDialog";
 
 export default function GroupDetail() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -31,24 +31,24 @@ export default function GroupDetail() {
   const [joining, setJoining] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: group, isLoading } = useQuery({
     queryKey: ["group", groupId],
-    queryFn: () => base44.entities.Group.filter({ id: groupId }).then(g => g[0]),
+    queryFn: () => db.entities.Group.filter({ id: groupId }).then(g => g[0]),
     enabled: !!groupId,
   });
 
   const { data: posts, refetch: refetchPosts } = useQuery({
     queryKey: ["group-posts", groupId],
-    queryFn: () => base44.entities.GroupPost.filter({ group_id: groupId }, "-created_date", 50),
+    queryFn: () => db.entities.GroupPost.filter({ group_id: groupId }, "-created_date", 50),
     enabled: !!groupId,
   });
 
   const { data: events, refetch: refetchEvents } = useQuery({
     queryKey: ["group-events", groupId],
-    queryFn: () => base44.entities.Event.filter({ group_id: groupId }, "date", 50),
+    queryFn: () => db.entities.Event.filter({ group_id: groupId }, "date", 50),
     enabled: !!groupId,
   });
 
@@ -59,7 +59,7 @@ export default function GroupDetail() {
     setJoining(true);
     try {
       if (group.membership_fee > 0) {
-        await base44.entities.Transaction.create({
+        await db.entities.Transaction.create({
           from_email: user.email,
           to_email: group.creator_email,
           type: "group_membership",
@@ -67,7 +67,7 @@ export default function GroupDetail() {
           status: "completed",
           group_id: groupId,
         });
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: group.creator_email,
           actor_email: user.email,
           actor_name: user.full_name,
@@ -76,7 +76,7 @@ export default function GroupDetail() {
           message: `joined ${group.name} (paid $${group.membership_fee})`,
         });
       }
-      await base44.entities.Group.update(groupId, {
+      await db.entities.Group.update(groupId, {
         members: [...(group.members || []), user.email],
       });
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
@@ -90,7 +90,7 @@ export default function GroupDetail() {
 
   const leaveGroup = async () => {
     try {
-      await base44.entities.Group.update(groupId, {
+      await db.entities.Group.update(groupId, {
         members: group.members.filter(m => m !== user.email),
       });
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
@@ -116,7 +116,7 @@ export default function GroupDetail() {
     }
     setSavingGroup(true);
     try {
-      await base44.entities.Group.update(groupId, editGroupData);
+      await db.entities.Group.update(groupId, editGroupData);
       queryClient.invalidateQueries({ queryKey: ["group", groupId] });
       setShowEditGroup(false);
       toast.success("Group updated!");

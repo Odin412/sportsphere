@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,14 +17,14 @@ export default function AIStreamRecommendations() {
     const fetchRecommendations = async () => {
       try {
         setLoading(true);
-        const result = await base44.functions.invoke('analyzeUserBehavior');
+        const result = await db.functions.invoke('analyzeUserBehavior');
         setRecommendations(result.data.recommendations);
 
         // Fetch actual stream data
         if (result.data.recommendations?.recommendedLiveStreams) {
           const streamIds = result.data.recommendations.recommendedLiveStreams.map(r => r.id);
           for (const id of streamIds.slice(0, 10)) {
-            const streamData = await base44.entities.LiveStream.filter({ id });
+            const streamData = await db.entities.LiveStream.filter({ id });
             if (streamData[0]) {
               setStreams(prev => ({ ...prev, [id]: streamData[0] }));
             }

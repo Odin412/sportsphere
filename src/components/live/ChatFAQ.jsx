@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Loader2, MessageCircle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,7 +35,7 @@ export default function ChatFAQ({ streamTitle, streamDescription, isHost }) {
 
     setLoadingAI(true);
     try {
-      const result = await base44.functions.invoke('analyzeChat', {
+      const result = await db.functions.invoke('analyzeChat', {
         action: 'faq_response',
         question: aiQuestion,
         streamTitle,

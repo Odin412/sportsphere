@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Video, Sparkles, Loader2, CheckCircle, Star, Upload } from "lucide-react";
 import VideoFormAnalysis from "@/components/org/VideoFormAnalysis";
@@ -22,11 +22,11 @@ export default function VideoReview() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setRole("admin"); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) { setOrgId(memberships[0].organization_id); setRole(memberships[0].role); }
     }).catch(() => {});
   }, []);
@@ -34,8 +34,8 @@ export default function VideoReview() {
   const { data: videos, isLoading } = useQuery({
     queryKey: ["org-videos", orgId, role, user?.email],
     queryFn: () => {
-      if (role === "athlete") return base44.entities.AthleteVideo.filter({ organization_id: orgId, athlete_email: user.email });
-      return base44.entities.AthleteVideo.filter({ organization_id: orgId });
+      if (role === "athlete") return db.entities.AthleteVideo.filter({ organization_id: orgId, athlete_email: user.email });
+      return db.entities.AthleteVideo.filter({ organization_id: orgId });
     },
     enabled: !!orgId && !!role,
   });
@@ -45,7 +45,7 @@ export default function VideoReview() {
 
   const generateAIAnalysis = async (video) => {
     setAiLoading(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are a sports coach analyzing an athlete's training video.
 
 Video title: ${video.title}
@@ -67,7 +67,7 @@ Keep it encouraging and practical. 3-4 sentences max.`,
   const saveFeedback = async () => {
     if (!selectedVideo || !feedback) return;
     setSaving(true);
-    await base44.entities.AthleteVideo.update(selectedVideo.id, {
+    await db.entities.AthleteVideo.update(selectedVideo.id, {
       coach_reviewed: true,
       coach_feedback: feedback,
       coach_rating: rating || null,

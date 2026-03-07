@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,7 +61,7 @@ export default function CreateEventDialog({ open, onOpenChange, currentUser, onS
     let imageUrl = "";
     try {
       if (imageFile) {
-        const result = await base44.integrations.Core.UploadFile({ file: imageFile });
+        const result = await db.integrations.Core.UploadFile({ file: imageFile });
         imageUrl = result.url || result.file_url || "";
       }
 
@@ -70,7 +70,7 @@ export default function CreateEventDialog({ open, onOpenChange, currentUser, onS
         ? `${formData.end_date}T${formData.end_time}`
         : null;
 
-      await base44.entities.Event.create({
+      await db.entities.Event.create({
       creator_email: currentUser.email,
       creator_name: currentUser.full_name,
       creator_avatar: currentUser.avatar_url,

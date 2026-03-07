@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Loader2, Inbox, Send, Check, X, Clock, MessageCircle } from "lucide-react";
 import moment from "moment";
-import PremiumGate from "../components/premium/PremiumGate";
+import PremiumGate from "@/components/premium/PremiumGate";
 
 const statusColors = {
   pending: "bg-amber-50 text-amber-700",
@@ -26,24 +26,24 @@ export default function Advice() {
   const [replying, setReplying] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => base44.auth.redirectToLogin());
+    db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
   }, []);
 
   const { data: received, isLoading: receivedLoading } = useQuery({
     queryKey: ["advice-received", user?.email],
-    queryFn: () => base44.entities.AdviceRequest.filter({ to_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.AdviceRequest.filter({ to_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
   const { data: sent, isLoading: sentLoading } = useQuery({
     queryKey: ["advice-sent", user?.email],
-    queryFn: () => base44.entities.AdviceRequest.filter({ from_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.AdviceRequest.filter({ from_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
   const handleReply = async () => {
     setReplying(true);
-    await base44.entities.AdviceRequest.update(replyDialog.id, {
+    await db.entities.AdviceRequest.update(replyDialog.id, {
       reply: replyText,
       status: "replied",
     });
@@ -54,7 +54,7 @@ export default function Advice() {
   };
 
   const updateStatus = async (id, status) => {
-    await base44.entities.AdviceRequest.update(id, { status });
+    await db.entities.AdviceRequest.update(id, { status });
     queryClient.invalidateQueries({ queryKey: ["advice-received"] });
   };
 

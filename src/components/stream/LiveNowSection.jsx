@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,14 +13,14 @@ import moment from "moment";
 export default function LiveNowSection({ user, userPreferences }) {
   const { data: liveStreams = [] } = useQuery({
     queryKey: ["liveStreams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }),
     refetchInterval: 60000,
     staleTime: 50000,
   });
 
   const { data: follows = [] } = useQuery({
     queryKey: ["follows", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user,
     staleTime: 60000,
   });

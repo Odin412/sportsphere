@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import moment from "moment";
 
 const IMAGE_DURATION = 5000;
@@ -46,7 +46,7 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen,
   // Track story view and increment view count when active story changes
   useEffect(() => {
     if (!current?.id || !user?.email) return;
-    base44.entities.Post.update(current.id, {
+    db.entities.Post.update(current.id, {
       views: (current.views || 0) + 1,
     }).catch(() => {});
   }, [current?.id]); // eslint-disable-line react-hooks/exhaustive-deps

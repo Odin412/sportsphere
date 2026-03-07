@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { Video, Users, Radio } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function RecommendedCoaches({ sessions: propSessions, userSports: propSports }) {
@@ -14,14 +14,14 @@ export default function RecommendedCoaches({ sessions: propSessions, userSports:
 
   const { data: liveStreams = [] } = useQuery({
     queryKey: ["coaching-live-streams"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }),
     enabled: !propSessions?.length && !!user,
     staleTime: 30000,
   });
 
   const { data: scheduledStreams = [] } = useQuery({
     queryKey: ["coaching-scheduled"],
-    queryFn: () => base44.entities.ScheduledStream.list("scheduled_time", 10),
+    queryFn: () => db.entities.ScheduledStream.list("scheduled_time", 10),
     enabled: !propSessions?.length && !!user,
     staleTime: 60000,
   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PostCard from "../components/feed/PostCard";
+import PostCard from "@/components/feed/PostCard";
 import { Flame, Clock, Sparkles, FileText, ArrowLeft, Users, Heart } from "lucide-react";
 
 export default function SportHub() {
@@ -17,37 +17,37 @@ export default function SportHub() {
   const [activeTab, setActiveTab] = useState("live");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: liveStreams = [] } = useQuery({
     queryKey: ["sportHub-live", sport],
-    queryFn: () => base44.entities.LiveStream.filter({ sport, status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ sport, status: "live" }),
     refetchInterval: 5000,
     enabled: !!sport,
   });
 
   const { data: upcomingStreams = [] } = useQuery({
     queryKey: ["sportHub-upcoming", sport],
-    queryFn: () => base44.entities.ScheduledStream.filter({ sport, status: "upcoming" }, "-scheduled_at", 10),
+    queryFn: () => db.entities.ScheduledStream.filter({ sport, status: "upcoming" }, "-scheduled_at", 10),
     enabled: !!sport,
   });
 
   const { data: highlightPosts = [] } = useQuery({
     queryKey: ["sportHub-highlights", sport],
-    queryFn: () => base44.entities.Post.filter({ sport, category: "highlight" }, "-created_date", 6),
+    queryFn: () => db.entities.Post.filter({ sport, category: "highlight" }, "-created_date", 6),
     enabled: !!sport,
   });
 
   const { data: allPosts = [] } = useQuery({
     queryKey: ["sportHub-posts", sport],
-    queryFn: () => base44.entities.Post.filter({ sport }, "-created_date", 20),
+    queryFn: () => db.entities.Post.filter({ sport }, "-created_date", 20),
     enabled: !!sport,
   });
 
   const { data: follows = [] } = useQuery({
     queryKey: ["follows", user?.email],
-    queryFn: () => (user ? base44.entities.Follow.filter({ follower_email: user.email }) : []),
+    queryFn: () => (user ? db.entities.Follow.filter({ follower_email: user.email }) : []),
     enabled: !!user,
   });
 

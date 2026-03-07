@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -18,7 +18,7 @@ export default function ChallengeUpdateCard({ update, currentUser }) {
       ? update.likes.filter(email => email !== currentUser.email)
       : [...(update.likes || []), currentUser.email];
 
-    await base44.entities.ChallengeUpdate.update(update.id, { likes: newLikes });
+    await db.entities.ChallengeUpdate.update(update.id, { likes: newLikes });
     setLiked(!liked);
     queryClient.invalidateQueries({ queryKey: ["challenge-updates"] });
   };

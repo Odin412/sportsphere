@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle } from "lucide-react";
@@ -14,7 +14,7 @@ export default function GroupPostCard({ post, currentUser, onUpdate }) {
 
   const { data: replies, refetch: refetchReplies } = useQuery({
     queryKey: ["group-replies", post.id],
-    queryFn: () => base44.entities.GroupReply.filter({ post_id: post.id }, "created_date"),
+    queryFn: () => db.entities.GroupReply.filter({ post_id: post.id }, "created_date"),
     enabled: showReplies,
   });
 
@@ -24,20 +24,20 @@ export default function GroupPostCard({ post, currentUser, onUpdate }) {
       : [...(post.likes || []), currentUser.email];
     
     setLiked(!liked);
-    await base44.entities.GroupPost.update(post.id, { likes: newLikes });
+    await db.entities.GroupPost.update(post.id, { likes: newLikes });
     onUpdate?.();
   };
 
   const addReply = async () => {
     if (!newReply.trim()) return;
-    await base44.entities.GroupReply.create({
+    await db.entities.GroupReply.create({
       post_id: post.id,
       author_email: currentUser.email,
       author_name: currentUser.full_name,
       author_avatar: currentUser.avatar_url,
       content: newReply,
     });
-    await base44.entities.GroupPost.update(post.id, {
+    await db.entities.GroupPost.update(post.id, {
       replies_count: (post.replies_count || 0) + 1,
     });
     setNewReply("");

@@ -1,5 +1,5 @@
 import React from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Star, Pin, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,7 @@ export default function FeaturedHighlight({ user, myPosts }) {
 
   const { data: highlights = [] } = useQuery({
     queryKey: ["my-highlights", user?.email],
-    queryFn: () => base44.entities.Highlight.filter({ user_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.Highlight.filter({ user_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
@@ -24,14 +24,14 @@ export default function FeaturedHighlight({ user, myPosts }) {
     // Unpin any existing pinned highlight
     const existing = highlights.find(h => h.is_pinned);
     if (existing) {
-      await base44.entities.Highlight.update(existing.id, { is_pinned: false });
+      await db.entities.Highlight.update(existing.id, { is_pinned: false });
     }
     // Create or update highlight for this post
     const existingForPost = highlights.find(h => h.item_id === post.id);
     if (existingForPost) {
-      await base44.entities.Highlight.update(existingForPost.id, { is_pinned: true });
+      await db.entities.Highlight.update(existingForPost.id, { is_pinned: true });
     } else {
-      await base44.entities.Highlight.create({
+      await db.entities.Highlight.create({
         user_email: user.email,
         item_type: "post",
         item_id: post.id,
@@ -45,7 +45,7 @@ export default function FeaturedHighlight({ user, myPosts }) {
 
   const unpin = async () => {
     if (!pinned) return;
-    await base44.entities.Highlight.update(pinned.id, { is_pinned: false });
+    await db.entities.Highlight.update(pinned.id, { is_pinned: false });
     qc.invalidateQueries({ queryKey: ["my-highlights"] });
     toast.success("Featured highlight removed");
   };

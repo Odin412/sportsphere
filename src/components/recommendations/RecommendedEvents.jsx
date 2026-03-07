@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { CalendarDays, MapPin, Globe } from "lucide-react";
 import { format } from "date-fns";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 
 export default function RecommendedEvents({ events: propEvents }) {
@@ -16,7 +16,7 @@ export default function RecommendedEvents({ events: propEvents }) {
     queryKey: ["recommended-events", userSports.join(",")],
     queryFn: async () => {
       const now = new Date();
-      const all = await base44.entities.Event.list("date", 30);
+      const all = await db.entities.Event.list("date", 30);
       return all
         .filter(e => new Date(e.date) >= now)
         .sort((a, b) => {

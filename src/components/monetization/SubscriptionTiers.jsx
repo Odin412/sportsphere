@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ export default function SubscriptionTiers({ creator, currentUser }) {
   const { data: existingSubscription } = useQuery({
     queryKey: ["creator-subscription", currentUser?.email, creator.email],
     queryFn: async () => {
-      const subs = await base44.entities.CreatorSubscription.filter({
+      const subs = await db.entities.CreatorSubscription.filter({
         subscriber_email: currentUser.email,
         creator_email: creator.email,
         status: "active"
@@ -67,7 +67,7 @@ export default function SubscriptionTiers({ creator, currentUser }) {
       const nextBillingDate = new Date();
       nextBillingDate.setMonth(nextBillingDate.getMonth() + 1);
 
-      await base44.entities.CreatorSubscription.create({
+      await db.entities.CreatorSubscription.create({
         subscriber_email: currentUser.email,
         creator_email: creator.email,
         tier: tier,
@@ -78,7 +78,7 @@ export default function SubscriptionTiers({ creator, currentUser }) {
         next_billing_date: nextBillingDate.toISOString()
       });
 
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: creator.email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,
@@ -99,7 +99,7 @@ export default function SubscriptionTiers({ creator, currentUser }) {
   const handleCancel = async () => {
     setLoading("cancel");
     try {
-      await base44.entities.CreatorSubscription.update(existingSubscription.id, {
+      await db.entities.CreatorSubscription.update(existingSubscription.id, {
         status: "cancelled"
       });
       toast.success("Subscription cancelled");

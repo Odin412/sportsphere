@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
@@ -149,12 +149,12 @@ export default function AdminUsers() {
 
   const { data: profiles = [], isLoading } = useQuery({
     queryKey: ["admin-all-users"],
-    queryFn: () => base44.entities.User.list("-created_at", 500),
+    queryFn: () => db.entities.User.list("-created_at", 500),
   });
 
   const { data: posts = [] } = useQuery({
     queryKey: ["admin-all-posts-users"],
-    queryFn: () => base44.entities.Post.list(null, 500),
+    queryFn: () => db.entities.Post.list(null, 500),
   });
 
   // Posts per author
@@ -187,19 +187,19 @@ export default function AdminUsers() {
 
   // ── Actions ──────────────────────────────────────────────────────────────
   const handleChangeRole = async (id, role) => {
-    await base44.entities.User.update(id, { role });
+    await db.entities.User.update(id, { role });
     queryClient.invalidateQueries({ queryKey: ["admin-all-users"] });
   };
 
   const handleBan = async (user) => {
-    await base44.entities.User.update(user.id, { banned: !user.banned });
+    await db.entities.User.update(user.id, { banned: !user.banned });
     queryClient.invalidateQueries({ queryKey: ["admin-all-users"] });
     setModal(null);
   };
 
   const handleDeletePosts = async (user) => {
     const userPosts = posts.filter(p => p.author_email === user.email);
-    await Promise.all(userPosts.map(p => base44.entities.Post.delete(p.id)));
+    await Promise.all(userPosts.map(p => db.entities.Post.delete(p.id)));
     queryClient.invalidateQueries({ queryKey: ["admin-all-posts-users"] });
     setModal(null);
   };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -41,7 +41,7 @@ export default function CreateSessionDialog({ user, onClose }) {
     if (!file) return;
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setFormData({ ...formData, image_url: file_url });
     } catch (error) {
       toast.error("Failed to upload image");
@@ -57,7 +57,7 @@ export default function CreateSessionDialog({ user, onClose }) {
 
     setSaving(true);
     try {
-      await base44.entities.CoachingSession.create({
+      await db.entities.CoachingSession.create({
         ...formData,
         host_email: user.email,
         host_name: user.full_name,
@@ -311,7 +311,7 @@ export default function CreateSessionDialog({ user, onClose }) {
                   if (!file) return;
                   setUploadingResource(true);
                   try {
-                    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+                    const { file_url } = await db.integrations.Core.UploadFile({ file });
                     const name = prompt("Resource name:", file.name);
                     const description = prompt("Resource description (optional):", "");
                     if (name) {

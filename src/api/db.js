@@ -1,7 +1,6 @@
 /**
- * Supabase compatibility layer — replaces @base44/sdk
- * Exports the same `base44` object shape so all existing page/component code
- * continues to work without changes.
+ * Sportsphere database client — direct Supabase + Anthropic
+ * Replaces all base44 SDK references.
  */
 import { createClient } from '@supabase/supabase-js';
 
@@ -18,19 +17,12 @@ export const supabase = createClient(
 
 // ---------------------------------------------------------------------------
 // Entity factory
-// Returns an object matching base44.entities.X interface:
-//   .filter(filters, sortField, limit)
-//   .list(sortField, limit)
-//   .create(data)
-//   .update(id, data)
-//   .delete(id)
-//   .subscribeToChanges(filters, callback) → { unsubscribe }
+// Returns an object with: .filter() .list() .create() .update() .delete()
 // ---------------------------------------------------------------------------
 const makeEntity = (tableName) => ({
   filter: async (filters = {}, sortField = null, limit = null) => {
     let query = supabase.from(tableName).select('*');
-    const entries = Object.entries(filters);
-    for (const [key, val] of entries) {
+    for (const [key, val] of Object.entries(filters)) {
       if (Array.isArray(val)) {
         query = query.overlaps(key, val);
       } else if (val === null) {
@@ -108,15 +100,11 @@ const makeEntity = (tableName) => ({
 });
 
 // ---------------------------------------------------------------------------
-// Auth compatibility
-// Matches base44.auth.me(), .logout(), .redirectToLogin(), .updateMe()
+// Auth
 // ---------------------------------------------------------------------------
 const auth = {
   me: async () => {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
+    const { data: { user }, error } = await supabase.auth.getUser();
     if (error || !user) throw new Error('Not authenticated');
     const { data: profile } = await supabase
       .from('profiles')
@@ -136,9 +124,7 @@ const auth = {
   },
 
   updateMe: async (data) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Not authenticated');
     const { data: profile, error } = await supabase
       .from('profiles')
@@ -156,49 +142,53 @@ const auth = {
 };
 
 // ---------------------------------------------------------------------------
-// Integrations compatibility
-// Matches base44.integrations.Core.UploadFile(), .InvokeLLM(), .SendEmail()
+// AI — direct Anthropic via Supabase Edge Function
 // ---------------------------------------------------------------------------
-const integrations = {
-  Core: {
-    UploadFile: async ({ file }) => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      const userId = user?.id || 'anon';
-      const ext = file.name.split('.').pop();
-      const fileName = `${userId}/${Date.now()}.${ext}`;
-      const { data, error } = await supabase.storage
-        .from('uploads')
-        .upload(fileName, file, { upsert: true });
-      if (error) throw error;
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from('uploads').getPublicUrl(data.path);
-      return { file_url: publicUrl };
-    },
-
-    InvokeLLM: async ({ prompt, response_json_schema, add_context_from_internet }) => {
-      const { data, error } = await supabase.functions.invoke('invoke-llm', {
-        body: { prompt, response_json_schema, add_context_from_internet },
-      });
-      if (error) throw error;
-      return data;
-    },
-
-    SendEmail: async ({ to, subject, body }) => {
-      const { data, error } = await supabase.functions.invoke('send-email', {
-        body: { to, subject, body },
-      });
-      if (error) throw error;
-      return data;
-    },
+const ai = {
+  invoke: async ({ prompt, schema, system } = {}) => {
+    const { data, error } = await supabase.functions.invoke('claude', {
+      body: { prompt, response_json_schema: schema, system },
+    });
+    if (error) throw error;
+    return data;
   },
 };
 
 // ---------------------------------------------------------------------------
-// Functions compatibility
-// Matches base44.functions.invoke(name, args)
+// Storage — Supabase Storage
+// ---------------------------------------------------------------------------
+const storage = {
+  upload: async ({ file }) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    const userId = user?.id || 'anon';
+    const ext = file.name.split('.').pop();
+    const fileName = `${userId}/${Date.now()}.${ext}`;
+    const { data, error } = await supabase.storage
+      .from('uploads')
+      .upload(fileName, file, { upsert: true });
+    if (error) throw error;
+    const { data: { publicUrl } } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(data.path);
+    return { file_url: publicUrl };
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Email — Supabase Edge Function
+// ---------------------------------------------------------------------------
+const email = {
+  send: async ({ to, subject, body }) => {
+    const { data, error } = await supabase.functions.invoke('send-email', {
+      body: { to, subject, body },
+    });
+    if (error) throw error;
+    return data;
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Functions — invoke Supabase Edge Functions by name
 // ---------------------------------------------------------------------------
 const functions = {
   invoke: async (name, args) => {
@@ -209,8 +199,7 @@ const functions = {
 };
 
 // ---------------------------------------------------------------------------
-// Agents compatibility
-// Matches base44.agents.createConversation, addMessage, subscribeToConversation
+// Agents / AI conversations
 // ---------------------------------------------------------------------------
 const agents = {
   listConversations: async ({ agent_name } = {}) => {
@@ -236,19 +225,11 @@ const agents = {
   },
 
   createConversation: async ({ agent_name, metadata = {} }) => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
     const participants = user?.email ? [user.email] : [];
     const { data, error } = await supabase
       .from('conversations')
-      .insert({
-        agent_name,
-        metadata,
-        messages: [],
-        participants,
-        is_group: false,
-      })
+      .insert({ agent_name, metadata, messages: [], participants, is_group: false })
       .select()
       .single();
     if (error) throw error;
@@ -265,7 +246,6 @@ const agents = {
     const userMsg = { role, content, created_at: new Date().toISOString() };
     const messages = [...(conv?.messages || []), userMsg];
 
-    // Call the AI agent edge function
     const { data: aiReply } = await supabase.functions.invoke('ai-agent', {
       body: { conversationId, message: content, agentName: conv?.agent_name, messages },
     });
@@ -288,42 +268,35 @@ const agents = {
   subscribeToConversation: (conversationId, callback) => {
     const channel = supabase
       .channel(`conv_${conversationId}`)
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'conversations',
-          filter: `id=eq.${conversationId}`,
-        },
-        callback
-      )
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'conversations',
+        filter: `id=eq.${conversationId}`,
+      }, callback)
       .subscribe();
     return { unsubscribe: () => supabase.removeChannel(channel) };
   },
 };
 
 // ---------------------------------------------------------------------------
-// All entities mapped to Supabase table names
+// Entities mapped to Supabase tables
 // ---------------------------------------------------------------------------
 const entities = {
   // User / Profiles
-  User: {
-    ...makeEntity('profiles'),
-    // override filter to also return auth.users fields merged in
-    filter: makeEntity('profiles').filter,
-    list: makeEntity('profiles').list,
-  },
+  User: makeEntity('profiles'),
 
   // Org
   Organization: makeEntity('organizations'),
   OrgMember: makeEntity('org_members'),
   OrgInvite: makeEntity('org_invites'),
+  OrgMessage: makeEntity('org_messages'),
 
   // Training
   TrainingPlan: makeEntity('training_plans'),
   WorkoutItem: makeEntity('workout_items'),
   TrainingSession: makeEntity('training_sessions'),
+  CoachingSession: makeEntity('coaching_sessions'),
   AthleteVideo: makeEntity('athlete_videos'),
   TrainingProgram: makeEntity('training_programs'),
 
@@ -331,10 +304,14 @@ const entities = {
   SportProfile: makeEntity('sport_profiles'),
   StatEntry: makeEntity('stat_entries'),
 
+  // ProPath
+  ProfileView: makeEntity('profile_views'),
+
   // Social
   Post: makeEntity('posts'),
   Follow: makeEntity('follows'),
   Highlight: makeEntity('highlights'),
+  SavedContent: makeEntity('saved_content'),
 
   // Community
   Group: makeEntity('groups'),
@@ -342,12 +319,14 @@ const entities = {
   Forum: makeEntity('forums'),
   ForumTopic: makeEntity('forum_topics'),
   Advice: makeEntity('advice'),
+  AdviceRequest: makeEntity('advice_requests'),
 
   // Gamification
   UserPoints: makeEntity('user_points'),
   UserBadge: makeEntity('user_badges'),
   Challenge: makeEntity('challenges'),
   ChallengeParticipant: makeEntity('challenge_participants'),
+  ChallengeUpdate: makeEntity('challenge_updates'),
 
   // Live streaming
   LiveStream: makeEntity('live_streams'),
@@ -368,10 +347,10 @@ const entities = {
   ModerationFlag: makeEntity('moderation_flags'),
   Report: makeEntity('reports'),
 
-  // Comments (dedicated table)
+  // Comments
   Comment: makeEntity('comments'),
 
-  // Typing indicators (for messaging)
+  // Typing indicators
   TypingIndicator: makeEntity('typing_indicators'),
 
   // Monetization
@@ -387,15 +366,26 @@ const entities = {
 };
 
 // ---------------------------------------------------------------------------
-// Main export — matches the shape of the old base44 client
+// Main export
 // ---------------------------------------------------------------------------
-export const base44 = {
+export const db = {
   auth,
   entities,
-  integrations,
+  ai,
+  storage,
+  email,
   functions,
   agents,
-  _supabase: supabase, // escape hatch for advanced Supabase-specific usage
+  // Backwards-compat aliases (for any remaining integrations references)
+  integrations: {
+    Core: {
+      InvokeLLM: ({ prompt, response_json_schema, add_context_from_internet }) =>
+        ai.invoke({ prompt, schema: response_json_schema }),
+      UploadFile: ({ file }) => storage.upload({ file }),
+      SendEmail: ({ to, subject, body }) => email.send({ to, subject, body }),
+    },
+  },
+  _supabase: supabase,
 };
 
-export default base44;
+export default db;

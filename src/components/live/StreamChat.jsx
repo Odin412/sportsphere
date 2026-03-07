@@ -7,7 +7,7 @@ import { Send, Pin, AlertTriangle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import moment from "moment";
 import { useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import ChatModeration from "./ChatModeration";
 import ChatFAQ from "./ChatFAQ";
 import ModerationSuggestions from "./ModerationSuggestions";
@@ -27,7 +27,7 @@ export default function StreamChat({ messages, user, isHost, message, setMessage
 
   const deleteMessage = async (msgId) => {
     try {
-      await base44.entities.LiveChat.delete(msgId);
+      await db.entities.LiveChat.delete(msgId);
       queryClient.invalidateQueries({ queryKey: ["stream-chat", streamId] });
       toast.success("Message deleted");
     } catch(e) { toast.error("Could not delete message"); }

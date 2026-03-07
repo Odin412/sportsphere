@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -7,11 +7,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Users, Calendar, Trophy, Target, Loader2, Share2, CheckCircle2, Flame, Medal } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import moment from "moment";
-import PostChallengeUpdateDialog from "../components/challenges/PostChallengeUpdateDialog";
-import ChallengeUpdateCard from "../components/challenges/ChallengeUpdateCard";
-import { awardPoints } from "../components/gamification/PointsHelper";
+import PostChallengeUpdateDialog from "@/components/challenges/PostChallengeUpdateDialog";
+import ChallengeUpdateCard from "@/components/challenges/ChallengeUpdateCard";
+import { awardPoints } from "@/components/gamification/PointsHelper";
 import { toast } from "sonner";
 
 export default function ChallengeDetail() {
@@ -24,24 +24,24 @@ export default function ChallengeDetail() {
   const [joining, setJoining] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: challenge, isLoading } = useQuery({
     queryKey: ["challenge", challengeId],
-    queryFn: () => base44.entities.Challenge.filter({ id: challengeId }).then(res => res[0]),
+    queryFn: () => db.entities.Challenge.filter({ id: challengeId }).then(res => res[0]),
     enabled: !!challengeId,
   });
 
   const { data: participants } = useQuery({
     queryKey: ["challenge-participants", challengeId],
-    queryFn: () => base44.entities.ChallengeParticipant.filter({ challenge_id: challengeId }),
+    queryFn: () => db.entities.ChallengeParticipant.filter({ challenge_id: challengeId }),
     enabled: !!challengeId,
   });
 
   const { data: updates } = useQuery({
     queryKey: ["challenge-updates", challengeId],
-    queryFn: () => base44.entities.ChallengeUpdate.filter({ challenge_id: challengeId }, "-created_date"),
+    queryFn: () => db.entities.ChallengeUpdate.filter({ challenge_id: challengeId }, "-created_date"),
     enabled: !!challengeId,
   });
 
@@ -51,7 +51,7 @@ export default function ChallengeDetail() {
   const handleJoinChallenge = async () => {
     setJoining(true);
     try {
-      await base44.entities.ChallengeParticipant.create({
+      await db.entities.ChallengeParticipant.create({
         challenge_id: challengeId,
         user_email: user.email,
         user_name: user.full_name,
@@ -60,13 +60,13 @@ export default function ChallengeDetail() {
         joined_date: new Date().toISOString(),
       });
 
-      await base44.entities.Challenge.update(challengeId, {
+      await db.entities.Challenge.update(challengeId, {
         participants_count: (challenge.participants_count || 0) + 1,
       });
 
       // Notify challenge creator
       if (challenge.creator_email && challenge.creator_email !== user.email) {
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: challenge.creator_email,
           actor_email: user.email,
           actor_name: user.full_name,
@@ -89,8 +89,8 @@ export default function ChallengeDetail() {
 
   const handleLeaveChallenge = async () => {
     if (myParticipation) {
-      await base44.entities.ChallengeParticipant.delete(myParticipation.id);
-      await base44.entities.Challenge.update(challengeId, {
+      await db.entities.ChallengeParticipant.delete(myParticipation.id);
+      await db.entities.Challenge.update(challengeId, {
         participants_count: Math.max(0, (challenge.participants_count || 1) - 1),
       });
       queryClient.invalidateQueries({ queryKey: ["challenge-participants"] });

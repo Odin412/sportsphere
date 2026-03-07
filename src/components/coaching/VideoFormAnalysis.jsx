@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { AlertCircle, CheckCircle2, TrendingUp, Zap, Loader2, Share2 } from "lucide-react";
@@ -21,11 +21,11 @@ export default function VideoFormAnalysis({ videoFile, videoUrl, onAnalysisCompl
     try {
       let fileUrl = videoUrl;
       if (videoFile) {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: videoFile });
+        const { file_url } = await db.integrations.Core.UploadFile({ file: videoFile });
         fileUrl = file_url;
       }
 
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await db.integrations.Core.InvokeLLM({
         prompt: `You are an expert sports form analyst. Analyze this training video and provide detailed form correction feedback.
 
 Provide your analysis in the following JSON structure:

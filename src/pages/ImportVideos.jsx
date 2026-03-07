@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Loader2, Youtube, Heart, Bookmark, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -25,14 +25,14 @@ export default function ImportVideos() {
   const [category, setCategory] = useState("highlight");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const handleSearch = async (pageToken = null) => {
     setLoading(true);
     try {
       const query = searchQuery.trim() || sport;
-      const { data } = await base44.functions.invoke('fetchExternalVideos', {
+      const { data } = await db.functions.invoke('fetchExternalVideos', {
         sport,
         query,
         source: 'youtube',
@@ -54,7 +54,7 @@ export default function ImportVideos() {
       return;
     }
     try {
-      await base44.entities.ExternalVideo.create({
+      await db.entities.ExternalVideo.create({
         user_email: user.email,
         source: 'youtube',
         platform_id: video.platform_id,

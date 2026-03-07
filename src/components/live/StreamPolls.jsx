@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,7 +49,7 @@ function ActivePoll({ poll, user, isHost, onClose }) {
         ...o,
         votes: o.id === optionId ? [...(o.votes || []), user.email] : (o.votes || [])
       }));
-      await base44.entities.StreamPoll.update(poll.id, { options: updatedOptions });
+      await db.entities.StreamPoll.update(poll.id, { options: updatedOptions });
       qc.invalidateQueries({ queryKey: ["stream-polls", poll.stream_id] });
       toast.success("Vote cast!");
     } catch (error) {
@@ -60,7 +60,7 @@ function ActivePoll({ poll, user, isHost, onClose }) {
   };
 
   const endPoll = async () => {
-    await base44.entities.StreamPoll.update(poll.id, { is_active: false });
+    await db.entities.StreamPoll.update(poll.id, { is_active: false });
     qc.invalidateQueries({ queryKey: ["stream-polls", poll.stream_id] });
     onClose?.();
   };
@@ -114,7 +114,7 @@ function CreatePollForm({ streamId, user, onCreated }) {
     if (filled.length < 2) return toast.error("Add at least 2 options");
     setCreating(true);
     try {
-      await base44.entities.StreamPoll.create({
+      await db.entities.StreamPoll.create({
         stream_id: streamId,
         creator_email: user.email,
         question: question.trim(),
@@ -177,7 +177,7 @@ export default function StreamPolls({ streamId, user, isHost, isLive }) {
 
   const { data: polls = [] } = useQuery({
     queryKey: ["stream-polls", streamId],
-    queryFn: () => base44.entities.StreamPoll.filter({ stream_id: streamId }, "-created_date", 10),
+    queryFn: () => db.entities.StreamPoll.filter({ stream_id: streamId }, "-created_date", 10),
     enabled: !!streamId,
     refetchInterval: 4000,
   });

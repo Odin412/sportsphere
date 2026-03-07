@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Users, UserPlus, Mail, Search, Shield, ChevronDown, Trash2, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -24,18 +24,18 @@ export default function OrgRoster() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) setOrgId(memberships[0].organization_id);
     }).catch(() => {});
   }, []);
 
   const { data: members, isLoading } = useQuery({
     queryKey: ["org-members", orgId],
-    queryFn: () => base44.entities.OrgMember.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.OrgMember.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
@@ -48,7 +48,7 @@ export default function OrgRoster() {
   const handleInvite = async () => {
     if (!invite.email || !orgId) return;
     setInviting(true);
-    await base44.entities.OrgInvite.create({
+    await db.entities.OrgInvite.create({
       organization_id: orgId,
       invited_email: invite.email,
       role: invite.role,
@@ -57,7 +57,7 @@ export default function OrgRoster() {
       token: Math.random().toString(36).substring(2, 18),
     });
     // Also create a pending member record
-    await base44.entities.OrgMember.create({
+    await db.entities.OrgMember.create({
       organization_id: orgId,
       user_email: invite.email,
       role: invite.role,
@@ -70,7 +70,7 @@ export default function OrgRoster() {
   };
 
   const handleRemove = async (memberId) => {
-    await base44.entities.OrgMember.delete(memberId);
+    await db.entities.OrgMember.delete(memberId);
     qc.invalidateQueries(["org-members", orgId]);
   };
 

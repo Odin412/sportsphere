@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Heart, MessageCircle, Share2, Radio, Crown, Play, Pause, Bookmark, Info, MoreVertical, Gauge, Music } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -36,7 +36,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
   const { data: savedContent } = useQuery({
     queryKey: ["saved-content", currentUser?.email, item.id],
     queryFn: async () => {
-      const saved = await base44.entities.SavedContent.filter({
+      const saved = await db.entities.SavedContent.filter({
         user_email: currentUser.email,
         content_id: item.id
       });
@@ -58,7 +58,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
   useEffect(() => {
     if (isActive && !isStream && currentUser) {
       const trackView = async () => {
-        await base44.entities.Post.update(item.id, { 
+        await db.entities.Post.update(item.id, { 
           views: (item.views || 0) + 1 
         });
       };
@@ -79,10 +79,10 @@ export default function ReelCard({ item, currentUser, isActive }) {
     setLiked(!liked);
     setLikeCount(prev => liked ? prev - 1 : prev + 1);
     
-    await base44.entities.Post.update(item.id, { likes: newLikes });
+    await db.entities.Post.update(item.id, { likes: newLikes });
     
     if (!liked && item.author_email !== currentUser.email) {
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: item.author_email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,
@@ -96,7 +96,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
 
   const loadComments = async () => {
     if (!showComments && comments.length === 0) {
-      const cmts = await base44.entities.Comment.filter({ post_id: item.id }, "-created_date");
+      const cmts = await db.entities.Comment.filter({ post_id: item.id }, "-created_date");
       setComments(cmts);
     }
     setShowComments(!showComments);
@@ -105,7 +105,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
   const handleComment = async () => {
     if (!currentUser || !newComment.trim()) return;
 
-    const comment = await base44.entities.Comment.create({
+    const comment = await db.entities.Comment.create({
       post_id: item.id,
       author_email: currentUser.email,
       author_name: currentUser.full_name,
@@ -115,12 +115,12 @@ export default function ReelCard({ item, currentUser, isActive }) {
 
     setComments(prev => [comment, ...prev]);
     setNewComment("");
-    await base44.entities.Post.update(item.id, { 
+    await db.entities.Post.update(item.id, { 
       comments_count: (item.comments_count || 0) + 1 
     });
 
     if (item.author_email !== currentUser.email) {
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: item.author_email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,
@@ -151,12 +151,12 @@ export default function ReelCard({ item, currentUser, isActive }) {
 
     if (saved) {
       // Unsave
-      await base44.entities.SavedContent.delete(savedContent.id);
+      await db.entities.SavedContent.delete(savedContent.id);
       setSaved(false);
       toast.success("Removed from saved");
     } else {
       // Save
-      await base44.entities.SavedContent.create({
+      await db.entities.SavedContent.create({
         user_email: currentUser.email,
         content_type: isStream ? "stream" : "post",
         content_id: item.id,
@@ -381,7 +381,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
                     <DropdownMenuItem onClick={async () => {
                       const newVal = !commentsDisabled;
                       setCommentsDisabled(newVal);
-                      await base44.entities.Post.update(item.id, { comments_disabled: newVal });
+                      await db.entities.Post.update(item.id, { comments_disabled: newVal });
                       if (newVal) setShowComments(false);
                     }} className="gap-2">
                       <MessageCircle className="w-4 h-4" />

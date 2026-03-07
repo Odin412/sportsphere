@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { createPageUrl } from "@/utils";
 import { Shield, Users, Dumbbell, Heart, ArrowRight, Loader2, Check, Camera, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -30,7 +30,7 @@ export default function Onboarding() {
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(u => {
+    db.auth.me().then(u => {
       setUser(u);
       setProfile(p => ({ ...p, full_name: u.full_name || "", avatar_url: u.avatar_url || "" }));
     }).catch(() => {});
@@ -45,7 +45,7 @@ export default function Onboarding() {
     if (!file) return;
     setAvatarUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setProfile(p => ({ ...p, avatar_url: file_url }));
     } catch (err) {
       console.error("Avatar upload failed:", err);
@@ -63,7 +63,7 @@ export default function Onboarding() {
       // File upload — upload to storage
       setAvatarUploading(true);
       try {
-        const { file_url } = await base44.integrations.Core.UploadFile({ file: result.file });
+        const { file_url } = await db.integrations.Core.UploadFile({ file: result.file });
         setProfile(p => ({ ...p, avatar_url: file_url }));
       } catch (err) {
         console.error("Avatar upload failed:", err);
@@ -79,7 +79,7 @@ export default function Onboarding() {
       const primarySport = selectedSports[0] || "";
 
       // Save profile to auth
-      await base44.auth.updateMe({
+      await db.auth.updateMe({
         full_name: profile.full_name,
         preferred_sports: selectedSports,
         onboarding_complete: true,
@@ -89,7 +89,7 @@ export default function Onboarding() {
       if (user?.id) localStorage.setItem(`ob_${user.id}`, '1');
 
       if (selectedRole === "admin") {
-        const createdOrg = await base44.entities.Organization.create({
+        const createdOrg = await db.entities.Organization.create({
           name: org.name,
           sport: org.sport || primarySport,
           location: org.location,
@@ -99,7 +99,7 @@ export default function Onboarding() {
           subscription_status: "trialing",
           max_athletes: 10,
         });
-        await base44.entities.OrgMember.create({
+        await db.entities.OrgMember.create({
           organization_id: createdOrg.id,
           user_email: user.email,
           user_name: profile.full_name || user.full_name,
@@ -109,12 +109,12 @@ export default function Onboarding() {
           phone: profile.phone,
         });
       } else {
-        const pendingInvites = await base44.entities.OrgInvite.filter({ invited_email: user.email, status: "pending" });
+        const pendingInvites = await db.entities.OrgInvite.filter({ invited_email: user.email, status: "pending" });
         if (pendingInvites[0]) {
           const invite = pendingInvites[0];
-          const members = await base44.entities.OrgMember.filter({ organization_id: invite.organization_id, user_email: user.email });
+          const members = await db.entities.OrgMember.filter({ organization_id: invite.organization_id, user_email: user.email });
           if (members[0]) {
-            await base44.entities.OrgMember.update(members[0].id, {
+            await db.entities.OrgMember.update(members[0].id, {
               user_name: profile.full_name || user.full_name,
               status: "active",
               sport: primarySport,
@@ -122,7 +122,7 @@ export default function Onboarding() {
               phone: profile.phone,
             });
           }
-          await base44.entities.OrgInvite.update(invite.id, { status: "accepted" });
+          await db.entities.OrgInvite.update(invite.id, { status: "accepted" });
         }
       }
     } catch (err) {

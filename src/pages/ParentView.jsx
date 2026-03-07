@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingUp, Video, Calendar, Dumbbell, Loader2, Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +11,9 @@ export default function ParentView() {
   const [membership, setMembership] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       setMembership(memberships[0] || null);
     }).catch(() => {});
   }, []);
@@ -24,7 +24,7 @@ export default function ParentView() {
   const { data: athleteProfiles } = useQuery({
     queryKey: ["athlete-profiles", athleteEmails.join(",")],
     queryFn: async () => {
-      const all = await base44.entities.OrgMember.filter({ organization_id: orgId });
+      const all = await db.entities.OrgMember.filter({ organization_id: orgId });
       return all.filter(m => athleteEmails.includes(m.user_email));
     },
     enabled: !!orgId && athleteEmails.length > 0,
@@ -33,7 +33,7 @@ export default function ParentView() {
   const { data: videos } = useQuery({
     queryKey: ["athlete-videos-parent", athleteEmails.join(","), orgId],
     queryFn: async () => {
-      const all = await base44.entities.AthleteVideo.filter({ organization_id: orgId });
+      const all = await db.entities.AthleteVideo.filter({ organization_id: orgId });
       return all.filter(v => athleteEmails.includes(v.athlete_email));
     },
     enabled: !!orgId && athleteEmails.length > 0,
@@ -42,7 +42,7 @@ export default function ParentView() {
   const { data: plans } = useQuery({
     queryKey: ["athlete-plans-parent", athleteEmails.join(","), orgId],
     queryFn: async () => {
-      const all = await base44.entities.TrainingPlan.filter({ organization_id: orgId });
+      const all = await db.entities.TrainingPlan.filter({ organization_id: orgId });
       return all.filter(p => athleteEmails.includes(p.athlete_email));
     },
     enabled: !!orgId && athleteEmails.length > 0,
@@ -51,7 +51,7 @@ export default function ParentView() {
   const { data: sessions } = useQuery({
     queryKey: ["athlete-sessions-parent", orgId],
     queryFn: async () => {
-      const all = await base44.entities.TrainingSession.filter({ organization_id: orgId });
+      const all = await db.entities.TrainingSession.filter({ organization_id: orgId });
       return all.filter(s => new Date(s.scheduled_date) >= new Date());
     },
     enabled: !!orgId,

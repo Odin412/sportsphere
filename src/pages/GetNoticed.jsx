@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   MapPin, Search, Star, Trophy, Users, Eye, MessageCircle,
-  ChevronRight, Loader2, Filter, Zap, Medal, TrendingUp,
+  ChevronRight, Loader2, Filter, Zap, Medal, TrendingUp, ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
 import moment from "moment";
@@ -46,21 +46,21 @@ export default function GetNoticed() {
   // All sport profiles (athlete role)
   const { data: allProfiles = [], isLoading } = useQuery({
     queryKey: ["sport-profiles-all"],
-    queryFn: () => base44.entities.SportProfile.filter({ role: "athlete" }, "-created_at", 100),
+    queryFn: () => db.entities.SportProfile.filter({ role: "athlete" }, "-created_at", 100),
     staleTime: 5 * 60 * 1000,
   });
 
   // My own sport profiles
   const { data: myProfiles = [], refetch: refetchMyProfiles } = useQuery({
     queryKey: ["my-sport-profiles", user?.email],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: user.email }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
   // Recent posts for athletes (to show activity)
   const { data: recentPosts = [] } = useQuery({
     queryKey: ["recent-athlete-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 200),
+    queryFn: () => db.entities.Post.list("-created_date", 200),
     staleTime: 60000,
   });
 
@@ -307,7 +307,7 @@ export default function GetNoticed() {
                       </div>
 
                       {/* Actions */}
-                      <div className="flex gap-2 mt-3">
+                      <div className="flex gap-2 mt-3 flex-wrap">
                         <Link
                           to={createPageUrl("UserProfile") + `?email=${profile.user_email}`}
                           className="flex-1"
@@ -317,6 +317,16 @@ export default function GetNoticed() {
                             className="w-full bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs"
                           >
                             View Profile <ChevronRight className="w-3 h-3 ml-1" />
+                          </Button>
+                        </Link>
+                        <Link to={`${createPageUrl("ScoutCard")}?email=${profile.user_email}`}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="border-red-800 text-red-400 hover:bg-red-950/50 hover:text-red-300 rounded-xl px-3"
+                            title="View Scout Card"
+                          >
+                            <ShieldCheck className="w-4 h-4" />
                           </Button>
                         </Link>
                         <Button

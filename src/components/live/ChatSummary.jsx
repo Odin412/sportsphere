@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { MessageSquare, TrendingUp, Loader2, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ export default function ChatSummary({ messages, streamTitle, streamDescription }
 
     setLoading(true);
     try {
-      const result = await base44.functions.invoke('analyzeChat', {
+      const result = await db.functions.invoke('analyzeChat', {
         action: 'sentiment_summary',
         messages: messages.map(m => ({ message: m.message }))
       });

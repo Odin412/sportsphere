@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -77,14 +77,14 @@ export default function ScoutingHub() {
   // All athlete sport profiles
   const { data: allProfiles = [], isLoading } = useQuery({
     queryKey: ["sport-profiles-scouts"],
-    queryFn: () => base44.entities.SportProfile.filter({ role: "athlete" }, null, 150),
+    queryFn: () => db.entities.SportProfile.filter({ role: "athlete" }, null, 150),
     staleTime: 5 * 60 * 1000,
   });
 
   // Recent posts (for post count per athlete)
   const { data: recentPosts = [] } = useQuery({
     queryKey: ["recent-posts-scout"],
-    queryFn: () => base44.entities.Post.list("-created_date", 200),
+    queryFn: () => db.entities.Post.list("-created_date", 200),
     staleTime: 60000,
   });
 
@@ -92,7 +92,7 @@ export default function ScoutingHub() {
   const { data: selectedStats = [], isLoading: statsLoading } = useQuery({
     queryKey: ["selected-athlete-stats", selectedProfile?.id],
     queryFn: () =>
-      base44.entities.StatEntry.filter(
+      db.entities.StatEntry.filter(
         { sport_profile_id: selectedProfile.id },
         "-date",
         20

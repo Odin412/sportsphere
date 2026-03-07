@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Sparkles, TrendingUp, Loader2, RefreshCw, User, Calendar, Dumbbell, Video } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,11 @@ export default function AthleteInsights() {
   const [genRec, setGenRec] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setRole("admin"); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) {
         setOrgId(memberships[0].organization_id);
         setRole(memberships[0].role);
@@ -35,7 +35,7 @@ export default function AthleteInsights() {
   const { data: athletes } = useQuery({
     queryKey: ["org-athletes-insights", orgId],
     queryFn: async () => {
-      const members = await base44.entities.OrgMember.filter({ organization_id: orgId });
+      const members = await db.entities.OrgMember.filter({ organization_id: orgId });
       return members.filter(m => m.role === "athlete");
     },
     enabled: !!orgId && (role === "admin" || role === "coach"),
@@ -45,10 +45,10 @@ export default function AthleteInsights() {
     queryKey: ["athlete-full-data", selectedAthleteEmail, orgId],
     queryFn: async () => {
       const [plans, sessions, videos, progress] = await Promise.all([
-        base44.entities.TrainingPlan.filter({ organization_id: orgId, athlete_email: selectedAthleteEmail }),
-        base44.entities.TrainingSession.filter({ organization_id: orgId }),
-        base44.entities.AthleteVideo.filter({ organization_id: orgId, athlete_email: selectedAthleteEmail }),
-        base44.entities.AthleteProgress.filter({ organization_id: orgId, athlete_email: selectedAthleteEmail }),
+        db.entities.TrainingPlan.filter({ organization_id: orgId, athlete_email: selectedAthleteEmail }),
+        db.entities.TrainingSession.filter({ organization_id: orgId }),
+        db.entities.AthleteVideo.filter({ organization_id: orgId, athlete_email: selectedAthleteEmail }),
+        db.entities.AthleteProgress.filter({ organization_id: orgId, athlete_email: selectedAthleteEmail }),
       ]);
       const athleteSessions = sessions.filter(s => s.attendees?.includes(selectedAthleteEmail));
       return { plans, sessions: athleteSessions, videos, progress };
@@ -59,7 +59,7 @@ export default function AthleteInsights() {
   const { data: memberProfile } = useQuery({
     queryKey: ["athlete-member-profile", selectedAthleteEmail, orgId],
     queryFn: async () => {
-      const members = await base44.entities.OrgMember.filter({ organization_id: orgId, user_email: selectedAthleteEmail });
+      const members = await db.entities.OrgMember.filter({ organization_id: orgId, user_email: selectedAthleteEmail });
       return members[0] || null;
     },
     enabled: !!orgId && !!selectedAthleteEmail,
@@ -72,7 +72,7 @@ export default function AthleteInsights() {
     const reviewedVideos = athleteData.videos.filter(v => v.coach_reviewed);
     const recentMetrics = athleteData.progress.slice(-10);
 
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are a sports analytics AI. Generate a concise performance summary for this athlete.
 
 Athlete: ${memberProfile?.user_name || selectedAthleteEmail}
@@ -102,7 +102,7 @@ Keep it encouraging, specific, and actionable. Address the athlete directly.`,
     const activePlan = athleteData.plans.find(p => p.status === "active");
     const lastSession = athleteData.sessions.sort((a, b) => new Date(b.scheduled_date) - new Date(a.scheduled_date))[0];
 
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are an expert sports coach AI. Provide personalized next-week training recommendations.
 
 Athlete: ${memberProfile?.user_name || selectedAthleteEmail}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, Clock, SlidersHorizontal, Play } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import moment from "moment";
 import { debounce } from "lodash";
 
@@ -73,7 +73,7 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const debouncedSetQuery = useCallback(
@@ -95,32 +95,32 @@ export default function SearchPage() {
 
   const { data: posts = [], isLoading: loadingPosts } = useQuery({
     queryKey: ["search-posts", debouncedQuery],
-    queryFn: () => base44.entities.Post.list("-created_date", 200),
+    queryFn: () => db.entities.Post.list("-created_date", 200),
     enabled: debouncedQuery.length >= 1,
   });
 
   const { data: users = [], isLoading: loadingUsers } = useQuery({
     queryKey: ["search-users", debouncedQuery],
-    queryFn: () => base44.entities.SportProfile.list("-created_date", 100),
+    queryFn: () => db.entities.SportProfile.list("-created_date", 100),
     enabled: debouncedQuery.length >= 1,
   });
 
   const { data: streams = [], isLoading: loadingStreams } = useQuery({
     queryKey: ["search-streams", debouncedQuery],
-    queryFn: () => base44.entities.LiveStream.list("-started_at", 100),
+    queryFn: () => db.entities.LiveStream.list("-started_at", 100),
     enabled: debouncedQuery.length >= 1,
   });
 
   const { data: challenges = [], isLoading: loadingChallenges } = useQuery({
     queryKey: ["search-challenges", debouncedQuery],
-    queryFn: () => base44.entities.Challenge.list("-created_date", 100),
+    queryFn: () => db.entities.Challenge.list("-created_date", 100),
     enabled: debouncedQuery.length >= 1,
   });
 
   // Explore grid — shown before typing (Instagram Explore-style)
   const { data: explorePosts = [] } = useQuery({
     queryKey: ["explore-grid"],
-    queryFn: () => base44.entities.Post.list("-created_date", 48),
+    queryFn: () => db.entities.Post.list("-created_date", 48),
     staleTime: 5 * 60 * 1000,
     enabled: !debouncedQuery,
   });

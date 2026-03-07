@@ -1,4 +1,4 @@
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 
 /**
  * Uses AI to re-rank posts based on deep user profile analysis.
@@ -45,7 +45,7 @@ export async function getAIRankedPosts({ user, posts, userSports, follows, liked
     content_preview: p.content?.slice(0, 80),
   }));
 
-  const result = await base44.integrations.Core.InvokeLLM({
+  const result = await db.integrations.Core.InvokeLLM({
     prompt: `You are a sports social feed recommendation engine. Rank posts for a user based on their profile and interests.
 
 USER:

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, Trophy, MapPin, Clock, Send, Loader2, ArrowLeft, Lightbulb, Users, Heart, Crown, ShoppingBag, Star, CheckCircle, UserCheck, UserPlus, Hourglass, Instagram, Twitter, Youtube, Globe, Pin, Film } from "lucide-react";
+import { MessageCircle, Trophy, MapPin, Clock, Send, Loader2, ArrowLeft, Lightbulb, Users, Heart, Crown, ShoppingBag, Star, CheckCircle, UserCheck, UserPlus, Hourglass, Instagram, Twitter, Youtube, Globe, Pin, Film, ShieldCheck } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { createPageUrl } from "../utils";
-import PostCard from "../components/feed/PostCard";
-import ReelsStatsPanel from "../components/profile/ReelsStatsPanel";
-import SubscriptionTiers from "../components/monetization/SubscriptionTiers";
-import FollowerListModal from "../components/social/FollowerListModal";
+import { createPageUrl } from "@/utils";
+import PostCard from "@/components/feed/PostCard";
+import ReelsStatsPanel from "@/components/profile/ReelsStatsPanel";
+import SubscriptionTiers from "@/components/monetization/SubscriptionTiers";
+import FollowerListModal from "@/components/social/FollowerListModal";
+import TrainingStreak from "@/components/propath/TrainingStreak";
+import WhosScouting from "@/components/propath/WhosScouting";
 
 export default function UserProfile() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -29,12 +31,12 @@ export default function UserProfile() {
   const [showFollowerList, setShowFollowerList] = useState(null); // null | "followers" | "following"
 
   useEffect(() => {
-    base44.auth.me().then(setCurrentUser).catch(() => {});
+    db.auth.me().then(setCurrentUser).catch(() => {});
   }, []);
 
   useEffect(() => {
     if (currentUser && profileEmail) {
-      base44.entities.Follow.filter({ 
+      db.entities.Follow.filter({ 
         follower_email: currentUser.email, 
         following_email: profileEmail 
       }).then(follows => {
@@ -46,26 +48,26 @@ export default function UserProfile() {
 
   const { data: profiles } = useQuery({
     queryKey: ["user-profiles", profileEmail],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: profileEmail }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: profileEmail }),
     enabled: !!profileEmail,
   });
 
   const { data: posts } = useQuery({
     queryKey: ["user-posts", profileEmail],
-    queryFn: () => base44.entities.Post.filter({ author_email: profileEmail }, "-created_date", 20),
+    queryFn: () => db.entities.Post.filter({ author_email: profileEmail }, "-created_date", 20),
     enabled: !!profileEmail,
   });
 
   const profile = profiles?.[0];
 
   const startConversation = async () => {
-    const existing = await base44.entities.Conversation.filter({ participants: currentUser.email });
+    const existing = await db.entities.Conversation.filter({ participants: currentUser.email });
     const found = existing.find(c => c.participants?.includes(profileEmail));
     
     if (found) {
       navigate(createPageUrl("Messages") + `?conv=${found.id}`);
     } else {
-      const conv = await base44.entities.Conversation.create({
+      const conv = await db.entities.Conversation.create({
         participants: [currentUser.email, profileEmail],
         participant_names: [currentUser.full_name, profile?.user_name || profileEmail],
       });
@@ -75,7 +77,7 @@ export default function UserProfile() {
 
   const sendAdviceRequest = async () => {
     setSending(true);
-    await base44.entities.AdviceRequest.create({
+    await db.entities.AdviceRequest.create({
       from_email: currentUser.email,
       from_name: currentUser.full_name,
       to_email: profileEmail,
@@ -93,23 +95,23 @@ export default function UserProfile() {
 
   const toggleFollow = async () => {
     if (followStatus) {
-      const follows = await base44.entities.Follow.filter({ 
+      const follows = await db.entities.Follow.filter({ 
         follower_email: currentUser.email, 
         following_email: profileEmail 
       });
       if (follows[0]) {
-        await base44.entities.Follow.delete(follows[0].id);
+        await db.entities.Follow.delete(follows[0].id);
         setFollowStatus(null);
       }
     } else {
-      await base44.entities.Follow.create({
+      await db.entities.Follow.create({
         follower_email: currentUser.email,
         following_email: profileEmail,
         status: "pending",
       });
       setFollowStatus("pending");
 
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: profileEmail,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,
@@ -124,7 +126,7 @@ export default function UserProfile() {
   const { data: pinnedHighlight } = useQuery({
     queryKey: ["pinned-highlight", profileEmail],
     queryFn: async () => {
-      const highlights = await base44.entities.Highlight.filter({ user_email: profileEmail });
+      const highlights = await db.entities.Highlight.filter({ user_email: profileEmail });
       return highlights.find(h => h.is_pinned && h.item_type === "post") || null;
     },
     enabled: !!profileEmail,
@@ -134,7 +136,7 @@ export default function UserProfile() {
   const { data: userRecord } = useQuery({
     queryKey: ["user-record", profileEmail],
     queryFn: async () => {
-      const users = await base44.entities.User.list();
+      const users = await db.entities.User.list();
       return users.find(u => u.email === profileEmail) || null;
     },
     enabled: !!profileEmail,
@@ -142,13 +144,32 @@ export default function UserProfile() {
 
   const { data: followerCount } = useQuery({
     queryKey: ["follower-count", profileEmail],
-    queryFn: () => base44.entities.Follow.filter({ following_email: profileEmail, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ following_email: profileEmail, status: "accepted" }),
     enabled: !!profileEmail,
   });
 
   const { data: followingCount } = useQuery({
     queryKey: ["following-count", profileEmail],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: profileEmail, status: "accepted" }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: profileEmail, status: "accepted" }),
+    enabled: !!profileEmail,
+  });
+
+  const isOwnProfile = currentUser?.email === profileEmail;
+
+  // Streak (own profile only)
+  const { data: userPoints = null } = useQuery({
+    queryKey: ["profile-points", profileEmail],
+    queryFn: async () => {
+      const pts = await db.entities.UserPoints.filter({ user_email: profileEmail });
+      return pts[0] || null;
+    },
+    enabled: !!profileEmail && isOwnProfile,
+  });
+
+  // Stat count for ProPath badge
+  const { data: statEntries = [] } = useQuery({
+    queryKey: ["profile-stat-entries", profileEmail],
+    queryFn: () => db.entities.StatEntry.filter({ user_email: profileEmail }, "-date", 10),
     enabled: !!profileEmail,
   });
 
@@ -233,11 +254,49 @@ export default function UserProfile() {
                     <ShoppingBag className="w-4 h-4" /> Shop
                   </Button>
                 </Link>
+                {statEntries.length > 0 && (
+                  <Link to={`${createPageUrl("ScoutCard")}?email=${profileEmail}`}>
+                    <Button variant="outline" size="sm" className="rounded-xl gap-2 border-red-200 text-red-700 hover:bg-red-50">
+                      <ShieldCheck className="w-4 h-4" /> Scout Card
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            )}
+            {isOwnProfile && (
+              <div className="flex flex-wrap gap-2">
+                <Link to={createPageUrl("ProPathHub")}>
+                  <Button size="sm" className="rounded-xl gap-2 bg-gradient-to-r from-red-800 to-red-600 text-white">
+                    <ShieldCheck className="w-4 h-4" /> ProPath Hub
+                  </Button>
+                </Link>
+                {userPoints?.current_streak > 0 && (
+                  <TrainingStreak streak={userPoints.current_streak} compact={true} />
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
+
+      {/* ProPath panel — own profile with stats */}
+      {isOwnProfile && statEntries.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <WhosScouting athleteEmail={profileEmail} />
+          <Link
+            to={`${createPageUrl("ScoutCard")}?email=${profileEmail}`}
+            className="bg-gradient-to-br from-red-950/40 to-gray-900 border border-red-900/30 rounded-2xl p-4 flex items-center gap-3 hover:border-red-800/50 transition-colors group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-red-900/50 flex items-center justify-center flex-shrink-0">
+              <ShieldCheck className="w-5 h-5 text-red-400" />
+            </div>
+            <div>
+              <p className="text-white font-bold text-sm">Your Scout Card</p>
+              <p className="text-gray-400 text-xs mt-0.5">{statEntries.length} verified stats · Share with recruiters</p>
+            </div>
+          </Link>
+        </div>
+      )}
 
       {/* Bio + Social Links */}
       {(userRecord?.bio || userRecord?.social_links) && (

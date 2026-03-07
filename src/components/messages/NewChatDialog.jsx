@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ export default function NewChatDialog({ user, onSelectConversation, onClose }) {
 
   const { data: profiles, isLoading } = useQuery({
     queryKey: ["all-sport-profiles-chat"],
-    queryFn: () => base44.entities.SportProfile.list("-created_date", 200),
+    queryFn: () => db.entities.SportProfile.list("-created_date", 200),
   });
 
   const seen = new Set();
@@ -56,7 +56,7 @@ export default function NewChatDialog({ user, onSelectConversation, onClose }) {
 
       // For DM, check for existing conversation
       if (selected.length === 1) {
-        const existing = await base44.entities.Conversation.list("-updated_date", 50);
+        const existing = await db.entities.Conversation.list("-updated_date", 50);
         const found = existing.find(c =>
           c.participants?.includes(user.email) && c.participants?.includes(selected[0].user_email) && c.participants?.length === 2
         );
@@ -67,7 +67,7 @@ export default function NewChatDialog({ user, onSelectConversation, onClose }) {
         }
       }
 
-      const conv = await base44.entities.Conversation.create({
+      const conv = await db.entities.Conversation.create({
         participants,
         participant_names: participantNames,
         participant_avatars: participantAvatars,

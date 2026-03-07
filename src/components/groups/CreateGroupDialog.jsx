@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -31,7 +31,7 @@ export default function CreateGroupDialog({ open, onOpenChange, user, onSuccess 
 
     setCreating(true);
     try {
-      await base44.entities.Group.create({
+      await db.entities.Group.create({
         ...formData,
         membership_fee: parseFloat(formData.membership_fee) || 0,
         creator_email: user.email,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { supabase } from "@/api/base44Client";
+import { supabase } from "@/api/db";
 import { Heart, MessageCircle, UserPlus, AtSign, Bell, Radio, DollarSign, Trophy, X, Lightbulb } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";

@@ -1,4 +1,4 @@
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 
 const POINTS_CONFIG = {
   POST_CREATED: 10,
@@ -32,11 +32,11 @@ export async function awardPoints(userEmail, action, amount = null) {
     const points = amount || POINTS_CONFIG[action] || 0;
     if (points === 0) return;
 
-    const userPointsList = await base44.entities.UserPoints.filter({ user_email: userEmail });
+    const userPointsList = await db.entities.UserPoints.filter({ user_email: userEmail });
     let userPoints = userPointsList[0];
 
     if (!userPoints) {
-      userPoints = await base44.entities.UserPoints.create({
+      userPoints = await db.entities.UserPoints.create({
         user_email: userEmail,
         total_points: 0,
         level: 1,
@@ -62,7 +62,7 @@ export async function awardPoints(userEmail, action, amount = null) {
       updates.forum_contributions = (userPoints.forum_contributions || 0) + 1;
     }
 
-    await base44.entities.UserPoints.update(userPoints.id, updates);
+    await db.entities.UserPoints.update(userPoints.id, updates);
 
     // Check for new badges
     const updatedPoints = { ...userPoints, ...updates };
@@ -76,12 +76,12 @@ export async function awardPoints(userEmail, action, amount = null) {
 
 async function checkAndAwardBadges(userEmail, userPoints) {
   try {
-    const earnedBadges = await base44.entities.UserBadge.filter({ user_email: userEmail });
+    const earnedBadges = await db.entities.UserBadge.filter({ user_email: userEmail });
     const earnedBadgeIds = earnedBadges.map(b => b.badge_id);
 
     for (const badge of BADGES) {
       if (!earnedBadgeIds.includes(badge.id) && badge.condition(userPoints)) {
-        await base44.entities.UserBadge.create({
+        await db.entities.UserBadge.create({
           user_email: userEmail,
           badge_id: badge.id,
           badge_name: badge.name,
@@ -91,7 +91,7 @@ async function checkAndAwardBadges(userEmail, userPoints) {
         });
 
         // Notify user
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: userEmail,
           actor_email: "system",
           actor_name: "SportHub",

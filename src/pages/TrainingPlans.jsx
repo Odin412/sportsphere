@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Dumbbell, Plus, Sparkles, Loader2, ChevronRight, Calendar, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,11 +19,11 @@ export default function TrainingPlans() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setRole("admin"); return; }
-      const memberships = await base44.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
       if (memberships[0]) { setOrgId(memberships[0].organization_id); setRole(memberships[0].role); }
     }).catch(() => {});
   }, []);
@@ -32,9 +32,9 @@ export default function TrainingPlans() {
     queryKey: ["training-plans", orgId, user?.email, role],
     queryFn: async () => {
       if (role === "athlete") {
-        return base44.entities.TrainingPlan.filter({ organization_id: orgId, athlete_email: user.email });
+        return db.entities.TrainingPlan.filter({ organization_id: orgId, athlete_email: user.email });
       }
-      return base44.entities.TrainingPlan.filter({ organization_id: orgId });
+      return db.entities.TrainingPlan.filter({ organization_id: orgId });
     },
     enabled: !!orgId && !!role,
   });
@@ -42,7 +42,7 @@ export default function TrainingPlans() {
   const { data: athletes } = useQuery({
     queryKey: ["org-athletes", orgId],
     queryFn: async () => {
-      const members = await base44.entities.OrgMember.filter({ organization_id: orgId });
+      const members = await db.entities.OrgMember.filter({ organization_id: orgId });
       return members.filter(m => m.role === "athlete");
     },
     enabled: !!orgId && (role === "admin" || role === "coach"),

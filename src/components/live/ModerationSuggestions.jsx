@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ export default function ModerationSuggestions({ message, streamId, isHost, onAct
     const analyzeModerator = async () => {
       setLoading(true);
       try {
-        const result = await base44.functions.invoke('analyzeMessageForModeration', {
+        const result = await db.functions.invoke('analyzeMessageForModeration', {
           message,
           streamId,
         });

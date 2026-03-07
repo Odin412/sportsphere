@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -17,24 +17,24 @@ export default function Leaderboard() {
   const [sportFilter, setSportFilter] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: topUsers = [] } = useQuery({
     queryKey: ["leaderboard-points"],
-    queryFn: () => base44.entities.UserPoints.list("-total_points", 50),
+    queryFn: () => db.entities.UserPoints.list("-total_points", 50),
     staleTime: 2 * 60 * 1000,
   });
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["users"],
-    queryFn: () => base44.entities.User.list(),
+    queryFn: () => db.entities.User.list(),
     staleTime: 5 * 60 * 1000,
   });
 
   const { data: recentPosts = [] } = useQuery({
     queryKey: ["leaderboard-recent-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 300),
+    queryFn: () => db.entities.Post.list("-created_date", 300),
     enabled: period !== "all",
     staleTime: 5 * 60 * 1000,
   });

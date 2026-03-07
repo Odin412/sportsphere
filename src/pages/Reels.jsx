@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
-import ReelCard from "../components/reels/ReelCard";
+import ReelCard from "@/components/reels/ReelCard";
 import { Loader2, Sparkles, Settings, Plus, Play, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
+import FeedPreferencesDialog from "@/components/reels/FeedPreferencesDialog";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
@@ -18,14 +18,14 @@ export default function Reels() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   // Fetch user preferences
   const { data: preferences } = useQuery({
     queryKey: ["feed-preferences", user?.email],
     queryFn: async () => {
-      const prefs = await base44.entities.FeedPreferences.filter({ user_email: user.email });
+      const prefs = await db.entities.FeedPreferences.filter({ user_email: user.email });
       return prefs[0] || null;
     },
     enabled: !!user,
@@ -34,13 +34,13 @@ export default function Reels() {
   // Fetch user's engagement data for personalization
   const { data: follows = [] } = useQuery({
     queryKey: ["user-follows", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user,
   });
 
   const { data: likedPosts = [] } = useQuery({
     queryKey: ["user-likes", user?.email],
-    queryFn: () => base44.entities.Post.list("-created_date", 500).then(posts => 
+    queryFn: () => db.entities.Post.list("-created_date", 500).then(posts => 
       posts.filter(p => p.likes?.includes(user.email))
     ),
     enabled: !!user,
@@ -48,19 +48,19 @@ export default function Reels() {
 
   const { data: userProfiles = [] } = useQuery({
     queryKey: ["user-sport-profiles", user?.email],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: user.email }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
   // Fetch all content
   const { data: allPosts = [], isLoading: postsLoading } = useQuery({
     queryKey: ["all-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 100),
+    queryFn: () => db.entities.Post.list("-created_date", 100),
   });
 
   const { data: liveStreams = [] } = useQuery({
     queryKey: ["live-streams-reels"],
-    queryFn: () => base44.entities.LiveStream.filter({ status: "live" }),
+    queryFn: () => db.entities.LiveStream.filter({ status: "live" }),
     refetchInterval: 10000,
   });
 

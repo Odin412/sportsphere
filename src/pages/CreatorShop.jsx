@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCart, Package, Download, Plus } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
-import ProductDialog from "../components/shop/ProductDialog";
-import ProductPurchaseDialog from "../components/shop/ProductPurchaseDialog";
+import ProductDialog from "@/components/shop/ProductDialog";
+import ProductPurchaseDialog from "@/components/shop/ProductPurchaseDialog";
 
 export default function CreatorShop() {
   const [user, setUser] = useState(null);
@@ -19,19 +19,19 @@ export default function CreatorShop() {
   const creatorEmail = urlParams.get("creator") || null;
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["products", creatorEmail],
     queryFn: () => creatorEmail 
-      ? base44.entities.Product.filter({ creator_email: creatorEmail, is_active: true })
-      : base44.entities.Product.filter({ is_active: true }, "-created_date", 50),
+      ? db.entities.Product.filter({ creator_email: creatorEmail, is_active: true })
+      : db.entities.Product.filter({ is_active: true }, "-created_date", 50),
   });
 
   const { data: myPurchases = [] } = useQuery({
     queryKey: ["my-purchases", user?.email],
-    queryFn: () => base44.entities.Purchase.filter({ buyer_email: user.email }),
+    queryFn: () => db.entities.Purchase.filter({ buyer_email: user.email }),
     enabled: !!user,
   });
 

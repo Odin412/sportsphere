@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "./utils";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Home, User, MessageCircle, Search, Bell, Plus, Menu, X,
   Trophy, Flame, Globe, Sparkles, Radio, Activity, Bookmark,
   Crown, Video, Shield, ShieldAlert, Settings, ChevronDown,
-  ChevronUp, Compass, Zap, Eye, BarChart2, Crosshair,
+  ChevronUp, Compass, Zap, Eye, BarChart2, Crosshair, ShieldCheck, Lock,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RecommendationNotification from "./components/notifications/RecommendationNotification";
@@ -20,9 +20,8 @@ const PRIMARY_NAV = [
   { name: "Feed", page: "Feed", icon: Home },
   { name: "Search", page: "Search", icon: Search },
   { name: "Reels", page: "Reels", icon: Flame },
-  { name: "Discover", page: "Discover", icon: Compass },
+  { name: "ProPath", page: "ProPathHub", icon: ShieldCheck },
   { name: "Live", page: "Live", icon: Radio },
-  { name: "Challenges", page: "Challenges", icon: Trophy },
   { name: "Messages", page: "Messages", icon: MessageCircle },
   { name: "Profile", page: "Profile", icon: User },
 ];
@@ -31,6 +30,9 @@ const PRIMARY_NAV = [
 const SECONDARY_NAV = [
   { name: "For You", page: "ForYou", icon: Sparkles },
   { name: "Get Noticed", page: "GetNoticed", icon: Eye },
+  { name: "The Vault", page: "TheVault", icon: Lock },
+  { name: "Discover", page: "Discover", icon: Compass },
+  { name: "Challenges", page: "Challenges", icon: Trophy },
   { name: "Performance", page: "PerformanceHub", icon: BarChart2 },
   { name: "Scouting Hub", page: "ScoutingHub", icon: Crosshair },
   { name: "Events", page: "Events", icon: Trophy },
@@ -67,7 +69,7 @@ export default function Layout({ children, currentPageName }) {
     queryKey: ["unread-notifications", user?.email],
     queryFn: async () => {
       if (!user?.email) return 0;
-      const notifs = await base44.entities.Notification.filter({
+      const notifs = await db.entities.Notification.filter({
         recipient_email: user.email,
         is_read: false,
       });
@@ -80,7 +82,7 @@ export default function Layout({ children, currentPageName }) {
   // Real-time subscription to invalidate count on new notifications
   useEffect(() => {
     if (!user?.email) return;
-    const unsub = base44.entities.Notification.subscribeToChanges(
+    const unsub = db.entities.Notification.subscribeToChanges(
       { recipient_email: user.email },
       () => queryClient.invalidateQueries({ queryKey: ["unread-notifications", user.email] })
     );

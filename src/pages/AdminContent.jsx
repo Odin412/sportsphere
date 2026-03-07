@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Trash2, AlertTriangle, Image, Video, FileText,
@@ -70,17 +70,17 @@ export default function AdminContent() {
 
   const { data: posts = [], isLoading: postsLoading } = useQuery({
     queryKey: ["admin-content-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 200),
+    queryFn: () => db.entities.Post.list("-created_date", 200),
   });
 
   const { data: reports = [] } = useQuery({
     queryKey: ["admin-content-reports"],
-    queryFn: () => base44.entities.Report.list("-created_date", 200),
+    queryFn: () => db.entities.Report.list("-created_date", 200),
   });
 
   const { data: flags = [] } = useQuery({
     queryKey: ["admin-content-flags"],
-    queryFn: () => base44.entities.ModerationFlag.list("-created_date", 200),
+    queryFn: () => db.entities.ModerationFlag.list("-created_date", 200),
   });
 
   // Sets of reported / flagged post IDs
@@ -127,7 +127,7 @@ export default function AdminContent() {
   const handleDelete = async (ids) => {
     setDeleting(true);
     try {
-      await Promise.all([...ids].map(id => base44.entities.Post.delete(id)));
+      await Promise.all([...ids].map(id => db.entities.Post.delete(id)));
       setSelected(s => { const n = new Set(s); ids.forEach(id => n.delete(id)); return n; });
       queryClient.invalidateQueries({ queryKey: ["admin-content-posts"] });
     } finally {

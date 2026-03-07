@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,9 +20,9 @@ export default function ContentDigest({ user, followedEmails, interests }) {
     setDigest(null);
 
     const [posts, streams, events] = await Promise.all([
-      base44.entities.Post.list("-created_date", 50),
-      base44.entities.LiveStream.list("-started_at", 20),
-      base44.entities.Event.list("-date", 20),
+      db.entities.Post.list("-created_date", 50),
+      db.entities.LiveStream.list("-started_at", 20),
+      db.entities.Event.list("-date", 20),
     ]);
 
     // Filter to followed creators + interests
@@ -62,7 +62,7 @@ Return JSON:
   "closing": string
 }`;
 
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt,
       response_json_schema: {
         type: "object",
@@ -92,7 +92,7 @@ ${digest.highlights.map(h => `<li><strong>${h.title}</strong> — ${h.descriptio
 <hr/>
 <p style="font-size:12px;color:#666">SportHub · <a href="#">Manage preferences</a></p>
     `;
-    await base44.integrations.Core.SendEmail({
+    await db.integrations.Core.SendEmail({
       to: user.email,
       subject: `🔥 Your SportHub Digest: ${digest.headline}`,
       body,

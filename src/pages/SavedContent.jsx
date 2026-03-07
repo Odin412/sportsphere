@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Bookmark, Loader2, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import PostCard from "../components/feed/PostCard";
+import PostCard from "@/components/feed/PostCard";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
 
 export default function SavedContent() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: savedItems = [], isLoading, refetch } = useQuery({
     queryKey: ["saved-content", user?.email],
-    queryFn: () => base44.entities.SavedContent.filter({ user_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.SavedContent.filter({ user_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
   const handleDelete = async (id) => {
-    await base44.entities.SavedContent.delete(id);
+    await db.entities.SavedContent.delete(id);
     toast.success("Removed from saved");
     refetch();
   };

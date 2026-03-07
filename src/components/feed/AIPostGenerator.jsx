@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Sparkles, Loader2, RefreshCw, ChevronDown, ChevronUp, Lightbulb, TrendingUp, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,7 +27,7 @@ export default function AIPostGenerator({ sport, category, onUseContent }) {
     setGenerated("");
     const sportContext = sport ? `for ${sport}` : "for sports in general";
     const categoryContext = category ? `in the "${category}" category` : "";
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `You are a sports social media content creator. Write an engaging, authentic social media post ${sportContext} ${categoryContext}.
 
 User's request: "${usePrompt}"
@@ -48,7 +48,7 @@ Guidelines:
     setLoading(true);
     setGenerated("");
     const sportContext = sport ? `for ${sport}` : "for sports in general";
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `Generate 5 creative and engaging sports social media post ideas ${sportContext}. 
 Format as a numbered list, one idea per line. Each idea should be a single sentence describing what the post would be about. Keep each idea short and punchy.
 Return ONLY the numbered list.`,

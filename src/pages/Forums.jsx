@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MessageCircle, Eye, ThumbsUp, Plus, Search, TrendingUp, Pin, Flame } from "lucide-react";
 import moment from "moment";
 import { toast } from "sonner";
-import { awardPoints } from "../components/gamification/PointsHelper";
+import { awardPoints } from "@/components/gamification/PointsHelper";
 
 const CATEGORIES = [
   { value: "training_tips", label: "Training Tips", icon: "💪" },
@@ -45,12 +45,12 @@ export default function Forums() {
   });
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: topics = [], isLoading } = useQuery({
     queryKey: ["forums"],
-    queryFn: () => base44.entities.Forum.list("-last_activity", 100),
+    queryFn: () => db.entities.Forum.list("-last_activity", 100),
   });
 
   const filteredTopics = topics.filter(topic => {
@@ -69,7 +69,7 @@ export default function Forums() {
     }
 
     try {
-      const topic = await base44.entities.Forum.create({
+      const topic = await db.entities.Forum.create({
         ...formData,
         author_email: user.email,
         author_name: user.full_name,

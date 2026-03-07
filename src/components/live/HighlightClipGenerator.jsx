@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -143,7 +143,7 @@ export default function HighlightClipGenerator({ stream }) {
     // Parse highlights from the stream's ai analysis if stored, or pass summary
     const highlights = stream.ai_analysis?.key_moments || [];
 
-    const res = await base44.functions.invoke("generateHighlightClips", {
+    const res = await db.functions.invoke("generateHighlightClips", {
       stream_id: stream.id,
       stream_title: stream.title,
       stream_sport: stream.sport,

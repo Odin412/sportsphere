@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -9,9 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import StatInputDialog from "@/components/stats/StatInputDialog";
 import StatsChart from "@/components/stats/StatsChart";
+import PRBadge from "@/components/propath/PRBadge";
+import TrainingStreak from "@/components/propath/TrainingStreak";
 import {
   BarChart2, Plus, Calendar, Trophy, TrendingUp,
-  ChevronDown, Loader2, Flame, Activity,
+  ChevronDown, Loader2, Flame, Activity, ShieldCheck,
 } from "lucide-react";
 import moment from "moment";
 
@@ -35,11 +37,12 @@ export default function PerformanceHub() {
   const [selectedProfileId, setSelectedProfileId] = useState(null);
   const [showLogDialog, setShowLogDialog] = useState(false);
   const [expandedSession, setExpandedSession] = useState(null);
+  const [newPRMetric, setNewPRMetric] = useState(null);
 
   // User's sport profiles
   const { data: profiles = [], isLoading: profilesLoading } = useQuery({
     queryKey: ["my-sport-profiles-perf", user?.email],
-    queryFn: () => base44.entities.SportProfile.filter({ user_email: user.email }),
+    queryFn: () => db.entities.SportProfile.filter({ user_email: user.email }),
     enabled: !!user,
   });
 
@@ -49,7 +52,7 @@ export default function PerformanceHub() {
   const { data: statEntries = [], isLoading: statsLoading } = useQuery({
     queryKey: ["stat-entries-hub", selectedProfile?.id],
     queryFn: () =>
-      base44.entities.StatEntry.filter(
+      db.entities.StatEntry.filter(
         { sport_profile_id: selectedProfile.id },
         "-date",
         50
@@ -69,12 +72,51 @@ export default function PerformanceHub() {
   });
 
   const handleSaveStats = async (data) => {
-    await base44.entities.StatEntry.create({
+    await db.entities.StatEntry.create({
       sport_profile_id: selectedProfile.id,
       user_email: user.email,
       sport: selectedProfile.sport,
       ...data,
     });
+
+    // PR detection — check each new metric against existing bests
+    const newMetrics = data.metrics || [];
+    for (const newM of newMetrics) {
+      const prevBest = personalBests[newM.name];
+      if (newM.value > 0 && (!prevBest || newM.value > prevBest.value)) {
+        setNewPRMetric(newM.name);
+        setTimeout(() => setNewPRMetric(null), 5000);
+        break;
+      }
+    }
+
+    // Streak update
+    try {
+      const pts = await db.entities.UserPoints.filter({ user_email: user.email });
+      const today = new Date().toDateString();
+      if (pts.length > 0) {
+        const p = pts[0];
+        const last = p.last_activity_date ? new Date(p.last_activity_date).toDateString() : "";
+        const yesterday = new Date(Date.now() - 86400000).toDateString();
+        const newStreak = last === yesterday ? (p.current_streak || 0) + 1
+          : last === today ? (p.current_streak || 0) : 1;
+        await db.entities.UserPoints.update(p.id, {
+          current_streak: newStreak,
+          last_activity_date: new Date().toISOString(),
+          workouts_completed: (p.workouts_completed || 0) + 1,
+        });
+      } else {
+        await db.entities.UserPoints.create({
+          user_email: user.email,
+          current_streak: 1,
+          last_activity_date: new Date().toISOString(),
+          workouts_completed: 1,
+          total_points: 10,
+          level: 1,
+        });
+      }
+    } catch {}
+
     setShowLogDialog(false);
     queryClient.invalidateQueries({ queryKey: ["stat-entries-hub"] });
   };
@@ -128,16 +170,26 @@ export default function PerformanceHub() {
             <BarChart2 className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Performance Hub</h1>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-2xl font-bold text-white">Performance Hub</h1>
+              <Link to={createPageUrl("ProPathHub")}>
+                <Badge className="bg-red-900/40 text-red-400 border border-red-800 text-xs gap-1 cursor-pointer hover:bg-red-900/60 transition-colors flex items-center">
+                  <ShieldCheck className="w-3 h-3" /> ProPath
+                </Badge>
+              </Link>
+            </div>
             <p className="text-gray-500 text-sm">Track every game, practice & training session</p>
           </div>
         </div>
-        <Button
-          onClick={() => setShowLogDialog(true)}
-          className="bg-red-600 hover:bg-red-700 text-white rounded-xl gap-2"
-        >
-          <Plus className="w-4 h-4" /> Log Session
-        </Button>
+        <div className="flex items-center gap-2">
+          {newPRMetric && <PRBadge metric={newPRMetric} />}
+          <Button
+            onClick={() => setShowLogDialog(true)}
+            className="bg-red-600 hover:bg-red-700 text-white rounded-xl gap-2"
+          >
+            <Plus className="w-4 h-4" /> Log Session
+          </Button>
+        </div>
       </div>
 
       {/* Sport profile selector */}

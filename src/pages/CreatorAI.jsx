@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sparkles, Wand2, Hash, Video, Copy, Loader2, TrendingUp } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import PremiumGate from "../components/premium/PremiumGate";
+import PremiumGate from "@/components/premium/PremiumGate";
 
 const SPORTS = [
   "Football", "Basketball", "Tennis", "Swimming", "Running", "Cycling",
@@ -28,7 +28,7 @@ export default function CreatorAI() {
   const [captionInput, setCaptionInput] = useState("");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const generatePostIdeas = async () => {
@@ -39,7 +39,7 @@ export default function CreatorAI() {
 
     setLoading(true);
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await db.integrations.Core.InvokeLLM({
         prompt: `You are a social media content strategist for athletes and sports creators.
 
 Generate 5 engaging post ideas for ${sport} content creators. Consider:
@@ -98,7 +98,7 @@ Return a JSON array of post ideas with this structure:
 
     setLoading(true);
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await db.integrations.Core.InvokeLLM({
         prompt: `You are a social media copywriter for sports content creators.
 
 Create an engaging post caption for:
@@ -134,7 +134,7 @@ Return ONLY the caption text, no extra formatting or quotes.`,
 
     setLoading(true);
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await db.integrations.Core.InvokeLLM({
         prompt: `You are a social media hashtag expert for sports content.
 
 Generate relevant hashtags for ${sport} content${topic ? ` about ${topic}` : ""}.
@@ -180,7 +180,7 @@ DO NOT include the # symbol, just the hashtag text.`,
 
     setLoading(true);
     try {
-      const result = await base44.integrations.Core.InvokeLLM({
+      const result = await db.integrations.Core.InvokeLLM({
         prompt: `You are a video script writer for sports reels and short-form content.
 
 Create a 30-60 second video script for:

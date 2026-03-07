@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Shield, Bell, Sliders, Database, CheckCircle,
@@ -59,7 +59,7 @@ export default function AdminSettings() {
   // ── Admin users list ──────────────────────────────────────────────────
   const { data: allProfiles = [] } = useQuery({
     queryKey: ["settings-profiles"],
-    queryFn: () => base44.entities.User.list("-created_at", 500),
+    queryFn: () => db.entities.User.list("-created_at", 500),
   });
 
   const admins = useMemo(() => allProfiles.filter(u => u.role === "admin"), [allProfiles]);
@@ -67,11 +67,11 @@ export default function AdminSettings() {
   // ── Platform stats ────────────────────────────────────────────────────
   const { data: posts = [] } = useQuery({
     queryKey: ["settings-posts"],
-    queryFn: () => base44.entities.Post.list(null, 500),
+    queryFn: () => db.entities.Post.list(null, 500),
   });
   const { data: streams = [] } = useQuery({
     queryKey: ["settings-streams"],
-    queryFn: () => base44.entities.LiveStream.list(null, 200),
+    queryFn: () => db.entities.LiveStream.list(null, 200),
   });
 
   const platformStats = useMemo(() => {
@@ -92,7 +92,7 @@ export default function AdminSettings() {
     if (!announcement.trim()) return;
     setAnnouncementSending(true);
     try {
-      await base44.entities.Post.create({
+      await db.entities.Post.create({
         content: announcement.trim(),
         category: "announcement",
         author_email: "system@sportsphere.app",

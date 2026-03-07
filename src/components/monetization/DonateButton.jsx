@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +25,7 @@ export default function DonateButton({ recipientEmail, recipientName, currentUse
     setSending(true);
 
     try {
-      await base44.entities.Transaction.create({
+      await db.entities.Transaction.create({
         from_email: currentUser.email,
         to_email: recipientEmail,
         type: "donation",
@@ -35,7 +35,7 @@ export default function DonateButton({ recipientEmail, recipientName, currentUse
       });
 
       // Send notification
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: recipientEmail,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,

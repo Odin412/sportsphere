@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +33,7 @@ function TrimEditor({ stream, onClose }) {
 
   const save = async () => {
     setSaving(true);
-    await base44.entities.LiveStream.update(stream.id, {
+    await db.entities.LiveStream.update(stream.id, {
       trim_start_seconds: startSec,
       trim_end_seconds: endSec,
       trim_applied: true,
@@ -136,7 +136,7 @@ function MergeSelector({ streams, onMerge }) {
     if (!title.trim()) return toast.error("Enter a title for the merged clip");
     setMerging(true);
     const clips = selected.map(id => streams.find(s => s.id === id)).filter(Boolean);
-    await base44.entities.LiveStream.create({
+    await db.entities.LiveStream.create({
       host_email: clips[0].host_email,
       host_name: clips[0].host_name,
       host_avatar: clips[0].host_avatar,
@@ -288,7 +288,7 @@ function AnnotationsEditor({ stream, onClose }) {
 
   const save = async () => {
     setSaving(true);
-    await base44.entities.LiveStream.update(stream.id, { text_overlays: overlays });
+    await db.entities.LiveStream.update(stream.id, { text_overlays: overlays });
     qc.invalidateQueries({ queryKey: ["past-streams-vod"] });
     toast.success("Text overlays saved!");
     setSaving(false);
@@ -426,7 +426,7 @@ export default function VODEditor({ user }) {
 
   const { data: pastStreams = [], isLoading } = useQuery({
     queryKey: ["past-streams-vod", user?.email],
-    queryFn: () => base44.entities.LiveStream.filter({ host_email: user.email, status: "ended" }, "-ended_at", 30),
+    queryFn: () => db.entities.LiveStream.filter({ host_email: user.email, status: "ended" }, "-ended_at", 30),
     enabled: !!user,
   });
 

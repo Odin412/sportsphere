@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function PostChallengeUpdateDialog({ challenge, user, participati
     if (!file) return;
     setUploading(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setMediaUrls([...mediaUrls, file_url]);
     } catch (error) {
       toast.error("Failed to upload image");
@@ -42,7 +42,7 @@ export default function PostChallengeUpdateDialog({ challenge, user, participati
 
     setSaving(true);
     try {
-      await base44.entities.ChallengeUpdate.create({
+      await db.entities.ChallengeUpdate.create({
         challenge_id: challenge.id,
         user_email: user.email,
         user_name: user.full_name,
@@ -60,7 +60,7 @@ export default function PostChallengeUpdateDialog({ challenge, user, participati
         const progressPercentage = Math.round((newDaysCompleted / challenge.duration_days) * 100);
         isNowCompleted = progressPercentage >= 100 && participation.status !== "completed";
         
-        await base44.entities.ChallengeParticipant.update(participation.id, {
+        await db.entities.ChallengeParticipant.update(participation.id, {
           days_completed: newDaysCompleted,
           progress_percentage: progressPercentage,
           status: progressPercentage >= 100 ? "completed" : "active",
@@ -70,7 +70,7 @@ export default function PostChallengeUpdateDialog({ challenge, user, participati
 
       // Notify challenge creator of progress update
       if (challenge.creator_email && challenge.creator_email !== user.email) {
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: challenge.creator_email,
           actor_email: user.email,
           actor_name: user.full_name,
@@ -85,7 +85,7 @@ export default function PostChallengeUpdateDialog({ challenge, user, participati
 
       // If completed, notify the participant themselves too (self-celebration)
       if (isNowCompleted) {
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: user.email,
           actor_email: user.email,
           actor_name: user.full_name,

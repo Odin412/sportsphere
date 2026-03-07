@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Heart, MessageCircle, Share2, Play, MoreHorizontal, Bookmark, Flag, AlertTriangle, Star, Eye, Crown, ZoomIn, Trash2, UserPlus, UserCheck, EyeOff, Ban } from "lucide-react";
 import SharePostDialog from "../messages/SharePostDialog";
 import MediaViewer from "./MediaViewer";
@@ -84,14 +84,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
 
   useEffect(() => {
     if (!currentUser) return;
-    base44.entities.Highlight.filter({ user_email: currentUser.email, item_type: "post", item_id: post.id })
+    db.entities.Highlight.filter({ user_email: currentUser.email, item_type: "post", item_id: post.id })
       .then(h => setIsHighlighted(h.length > 0))
       .catch(() => {});
 
     trackView();
 
     if (post.is_premium && post.author_email !== currentUser.email) {
-      base44.entities.Subscription.filter({
+      db.entities.Subscription.filter({
         subscriber_email: currentUser.email,
         creator_email: post.author_email,
         status: "active"
@@ -101,7 +101,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     }
 
     if (post.author_email !== currentUser.email) {
-      base44.entities.Follow.filter({ follower_email: currentUser.email, following_email: post.author_email })
+      db.entities.Follow.filter({ follower_email: currentUser.email, following_email: post.author_email })
         .then(f => setFollowing(f.length > 0))
         .catch(() => {});
     }
@@ -109,7 +109,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
 
   const trackView = async () => {
     if (!currentUser) return;
-    await base44.entities.Post.update(post.id, { views: (post.views || 0) + 1 }).catch(() => {});
+    await db.entities.Post.update(post.id, { views: (post.views || 0) + 1 }).catch(() => {});
   };
 
   const handleLike = async () => {
@@ -118,10 +118,10 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
       : [...(post.likes || []), currentUser.email];
     setLiked(!liked);
     setLikeCount(prev => liked ? prev - 1 : prev + 1);
-    await base44.entities.Post.update(post.id, { likes: newLikes });
+    await db.entities.Post.update(post.id, { likes: newLikes });
     if (!liked) {
       if (post.author_email !== currentUser.email) {
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: post.author_email,
           actor_email: currentUser.email,
           actor_name: currentUser.full_name,
@@ -143,7 +143,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
       localStorage.removeItem(reactionKey);
       setLiked(false);
       setLikeCount(prev => Math.max(0, prev - 1));
-      await base44.entities.Post.update(post.id, {
+      await db.entities.Post.update(post.id, {
         likes: (post.likes || []).filter(e => e !== currentUser.email),
       }).catch(() => {});
     } else {
@@ -153,11 +153,11 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
       if (!wasLiked) {
         setLiked(true);
         setLikeCount(prev => prev + 1);
-        await base44.entities.Post.update(post.id, {
+        await db.entities.Post.update(post.id, {
           likes: [...(post.likes || []), currentUser.email],
         }).catch(() => {});
         if (post.author_email !== currentUser.email) {
-          await base44.entities.Notification.create({
+          await db.entities.Notification.create({
             recipient_email: post.author_email,
             actor_email: currentUser.email,
             actor_name: currentUser.full_name,
@@ -174,17 +174,17 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
 
   const handleFollow = async () => {
     if (following) {
-      const follows = await base44.entities.Follow.filter({ follower_email: currentUser.email, following_email: post.author_email });
-      if (follows[0]) await base44.entities.Follow.delete(follows[0].id);
+      const follows = await db.entities.Follow.filter({ follower_email: currentUser.email, following_email: post.author_email });
+      if (follows[0]) await db.entities.Follow.delete(follows[0].id);
       setFollowing(false);
     } else {
-      await base44.entities.Follow.create({
+      await db.entities.Follow.create({
         follower_email: currentUser.email,
         following_email: post.author_email,
         status: "accepted",
       });
       setFollowing(true);
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: post.author_email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,
@@ -198,7 +198,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const loadComments = async () => {
     if (!showComments) {
       setLoadingComments(true);
-      const cmts = await base44.entities.Comment.filter({ post_id: post.id }, '-created_at').catch(() => []);
+      const cmts = await db.entities.Comment.filter({ post_id: post.id }, '-created_at').catch(() => []);
       setComments(cmts);
       setLoadingComments(false);
     }
@@ -208,7 +208,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const addComment = async () => {
     if (!newComment.trim()) return;
     try {
-      const result = await base44.functions.invoke("moderateContent", {
+      const result = await db.functions.invoke("moderateContent", {
         content_type: "comment",
         content_id: `pending_${Date.now()}`,
         content_text: newComment,
@@ -224,7 +224,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     const mentionRegex = /@(\w+(?:\s+\w+)*)/g;
     const mentions = [...newComment.matchAll(mentionRegex)].map(m => m[1]);
 
-    const comment = await base44.entities.Comment.create({
+    const comment = await db.entities.Comment.create({
       post_id: post.id,
       author_id: currentUser.id,
       author_email: currentUser.email,
@@ -234,10 +234,10 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     });
     setComments(prev => [comment, ...prev]);
     setNewComment("");
-    await base44.entities.Post.update(post.id, { comments_count: (post.comments_count || 0) + 1 }).catch(() => {});
+    await db.entities.Post.update(post.id, { comments_count: (post.comments_count || 0) + 1 }).catch(() => {});
 
     if (post.author_email !== currentUser.email) {
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: post.author_email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,
@@ -250,11 +250,11 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     }
 
     if (mentions.length > 0) {
-      const allUsers = await base44.entities.User.list().catch(() => []);
+      const allUsers = await db.entities.User.list().catch(() => []);
       for (const mention of mentions) {
         const mentioned = allUsers.find(u => u.full_name?.toLowerCase() === mention.toLowerCase());
         if (mentioned && mentioned.email !== currentUser.email) {
-          await base44.entities.Notification.create({
+          await db.entities.Notification.create({
             recipient_email: mentioned.email,
             actor_email: currentUser.email,
             actor_name: currentUser.full_name,
@@ -271,7 +271,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const addReply = async (parentCommentId) => {
     if (!replyText.trim()) return;
     try {
-      const reply = await base44.entities.Comment.create({
+      const reply = await db.entities.Comment.create({
         post_id: post.id,
         parent_comment_id: parentCommentId,
         author_id: currentUser.id,
@@ -288,9 +288,9 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   };
 
   const deleteComment = async (commentId) => {
-    await base44.entities.Comment.delete(commentId).catch(() => {});
+    await db.entities.Comment.delete(commentId).catch(() => {});
     setComments(prev => prev.filter(c => c.id !== commentId));
-    await base44.entities.Post.update(post.id, {
+    await db.entities.Post.update(post.id, {
       comments_count: Math.max(0, (post.comments_count || 1) - 1),
     }).catch(() => {});
   };
@@ -300,7 +300,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const submitReport = async () => {
     if (!reportReason) return;
     setSubmittingReport(true);
-    await base44.entities.Report.create({
+    await db.entities.Report.create({
       reporter_id: currentUser.id,
       reporter_email: currentUser.email,
       reported_item_type: "post",
@@ -318,11 +318,11 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
 
   const toggleHighlight = async () => {
     if (isHighlighted) {
-      const highlights = await base44.entities.Highlight.filter({ user_email: currentUser.email, item_type: "post", item_id: post.id });
-      if (highlights[0]) await base44.entities.Highlight.delete(highlights[0].id);
+      const highlights = await db.entities.Highlight.filter({ user_email: currentUser.email, item_type: "post", item_id: post.id });
+      if (highlights[0]) await db.entities.Highlight.delete(highlights[0].id);
       setIsHighlighted(false);
     } else {
-      await base44.entities.Highlight.create({ user_email: currentUser.email, item_type: "post", item_id: post.id, item_data: post });
+      await db.entities.Highlight.create({ user_email: currentUser.email, item_type: "post", item_id: post.id, item_data: post });
       setIsHighlighted(true);
     }
   };
@@ -400,7 +400,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                     <DropdownMenuItem
                       onClick={async () => {
                         if (!confirm("Delete this post?")) return;
-                        await base44.entities.Post.delete(post.id);
+                        await db.entities.Post.delete(post.id);
                         if (onDelete) onDelete(post.id);
                       }}
                       className="gap-2 text-red-400"
@@ -414,7 +414,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
                     <DropdownMenuItem onClick={async () => {
                       const newVal = !commentsDisabled;
                       setCommentsDisabled(newVal);
-                      await base44.entities.Post.update(post.id, { comments_disabled: newVal });
+                      await db.entities.Post.update(post.id, { comments_disabled: newVal });
                       if (newVal) setShowComments(false);
                     }} className="gap-2 text-gray-300 hover:text-white">
                       <MessageCircle className="w-4 h-4" />

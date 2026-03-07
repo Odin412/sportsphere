@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ export default function StreamSummaryPanel({ stream, transcript, onSummaryGenera
     try {
       setLoading(true);
       setError(null);
-      const response = await base44.functions.invoke('generateStreamSummary', {
+      const response = await db.functions.invoke('generateStreamSummary', {
         stream_id: stream.id,
         transcript: transcript || "",
         title: stream.title,

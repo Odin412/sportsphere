@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { TrendingUp, Loader2, Trophy, Users, Flame } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -13,14 +13,14 @@ export default function TrendingChallenges() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   // Trending challenges (most participants recently)
   const { data: trendingChallenges, isLoading } = useQuery({
     queryKey: ["trending-challenges"],
     queryFn: async () => {
-      const challenges = await base44.entities.Challenge.list("-created_date", 50);
+      const challenges = await db.entities.Challenge.list("-created_date", 50);
       
       return challenges
         .filter(c => c.status === "active")
@@ -33,7 +33,7 @@ export default function TrendingChallenges() {
   const { data: challengesBySport } = useQuery({
     queryKey: ["challenges-by-sport"],
     queryFn: async () => {
-      const challenges = await base44.entities.Challenge.filter({ status: "active" });
+      const challenges = await db.entities.Challenge.filter({ status: "active" });
       const sports = [...new Set(challenges.map(c => c.sport).filter(Boolean))];
       
       return sports.map(sport => ({

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, Tooltip,
@@ -43,22 +43,22 @@ const PIE_COLORS = ["#dc2626", "#2563eb", "#16a34a", "#d97706", "#9333ea", "#089
 export default function AdminAnalytics() {
   const { data: profiles = [], isLoading: loadP } = useQuery({
     queryKey: ["analytics-profiles"],
-    queryFn: () => base44.entities.User.list("-created_at", 500),
+    queryFn: () => db.entities.User.list("-created_at", 500),
   });
 
   const { data: posts = [], isLoading: loadPosts } = useQuery({
     queryKey: ["analytics-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 500),
+    queryFn: () => db.entities.Post.list("-created_date", 500),
   });
 
   const { data: txns = [] } = useQuery({
     queryKey: ["analytics-txns"],
-    queryFn: () => base44.entities.Transaction.list("-created_date", 500),
+    queryFn: () => db.entities.Transaction.list("-created_date", 500),
   });
 
   const { data: follows = [] } = useQuery({
     queryKey: ["analytics-follows"],
-    queryFn: () => base44.entities.Follow.list(null, 500),
+    queryFn: () => db.entities.Follow.list(null, 500),
   });
 
   const loading = loadP || loadPosts;

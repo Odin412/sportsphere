@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingUp, Eye, Heart, MessageCircle, Users, DollarSign, Radio, Activity, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
-import MetricCard from "../components/analytics/MetricCard";
-import EngagementChart from "../components/analytics/EngagementChart";
-import StreamMetrics from "../components/analytics/StreamMetrics";
-import AudienceDemographics from "../components/analytics/AudienceDemographics";
+import { createPageUrl } from "@/utils";
+import MetricCard from "@/components/analytics/MetricCard";
+import EngagementChart from "@/components/analytics/EngagementChart";
+import StreamMetrics from "@/components/analytics/StreamMetrics";
+import AudienceDemographics from "@/components/analytics/AudienceDemographics";
 
 export default function Analytics() {
   const [user, setUser] = useState(null);
   const [timeRange, setTimeRange] = useState("30"); // days
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {
+    db.auth.me().then(setUser).catch(() => {
       window.location.href = createPageUrl("Login");
     });
   }, []);
@@ -22,35 +22,35 @@ export default function Analytics() {
   // Fetch user's posts
   const { data: posts = [] } = useQuery({
     queryKey: ["analytics-posts", user?.email],
-    queryFn: () => base44.entities.Post.filter({ author_email: user.email }, "-created_date"),
+    queryFn: () => db.entities.Post.filter({ author_email: user.email }, "-created_date"),
     enabled: !!user,
   });
 
   // Fetch user's streams
   const { data: streams = [] } = useQuery({
     queryKey: ["analytics-streams", user?.email],
-    queryFn: () => base44.entities.LiveStream.filter({ host_email: user.email }, "-started_at"),
+    queryFn: () => db.entities.LiveStream.filter({ host_email: user.email }, "-started_at"),
     enabled: !!user,
   });
 
   // Fetch followers
   const { data: followers = [] } = useQuery({
     queryKey: ["analytics-followers", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ following_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ following_email: user.email }),
     enabled: !!user,
   });
 
   // Fetch subscriptions (people subscribed to this user)
   const { data: subscribers = [] } = useQuery({
     queryKey: ["analytics-subscribers", user?.email],
-    queryFn: () => base44.entities.Subscription.filter({ creator_email: user.email, status: "active" }),
+    queryFn: () => db.entities.Subscription.filter({ creator_email: user.email, status: "active" }),
     enabled: !!user,
   });
 
   // Fetch revenue
   const { data: transactions = [] } = useQuery({
     queryKey: ["analytics-transactions", user?.email],
-    queryFn: () => base44.entities.Transaction.filter({ to_email: user.email, status: "completed" }),
+    queryFn: () => db.entities.Transaction.filter({ to_email: user.email, status: "completed" }),
     enabled: !!user,
   });
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -22,8 +22,8 @@ export default function FollowerListModal({ profileEmail, mode, onClose }) {
     queryKey: ["follow-list", profileEmail, mode],
     queryFn: () =>
       mode === "followers"
-        ? base44.entities.Follow.filter({ following_email: profileEmail, status: "accepted" })
-        : base44.entities.Follow.filter({ follower_email: profileEmail, status: "accepted" }),
+        ? db.entities.Follow.filter({ following_email: profileEmail, status: "accepted" })
+        : db.entities.Follow.filter({ follower_email: profileEmail, status: "accepted" }),
     enabled: !!profileEmail,
   });
 
@@ -33,7 +33,7 @@ export default function FollowerListModal({ profileEmail, mode, onClose }) {
   // Fetch SportProfiles for all those emails
   const { data: profiles = [], isLoading: loadingProfiles } = useQuery({
     queryKey: ["follow-profiles", emails.join(",")],
-    queryFn: () => base44.entities.SportProfile.list("-created_date", 200),
+    queryFn: () => db.entities.SportProfile.list("-created_date", 200),
     enabled: emails.length > 0,
     select: (all) => {
       const emailSet = new Set(emails);

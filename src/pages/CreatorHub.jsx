@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign, TrendingUp, Users, ShoppingBag, Trophy, Loader2, Plus, Crown, Calendar, Scissors, BarChart2, CreditCard } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import MonetizationSetup from "../components/monetization/MonetizationSetup";
-import ProductDialog from "../components/shop/ProductDialog";
-import StreamScheduler from "../components/creator/StreamScheduler";
-import VODEditor from "../components/creator/VODEditor";
-import CreatorAnalytics from "../components/creator/CreatorAnalytics";
-import SubscriptionPlans from "../components/creator/SubscriptionPlans";
+import MonetizationSetup from "@/components/monetization/MonetizationSetup";
+import ProductDialog from "@/components/shop/ProductDialog";
+import StreamScheduler from "@/components/creator/StreamScheduler";
+import VODEditor from "@/components/creator/VODEditor";
+import CreatorAnalytics from "@/components/creator/CreatorAnalytics";
+import SubscriptionPlans from "@/components/creator/SubscriptionPlans";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 
 export default function CreatorHub() {
   const [user, setUser] = useState(null);
@@ -21,31 +21,31 @@ export default function CreatorHub() {
   const [showProductDialog, setShowProductDialog] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   // Fetch creator stats
   const { data: subscriptions = [] } = useQuery({
     queryKey: ["creator-subscriptions", user?.email],
-    queryFn: () => base44.entities.Subscription.filter({ creator_email: user.email, status: "active" }),
+    queryFn: () => db.entities.Subscription.filter({ creator_email: user.email, status: "active" }),
     enabled: !!user,
   });
 
   const { data: tips = [] } = useQuery({
     queryKey: ["creator-tips", user?.email],
-    queryFn: () => base44.entities.Tip.filter({ to_email: user.email }),
+    queryFn: () => db.entities.Tip.filter({ to_email: user.email }),
     enabled: !!user,
   });
 
   const { data: products = [] } = useQuery({
     queryKey: ["creator-products", user?.email],
-    queryFn: () => base44.entities.Product.filter({ creator_email: user.email }),
+    queryFn: () => db.entities.Product.filter({ creator_email: user.email }),
     enabled: !!user,
   });
 
   const { data: challenges = [] } = useQuery({
     queryKey: ["creator-challenges", user?.email],
-    queryFn: () => base44.entities.Challenge.filter({ creator_email: user.email }),
+    queryFn: () => db.entities.Challenge.filter({ creator_email: user.email }),
     enabled: !!user,
   });
 

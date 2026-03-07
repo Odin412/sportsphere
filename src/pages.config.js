@@ -94,6 +94,9 @@ import OrgSessions from './pages/OrgSessions';
 import ParentView from './pages/ParentView';
 import PerformanceHub from './pages/PerformanceHub';
 import Premium from './pages/Premium';
+import ProPathHub from './pages/ProPathHub';
+import ScoutCard from './pages/ScoutCard';
+import TheVault from './pages/TheVault';
 import Profile from './pages/Profile';
 import ProfileSettings from './pages/ProfileSettings';
 import Reels from './pages/Reels';
@@ -160,6 +163,9 @@ export const PAGES = {
     "ParentView": ParentView,
     "PerformanceHub": PerformanceHub,
     "Premium": Premium,
+    "ProPathHub": ProPathHub,
+    "ScoutCard": ScoutCard,
+    "TheVault": TheVault,
     "Profile": Profile,
     "ProfileSettings": ProfileSettings,
     "Reels": Reels,

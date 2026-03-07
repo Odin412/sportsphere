@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
-import PostCard from "../components/feed/PostCard";
-import FeedPreferencesDialog from "../components/reels/FeedPreferencesDialog";
-import UpcomingStreamsSection from "../components/feed/UpcomingStreamsSection";
-import LiveNowSection from "../components/stream/LiveNowSection";
-import SportNewsWidget from "../components/feed/SportNewsWidget";
-import StoriesBar from "../components/feed/StoriesBar";
-import StoryViewer from "../components/feed/StoryViewer";
+import PostCard from "@/components/feed/PostCard";
+import FeedPreferencesDialog from "@/components/reels/FeedPreferencesDialog";
+import UpcomingStreamsSection from "@/components/feed/UpcomingStreamsSection";
+import LiveNowSection from "@/components/stream/LiveNowSection";
+import SportNewsWidget from "@/components/feed/SportNewsWidget";
+import SuggestedUsers from "@/components/social/SuggestedUsers";
+import StoriesBar from "@/components/feed/StoriesBar";
+import StoryViewer from "@/components/feed/StoryViewer";
 import { Loader2, Settings2, Sparkles, Users } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
@@ -50,7 +51,7 @@ export default function Feed() {
   const { data: preferences } = useQuery({
     queryKey: ["feed-preferences", user?.email],
     queryFn: async () => {
-      const prefs = await base44.entities.FeedPreferences.filter({ user_email: user.email });
+      const prefs = await db.entities.FeedPreferences.filter({ user_email: user.email });
       return prefs[0] || null;
     },
     enabled: !!user,
@@ -60,7 +61,7 @@ export default function Feed() {
   const { data: followedUsers } = useQuery({
     queryKey: ["follows", user?.email],
     queryFn: async () => {
-      const follows = await base44.entities.Follow.filter({ follower_email: user.email, status: "accepted" });
+      const follows = await db.entities.Follow.filter({ follower_email: user.email, status: "accepted" });
       return follows.map(f => f.following_email);
     },
     enabled: !!user,
@@ -70,8 +71,8 @@ export default function Feed() {
   const { data: allPosts, isLoading, refetch } = useQuery({
     queryKey: ["feed-posts", sportFilter],
     queryFn: () => sportFilter
-      ? base44.entities.Post.filter({ sport: sportFilter }, "-created_date", 50)
-      : base44.entities.Post.list("-created_date", 50),
+      ? db.entities.Post.filter({ sport: sportFilter }, "-created_date", 50)
+      : db.entities.Post.list("-created_date", 50),
     staleTime: 60000,
     refetchInterval: 120000,
     retry: 2,
@@ -221,6 +222,7 @@ export default function Feed() {
         <div className="hidden lg:block">
           <div className="sticky top-16 max-h-[calc(100vh-72px)] overflow-y-auto no-scrollbar space-y-3">
             <SportNewsWidget compact={true} />
+            <SuggestedUsers />
           </div>
         </div>
 

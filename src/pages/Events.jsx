@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import moment from "moment";
 import { toast } from "sonner";
-import CreateEventDialog from "../components/events/CreateEventDialog";
-import AIEventRecommendations from "../components/events/AIEventRecommendations";
+import CreateEventDialog from "@/components/events/CreateEventDialog";
+import AIEventRecommendations from "@/components/events/AIEventRecommendations";
 import { motion } from "framer-motion";
 import { SkeletonEventCard } from "@/components/ui/SkeletonCard";
 
@@ -55,7 +55,7 @@ function EventCard({ event, currentUser, onUpdate }) {
       if (!isRSVPd && event.max_attendees && newAttendees.length > event.max_attendees) {
         toast.error("Event is full"); setLoading(false); return;
       }
-      await base44.entities.Event.update(event.id, { attendees: newAttendees });
+      await db.entities.Event.update(event.id, { attendees: newAttendees });
       setIsRSVPd(!isRSVPd);
       setAttendeeCount(newAttendees.length);
       if (!isRSVPd && event.price > 0) {
@@ -216,12 +216,12 @@ export default function Events() {
   const [tab, setTab] = useState("discover");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: allEvents = [], isLoading, refetch } = useQuery({
     queryKey: ["events-all"],
-    queryFn: () => base44.entities.Event.list("date", 300),
+    queryFn: () => db.entities.Event.list("date", 300),
   });
 
   const filtered = allEvents.filter(e => {

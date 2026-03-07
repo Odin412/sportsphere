@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,7 +22,7 @@ export default function CreateTrainingPlanDialog({ orgId, coachEmail, coachName,
     if (!form.athlete_email || !form.goal) return;
     setAiLoading(true);
     const athlete = athletes.find(a => a.user_email === form.athlete_email);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `Create a detailed 4-week training plan for an athlete.
 
 Athlete: ${form.athlete_name || form.athlete_email}
@@ -84,7 +84,7 @@ Generate a structured weekly training plan with specific exercises, sets, reps, 
 
   const handleCreate = async () => {
     setLoading(true);
-    await base44.entities.TrainingPlan.create({
+    await db.entities.TrainingPlan.create({
       organization_id: orgId,
       coach_email: coachEmail,
       coach_name: coachName,

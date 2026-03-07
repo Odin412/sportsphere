@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Mic, MicOff, Loader2, Square } from "lucide-react";
 
 export default function VoiceRecorder({ onTranscribed, disabled }) {
@@ -20,8 +20,8 @@ export default function VoiceRecorder({ onTranscribed, disabled }) {
       setTranscribing(true);
       const blob = new Blob(chunksRef.current, { type: "audio/webm" });
       const file = new File([blob], "voice.webm", { type: "audio/webm" });
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      const result = await base44.integrations.Core.InvokeLLM({
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
+      const result = await db.integrations.Core.InvokeLLM({
         prompt: "Transcribe this audio recording. Return ONLY the transcribed text, nothing else. If you cannot transcribe, return an empty string.",
         file_urls: [file_url],
       });

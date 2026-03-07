@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -21,7 +21,7 @@ export default function CreatePostDialog({ open, onOpenChange, groupId, user, on
 
     setCreating(true);
     try {
-      await base44.entities.GroupPost.create({
+      await db.entities.GroupPost.create({
         group_id: groupId,
         author_email: user.email,
         author_name: user.full_name,

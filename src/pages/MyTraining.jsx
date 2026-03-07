@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Dumbbell, Calendar, CheckCircle, Target, Loader2, ChevronDown, ChevronUp, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import SocialShareDialog from "../components/sharing/SocialShareDialog";
+import SocialShareDialog from "@/components/sharing/SocialShareDialog";
 
 export default function MyTraining() {
   const [user, setUser] = useState(null);
@@ -13,16 +13,16 @@ export default function MyTraining() {
   const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: plans, isLoading } = useQuery({
     queryKey: ["my-training-plans", user?.email],
     queryFn: async () => {
-      const memberships = await base44.entities.OrgMember.filter({ user_email: user.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       const orgId = memberships[0]?.organization_id;
       if (!orgId) return [];
-      return base44.entities.TrainingPlan.filter({ athlete_email: user.email, organization_id: orgId });
+      return db.entities.TrainingPlan.filter({ athlete_email: user.email, organization_id: orgId });
     },
     enabled: !!user,
   });
@@ -30,10 +30,10 @@ export default function MyTraining() {
   const { data: sessions } = useQuery({
     queryKey: ["my-sessions", user?.email],
     queryFn: async () => {
-      const memberships = await base44.entities.OrgMember.filter({ user_email: user.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       const orgId = memberships[0]?.organization_id;
       if (!orgId) return [];
-      const all = await base44.entities.TrainingSession.filter({ organization_id: orgId });
+      const all = await db.entities.TrainingSession.filter({ organization_id: orgId });
       return all.filter(s => s.attendees?.includes(user.email) && new Date(s.scheduled_date) >= new Date());
     },
     enabled: !!user,

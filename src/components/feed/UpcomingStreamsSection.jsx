@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -104,7 +104,7 @@ export default function UpcomingStreamsSection({ user }) {
 
   const { data: streams = [] } = useQuery({
     queryKey: ["upcoming-streams-feed"],
-    queryFn: () => base44.entities.ScheduledStream.filter({ status: "upcoming" }, "scheduled_at", 20),
+    queryFn: () => db.entities.ScheduledStream.filter({ status: "upcoming" }, "scheduled_at", 20),
     refetchInterval: 120000,
     staleTime: 60000,
   });
@@ -124,7 +124,7 @@ export default function UpcomingStreamsSection({ user }) {
       ? stream.rsvp_emails.filter(e => e !== user.email)
       : [...(stream.rsvp_emails || []), user.email];
 
-    await base44.entities.ScheduledStream.update(stream.id, { rsvp_emails: updated });
+    await db.entities.ScheduledStream.update(stream.id, { rsvp_emails: updated });
     qc.invalidateQueries({ queryKey: ["upcoming-streams-feed"] });
     qc.invalidateQueries({ queryKey: ["my-rsvps", user?.email] });
 

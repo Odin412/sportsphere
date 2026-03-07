@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,7 +26,7 @@ export default function CreateEventDialog({ open, onOpenChange, groupId, user, o
 
     setCreating(true);
     try {
-      await base44.entities.Event.create({
+      await db.entities.Event.create({
         group_id: groupId,
         creator_email: user.email,
         title: formData.title,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ export default function ProductDialog({ onClose, creatorEmail }) {
 
     setUploadingImage(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setFormData({ ...formData, image_url: file_url });
       toast.success("Image uploaded");
     } catch (error) {
@@ -47,7 +47,7 @@ export default function ProductDialog({ onClose, creatorEmail }) {
 
     setUploadingFile(true);
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await db.integrations.Core.UploadFile({ file });
       setFormData({ ...formData, file_url });
       toast.success("File uploaded");
     } catch (error) {
@@ -65,7 +65,7 @@ export default function ProductDialog({ onClose, creatorEmail }) {
 
     setLoading(true);
     try {
-      await base44.entities.Product.create({
+      await db.entities.Product.create({
         creator_email: creatorEmail,
         name: formData.name,
         description: formData.description,

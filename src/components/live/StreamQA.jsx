@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -15,7 +15,7 @@ export default function StreamQA({ streamId, user, isHost, isLive }) {
 
   const { data: questions = [] } = useQuery({
     queryKey: ["stream-qa", streamId],
-    queryFn: () => base44.entities.StreamQuestion.filter({ stream_id: streamId }, "-created_date", 50),
+    queryFn: () => db.entities.StreamQuestion.filter({ stream_id: streamId }, "-created_date", 50),
     enabled: !!streamId,
     refetchInterval: 4000,
   });
@@ -24,7 +24,7 @@ export default function StreamQA({ streamId, user, isHost, isLive }) {
     if (!questionText.trim()) return;
     if (!user) return toast.error("Log in to ask a question");
     setSubmitting(true);
-    await base44.entities.StreamQuestion.create({
+    await db.entities.StreamQuestion.create({
       stream_id: streamId,
       asker_email: user.email,
       asker_name: user.full_name,
@@ -43,19 +43,19 @@ export default function StreamQA({ streamId, user, isHost, isLive }) {
   const upvote = async (q) => {
     if (!user) return toast.error("Log in to upvote");
     if (q.upvotes?.includes(user.email)) return;
-    await base44.entities.StreamQuestion.update(q.id, {
+    await db.entities.StreamQuestion.update(q.id, {
       upvotes: [...(q.upvotes || []), user.email],
     });
     qc.invalidateQueries({ queryKey: ["stream-qa", streamId] });
   };
 
   const highlight = async (q) => {
-    await base44.entities.StreamQuestion.update(q.id, { is_highlighted: !q.is_highlighted });
+    await db.entities.StreamQuestion.update(q.id, { is_highlighted: !q.is_highlighted });
     qc.invalidateQueries({ queryKey: ["stream-qa", streamId] });
   };
 
   const markAnswered = async (q) => {
-    await base44.entities.StreamQuestion.update(q.id, { is_answered: true, is_highlighted: false });
+    await db.entities.StreamQuestion.update(q.id, { is_answered: true, is_highlighted: false });
     qc.invalidateQueries({ queryKey: ["stream-qa", streamId] });
   };
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -54,7 +54,7 @@ export default function SocialShareDialog({ open, onClose, title, summary, user 
     if (!user) return;
     setPostingToFeed(true);
     try {
-      await base44.entities.Post.create({
+      await db.entities.Post.create({
         author_email: user.email,
         author_name: user.full_name,
         author_avatar: user.avatar_url,

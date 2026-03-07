@@ -11,7 +11,7 @@ export default function ContentSummary({ content }) {
   // Display existing summary/analysis or button to generate
   return (
     <div className="mt-4 space-y-3">
-      {content.ai_summary ? (
+      {content.ai_summary && (
         <>
           {/* Main Summary Card */}
           <Card className="bg-gradient-to-br from-purple-950/50 to-blue-950/50 border-purple-500/30 overflow-hidden">

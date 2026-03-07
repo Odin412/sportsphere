@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Video, Calendar, Users, DollarSign, Plus, Loader2, Clock, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CreateSessionDialog from "../components/coaching/CreateSessionDialog";
+import CreateSessionDialog from "@/components/coaching/CreateSessionDialog";
 import moment from "moment";
 
 export default function LiveCoaching() {
@@ -18,13 +18,13 @@ export default function LiveCoaching() {
   const [filter, setFilter] = useState("upcoming");
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   const { data: sessions, isLoading } = useQuery({
     queryKey: ["coaching-sessions", filter],
     queryFn: async () => {
-      const all = await base44.entities.CoachingSession.list("-scheduled_date", 50);
+      const all = await db.entities.CoachingSession.list("-scheduled_date", 50);
       const now = new Date();
       
       if (filter === "live") {

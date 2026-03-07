@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -14,40 +14,40 @@ export default function AdminHealth() {
   const [org, setOrg] = useState(null);
 
   useEffect(() => {
-    base44.auth.me().then(async u => {
+    db.auth.me().then(async u => {
       setUser(u);
-      const orgs = await base44.entities.Organization.filter({ owner_email: u.email });
+      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
       if (orgs[0]) { setOrg(orgs[0]); setOrgId(orgs[0].id); }
     }).catch(() => {});
   }, []);
 
   const { data: members } = useQuery({
     queryKey: ["health-members", orgId],
-    queryFn: () => base44.entities.OrgMember.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.OrgMember.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: plans } = useQuery({
     queryKey: ["health-plans", orgId],
-    queryFn: () => base44.entities.TrainingPlan.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.TrainingPlan.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: sessions } = useQuery({
     queryKey: ["health-sessions", orgId],
-    queryFn: () => base44.entities.TrainingSession.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.TrainingSession.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: videos } = useQuery({
     queryKey: ["health-videos", orgId],
-    queryFn: () => base44.entities.AthleteVideo.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.AthleteVideo.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 
   const { data: messages } = useQuery({
     queryKey: ["health-messages", orgId],
-    queryFn: () => base44.entities.OrgMessage.filter({ organization_id: orgId }),
+    queryFn: () => db.entities.OrgMessage.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
 

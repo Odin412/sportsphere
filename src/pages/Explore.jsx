@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import { Search, Loader2, MapPin, Trophy, TrendingUp, ChevronRight, Plus, Filter, Globe, MapPinned, Flame, Users, BarChart2, Zap } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -11,11 +11,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import SportFilter from "../components/feed/SportFilter";
-import SportHubGrid from "../components/stream/SportHubGrid";
-import EventCard from "../components/events/EventCard";
-import CreateEventDialog from "../components/events/CreateEventDialog";
-import PostCard from "../components/feed/PostCard";
+import SportFilter from "@/components/feed/SportFilter";
+import SportHubGrid from "@/components/stream/SportHubGrid";
+import EventCard from "@/components/events/EventCard";
+import CreateEventDialog from "@/components/events/CreateEventDialog";
+import PostCard from "@/components/feed/PostCard";
 import { motion } from "framer-motion";
 
 const EVENT_TYPES = ["All", "Competition", "Workshop", "Meetup", "Training", "Tournament", "Other"];
@@ -44,7 +44,7 @@ function PopularAthleteCard({ profile, postCount, likeCount, currentUser }) {
 
   useEffect(() => {
     if (!currentUser) return;
-    base44.entities.Follow.filter({ follower_email: currentUser.email, following_email: profile.user_email })
+    db.entities.Follow.filter({ follower_email: currentUser.email, following_email: profile.user_email })
       .then(f => setFollowing(f.length > 0)).catch(() => {});
   }, [currentUser, profile.user_email]);
 
@@ -52,10 +52,10 @@ function PopularAthleteCard({ profile, postCount, likeCount, currentUser }) {
     e.preventDefault();
     if (!currentUser) return;
     if (following) {
-      const follows = await base44.entities.Follow.filter({ follower_email: currentUser.email, following_email: profile.user_email });
-      if (follows[0]) { await base44.entities.Follow.delete(follows[0].id); setFollowing(false); }
+      const follows = await db.entities.Follow.filter({ follower_email: currentUser.email, following_email: profile.user_email });
+      if (follows[0]) { await db.entities.Follow.delete(follows[0].id); setFollowing(false); }
     } else {
-      await base44.entities.Follow.create({ follower_email: currentUser.email, following_email: profile.user_email, status: "accepted" });
+      await db.entities.Follow.create({ follower_email: currentUser.email, following_email: profile.user_email, status: "accepted" });
       setFollowing(true);
     }
   };
@@ -116,27 +116,27 @@ export default function Explore() {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   // Trending posts
   const { data: allPosts, isLoading: loadingPosts } = useQuery({
     queryKey: ["explore-all-posts"],
-    queryFn: () => base44.entities.Post.list("-created_date", 200),
+    queryFn: () => db.entities.Post.list("-created_date", 200),
   });
 
   // Sport profiles for popular athletes
   const { data: profiles, isLoading: loadingProfiles } = useQuery({
     queryKey: ["explore-profiles", sportFilter],
     queryFn: () => sportFilter
-      ? base44.entities.SportProfile.filter({ sport: sportFilter }, "-created_date", 100)
-      : base44.entities.SportProfile.list("-created_date", 100),
+      ? db.entities.SportProfile.filter({ sport: sportFilter }, "-created_date", 100)
+      : db.entities.SportProfile.list("-created_date", 100),
   });
 
   // Trending hashtags
   const { data: recentPosts = [] } = useQuery({
     queryKey: ["trending-hashtags"],
-    queryFn: () => base44.entities.Post.list("-created_date", 50),
+    queryFn: () => db.entities.Post.list("-created_date", 50),
     staleTime: 5 * 60 * 1000,
   });
 
@@ -155,7 +155,7 @@ export default function Explore() {
   // Events
   const { data: allEvents, isLoading: loadingEvents, refetch: refetchEvents } = useQuery({
     queryKey: ["all-events"],
-    queryFn: () => base44.entities.Event.list("date", 200),
+    queryFn: () => db.entities.Event.list("date", 200),
   });
 
   // Trending posts: ranked by engagement in last 48h

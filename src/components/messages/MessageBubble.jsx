@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Languages, CheckCheck, Check, ExternalLink, Trash2 } from "lucide-react";
 import moment from "moment";
@@ -42,14 +42,14 @@ export default function MessageBubble({ msg, isMine, preferredLanguage, allParti
 
   const handleDelete = async () => {
     setDeleting(true);
-    await base44.entities.Message.delete(msg.id).catch(() => {});
+    await db.entities.Message.delete(msg.id).catch(() => {});
     onDelete?.(msg.id);
   };
 
   const handleTranslate = async () => {
     if (translated) { setShowOriginal(prev => !prev); return; }
     setTranslating(true);
-    const result = await base44.integrations.Core.InvokeLLM({
+    const result = await db.integrations.Core.InvokeLLM({
       prompt: `Translate the following message to ${LANGUAGE_NAMES[preferredLanguage] || "English"}. Return ONLY the translated text, nothing else.\n\nMessage: "${msg.content}"`,
     });
     setTranslated(result);

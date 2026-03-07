@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { createPageUrl } from "@/utils";
 import {
   LayoutDashboard, Users, FileText, ShieldAlert, BarChart2,
@@ -24,7 +24,7 @@ export default function AdminLayout({ children, currentPage }) {
   const location = useLocation();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {}).finally(() => setLoading(false));
+    db.auth.me().then(setUser).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function AdminLayout({ children, currentPage }) {
           <ArrowLeft className="w-4 h-4" /> Back to Site
         </Link>
         <button
-          onClick={() => base44.auth.logout()}
+          onClick={() => db.auth.logout()}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:text-red-400 hover:bg-gray-800 transition-all"
         >
           <LogOut className="w-4 h-4" /> Sign Out

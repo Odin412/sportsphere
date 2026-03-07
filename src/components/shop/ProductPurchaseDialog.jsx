@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -18,7 +18,7 @@ export default function ProductPurchaseDialog({ product, currentUser, hasPurchas
 
     setLoading(true);
     try {
-      await base44.entities.Purchase.create({
+      await db.entities.Purchase.create({
         buyer_email: currentUser.email,
         product_id: product.id,
         product_data: product,
@@ -27,11 +27,11 @@ export default function ProductPurchaseDialog({ product, currentUser, hasPurchas
         download_url: product.file_url
       });
 
-      await base44.entities.Product.update(product.id, {
+      await db.entities.Product.update(product.id, {
         sales_count: (product.sales_count || 0) + 1
       });
 
-      await base44.entities.Notification.create({
+      await db.entities.Notification.create({
         recipient_email: product.creator_email,
         actor_email: currentUser.email,
         actor_name: currentUser.full_name,

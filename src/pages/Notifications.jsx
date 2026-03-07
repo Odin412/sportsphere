@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
+import { db } from "@/api/db";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bell, Heart, MessageCircle, UserPlus, AtSign, Loader2, Settings, Trophy, Radio, DollarSign, Filter, Check, X, Zap } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "../utils";
+import { createPageUrl } from "@/utils";
 import moment from "moment";
-import NotificationSettingsDialog from "../components/notifications/NotificationSettingsDialog";
+import NotificationSettingsDialog from "@/components/notifications/NotificationSettingsDialog";
 import { motion } from "framer-motion";
 
 // ── Grouping helpers ──────────────────────────────────────────────────────────
@@ -67,14 +67,14 @@ export default function Notifications() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    db.auth.me().then(setUser).catch(() => {});
   }, []);
 
   // Real-time subscription for new notifications (graceful fallback if not supported)
   useEffect(() => {
     if (!user) return;
     try {
-      const unsubscribe = base44.entities.Notification.subscribe((event) => {
+      const unsubscribe = db.entities.Notification.subscribe((event) => {
         if (event.type === "create" && event.data.recipient_email === user.email) {
           queryClient.invalidateQueries({ queryKey: ["notifications"] });
         }
@@ -85,7 +85,7 @@ export default function Notifications() {
 
   const { data: allNotifications, isLoading } = useQuery({
     queryKey: ["notifications", user?.email],
-    queryFn: () => base44.entities.Notification.filter({ recipient_email: user.email }, "-created_date", 100),
+    queryFn: () => db.entities.Notification.filter({ recipient_email: user.email }, "-created_date", 100),
     enabled: !!user,
   });
 
@@ -100,14 +100,14 @@ export default function Notifications() {
 
   const { data: followingList = [] } = useQuery({
     queryKey: ["my-following", user?.email],
-    queryFn: () => base44.entities.Follow.filter({ follower_email: user.email }),
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
     enabled: !!user?.email,
   });
   const followingEmails = followingList.map(f => f.following_email);
 
   const { data: recentActivity = [] } = useQuery({
     queryKey: ["following-activity", followingEmails.join(",")],
-    queryFn: () => base44.entities.Post.list("-created_date", 30),
+    queryFn: () => db.entities.Post.list("-created_date", 30),
     enabled: followingEmails.length > 0,
     select: posts => posts.filter(p => followingEmails.includes(p.author_email)),
   });
@@ -115,7 +115,7 @@ export default function Notifications() {
   // ── Mutations ───────────────────────────────────────────────────────────────
 
   const markAsReadMutation = useMutation({
-    mutationFn: (notificationId) => base44.entities.Notification.update(notificationId, { is_read: true }),
+    mutationFn: (notificationId) => db.entities.Notification.update(notificationId, { is_read: true }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
     },
@@ -123,12 +123,12 @@ export default function Notifications() {
 
   const markAllAsRead = async () => {
     const unreadNotifs = allNotifications?.filter(n => !n.is_read) || [];
-    await Promise.all(unreadNotifs.map(n => base44.entities.Notification.update(n.id, { is_read: true })));
+    await Promise.all(unreadNotifs.map(n => db.entities.Notification.update(n.id, { is_read: true })));
     queryClient.invalidateQueries({ queryKey: ["notifications"] });
   };
 
   const deleteNotification = async (notifId) => {
-    await base44.entities.Notification.delete(notifId);
+    await db.entities.Notification.delete(notifId);
     queryClient.invalidateQueries({ queryKey: ["notifications"] });
   };
 
@@ -161,15 +161,15 @@ export default function Notifications() {
 
   const handleFollowResponse = async (notif, accept) => {
     // Find the pending follow record
-    const follows = await base44.entities.Follow.filter({
+    const follows = await db.entities.Follow.filter({
       follower_email: notif.follow_requester_email || notif.actor_email,
       following_email: user.email,
     });
     if (follows[0]) {
       if (accept) {
-        await base44.entities.Follow.update(follows[0].id, { status: "accepted" });
+        await db.entities.Follow.update(follows[0].id, { status: "accepted" });
         // Notify requester they were accepted
-        await base44.entities.Notification.create({
+        await db.entities.Notification.create({
           recipient_email: notif.actor_email,
           actor_email: user.email,
           actor_name: user.full_name,
@@ -178,10 +178,10 @@ export default function Notifications() {
           message: "accepted your follow request",
         });
       } else {
-        await base44.entities.Follow.delete(follows[0].id);
+        await db.entities.Follow.delete(follows[0].id);
       }
     }
-    await base44.entities.Notification.update(notif.id, { is_read: true, follow_resolved: true });
+    await db.entities.Notification.update(notif.id, { is_read: true, follow_resolved: true });
     queryClient.invalidateQueries({ queryKey: ["notifications"] });
   };
 

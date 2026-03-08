@@ -502,7 +502,7 @@ export default function Onboarding() {
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [stepData, setStepData] = useState({});
-  const { user } = useAuth();
+  const { user, checkAppState } = useAuth();
   const navigate = useNavigate();
 
   const role = user?.role || "athlete";
@@ -619,10 +619,26 @@ export default function Onboarding() {
         profileUpdate.location = stepData.location || "";
       }
 
-      // Try to update profile in DB; always set localStorage as reliable fallback
+      // Update profile in DB
       if (user?.id) {
-        await supabase.from('profiles').update(profileUpdate).eq('id', user.id).catch(() => {});
+        const { data: updated, error: updateError } = await supabase
+          .from('profiles')
+          .update(profileUpdate)
+          .eq('id', user.id)
+          .select();
+        if (updateError) {
+          console.error("Onboarding profile update failed:", updateError);
+        } else if (!updated?.length) {
+          // RLS may have blocked the update — try upsert as fallback
+          console.warn("Onboarding: update returned 0 rows, trying upsert");
+          await supabase
+            .from('profiles')
+            .upsert({ id: user.id, email: user.email, ...profileUpdate }, { onConflict: 'id' })
+            .then(({ error }) => error && console.error("Onboarding upsert failed:", error));
+        }
         localStorage.setItem(`ob_${user.id}`, "1");
+        // Refresh AuthContext user with updated profile data
+        await checkAppState().catch(() => {});
       }
       localStorage.setItem("user_role", role);
     } catch (err) {

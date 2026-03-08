@@ -220,13 +220,21 @@ export default function Login() {
       return;
     }
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { full_name: fullName, role: selectedRole, ...(isParent ? { child_name: childName } : {}) } },
     });
     if (error) {
-      toast.error(error.message);
+      const msg = error.message?.toLowerCase();
+      if (msg?.includes("already registered") || msg?.includes("already exists")) {
+        toast.error("An account with this email already exists. Try signing in instead.");
+      } else {
+        toast.error(error.message);
+      }
+    } else if (data?.user && data.user.identities?.length === 0) {
+      // Supabase silent duplicate — email already registered
+      toast.error("An account with this email already exists. Try signing in instead.");
     } else {
       setSignupDone(true);
     }

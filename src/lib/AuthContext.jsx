@@ -74,6 +74,7 @@ export const AuthProvider = ({ children }) => {
         email: authUser.email,
         full_name: authUser.user_metadata?.full_name || '',
         avatar_url: authUser.user_metadata?.avatar_url || '',
+        role: authUser.user_metadata?.role || 'athlete',
       })
       .select()
       .maybeSingle();

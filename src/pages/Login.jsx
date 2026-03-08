@@ -3,9 +3,9 @@ import { supabase } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff } from "lucide-react";
+import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff, ChevronLeft, Dumbbell, UserCheck, Building2, Heart } from "lucide-react";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const features = [
   { icon: Video, text: "Live streaming for athletes & coaches" },
@@ -21,13 +21,106 @@ const stats = [
   { label: "Coaches", value: "890+" },
 ];
 
+const ROLE_CARDS = [
+  {
+    id: "athlete",
+    label: "Athlete",
+    icon: Dumbbell,
+    desc: "Track performance, get scouted, build your brand",
+    color: "from-red-500 to-orange-500",
+    bg: "bg-red-50 border-red-200 hover:border-red-400",
+    iconBg: "bg-red-100 text-red-600",
+    role: "athlete",
+    hasSub: false,
+  },
+  {
+    id: "coach",
+    label: "Coach",
+    icon: UserCheck,
+    desc: "Manage athletes, share content, grow your coaching practice",
+    color: "from-blue-500 to-cyan-500",
+    bg: "bg-blue-50 border-blue-200 hover:border-blue-400",
+    iconBg: "bg-blue-100 text-blue-600",
+    role: "coach",
+    hasSub: true,
+  },
+  {
+    id: "org",
+    label: "Organization",
+    icon: Building2,
+    desc: "Leagues, clubs, schools — manage teams and events",
+    color: "from-purple-500 to-violet-500",
+    bg: "bg-purple-50 border-purple-200 hover:border-purple-400",
+    iconBg: "bg-purple-100 text-purple-600",
+    role: "admin",
+    hasSub: true,
+  },
+  {
+    id: "parent",
+    label: "Parent",
+    icon: Heart,
+    desc: "Follow your child's sport journey and stay connected",
+    color: "from-green-500 to-emerald-500",
+    bg: "bg-green-50 border-green-200 hover:border-green-400",
+    iconBg: "bg-green-100 text-green-600",
+    role: "parent",
+    hasSub: false,
+  },
+];
+
+const COACH_SUB = [
+  { id: "independent", label: "Independent Coach", desc: "Work with individual athletes or small groups" },
+  { id: "team", label: "Team / Club Coach", desc: "Coach a team within a club or school" },
+];
+
+const ORG_SUB = [
+  { id: "league", label: "League" },
+  { id: "club", label: "Club / Team" },
+  { id: "school", label: "School / University" },
+  { id: "other", label: "Other Organization" },
+];
+
 export default function Login() {
   const [tab, setTab] = useState("signin"); // "signin" | "signup"
+  const [signupStep, setSignupStep] = useState("role-select"); // "role-select" | "role-sub" | "form"
+  const [selectedRoleCard, setSelectedRoleCard] = useState(null); // the ROLE_CARDS entry
+  const [selectedRole, setSelectedRole] = useState(""); // db role value
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const switchToSignup = () => {
+    setTab("signup");
+    setSignupStep("role-select");
+    setSelectedRoleCard(null);
+    setSelectedRole("");
+  };
+
+  const switchToSignin = () => {
+    setTab("signin");
+    setSignupStep("role-select");
+    setSelectedRoleCard(null);
+    setSelectedRole("");
+  };
+
+  const handleRoleCardClick = (card) => {
+    setSelectedRoleCard(card);
+    if (card.hasSub) {
+      setSignupStep("role-sub");
+    } else {
+      setSelectedRole(card.role);
+      setSignupStep("form");
+    }
+  };
+
+  const handleSubChoice = () => {
+    // All sub-choices collapse to the parent card's db role
+    setSelectedRole(selectedRoleCard.role);
+    setSignupStep("form");
+  };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -44,7 +137,7 @@ export default function Login() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    if (!email || !password || !fullName) return;
+    if (!email || !password || !fullName || !selectedRole) return;
     if (password.length < 6) {
       toast.error("Password must be at least 6 characters.");
       return;
@@ -53,24 +146,14 @@ export default function Login() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName } },
+      options: { data: { full_name: fullName, role: selectedRole } },
     });
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Account created! You're now signed in.");
+      toast.success("Account created! Setting up your profile...");
     }
     setLoading(false);
-  };
-
-  const handleOAuth = async (provider) => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider,
-      options: { redirectTo: window.location.origin },
-    });
-    if (error) {
-      toast.error(`${provider} sign-in isn't configured yet.`);
-    }
   };
 
   const HeroPanel = () => (
@@ -146,6 +229,179 @@ export default function Login() {
     </div>
   );
 
+  const RoleSelectScreen = () => (
+    <motion.div
+      key="role-select"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.25 }}
+      className="space-y-4"
+    >
+      <div className="text-center">
+        <h2 className="text-lg font-black text-white lg:text-slate-900">I am joining as a...</h2>
+        <p className="text-xs text-slate-400 mt-1">Choose the option that best describes you</p>
+      </div>
+      <div className="grid grid-cols-2 gap-3">
+        {ROLE_CARDS.map((card) => {
+          const Icon = card.icon;
+          return (
+            <button
+              key={card.id}
+              onClick={() => handleRoleCardClick(card)}
+              className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all text-left bg-white ${card.bg}`}
+            >
+              <span className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.iconBg}`}>
+                <Icon className="w-5 h-5" />
+              </span>
+              <div className="text-center">
+                <p className="font-bold text-sm text-slate-900">{card.label}</p>
+                <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{card.desc}</p>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      <p className="text-center text-xs text-slate-400">
+        Already have an account?{" "}
+        <button onClick={switchToSignin} className="text-red-600 font-semibold hover:underline">Sign in</button>
+      </p>
+    </motion.div>
+  );
+
+  const RoleSubScreen = () => {
+    const isCoach = selectedRoleCard?.id === "coach";
+    const items = isCoach ? COACH_SUB : ORG_SUB;
+    return (
+      <motion.div
+        key="role-sub"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -12 }}
+        transition={{ duration: 0.25 }}
+        className="space-y-4"
+      >
+        <div className="flex items-center gap-2">
+          <button onClick={() => setSignupStep("role-select")} className="text-slate-400 hover:text-slate-600 transition-colors">
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <div>
+            <h2 className="text-base font-black text-white lg:text-slate-900">
+              {isCoach ? "What type of coach are you?" : "What type of organization?"}
+            </h2>
+          </div>
+        </div>
+        <div className="space-y-2">
+          {items.map((item) => (
+            <button
+              key={item.id}
+              onClick={handleSubChoice}
+              className="w-full flex items-start gap-3 p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white hover:bg-slate-50 transition-all text-left"
+            >
+              <div>
+                <p className="font-bold text-sm text-slate-900">{item.label}</p>
+                {item.desc && <p className="text-xs text-slate-500 mt-0.5">{item.desc}</p>}
+              </div>
+            </button>
+          ))}
+        </div>
+      </motion.div>
+    );
+  };
+
+  const SignupFormScreen = () => (
+    <motion.div
+      key="signup-form"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      transition={{ duration: 0.25 }}
+      className="space-y-4"
+    >
+      {/* Role badge */}
+      <div className="flex items-center gap-2">
+        <button onClick={() => setSignupStep(selectedRoleCard?.hasSub ? "role-sub" : "role-select")} className="text-slate-400 hover:text-slate-600 transition-colors">
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+        <div className="flex items-center gap-2">
+          {selectedRoleCard && (() => {
+            const Icon = selectedRoleCard.icon;
+            return (
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${selectedRoleCard.iconBg}`}>
+                <Icon className="w-3.5 h-3.5" />
+                {selectedRoleCard.label}
+              </span>
+            );
+          })()}
+          <span className="text-sm font-bold text-white lg:text-slate-900">Create your account</span>
+        </div>
+      </div>
+
+      <form onSubmit={handleSignUp} className="space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Full Name</Label>
+          <Input
+            id="fullName"
+            type="text"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            placeholder="Your name"
+            className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
+          <div className="relative">
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input
+              id="emailSignup"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
+          <div className="relative">
+            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Input
+              id="passwordSignup"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Min. 6 characters"
+              className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+              required
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
+              aria-label="Toggle password visibility"
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+
+        <Button
+          type="submit"
+          disabled={loading || !email || !password || !fullName}
+          className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
+        >
+          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
+        </Button>
+      </form>
+    </motion.div>
+  );
+
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       <HeroPanel />
@@ -167,25 +423,27 @@ export default function Login() {
             <span className="text-2xl font-black text-white lg:text-slate-900">Sportsphere</span>
           </div>
 
-          {/* Tab switcher */}
-          <div className="flex rounded-xl bg-gray-800 lg:bg-slate-100 p-1">
-            <button
-              onClick={() => setTab("signin")}
-              className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
-                tab === "signin" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
-              }`}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setTab("signup")}
-              className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
-                tab === "signup" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
-              }`}
-            >
-              Create Account
-            </button>
-          </div>
+          {/* Tab switcher — only show when not in signup sub-steps */}
+          {(tab === "signin" || signupStep === "role-select") && (
+            <div className="flex rounded-xl bg-gray-800 lg:bg-slate-100 p-1">
+              <button
+                onClick={switchToSignin}
+                className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
+                  tab === "signin" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
+                }`}
+              >
+                Sign In
+              </button>
+              <button
+                onClick={switchToSignup}
+                className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
+                  tab === "signup" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
+                }`}
+              >
+                Create Account
+              </button>
+            </div>
+          )}
 
           {tab === "signin" ? (
             <form onSubmit={handleSignIn} className="space-y-4">
@@ -236,102 +494,19 @@ export default function Login() {
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
               </Button>
+
+              <p className="text-center text-xs text-slate-400">
+                Don't have an account?{" "}
+                <button type="button" onClick={switchToSignup} className="text-red-600 font-semibold hover:underline">Create one</button>
+              </p>
             </form>
           ) : (
-            <form onSubmit={handleSignUp} className="space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Full Name</Label>
-                <Input
-                  id="fullName"
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Your name"
-                  className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input
-                    id="emailSignup"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                  <Input
-                    id="passwordSignup"
-                    type={showPassword ? "text" : "password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Min. 6 characters"
-                    className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
-                    aria-label="Toggle password visibility"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              <Button
-                type="submit"
-                disabled={loading || !email || !password || !fullName}
-                className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
-              >
-                {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
-              </Button>
-            </form>
+            <AnimatePresence mode="wait">
+              {signupStep === "role-select" && <RoleSelectScreen key="role-select" />}
+              {signupStep === "role-sub" && <RoleSubScreen key="role-sub" />}
+              {signupStep === "form" && <SignupFormScreen key="signup-form" />}
+            </AnimatePresence>
           )}
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-800 lg:border-slate-100" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-gray-950 lg:bg-white px-3 text-slate-400 font-medium">or</span>
-            </div>
-          </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleOAuth("google")}
-            className="w-full rounded-xl h-11 font-medium border-gray-700 lg:border-slate-200 text-white lg:text-slate-900 hover:bg-gray-800 lg:hover:bg-slate-50"
-          >
-            <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
-            </svg>
-            Continue with Google
-          </Button>
-
-          <p className="text-center text-xs text-slate-400">
-            By continuing, you agree to our{" "}
-            <a href="/Terms" className="text-red-800 hover:underline font-medium">Terms of Service</a>
-            {" "}and{" "}
-            <a href="/Guidelines" className="text-red-800 hover:underline font-medium">Community Guidelines</a>.
-          </p>
 
           <div className="flex items-center justify-center gap-1.5 text-xs text-slate-400">
             <Shield className="w-3 h-3" />

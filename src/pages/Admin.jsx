@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
+import { useNavigate } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -62,6 +63,13 @@ function ChartTooltip({ active, payload, label }) {
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function Admin() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Guard: redirect non-admins before any data loads
+  if (user && user.role !== 'admin') {
+    navigate('/', { replace: true });
+    return null;
+  }
 
   const { data: allProfiles = [], isLoading: profilesLoading } = useQuery({
     queryKey: ["admin-profiles"],

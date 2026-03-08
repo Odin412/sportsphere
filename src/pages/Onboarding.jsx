@@ -575,15 +575,17 @@ export default function Onboarding() {
             subscription_plan: "free",
             subscription_status: "trialing",
             max_athletes: 10,
-          });
-          await db.entities.OrgMember.create({
-            organization_id: createdOrg.id,
-            user_email: user.email,
-            user_name: user.full_name,
-            role: "coach",
-            status: "active",
-            sport: stepData.teamSport || primarySport,
-          });
+          }).catch(() => null);
+          if (createdOrg?.id) {
+            await db.entities.OrgMember.create({
+              organization_id: createdOrg.id,
+              user_email: user.email,
+              user_name: user.full_name,
+              role: "coach",
+              status: "active",
+              sport: stepData.teamSport || primarySport,
+            }).catch(() => {});
+          }
         }
       }
 
@@ -600,14 +602,16 @@ export default function Onboarding() {
           subscription_plan: "free",
           subscription_status: "trialing",
           max_athletes: 50,
-        });
-        await db.entities.OrgMember.create({
-          organization_id: createdOrg.id,
-          user_email: user.email,
-          user_name: user.full_name,
-          role: "admin",
-          status: "active",
-        });
+        }).catch(() => null);
+        if (createdOrg?.id) {
+          await db.entities.OrgMember.create({
+            organization_id: createdOrg.id,
+            user_email: user.email,
+            user_name: user.full_name,
+            role: "admin",
+            status: "active",
+          }).catch(() => {});
+        }
       }
 
       if (role === "parent") {

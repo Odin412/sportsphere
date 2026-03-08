@@ -4,7 +4,7 @@ import { db } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { createPageUrl } from "@/utils";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Search, ChevronLeft, ChevronRight, MoreVertical,
   ExternalLink, Shield, Ban, Trash2, UserCheck, X,
@@ -144,6 +144,13 @@ function RoleModal({ user, onSave, onClose }) {
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function AdminUsers() {
   const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Guard: redirect non-admins before any data loads
+  if (user && user.role !== 'admin') {
+    navigate('/', { replace: true });
+    return null;
+  }
 
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");

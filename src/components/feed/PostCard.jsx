@@ -359,7 +359,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
               {post.author_name || "Anonymous"}
             </p>
             <div className="flex items-center gap-2">
-              <p className="text-xs text-gray-500">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
+              <p className="text-xs text-gray-500">{post.created_date ? formatDistanceToNow(new Date(post.created_date), { addSuffix: true }) : 'recently'}</p>
               {post.sport && (
                 <span className="text-xs bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-medium">
                   {post.sport}

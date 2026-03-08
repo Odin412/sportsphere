@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate, useLocation, useNavig
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
 import { Suspense, useEffect } from 'react';
@@ -94,29 +95,31 @@ const AuthenticatedApp = () => {
           </div>
         </div>
       }>
-        <Routes>
-          <Route path="/" element={
-            <LayoutWrapper currentPageName={mainPageKey}>
-              <MainPage />
-            </LayoutWrapper>
-          } />
-          {Object.entries(Pages).map(([path, Page]) => (
-            path === 'Onboarding' ? (
-              <Route key={path} path={`/${path}`} element={<Page />} />
-            ) : (
-              <Route
-                key={path}
-                path={`/${path}`}
-                element={
-                  <LayoutWrapper currentPageName={path}>
-                    <Page />
-                  </LayoutWrapper>
-                }
-              />
-            )
-          ))}
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
+        <ErrorBoundary>
+          <Routes>
+            <Route path="/" element={
+              <LayoutWrapper currentPageName={mainPageKey}>
+                <MainPage />
+              </LayoutWrapper>
+            } />
+            {Object.entries(Pages).map(([path, Page]) => (
+              path === 'Onboarding' ? (
+                <Route key={path} path={`/${path}`} element={<Page />} />
+              ) : (
+                <Route
+                  key={path}
+                  path={`/${path}`}
+                  element={
+                    <LayoutWrapper currentPageName={path}>
+                      <Page />
+                    </LayoutWrapper>
+                  }
+                />
+              )
+            ))}
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </ErrorBoundary>
       </Suspense>
     </>
   );

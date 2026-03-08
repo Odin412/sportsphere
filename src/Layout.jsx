@@ -87,7 +87,7 @@ export default function Layout({ children, currentPageName }) {
       { recipient_email: user.email },
       () => queryClient.invalidateQueries({ queryKey: ["unread-notifications", user.email] })
     );
-    return () => unsub?.();
+    return () => unsub?.unsubscribe?.();
   }, [user?.email]);
 
   const STANDALONE_PAGES = ["Login", "Admin", "AdminUsers", "AdminContent", "AdminAnalytics", "AdminSettings"];

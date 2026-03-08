@@ -23,15 +23,15 @@ export default function Challenges() {
     queryKey: ["challenges", filter],
     queryFn: async () => {
       if (filter === "my-challenges") {
-        return db.entities.Challenge.filter({ creator_email: user.email }, "-created_date");
+        return db.entities.Challenge.filter({ creator_email: user.email }, "-created_date", 50);
       } else if (filter === "joined") {
-        const myParticipations = await db.entities.ChallengeParticipant.filter({ user_email: user.email });
+        const myParticipations = await db.entities.ChallengeParticipant.filter({ user_email: user.email }, null, 100);
         const challengeIds = myParticipations.map(p => p.challenge_id);
-        const allChallenges = await db.entities.Challenge.list("-created_date");
+        const allChallenges = await db.entities.Challenge.list("-created_date", 100);
         return allChallenges.filter(c => challengeIds.includes(c.id));
       } else if (filter === "active") {
-        const all = await db.entities.Challenge.list("-created_date");
-        return all.filter(c => c.status === "active");
+        const all = await db.entities.Challenge.filter({ status: "active" }, "-created_date", 50);
+        return all;
       }
       return db.entities.Challenge.list("-created_date", 50);
     },

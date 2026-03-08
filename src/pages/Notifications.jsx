@@ -70,18 +70,15 @@ export default function Notifications() {
     db.auth.me().then(setUser).catch(() => {});
   }, []);
 
-  // Real-time subscription for new notifications (graceful fallback if not supported)
+  // Real-time subscription for new notifications
   useEffect(() => {
-    if (!user) return;
-    try {
-      const unsubscribe = db.entities.Notification.subscribe((event) => {
-        if (event.type === "create" && event.data.recipient_email === user.email) {
-          queryClient.invalidateQueries({ queryKey: ["notifications"] });
-        }
-      });
-      return unsubscribe;
-    } catch (_) {}
-  }, [user, queryClient]);
+    if (!user?.email) return;
+    const sub = db.entities.Notification.subscribeToChanges(
+      { recipient_email: user.email },
+      () => queryClient.invalidateQueries({ queryKey: ["notifications"] })
+    );
+    return () => sub?.unsubscribe?.();
+  }, [user?.email, queryClient]);
 
   const { data: allNotifications, isLoading } = useQuery({
     queryKey: ["notifications", user?.email],

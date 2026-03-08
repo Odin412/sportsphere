@@ -56,12 +56,11 @@ export default function ViewLive() {
   // Real-time subscription to new chat messages
   useEffect(() => {
     if (!streamId || !hasAccess) return;
-    const unsub = db.entities.LiveChat.subscribe((event) => {
-      if (event.data?.stream_id === streamId) {
-        queryClient.invalidateQueries({ queryKey: ["stream-chat", streamId] });
-      }
-    });
-    return unsub;
+    const sub = db.entities.LiveChat.subscribeToChanges(
+      { stream_id: streamId },
+      () => queryClient.invalidateQueries({ queryKey: ["stream-chat", streamId] })
+    );
+    return () => sub?.unsubscribe?.();
   }, [streamId, hasAccess]);
 
   // Check follow status

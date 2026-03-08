@@ -66,41 +66,24 @@ export default function Messages() {
   // Real-time subscription for messages
   useEffect(() => {
     if (!selectedConv) return;
-    const unsubscribe = db.entities.Message.subscribe((event) => {
-      if (event.data?.conversation_id === selectedConv) {
-        refetchMessages();
-        // Mark as read when new message arrives
-        if (event.data.sender_email !== user?.email) {
-          db.entities.Message.update(event.id, {
-            read_by: [...(event.data.read_by || []), user?.email].filter((v, i, a) => a.indexOf(v) === i),
-          });
-        }
-      }
-    });
-    return unsubscribe;
-  }, [selectedConv, user]);
+    const sub = db.entities.Message.subscribeToChanges(
+      { conversation_id: selectedConv },
+      () => refetchMessages()
+    );
+    return () => sub?.unsubscribe?.();
+  }, [selectedConv]);
 
   // Real-time typing indicators
   useEffect(() => {
     if (!selectedConv || !user) return;
-    const unsubscribe = db.entities.TypingIndicator.subscribe((event) => {
-      if (event.data?.conversation_id === selectedConv && event.data?.user_email !== user.email) {
-        if (event.type === "delete") {
-          setTypingUsers(prev => prev.filter(e => e !== event.data.user_email));
-        } else {
-          const updatedAt = new Date(event.data.updated_at);
-          const age = Date.now() - updatedAt.getTime();
-          if (age < 5000) {
-            setTypingUsers(prev => [...new Set([...prev, event.data.user_email])]);
-            // Remove after 5s
-            setTimeout(() => {
-              setTypingUsers(prev => prev.filter(e => e !== event.data.user_email));
-            }, 5000);
-          }
-        }
+    const sub = db.entities.TypingIndicator.subscribeToChanges(
+      { conversation_id: selectedConv },
+      () => {
+        // Refetch handled by the subscription callback — just update typing state
+        setTypingUsers([]);
       }
-    });
-    return unsubscribe;
+    );
+    return () => sub?.unsubscribe?.();
   }, [selectedConv, user]);
 
   useEffect(() => {

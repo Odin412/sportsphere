@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Sparkles, Mail, RefreshCw, ChevronRight, Radio, FileText, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import moment from "moment";
+import { format } from "date-fns";
 import { toast } from "sonner";
 
 export default function ContentDigest({ user, followedEmails, interests }) {
@@ -46,7 +46,7 @@ Following ${followedEmails?.length || 0} creators
 Recent content from their network:
 Posts: ${relevantPosts.map(p => `"${p.content?.slice(0, 60)}" by ${p.author_name} (${p.sport})`).join("; ")}
 Streams: ${relevantStreams.map(s => `"${s.title}" by ${s.host_name} (${s.sport}, ${s.status})`).join("; ")}
-Events: ${upcomingEvents.map(e => `"${e.title}" on ${moment(e.date).format("MMM D")}`).join("; ")}
+Events: ${upcomingEvents.map(e => `"${e.title}" on ${format(new Date(e.date), "MMM d")}`).join("; ")}
 
 Write an engaging, concise weekly digest with:
 1. A punchy headline (max 10 words)

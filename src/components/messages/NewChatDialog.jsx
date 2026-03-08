@@ -18,7 +18,27 @@ export default function NewChatDialog({ user, onSelectConversation, onClose }) {
 
   const { data: profiles, isLoading } = useQuery({
     queryKey: ["all-sport-profiles-chat"],
-    queryFn: () => db.entities.SportProfile.list("-created_date", 200),
+    queryFn: async () => {
+      const [sportProfiles, allUsers] = await Promise.all([
+        db.entities.SportProfile.list("-created_date", 200),
+        db.entities.User.list("-created_at", 500),
+      ]);
+      // Build a map of email → SportProfile
+      const profileMap = new Map(sportProfiles.map(p => [p.user_email, p]));
+      // Add users who have no SportProfile as synthetic entries
+      for (const u of allUsers) {
+        if (!profileMap.has(u.email)) {
+          profileMap.set(u.email, {
+            user_email: u.email,
+            user_name: u.full_name || u.email,
+            avatar_url: u.avatar_url || "",
+            sport: "",
+            level: "",
+          });
+        }
+      }
+      return Array.from(profileMap.values());
+    },
   });
 
   const seen = new Set();

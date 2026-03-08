@@ -15,7 +15,7 @@ import {
   BarChart2, Plus, Calendar, Trophy, TrendingUp,
   ChevronDown, Loader2, Flame, Activity, ShieldCheck,
 } from "lucide-react";
-import moment from "moment";
+import { format } from "date-fns";
 
 const SESSION_COLORS = {
   game:        "bg-red-900/50 text-red-300 border border-red-800",
@@ -258,7 +258,7 @@ export default function PerformanceHub() {
                   {best.value}
                   <span className="text-gray-500 text-xs ml-1 font-normal">{best.unit}</span>
                 </p>
-                <p className="text-gray-600 text-xs mt-1">{moment(best.date).format("MMM D")}</p>
+                <p className="text-gray-600 text-xs mt-1">{format(new Date(best.date), "MMM d")}</p>
               </div>
             ))}
           </div>
@@ -317,7 +317,7 @@ export default function PerformanceHub() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <p className="text-white font-semibold text-sm">
-                        {moment(entry.date).format("MMM D, YYYY")}
+                        {format(new Date(entry.date), "MMM d, yyyy")}
                       </p>
                       <Badge
                         className={`text-xs capitalize ${

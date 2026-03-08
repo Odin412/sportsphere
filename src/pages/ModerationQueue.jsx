@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertTriangle, CheckCircle2, Trash2, Eye, ShieldAlert, Bot, User, Loader2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
-import moment from "moment";
+import { formatDistanceToNow, isToday } from "date-fns";
 
 const SEVERITY_COLORS = {
   low: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -52,7 +52,7 @@ function FlagCard({ flag, onDecision }) {
               <span className="flex items-center gap-1 text-xs text-blue-600 font-medium"><User className="w-3 h-3" />User Report</span>
             )}
           </div>
-          <span className="text-xs text-slate-400 whitespace-nowrap">{moment(flag.created_date).fromNow()}</span>
+          <span className="text-xs text-slate-400 whitespace-nowrap">{formatDistanceToNow(new Date(flag.created_date), { addSuffix: true })}</span>
         </div>
 
         {/* Violations */}
@@ -222,7 +222,7 @@ export default function ModerationQueue() {
           {[
             { label: "Pending Review", value: flags.filter(f => f.status === "pending").length, color: "text-amber-400" },
             { label: "Critical", value: criticalCount, color: "text-red-400" },
-            { label: "Resolved Today", value: flags.filter(f => f.status !== "pending" && moment(f.updated_date).isSame(moment(), "day")).length, color: "text-green-400" },
+            { label: "Resolved Today", value: flags.filter(f => f.status !== "pending" && isToday(new Date(f.updated_date))).length, color: "text-green-400" },
           ].map(s => (
             <div key={s.label} className="bg-white/10 rounded-2xl p-3 text-center">
               <div className={`text-2xl font-black ${s.color}`}>{s.value}</div>

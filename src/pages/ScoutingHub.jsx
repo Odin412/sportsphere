@@ -14,7 +14,7 @@ import {
   MessageCircle, Bookmark, BookmarkCheck, X, ChevronRight,
   Users, Loader2, BarChart2, ExternalLink, Star,
 } from "lucide-react";
-import moment from "moment";
+import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 
 const SPORTS = [
@@ -385,7 +385,7 @@ export default function ScoutingHub() {
                           </span>
                         )}
                         {lastActive && (
-                          <span className="ml-auto">{moment(lastActive).fromNow()}</span>
+                          <span className="ml-auto">{formatDistanceToNow(new Date(lastActive), { addSuffix: true })}</span>
                         )}
                       </div>
 
@@ -551,7 +551,7 @@ export default function ScoutingHub() {
                         <div key={entry.id} className="bg-gray-800 rounded-xl p-3">
                           <div className="flex items-center justify-between mb-2">
                             <span className="text-white text-xs font-semibold">
-                              {moment(entry.date).format("MMM D, YYYY")}
+                              {format(new Date(entry.date), "MMM d, yyyy")}
                             </span>
                             <span
                               className={`text-xs px-2 py-0.5 rounded-full capitalize ${

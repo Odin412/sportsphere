@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sparkles, TrendingUp, Radio, Calendar, Users, Loader2, Play, Crown, Filter, Search, Mail, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
+import { format, formatDistanceToNow } from "date-fns";
 import ContentDigest from "@/components/discover/ContentDigest";
 
 export default function Discover() {
@@ -88,7 +88,7 @@ Live Streams (${liveStreams.length}):
 ${liveStreams.slice(0, 5).map(s => `- "${s.title}" by ${s.host_name} (${s.sport})`).join("\n")}
 
 Upcoming Events (${events.length}):
-${events.slice(0, 5).map(e => `- "${e.title}" (${e.sport}, ${e.event_type}) on ${moment(e.date).format("MMM D")}`).join("\n")}
+${events.slice(0, 5).map(e => `- "${e.title}" (${e.sport}, ${e.event_type}) on ${format(new Date(e.date), "MMM d")}`).join("\n")}
 
 Groups (${groups.length}):
 ${groups.slice(0, 5).map(g => `- "${g.name}" (${g.sport}, ${g.category})`).join("\n")}
@@ -352,7 +352,7 @@ Based on the user's interests, provide personalized recommendations. Return a JS
                         <Badge className="bg-blue-600 text-white capitalize">{event.event_type}</Badge>
                         <h3 className="font-bold text-white line-clamp-2">{event.title}</h3>
                         <div className="space-y-1 text-sm text-slate-400">
-                          <p>{moment(event.date).format("MMM D, YYYY")}</p>
+                          <p>{format(new Date(event.date), "MMM d, yyyy")}</p>
                           <p>{event.location || event.city}</p>
                         </div>
                       </CardContent>
@@ -401,7 +401,7 @@ Based on the user's interests, provide personalized recommendations. Return a JS
                           </Avatar>
                           <div className="flex-1">
                             <p className="font-semibold text-white text-sm">{post.author_name}</p>
-                            <p className="text-xs text-slate-500">{moment(post.created_date).fromNow()}</p>
+                            <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
                           </div>
                           {post.sport && <Badge className="bg-cyan-600 text-white">{post.sport}</Badge>}
                         </div>
@@ -517,7 +517,7 @@ Based on the user's interests, provide personalized recommendations. Return a JS
                     <Badge className="bg-blue-600 text-white capitalize">{event.event_type}</Badge>
                     <h3 className="font-bold text-white line-clamp-2">{event.title}</h3>
                     <div className="space-y-1 text-sm text-slate-400">
-                      <p>{moment(event.date).format("MMM D, YYYY")}</p>
+                      <p>{format(new Date(event.date), "MMM d, yyyy")}</p>
                       <p>{event.location || event.city}</p>
                     </div>
                     <Link to={createPageUrl("Explore") + "?tab=events"}>
@@ -579,7 +579,7 @@ Based on the user's interests, provide personalized recommendations. Return a JS
                       </Avatar>
                       <div className="flex-1">
                         <p className="font-semibold text-white text-sm">{post.author_name}</p>
-                        <p className="text-xs text-slate-500">{moment(post.created_date).fromNow()}</p>
+                        <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
                       </div>
                       {post.sport && (
                         <Badge className="bg-cyan-600 text-white">{post.sport}</Badge>

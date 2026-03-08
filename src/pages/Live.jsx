@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Switch } from "@/components/ui/switch";
 import StreamSearch from "@/components/discover/StreamSearch";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 
@@ -38,7 +38,7 @@ function StreamCard({ stream, isLive }) {
           <div className="absolute top-3 right-3 bg-black/60 px-2 py-1 rounded-lg flex items-center gap-1">
             {isLive ? <Eye className="w-3 h-3 text-white" /> : <Clock className="w-3 h-3 text-white" />}
             <span className="text-white text-xs font-semibold">
-              {isLive ? (stream.viewers?.length || 0) : moment(stream.ended_at || stream.started_at).fromNow()}
+              {isLive ? (stream.viewers?.length || 0) : formatDistanceToNow(new Date(stream.ended_at || stream.started_at), { addSuffix: true })}
             </span>
           </div>
           {stream.thumbnail_url && (
@@ -494,7 +494,7 @@ export default function Live() {
                 <p className="text-white/70 text-xs font-medium">Viewers</p>
               </div>
               <div className="bg-white/10 rounded-xl p-3">
-                <p className="text-xl font-black">{moment(myActiveStream[0].started_at).fromNow(true)}</p>
+                <p className="text-xl font-black">{formatDistanceToNow(new Date(myActiveStream[0].started_at))}</p>
                 <p className="text-white/70 text-xs font-medium">Duration</p>
               </div>
               <div className="bg-white/10 rounded-xl p-3">

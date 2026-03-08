@@ -13,7 +13,7 @@ import {
   Scissors, Loader2, Play, Clock, Save, RotateCcw, Merge, Video,
   CheckCircle, GripVertical, ChevronUp, ChevronDown, Plus, Trash2, Type, Film
 } from "lucide-react";
-import moment from "moment";
+import { format } from "date-fns";
 import { toast } from "sonner";
 
 function secondsToTime(s) {
@@ -175,7 +175,7 @@ function MergeSelector({ streams, onMerge }) {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-gray-900 truncate">{s.title}</p>
-              <p className="text-xs text-gray-500">{moment(s.started_at).format("MMM D, YYYY")}</p>
+              <p className="text-xs text-gray-500">{format(new Date(s.started_at), "MMM d, yyyy")}</p>
             </div>
             {s.sport && <Badge variant="secondary" className="text-[10px]">{s.sport}</Badge>}
           </button>
@@ -466,7 +466,7 @@ export default function VODEditor({ user }) {
                 <p className="font-bold text-gray-900 text-sm truncate">{s.title}</p>
                 <div className="flex items-center gap-2 text-xs text-gray-500 mt-0.5 flex-wrap">
                   <Clock className="w-3 h-3" />
-                  <span>{moment(s.started_at).format("MMM D")}</span>
+                  <span>{format(new Date(s.started_at), "MMM d")}</span>
                   {s.trim_applied && <Badge className="bg-green-100 text-green-700 text-[10px] gap-1"><Scissors className="w-2.5 h-2.5" />Trimmed</Badge>}
                   {s.text_overlays?.length > 0 && <Badge className="bg-blue-100 text-blue-700 text-[10px] gap-1"><Type className="w-2.5 h-2.5" />{s.text_overlays.length} overlays</Badge>}
                 </div>

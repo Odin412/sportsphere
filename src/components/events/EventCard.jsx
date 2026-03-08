@@ -4,7 +4,7 @@ import { Calendar, MapPin, Users, Clock, DollarSign, Video, ExternalLink, Downlo
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import moment from "moment";
+import { format, isBefore, addHours } from "date-fns";
 import { toast } from "sonner";
 
 const eventTypeColors = {
@@ -52,17 +52,17 @@ export default function EventCard({ event, currentUser, onUpdate }) {
   };
 
   const downloadICS = () => {
-    const startDate = moment(event.date).format('YYYYMMDDTHHmmss');
-    const endDate = event.end_date 
-      ? moment(event.end_date).format('YYYYMMDDTHHmmss')
-      : moment(event.date).add(2, 'hours').format('YYYYMMDDTHHmmss');
+    const startDate = format(new Date(event.date), "yyyyMMdd'T'HHmmss");
+    const endDate = event.end_date
+      ? format(new Date(event.end_date), "yyyyMMdd'T'HHmmss")
+      : format(addHours(new Date(event.date), 2), "yyyyMMdd'T'HHmmss");
     
     const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//SportHub//Event//EN
 BEGIN:VEVENT
 UID:${event.id}@sporthub.com
-DTSTAMP:${moment().format('YYYYMMDDTHHmmss')}
+DTSTAMP:${format(new Date(), "yyyyMMdd'T'HHmmss")}
 DTSTART:${startDate}
 DTEND:${endDate}
 SUMMARY:${event.title}
@@ -84,7 +84,7 @@ END:VCALENDAR`;
   };
 
   const isFull = event.max_attendees && attendeeCount >= event.max_attendees;
-  const isPast = moment(event.date).isBefore(moment());
+  const isPast = isBefore(new Date(event.date), new Date());
 
   return (
     <article className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
@@ -127,9 +127,9 @@ END:VCALENDAR`;
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2 text-slate-600">
             <Calendar className="w-4 h-4 text-slate-400" />
-            <span className="font-medium">{moment(event.date).format('MMM D, YYYY')}</span>
+            <span className="font-medium">{format(new Date(event.date), "MMM d, yyyy")}</span>
             <Clock className="w-4 h-4 text-slate-400 ml-2" />
-            <span>{moment(event.date).format('h:mm A')}</span>
+            <span>{format(new Date(event.date), "h:mm a")}</span>
           </div>
           
           {event.is_virtual ? (

@@ -78,15 +78,18 @@ export default function Onboarding() {
     try {
       const primarySport = selectedSports[0] || "";
 
-      // Save profile to auth
+      // Save profile to auth (including role for tutorial personalization)
       await db.auth.updateMe({
         full_name: profile.full_name,
         preferred_sports: selectedSports,
         onboarding_complete: true,
+        role: selectedRole,
         ...(profile.avatar_url ? { avatar_url: profile.avatar_url } : {}),
       }).catch(() => {});
       // localStorage fallback for missing onboarding_complete DB column
       if (user?.id) localStorage.setItem(`ob_${user.id}`, '1');
+      // Store role for tutorial personalization
+      localStorage.setItem('user_role', selectedRole);
 
       if (selectedRole === "admin") {
         const createdOrg = await db.entities.Organization.create({
@@ -140,13 +143,22 @@ export default function Onboarding() {
             <Check className="w-10 h-10 text-green-600" />
           </div>
           <h2 className="text-2xl font-black text-gray-900">You're all set!</h2>
-          <p className="text-gray-500">Welcome to Sportsphere. Your profile is ready.</p>
+          <p className="text-gray-500">Welcome to Sportsphere. Let us show you around so you know where everything is.</p>
           <Button
-            onClick={() => window.location.href = createPageUrl("Feed")}
+            onClick={() => {
+              localStorage.setItem('tutorial_pending', '1');
+              window.location.href = createPageUrl("Feed");
+            }}
             className="bg-gradient-to-r from-red-900 to-red-700 text-white rounded-xl px-8 font-bold"
           >
-            Explore the Feed <ArrowRight className="w-4 h-4 ml-2" />
+            <Sparkles className="w-4 h-4 mr-2" /> Start the Tour <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
+          <button
+            onClick={() => window.location.href = createPageUrl("Feed")}
+            className="block w-full text-center text-sm text-gray-400 hover:text-gray-600 py-2 transition-colors"
+          >
+            Skip tutorial — go to Feed
+          </button>
         </div>
       </div>
     );

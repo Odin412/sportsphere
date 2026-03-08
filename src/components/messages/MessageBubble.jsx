@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { db } from "@/api/db";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader2, Languages, CheckCheck, Check, ExternalLink, Trash2 } from "lucide-react";
-import moment from "moment";
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
@@ -118,7 +118,7 @@ export default function MessageBubble({ msg, isMine, preferredLanguage, allParti
               {translating ? "Translating..." : isTranslated ? "Translated" : "Translate"}
             </button>
           )}
-          <span className="text-[10px] text-slate-400">{moment(msg.created_date).format("h:mm A")}</span>
+          <span className="text-[10px] text-slate-400">{format(new Date(msg.created_date), "h:mm a")}</span>
           {isMine && (
             <span className={`text-[10px] ${allRead ? "text-blue-500" : "text-slate-400"}`} title={allRead ? "Read" : "Delivered"}>
               {allRead ? <CheckCheck className="w-3 h-3" /> : <Check className="w-3 h-3" />}

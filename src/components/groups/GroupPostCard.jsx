@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 
 export default function GroupPostCard({ post, currentUser, onUpdate }) {
@@ -57,7 +57,7 @@ export default function GroupPostCard({ post, currentUser, onUpdate }) {
           </Avatar>
           <div>
             <p className="font-semibold text-sm text-slate-900">{post.author_name}</p>
-            <p className="text-xs text-slate-400">{moment(post.created_date).fromNow()}</p>
+            <p className="text-xs text-slate-400">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
           </div>
         </div>
       </div>

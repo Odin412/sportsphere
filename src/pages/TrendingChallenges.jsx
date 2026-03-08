@@ -7,7 +7,7 @@ import { TrendingUp, Loader2, Trophy, Users, Flame } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import moment from "moment";
+
 
 export default function TrendingChallenges() {
   const [user, setUser] = useState(null);

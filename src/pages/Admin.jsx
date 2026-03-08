@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -60,6 +61,8 @@ function ChartTooltip({ active, payload, label }) {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function Admin() {
+  const { user } = useAuth();
+
   const { data: allProfiles = [], isLoading: profilesLoading } = useQuery({
     queryKey: ["admin-profiles"],
     queryFn: () => db.entities.User.list("-created_at", 500),
@@ -128,6 +131,10 @@ export default function Admin() {
   }, [allPosts]);
 
   const loading = profilesLoading || postsLoading;
+
+  if (!user || user.role !== "admin") {
+    return <div className="flex items-center justify-center h-screen text-white text-lg">Access denied.</div>;
+  }
 
   return (
     <AdminLayout currentPage="Admin">

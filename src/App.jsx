@@ -8,7 +8,8 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Login from './pages/Login';
-import { useEffect } from 'react';
+import LandingPage from './pages/LandingPage';
+import { Suspense, useEffect } from 'react';
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -46,8 +47,8 @@ const AuthenticatedApp = () => {
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
     return (
-      <div className="fixed inset-0 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      <div className="fixed inset-0 flex items-center justify-center bg-black">
+        <div className="w-8 h-8 border-4 border-gray-700 border-t-red-500 rounded-full animate-spin"></div>
       </div>
     );
   }
@@ -59,12 +60,13 @@ const AuthenticatedApp = () => {
     }
   }
 
-  // Not authenticated — show login
+  // Not authenticated — show landing page + login
   if (!isAuthenticated) {
     return (
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="*" element={<LandingPage />} />
       </Routes>
     );
   }
@@ -73,25 +75,34 @@ const AuthenticatedApp = () => {
   return (
     <>
       <OnboardingRedirect />
-      <Routes>
-        <Route path="/" element={
-          <LayoutWrapper currentPageName={mainPageKey}>
-            <MainPage />
-          </LayoutWrapper>
-        } />
-        {Object.entries(Pages).map(([path, Page]) => (
-          <Route
-            key={path}
-            path={`/${path}`}
-            element={
-              <LayoutWrapper currentPageName={path}>
-                <Page />
-              </LayoutWrapper>
-            }
-          />
-        ))}
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      <Suspense fallback={
+        <div className="fixed inset-0 flex items-center justify-center bg-black">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-8 h-8 border-4 border-gray-700 border-t-red-500 rounded-full animate-spin" />
+            <span className="text-gray-500 text-sm">Loading...</span>
+          </div>
+        </div>
+      }>
+        <Routes>
+          <Route path="/" element={
+            <LayoutWrapper currentPageName={mainPageKey}>
+              <MainPage />
+            </LayoutWrapper>
+          } />
+          {Object.entries(Pages).map(([path, Page]) => (
+            <Route
+              key={path}
+              path={`/${path}`}
+              element={
+                <LayoutWrapper currentPageName={path}>
+                  <Page />
+                </LayoutWrapper>
+              }
+            />
+          ))}
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 };

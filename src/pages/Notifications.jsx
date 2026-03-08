@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import NotificationSettingsDialog from "@/components/notifications/NotificationSettingsDialog";
 import { motion } from "framer-motion";
 
@@ -345,7 +345,7 @@ export default function Notifications() {
                               )}
                             </p>
                             <div className="flex items-center gap-2 mt-2 flex-wrap">
-                              <p className="text-xs text-slate-500">{moment(group.created_date).fromNow()}</p>
+                              <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(group.created_date), { addSuffix: true })}</p>
                               {!group.is_read && (
                                 <Badge className="bg-cyan-500 text-white text-xs">New</Badge>
                               )}

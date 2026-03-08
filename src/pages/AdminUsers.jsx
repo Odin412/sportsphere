@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { createPageUrl } from "@/utils";
 import { Link } from "react-router-dom";
@@ -142,6 +143,8 @@ function RoleModal({ user, onSave, onClose }) {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function AdminUsers() {
+  const { user } = useAuth();
+
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(0);
@@ -203,6 +206,10 @@ export default function AdminUsers() {
     queryClient.invalidateQueries({ queryKey: ["admin-all-posts-users"] });
     setModal(null);
   };
+
+  if (!user || user.role !== "admin") {
+    return <div className="flex items-center justify-center h-screen text-white text-lg">Access denied.</div>;
+  }
 
   return (
     <AdminLayout currentPage="AdminUsers">

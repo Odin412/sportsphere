@@ -10,8 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, Clock, SlidersHorizontal, Play } from "lucide-react";
 import { Link, useSearchParams } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
-import { debounce } from "lodash";
+import { formatDistanceToNow } from "date-fns";
+
+// Native debounce — replaces lodash
+function debounce(fn, ms) {
+  let timer;
+  return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+}
 
 const STATUS_GRADIENTS = {
   Basketball: "from-orange-600 to-red-700",
@@ -398,7 +403,7 @@ export default function SearchPage() {
                               </Avatar>
                               <div className="flex-1 min-w-0">
                                 <p className="font-semibold text-white text-sm truncate">{post.author_name}</p>
-                                <p className="text-xs text-slate-500">{moment(post.created_date).fromNow()}</p>
+                                <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
                               </div>
                               {post.sport && <Badge className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 text-xs">{post.sport}</Badge>}
                               {post.category && <Badge className="bg-slate-700/60 text-slate-300 text-xs capitalize">{post.category}</Badge>}
@@ -633,7 +638,7 @@ export default function SearchPage() {
                             <p className="text-sm text-slate-400 line-clamp-2">{challenge.description}</p>
                             <div className="flex items-center gap-3 text-xs text-slate-500">
                               <span className="flex items-center gap-1"><Users className="w-3 h-3" />{challenge.participants?.length || 0} participants</span>
-                              {challenge.end_date && <span>Ends {moment(challenge.end_date).fromNow()}</span>}
+                              {challenge.end_date && <span>Ends {formatDistanceToNow(new Date(challenge.end_date), { addSuffix: true })}</span>}
                             </div>
                           </CardContent>
                         </Card>

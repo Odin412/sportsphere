@@ -4,7 +4,7 @@ import { Sparkles, Loader2, RefreshCw, MapPin, Calendar, Users, DollarSign, Vide
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import moment from "moment";
+import { format, isAfter, addHours } from "date-fns";
 import { toast } from "sonner";
 
 function RecommendedEventCard({ event, match, currentUser, onRSVP }) {
@@ -25,10 +25,10 @@ function RecommendedEventCard({ event, match, currentUser, onRSVP }) {
   };
 
   const addToCalendar = () => {
-    const startDate = moment(event.date).format("YYYYMMDDTHHmmss");
+    const startDate = format(new Date(event.date), "yyyyMMdd'T'HHmmss");
     const endDate = event.end_date
-      ? moment(event.end_date).format("YYYYMMDDTHHmmss")
-      : moment(event.date).add(2, "hours").format("YYYYMMDDTHHmmss");
+      ? format(new Date(event.end_date), "yyyyMMdd'T'HHmmss")
+      : format(addHours(new Date(event.date), 2), "yyyyMMdd'T'HHmmss");
     const location = event.is_virtual ? (event.meeting_link || "Online") : (event.location || "");
     const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${event.id}@sporthub\nDTSTART:${startDate}\nDTEND:${endDate}\nSUMMARY:${event.title}\nLOCATION:${location}\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
     const blob = new Blob([ics], { type: "text/calendar" });
@@ -76,7 +76,7 @@ function RecommendedEventCard({ event, match, currentUser, onRSVP }) {
         <div className="space-y-1 text-xs text-gray-500">
           <div className="flex items-center gap-1.5">
             <Calendar className="w-3.5 h-3.5 text-red-900" />
-            <span>{moment(event.date).format("ddd, MMM D")} · {moment(event.date).format("h:mm A")}</span>
+            <span>{format(new Date(event.date), "EEE, MMM d")} · {format(new Date(event.date), "h:mm a")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             {event.is_virtual ? (
@@ -139,7 +139,7 @@ export default function AIEventRecommendations({ user, allEvents, onRSVP }) {
     const preferredSports = feedPrefs[0]?.preferred_sports || [];
 
     const upcomingEvents = allEvents
-      .filter(e => moment(e.date).isAfter(moment()))
+      .filter(e => isAfter(new Date(e.date), new Date()))
       .filter(e => !e.attendees?.includes(user.email))
       .slice(0, 50);
 

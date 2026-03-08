@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Users, Calendar, Trophy, Target, Loader2, Share2, CheckCircle2, Flame, Medal } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
+import { differenceInDays } from "date-fns";
 import PostChallengeUpdateDialog from "@/components/challenges/PostChallengeUpdateDialog";
 import ChallengeUpdateCard from "@/components/challenges/ChallengeUpdateCard";
 import { awardPoints } from "@/components/gamification/PointsHelper";
@@ -106,8 +106,8 @@ export default function ChallengeDetail() {
     );
   }
 
-  const daysRemaining = moment(challenge.end_date).diff(moment(), "days");
-  const daysSinceStart = moment().diff(moment(challenge.start_date), "days");
+  const daysRemaining = differenceInDays(new Date(challenge.end_date), new Date());
+  const daysSinceStart = differenceInDays(new Date(), new Date(challenge.start_date));
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">

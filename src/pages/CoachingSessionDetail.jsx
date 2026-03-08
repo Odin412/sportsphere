@@ -14,7 +14,7 @@ import { ArrowLeft, Calendar, Clock, Users, DollarSign, Video, Loader2, Send, Me
 import { Link } from "react-router-dom";
 import VideoFormAnalysis from "@/components/org/VideoFormAnalysis";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
+import { format, formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 
 export default function CoachingSessionDetail() {
@@ -214,7 +214,7 @@ export default function CoachingSessionDetail() {
                   <div>
                     <p className="text-xs text-gray-500">Date & Time</p>
                     <p className="font-semibold text-gray-900 text-sm">
-                      {moment(session.scheduled_date).format("MMM D, h:mm A")}
+                      {format(new Date(session.scheduled_date), "MMM d, h:mm a")}
                     </p>
                   </div>
                 </div>
@@ -403,7 +403,7 @@ export default function CoachingSessionDetail() {
                           <Video className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
                           <div className="min-w-0">
                             <p className="font-semibold text-sm text-gray-900 truncate">{video.title}</p>
-                            <p className="text-xs text-gray-500">{video.athlete_name} · {moment(video.created_date).fromNow()}</p>
+                            <p className="text-xs text-gray-500">{video.athlete_name} · {formatDistanceToNow(new Date(video.created_date), { addSuffix: true })}</p>
                           </div>
                         </div>
                         {video.video_url && (
@@ -438,7 +438,7 @@ export default function CoachingSessionDetail() {
                     ?.filter(slot => !bookings.some(b => b.booking_date === slot))
                     .map((slot, idx) => (
                       <SelectItem key={idx} value={slot}>
-                        {moment(slot).format("MMM D, YYYY [at] h:mm A")}
+                        {format(new Date(slot), "MMM d, yyyy 'at' h:mm a")}
                       </SelectItem>
                     ))}
                 </SelectContent>

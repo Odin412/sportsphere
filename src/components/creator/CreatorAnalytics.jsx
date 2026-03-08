@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, PieChart, Pie, Cell } from "recharts";
 import { TrendingUp, Users, DollarSign, Radio, Eye, Heart, UserPlus, Loader2 } from "lucide-react";
-import moment from "moment";
+import { format, subDays, isBefore } from "date-fns";
 
 function StatCard({ icon: Icon, label, value, sub, color = "text-red-800" }) {
   return (
@@ -71,9 +71,9 @@ export default function CreatorAnalytics({ user, timeRange = 30 }) {
   const followerGrowthData = useMemo(() => {
     const days = [];
     for (let i = 29; i >= 0; i--) {
-      const date = moment().subtract(i, "days");
-      const count = followers.filter(f => moment(f.created_date).isSameOrBefore(date, "day")).length;
-      days.push({ date: date.format("MMM D"), followers: count });
+      const date = subDays(new Date(), i);
+      const count = followers.filter(f => isBefore(new Date(f.created_date), date) || format(new Date(f.created_date), "yyyy-MM-dd") === format(date, "yyyy-MM-dd")).length;
+      days.push({ date: format(date, "MMM d"), followers: count });
     }
     return days;
   }, [followers]);
@@ -83,7 +83,7 @@ export default function CreatorAnalytics({ user, timeRange = 30 }) {
     recentStreams.slice(0, 10).reverse().map(s => ({
       name: s.title?.slice(0, 15) + (s.title?.length > 15 ? "…" : ""),
       viewers: s.viewers?.length || 0,
-      date: moment(s.started_at).format("MMM D"),
+      date: format(new Date(s.started_at), "MMM d"),
     })),
     [recentStreams]
   );
@@ -92,7 +92,7 @@ export default function CreatorAnalytics({ user, timeRange = 30 }) {
   const revenueByDay = useMemo(() => {
     const map = {};
     recentTx.forEach(t => {
-      const d = moment(t.created_date).format("MMM D");
+      const d = format(new Date(t.created_date), "MMM d");
       map[d] = (map[d] || 0) + (t.amount || 0);
     });
     return Object.entries(map).map(([date, amount]) => ({ date, amount })).slice(-14);
@@ -238,7 +238,7 @@ export default function CreatorAnalytics({ user, timeRange = 30 }) {
               <div key={s.id} className="flex items-center gap-3">
                 <div className="flex-1 min-w-0">
                   <p className="text-xs font-semibold text-gray-800 truncate">{s.title}</p>
-                  <p className="text-[10px] text-gray-400">{moment(s.started_at).format("MMM D")}</p>
+                  <p className="text-[10px] text-gray-400">{format(new Date(s.started_at), "MMM d")}</p>
                 </div>
                 <div className="flex items-center gap-1 text-xs font-bold text-gray-700 flex-shrink-0">
                   <Eye className="w-3 h-3" /> {s.viewers?.length || 0}

@@ -150,7 +150,7 @@ export default function Login() {
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       <HeroPanel />
 
-      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-white">
+      <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-950 lg:bg-white">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -164,15 +164,15 @@ export default function Login() {
               alt="Sportsphere"
               className="w-14 h-14 object-contain"
             />
-            <span className="text-2xl font-black text-slate-900">Sportsphere</span>
+            <span className="text-2xl font-black text-white lg:text-slate-900">Sportsphere</span>
           </div>
 
           {/* Tab switcher */}
-          <div className="flex rounded-xl bg-slate-100 p-1">
+          <div className="flex rounded-xl bg-gray-800 lg:bg-slate-100 p-1">
             <button
               onClick={() => setTab("signin")}
               className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
-                tab === "signin" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700"
+                tab === "signin" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
               }`}
             >
               Sign In
@@ -180,7 +180,7 @@ export default function Login() {
             <button
               onClick={() => setTab("signup")}
               className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
-                tab === "signup" ? "bg-white shadow text-slate-900" : "text-slate-500 hover:text-slate-700"
+                tab === "signup" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
               }`}
             >
               Create Account
@@ -190,7 +190,7 @@ export default function Login() {
           {tab === "signin" ? (
             <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="email" className="text-sm font-semibold text-slate-700">Email</Label>
+                <Label htmlFor="email" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
@@ -199,14 +199,14 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="pl-9 rounded-xl h-12 border-slate-200"
+                    className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="password" className="text-sm font-semibold text-slate-700">Password</Label>
+                <Label htmlFor="password" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
@@ -215,13 +215,14 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="pl-9 pr-10 rounded-xl h-12 border-slate-200"
+                    className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
+                    aria-label="Toggle password visibility"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -239,20 +240,20 @@ export default function Login() {
           ) : (
             <form onSubmit={handleSignUp} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="fullName" className="text-sm font-semibold text-slate-700">Full Name</Label>
+                <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Full Name</Label>
                 <Input
                   id="fullName"
                   type="text"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Your name"
-                  className="rounded-xl h-12 border-slate-200"
+                  className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
                   required
                 />
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-700">Email</Label>
+                <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
@@ -261,14 +262,14 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="pl-9 rounded-xl h-12 border-slate-200"
+                    className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-1.5">
-                <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-700">Password</Label>
+                <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                   <Input
@@ -277,13 +278,14 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Min. 6 characters"
-                    className="pl-9 pr-10 rounded-xl h-12 border-slate-200"
+                    className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
+                    aria-label="Toggle password visibility"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -302,10 +304,10 @@ export default function Login() {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-100" />
+              <div className="w-full border-t border-gray-800 lg:border-slate-100" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-3 text-slate-400 font-medium">or</span>
+              <span className="bg-gray-950 lg:bg-white px-3 text-slate-400 font-medium">or</span>
             </div>
           </div>
 
@@ -313,7 +315,7 @@ export default function Login() {
             type="button"
             variant="outline"
             onClick={() => handleOAuth("google")}
-            className="w-full rounded-xl h-11 font-medium border-slate-200 hover:bg-slate-50"
+            className="w-full rounded-xl h-11 font-medium border-gray-700 lg:border-slate-200 text-white lg:text-slate-900 hover:bg-gray-800 lg:hover:bg-slate-50"
           >
             <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />

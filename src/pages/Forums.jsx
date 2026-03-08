@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MessageCircle, Eye, ThumbsUp, Plus, Search, TrendingUp, Pin, Flame } from "lucide-react";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { awardPoints } from "@/components/gamification/PointsHelper";
 
@@ -223,7 +223,7 @@ export default function Forums() {
                               {topic.likes?.length || 0}
                             </div>
                             <span className="text-gray-400">
-                              {moment(topic.last_activity || topic.created_date).fromNow()}
+                              {formatDistanceToNow(new Date(topic.last_activity || topic.created_date), { addSuffix: true })}
                             </span>
                           </div>
                         </div>

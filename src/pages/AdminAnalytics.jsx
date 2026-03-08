@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   BarChart, Bar, AreaChart, Area, PieChart, Pie, Cell, Tooltip,
@@ -41,6 +42,8 @@ function KpiCard({ label, value, sub, icon: Icon, color }) {
 const PIE_COLORS = ["#dc2626", "#2563eb", "#16a34a", "#d97706", "#9333ea", "#0891b2", "#db2777", "#65a30d"];
 
 export default function AdminAnalytics() {
+  const { user } = useAuth();
+
   const { data: profiles = [], isLoading: loadP } = useQuery({
     queryKey: ["analytics-profiles"],
     queryFn: () => db.entities.User.list("-created_at", 500),
@@ -167,6 +170,10 @@ export default function AdminAnalytics() {
         </div>
       </AdminLayout>
     );
+  }
+
+  if (!user || user.role !== "admin") {
+    return <div className="flex items-center justify-center h-screen text-white text-lg">Access denied.</div>;
   }
 
   return (

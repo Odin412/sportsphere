@@ -11,7 +11,7 @@ import {
   Calendar, MapPin, Clock, Users, DollarSign, Video, ExternalLink,
   Search, Plus, Filter, Globe, Download, Trophy, Loader2, X, CheckCircle2
 } from "lucide-react";
-import moment from "moment";
+import { format, isBefore, isAfter, isSameDay, isSameMonth, startOfWeek, endOfWeek, addHours } from "date-fns";
 import { toast } from "sonner";
 import CreateEventDialog from "@/components/events/CreateEventDialog";
 import AIEventRecommendations from "@/components/events/AIEventRecommendations";
@@ -72,12 +72,12 @@ function EventCard({ event, currentUser, onUpdate }) {
   };
 
   const addToCalendar = () => {
-    const startDate = moment(event.date).format("YYYYMMDDTHHmmss");
+    const startDate = format(new Date(event.date), "yyyyMMdd'T'HHmmss");
     const endDate = event.end_date
-      ? moment(event.end_date).format("YYYYMMDDTHHmmss")
-      : moment(event.date).add(2, "hours").format("YYYYMMDDTHHmmss");
+      ? format(new Date(event.end_date), "yyyyMMdd'T'HHmmss")
+      : format(addHours(new Date(event.date), 2), "yyyyMMdd'T'HHmmss");
     const location = event.is_virtual ? (event.meeting_link || "Online") : (event.location || "");
-    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SportHub//Event//EN\nBEGIN:VEVENT\nUID:${event.id}@sporthub\nDTSTAMP:${moment().format("YYYYMMDDTHHmmss")}\nDTSTART:${startDate}\nDTEND:${endDate}\nSUMMARY:${event.title}\nDESCRIPTION:${(event.description || "").replace(/\n/g, "\\n")}\nLOCATION:${location}\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
+    const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//SportHub//Event//EN\nBEGIN:VEVENT\nUID:${event.id}@sporthub\nDTSTAMP:${format(new Date(), "yyyyMMdd'T'HHmmss")}\nDTSTART:${startDate}\nDTEND:${endDate}\nSUMMARY:${event.title}\nDESCRIPTION:${(event.description || "").replace(/\n/g, "\\n")}\nLOCATION:${location}\nSTATUS:CONFIRMED\nEND:VEVENT\nEND:VCALENDAR`;
     const blob = new Blob([ics], { type: "text/calendar" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -87,7 +87,7 @@ function EventCard({ event, currentUser, onUpdate }) {
   };
 
   const isFull = event.max_attendees && attendeeCount >= event.max_attendees;
-  const isPast = moment(event.date).isBefore(moment());
+  const isPast = isBefore(new Date(event.date), new Date());
   const typeData = EVENT_TYPES.find(t => t.value === event.event_type) || EVENT_TYPES[0];
   const spotsLeft = event.max_attendees ? event.max_attendees - attendeeCount : null;
 
@@ -126,9 +126,9 @@ function EventCard({ event, currentUser, onUpdate }) {
         <div className="space-y-1.5 text-sm text-gray-600">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-red-900 shrink-0" />
-            <span className="font-medium">{moment(event.date).format("ddd, MMM D, YYYY")}</span>
+            <span className="font-medium">{format(new Date(event.date), "EEE, MMM d, yyyy")}</span>
             <Clock className="w-4 h-4 text-gray-400 ml-1" />
-            <span>{moment(event.date).format("h:mm A")}</span>
+            <span>{format(new Date(event.date), "h:mm a")}</span>
           </div>
           {event.is_virtual ? (
             <div className="flex items-center gap-2">
@@ -225,18 +225,18 @@ export default function Events() {
   });
 
   const filtered = allEvents.filter(e => {
-    const now = moment();
-    const evDate = moment(e.date);
+    const now = new Date();
+    const evDate = new Date(e.date);
 
     // Date range
-    if (dateFilter === "upcoming" && evDate.isBefore(now)) return false;
-    if (dateFilter === "past" && evDate.isAfter(now)) return false;
-    if (dateFilter === "today" && !evDate.isSame(now, "day")) return false;
-    if (dateFilter === "this_week" && !evDate.isBetween(now.startOf("week"), moment().endOf("week"))) return false;
-    if (dateFilter === "this_month" && !evDate.isSame(now, "month")) return false;
+    if (dateFilter === "upcoming" && isBefore(evDate, now)) return false;
+    if (dateFilter === "past" && isAfter(evDate, now)) return false;
+    if (dateFilter === "today" && !isSameDay(evDate, now)) return false;
+    if (dateFilter === "this_week" && (isBefore(evDate, startOfWeek(now)) || isAfter(evDate, endOfWeek(now)))) return false;
+    if (dateFilter === "this_month" && !isSameMonth(evDate, now)) return false;
     if (dateFilter === "custom") {
-      if (dateFrom && evDate.isBefore(moment(dateFrom))) return false;
-      if (dateTo && evDate.isAfter(moment(dateTo).endOf("day"))) return false;
+      if (dateFrom && isBefore(evDate, new Date(dateFrom))) return false;
+      if (dateTo && isAfter(evDate, new Date(new Date(dateTo).setHours(23, 59, 59, 999)))) return false;
     }
 
     if (sportFilter !== "All Sports" && e.sport !== sportFilter) return false;
@@ -289,7 +289,7 @@ export default function Events() {
             <h1 className="text-4xl font-black mb-1">Event Discovery</h1>
             <p className="text-white/80 text-lg">Find tournaments, workshops, and sports events near you</p>
             <div className="flex gap-4 mt-3 text-sm text-white/70">
-              <span>🏆 {allEvents.filter(e => moment(e.date).isAfter(moment())).length} upcoming events</span>
+              <span>🏆 {allEvents.filter(e => isAfter(new Date(e.date), new Date())).length} upcoming events</span>
               <span>🌐 {allEvents.filter(e => e.is_virtual).length} virtual</span>
             </div>
           </div>
@@ -472,22 +472,22 @@ export default function Events() {
             ) : (
               <>
                 {/* Upcoming */}
-                {myEvents.filter(e => moment(e.date).isAfter(moment())).length > 0 && (
+                {myEvents.filter(e => isAfter(new Date(e.date), new Date())).length > 0 && (
                   <div>
                     <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3">Upcoming</h3>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {myEvents.filter(e => moment(e.date).isAfter(moment())).map(event => (
+                      {myEvents.filter(e => isAfter(new Date(e.date), new Date())).map(event => (
                         <EventCard key={event.id} event={event} currentUser={user} onUpdate={refetch} />
                       ))}
                     </div>
                   </div>
                 )}
                 {/* Past */}
-                {myEvents.filter(e => moment(e.date).isBefore(moment())).length > 0 && (
+                {myEvents.filter(e => isBefore(new Date(e.date), new Date())).length > 0 && (
                   <div>
                     <h3 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-3 mt-4">Past Events</h3>
                     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                      {myEvents.filter(e => moment(e.date).isBefore(moment())).map(event => (
+                      {myEvents.filter(e => isBefore(new Date(e.date), new Date())).map(event => (
                         <EventCard key={event.id} event={event} currentUser={user} onUpdate={refetch} />
                       ))}
                     </div>

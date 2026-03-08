@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Plus, Trophy, Users, Calendar, Target, Flame, TrendingUp, Loader2 } from "lucide-react";
 import CreateChallengeDialog from "@/components/challenges/CreateChallengeDialog";
-import moment from "moment";
+import { format } from "date-fns";
 
 export default function Challenges() {
   const [user, setUser] = useState(null);
@@ -170,7 +170,7 @@ export default function Challenges() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Target className="w-4 h-4" />
-                      {moment(challenge.start_date).format("MMM D")}
+                      {format(new Date(challenge.start_date), "MMM d")}
                     </div>
                   </div>
 

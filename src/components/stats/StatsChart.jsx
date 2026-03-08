@@ -3,7 +3,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { TrendingUp, TrendingDown, Activity } from "lucide-react";
-import moment from "moment";
+import { format } from "date-fns";
 
 export default function StatsChart({ stats, sport }) {
   if (!stats || stats.length === 0) {
@@ -28,7 +28,7 @@ export default function StatsChart({ stats, sport }) {
       .map(s => {
         const metric = s.metrics.find(m => m.name === metricName);
         return {
-          date: moment(s.date).format("MMM D"),
+          date: format(new Date(s.date), "MMM d"),
           value: metric?.value || 0,
           fullDate: s.date,
         };

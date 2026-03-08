@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -9,17 +10,17 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
 export default function AdminHealth() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
+
   const [orgId, setOrgId] = useState(null);
   const [org, setOrg] = useState(null);
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user?.email) return;
+    db.entities.Organization.filter({ owner_email: user.email }).then(orgs => {
       if (orgs[0]) { setOrg(orgs[0]); setOrgId(orgs[0].id); }
     }).catch(() => {});
-  }, []);
+  }, [user?.email]);
 
   const { data: members } = useQuery({
     queryKey: ["health-members", orgId],
@@ -50,6 +51,10 @@ export default function AdminHealth() {
     queryFn: () => db.entities.OrgMessage.filter({ organization_id: orgId }),
     enabled: !!orgId,
   });
+
+  if (!user || user.role !== "admin") {
+    return <div className="flex items-center justify-center h-screen text-white text-lg">Access denied.</div>;
+  }
 
   if (!user || !org) {
     return (

@@ -120,7 +120,7 @@ export default function OrgMessages() {
                     channel,
                     content: msg,
                   });
-                  qc.invalidateQueries(["org-messages", orgId, channel]);
+                  qc.invalidateQueries({ queryKey: ["org-messages", orgId, channel] });
                 };
                 sendIt();
               }}

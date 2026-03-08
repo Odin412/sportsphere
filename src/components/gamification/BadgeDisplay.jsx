@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import moment from "moment";
+import { format } from "date-fns";
 
 export default function BadgeDisplay({ badges }) {
   if (!badges || badges.length === 0) {
@@ -23,7 +23,7 @@ export default function BadgeDisplay({ badges }) {
             <p className="font-bold text-gray-900 text-sm mb-1">{badge.badge_name}</p>
             <p className="text-xs text-gray-500 mb-2">{badge.badge_description}</p>
             <Badge variant="outline" className="text-xs">
-              {moment(badge.earned_date).format("MMM D, YYYY")}
+              {format(new Date(badge.earned_date), "MMM d, yyyy")}
             </Badge>
           </CardContent>
         </Card>

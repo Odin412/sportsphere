@@ -136,8 +136,8 @@ export default function UserProfile() {
   const { data: userRecord } = useQuery({
     queryKey: ["user-record", profileEmail],
     queryFn: async () => {
-      const users = await db.entities.User.list();
-      return users.find(u => u.email === profileEmail) || null;
+      const users = await db.entities.User.filter({ email: profileEmail });
+      return users[0] || null;
     },
     enabled: !!profileEmail,
   });

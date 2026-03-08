@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -344,7 +344,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   };
 
   return (
-    <article className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800 hover:scale-[1.002] transition-transform duration-200">
+    <article className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800 transition-colors duration-200 hover:border-gray-700">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3">
         <Link to={createPageUrl("UserProfile") + `?email=${post.author_email}`} className="flex items-center gap-3 group">
@@ -359,7 +359,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
               {post.author_name || "Anonymous"}
             </p>
             <div className="flex items-center gap-2">
-              <p className="text-xs text-gray-500">{moment(post.created_date).fromNow()}</p>
+              <p className="text-xs text-gray-500">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
               {post.sport && (
                 <span className="text-xs bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-medium">
                   {post.sport}
@@ -375,7 +375,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
           {currentUser && post.author_email !== currentUser.email && (
             <button
               onClick={handleFollow}
-              className={`flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-full transition-all ${
+              className={`flex items-center gap-1 text-xs font-semibold px-3 py-2 rounded-full transition-all ${
                 following
                   ? "text-gray-400 bg-gray-800 hover:text-red-400"
                   : "text-red-500 border border-red-500/50 hover:bg-red-600 hover:text-white hover:border-red-600"
@@ -390,8 +390,8 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
           {currentUser && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="p-1.5 hover:bg-gray-800 rounded-lg transition-colors">
-                  <MoreHorizontal className="w-4 h-4 text-gray-500 hover:text-white" />
+                <button className="p-2.5 hover:bg-gray-800 rounded-lg transition-colors">
+                  <MoreHorizontal className="w-5 h-5 text-gray-500 hover:text-white" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-gray-900 border-gray-700">

@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Loader2, Inbox, Send, Check, X, Clock, MessageCircle } from "lucide-react";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import PremiumGate from "@/components/premium/PremiumGate";
 
 const statusColors = {
@@ -74,7 +74,7 @@ export default function Advice() {
             <p className="font-semibold text-sm text-slate-900">
               {isReceived ? req.from_name : req.to_name}
             </p>
-            <p className="text-xs text-slate-400">{moment(req.created_date).fromNow()}</p>
+            <p className="text-xs text-slate-400">{formatDistanceToNow(new Date(req.created_date), { addSuffix: true })}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">

@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CreateSessionDialog from "@/components/coaching/CreateSessionDialog";
-import moment from "moment";
+import { format } from "date-fns";
 
 export default function LiveCoaching() {
   const [user, setUser] = useState(null);
@@ -156,7 +156,7 @@ export default function LiveCoaching() {
                   <div className="space-y-2 text-sm text-gray-500 mb-4">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
-                      {moment(session.scheduled_date).format("MMM D, YYYY [at] h:mm A")}
+                      {format(new Date(session.scheduled_date), "MMM d, yyyy 'at' h:mm a")}
                     </div>
                     <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />

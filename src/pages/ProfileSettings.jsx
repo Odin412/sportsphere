@@ -16,10 +16,10 @@ import {
   ArrowLeft, Camera, Loader2, Check, Bell, Globe, Activity,
   User, Heart, MessageCircle, UserPlus, AtSign, Trophy, Radio,
   DollarSign, Lightbulb, Smartphone, Mail, Share2, FileText,
-  Instagram, Twitter, Youtube, Linkedin, Phone, Upload, Music2
+  Instagram, Twitter, Youtube, Linkedin, Phone, Upload, Music2, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 // ─── Constants ──────────────────────────────────────────────────────────────
 const LANGUAGES = [
@@ -388,6 +388,27 @@ export default function ProfileSettings() {
             ))}
           </div>
 
+          {/* Replay Tutorial */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-bold text-slate-900">App Tutorial</h2>
+                <p className="text-sm text-slate-500">Replay the feature walkthrough</p>
+              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  localStorage.removeItem("tutorial_complete");
+                  localStorage.setItem("tutorial_pending", "1");
+                  window.location.href = createPageUrl("Feed");
+                }}
+                className="rounded-xl gap-2"
+              >
+                <Sparkles className="w-4 h-4" /> Replay Tutorial
+              </Button>
+            </div>
+          </div>
+
           <Button
             onClick={handleSaveIdentity}
             disabled={saving}
@@ -477,7 +498,7 @@ export default function ProfileSettings() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-slate-700 line-clamp-2">{post.content || "(no text)"}</p>
                       <div className="flex items-center gap-3 mt-1">
-                        <span className="text-[11px] text-slate-400">{moment(post.created_date).fromNow()}</span>
+                        <span className="text-[11px] text-slate-400">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</span>
                         {post.sport && <Badge variant="outline" className="text-[10px] py-0 h-4">{post.sport}</Badge>}
                         <span className="text-[11px] text-slate-400 flex items-center gap-0.5"><Heart className="w-3 h-3" />{post.likes?.length || 0}</span>
                       </div>
@@ -507,7 +528,7 @@ export default function ProfileSettings() {
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium text-slate-500">Shared post by {msg.shared_post_data?.author_name || "Unknown"}</p>
                       <p className="text-sm text-slate-700 line-clamp-1 mt-0.5">{msg.shared_post_data?.content || "(no text)"}</p>
-                      <span className="text-[11px] text-slate-400">{moment(msg.created_date).fromNow()}</span>
+                      <span className="text-[11px] text-slate-400">{formatDistanceToNow(new Date(msg.created_date), { addSuffix: true })}</span>
                     </div>
                   </div>
                 ))}

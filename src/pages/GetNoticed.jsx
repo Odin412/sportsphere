@@ -13,7 +13,7 @@ import {
   ChevronRight, Loader2, Filter, Zap, Medal, TrendingUp, ShieldCheck,
 } from "lucide-react";
 import { toast } from "sonner";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 const SPORTS = [
   "All", "Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf",
@@ -243,7 +243,7 @@ export default function GetNoticed() {
                         </Avatar>
                         {lastActive && (
                           <span className="text-xs text-gray-600">
-                            Active {moment(lastActive).fromNow()}
+                            Active {formatDistanceToNow(new Date(lastActive), { addSuffix: true })}
                           </span>
                         )}
                       </div>

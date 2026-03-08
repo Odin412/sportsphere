@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 const SPORT_EMOJIS = {
   Basketball: "🏀",
@@ -146,7 +146,7 @@ export default function SportNewsWidget({ compact = false }) {
                   <p className="text-white text-xs font-semibold line-clamp-2 group-hover:text-red-300 leading-snug transition-colors">
                     {article.title}
                   </p>
-                  <p className="text-[10px] text-gray-500 mt-0.5">{article.source} · {moment(article.pubDate).fromNow()}</p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">{article.source} · {formatDistanceToNow(new Date(article.pubDate), { addSuffix: true })}</p>
                 </div>
               </button>
             ))}
@@ -213,7 +213,7 @@ export default function SportNewsWidget({ compact = false }) {
                 {article.title}
               </p>
               <p className="text-gray-600 text-xs mt-2">
-                {moment(article.pubDate).fromNow()}
+                {formatDistanceToNow(new Date(article.pubDate), { addSuffix: true })}
               </p>
             </button>
           ))}

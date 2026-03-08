@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Flame, Users, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
 
 export default function LiveNowSection({ user, userPreferences }) {
   const { data: liveStreams = [] } = useQuery({

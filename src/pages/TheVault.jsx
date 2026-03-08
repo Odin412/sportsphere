@@ -9,7 +9,7 @@ import {
   Video, Upload, Lock, Play, Loader2, Plus, Film, Clock, X
 } from "lucide-react";
 import { toast } from "sonner";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import VideoTelestration from "@/components/propath/VideoTelestration";
 
 export default function TheVault() {
@@ -206,7 +206,7 @@ export default function TheVault() {
                   <div className="flex items-center gap-2 mt-1">
                     <Clock className="w-3 h-3 text-gray-500" />
                     <span className="text-gray-500 text-xs">
-                      {moment(video.created_date).fromNow()}
+                      {formatDistanceToNow(new Date(video.created_date), { addSuffix: true })}
                     </span>
                     <Lock className="w-3 h-3 text-gray-600 ml-auto" />
                   </div>

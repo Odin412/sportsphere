@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { X, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { db } from "@/api/db";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 const IMAGE_DURATION = 5000;
 const VIDEO_DURATION = 10000;
@@ -146,7 +146,7 @@ export default function StoryViewer({ stories, authorGroup, onClose, onMarkSeen,
               {authorGroup.author_name}
             </p>
             <p className="text-white/60 text-[10px]">
-              {moment(current?.created_date).fromNow()}
+              {formatDistanceToNow(new Date(current?.created_date), { addSuffix: true })}
             </p>
           </div>
           {current.sport && (

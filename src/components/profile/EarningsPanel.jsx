@@ -4,7 +4,7 @@ import { db } from "@/api/db";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DollarSign, TrendingUp, Heart, Users, Loader2 } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import moment from "moment";
+import { format, formatDistanceToNow, subWeeks, startOfWeek, isWithinInterval } from "date-fns";
 
 export default function EarningsPanel({ user }) {
   const { data: tips = [], isLoading: loadingTips } = useQuery({
@@ -39,12 +39,12 @@ export default function EarningsPanel({ user }) {
   const weeklyData = useMemo(() => {
     const weeks = [];
     for (let i = 7; i >= 0; i--) {
-      const start = moment().subtract(i + 1, "weeks").startOf("week");
-      const end = moment().subtract(i, "weeks").startOf("week");
+      const start = startOfWeek(subWeeks(new Date(), i + 1));
+      const end = startOfWeek(subWeeks(new Date(), i));
       const weekEarnings = allEarnings
-        .filter(e => moment(e.created_date).isBetween(start, end))
+        .filter(e => isWithinInterval(new Date(e.created_date), { start, end }))
         .reduce((sum, e) => sum + (e.amount || 0), 0);
-      weeks.push({ week: start.format("MMM D"), amount: weekEarnings });
+      weeks.push({ week: format(start, "MMM d"), amount: weekEarnings });
     }
     return weeks;
   }, [allEarnings]);
@@ -133,7 +133,7 @@ export default function EarningsPanel({ user }) {
               </div>
               <div className="text-right flex-shrink-0">
                 <p className="text-sm font-black text-green-700">+${(e.amount || 0).toFixed(2)}</p>
-                <p className="text-xs text-gray-400">{moment(e.created_date).fromNow()}</p>
+                <p className="text-xs text-gray-400">{formatDistanceToNow(new Date(e.created_date), { addSuffix: true })}</p>
               </div>
             </div>
           ))}

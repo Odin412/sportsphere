@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Shield, Bell, Sliders, Database, CheckCircle,
@@ -41,6 +42,8 @@ function Toast({ message, onDone }) {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function AdminSettings() {
+  const { user } = useAuth();
+
   const queryClient = useQueryClient();
   const [toast, setToast] = useState(null);
 
@@ -116,6 +119,10 @@ export default function AdminSettings() {
     localStorage.setItem("admin_auto_hide_flags", String(autoHideFlags));
     setToast("Moderation thresholds saved");
   };
+
+  if (!user || user.role !== "admin") {
+    return <div className="flex items-center justify-center h-screen text-white text-lg">Access denied.</div>;
+  }
 
   return (
     <AdminLayout currentPage="AdminSettings">

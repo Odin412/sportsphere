@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import RecommendationNotification from "./components/notifications/RecommendationNotification";
 import SupportChatWidget from "./components/messages/SupportChatWidget";
 import PushNotificationBanner from "./components/notifications/PushNotificationBanner";
+import AppTour from "./components/onboarding/AppTour";
 
 // Primary nav items shown in sidebar + mobile bottom nav
 const PRIMARY_NAV = [
@@ -116,7 +117,7 @@ export default function Layout({ children, currentPageName }) {
 
         {/* Right controls */}
         <div className="flex items-center gap-3">
-          <Link to={createPageUrl("Notifications")} className="relative p-2 rounded-xl hover:bg-gray-800 transition-colors">
+          <Link to={createPageUrl("Notifications")} className="relative p-2.5 rounded-xl hover:bg-gray-800 transition-colors" aria-label="Notifications">
             <Bell className="w-5 h-5 text-gray-300" />
             {unreadCount > 0 && (
               <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-red-500 rounded-full text-[10px] font-bold text-white flex items-center justify-center px-1 leading-none">
@@ -155,6 +156,7 @@ export default function Layout({ children, currentPageName }) {
             <Link
               key={page}
               to={createPageUrl(page)}
+              data-tour={`nav-${page.toLowerCase()}`}
               className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                 isActive(page)
                   ? "bg-red-600 text-white"
@@ -169,6 +171,7 @@ export default function Layout({ children, currentPageName }) {
           {/* Create Post button */}
           <Link
             to={createPageUrl("CreatePost")}
+            data-tour="nav-create"
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold bg-red-600 hover:bg-red-700 text-white transition-colors mt-2"
           >
             <Plus className="w-5 h-5 flex-shrink-0" />
@@ -180,6 +183,7 @@ export default function Layout({ children, currentPageName }) {
         <div className="px-3 pb-4 border-t border-gray-800 pt-3">
           <button
             onClick={() => setMoreOpen(o => !o)}
+            data-tour="more-menu"
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-gray-800 transition-all w-full"
           >
             <Menu className="w-5 h-5" />
@@ -193,6 +197,7 @@ export default function Layout({ children, currentPageName }) {
                 <Link
                   key={page}
                   to={createPageUrl(page)}
+                  data-tour={`nav-${page.toLowerCase()}`}
                   className={`flex items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium transition-all ${
                     isActive(page)
                       ? "bg-red-600 text-white"
@@ -221,6 +226,9 @@ export default function Layout({ children, currentPageName }) {
         {children}
       </main>
 
+      {/* ── APP TOUR ──────────────────────────────────────────────────── */}
+      <AppTour userRole={user?.role || localStorage.getItem("user_role") || "athlete"} />
+
       {/* ── MOBILE BOTTOM NAV ───────────────────────────────────────── */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-16 flex items-center bg-black/95 backdrop-blur-xl border-t border-gray-800">
         {MOBILE_BOTTOM.map((item, i) => {
@@ -228,7 +236,7 @@ export default function Layout({ children, currentPageName }) {
           if (item === null) {
             return (
               <div key="create" className="flex-1 flex items-center justify-center">
-                <Link to={createPageUrl("CreatePost")}>
+                <Link to={createPageUrl("CreatePost")} data-tour="mobile-create">
                   <div className="w-12 h-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center shadow-lg shadow-red-600/30 transition-colors">
                     <Plus className="w-6 h-6 text-white" />
                   </div>
@@ -243,6 +251,7 @@ export default function Layout({ children, currentPageName }) {
             <Link
               key={page}
               to={createPageUrl(page)}
+              data-tour={`mobile-${page.toLowerCase()}`}
               className="flex-1 flex flex-col items-center justify-center gap-1 py-2"
             >
               <Icon className={`w-6 h-6 ${active ? "text-red-500" : "text-gray-500"}`} />

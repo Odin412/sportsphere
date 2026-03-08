@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Trash2, AlertTriangle, Image, Video, FileText,
@@ -61,6 +62,8 @@ function DeleteModal({ count, onConfirm, onCancel }) {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function AdminContent() {
+  const { user } = useAuth();
+
   const queryClient = useQueryClient();
   const [tab, setTab] = useState("All Posts");
   const [selected, setSelected] = useState(new Set());
@@ -140,6 +143,10 @@ export default function AdminContent() {
     if (selected.size === 0) return;
     setShowDeleteModal(true);
   };
+
+  if (!user || user.role !== "admin") {
+    return <div className="flex items-center justify-center h-screen text-white text-lg">Access denied.</div>;
+  }
 
   return (
     <AdminLayout currentPage="AdminContent">

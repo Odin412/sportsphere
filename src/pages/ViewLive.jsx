@@ -16,7 +16,7 @@ import StreamPolls from "@/components/live/StreamPolls";
 import StreamQA from "@/components/live/StreamQA";
 import StreamSummaryPanel from "@/components/live/StreamSummaryPanel";
 import HighlightClipGenerator from "@/components/live/HighlightClipGenerator";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 export default function ViewLive() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -361,7 +361,7 @@ export default function ViewLive() {
                   </Link>
                   <div>
                     <p className="text-white font-bold text-sm">{stream.host_name}</p>
-                    <p className="text-slate-400 text-xs">{moment(stream.started_at).fromNow()}</p>
+                    <p className="text-slate-400 text-xs">{formatDistanceToNow(new Date(stream.started_at), { addSuffix: true })}</p>
                   </div>
                   {user && !isHost && (
                     <Button

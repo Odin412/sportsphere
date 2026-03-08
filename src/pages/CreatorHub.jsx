@@ -273,7 +273,7 @@ export default function CreatorHub() {
                     <div>
                       <p className="font-semibold text-gray-900">{sub.subscriber_email}</p>
                       <p className="text-sm text-gray-500">
-                        {sub.tier} tier - ${sub.amount}/month
+                        {sub.tier || 'Standard'} tier - ${sub.amount}/month
                       </p>
                     </div>
                     <Badge className="bg-green-100 text-green-800">{sub.status}</Badge>

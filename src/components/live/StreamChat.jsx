@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Send, Pin, AlertTriangle, Trash2 } from "lucide-react";
 import { toast } from "sonner";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import { useQueryClient } from "@tanstack/react-query";
 import { db } from "@/api/db";
 import ChatModeration from "./ChatModeration";
@@ -117,7 +117,6 @@ export default function StreamChat({ messages, user, isHost, message, setMessage
 
             {regularMessages.map(msg => {
               const isMe = msg.sender_email === user?.email;
-              const isHostMsg = msg.sender_email === msg.host_email;
               return (
                 <div key={msg.id} className="flex items-start gap-2 group hover:bg-slate-50 rounded-xl p-1.5 transition-colors">
                   <Avatar className="w-7 h-7 flex-shrink-0">
@@ -134,7 +133,7 @@ export default function StreamChat({ messages, user, isHost, message, setMessage
                           <Badge className="ml-1 bg-red-600 text-white text-[9px] px-1 py-0">Host</Badge>
                         )}
                       </p>
-                      <p className="text-[10px] text-slate-400 flex-shrink-0">{moment(msg.created_date).fromNow(true)}</p>
+                      <p className="text-[10px] text-slate-400 flex-shrink-0">{formatDistanceToNow(new Date(msg.created_date))}</p>
                     </div>
                     <p className="text-sm text-slate-700 break-words leading-snug">{msg.message}</p>
                   </div>

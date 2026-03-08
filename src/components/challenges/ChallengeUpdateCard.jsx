@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heart, MessageCircle } from "lucide-react";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 export default function ChallengeUpdateCard({ update, currentUser }) {
   const queryClient = useQueryClient();
@@ -39,7 +39,7 @@ export default function ChallengeUpdateCard({ update, currentUser }) {
               <Badge className="bg-amber-100 text-amber-700">Day {update.day_number}</Badge>
             )}
           </div>
-          <p className="text-xs text-slate-500">{moment(update.created_date).fromNow()}</p>
+          <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(update.created_date), { addSuffix: true })}</p>
         </div>
       </div>
 

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft, ThumbsUp, MessageCircle, Eye, Send, Flag, Trash2, Pencil, Check, X as XIcon } from "lucide-react";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import { toast } from "sonner";
 import { awardPoints } from "@/components/gamification/PointsHelper";
 
@@ -208,7 +208,7 @@ export default function ForumTopic() {
                 <Link to={createPageUrl(`UserProfile?email=${topic.author_email}`)} className="text-sm font-semibold text-gray-700 hover:text-red-900">
                   {topic.author_name}
                 </Link>
-                <span className="text-sm text-gray-400">{moment(topic.created_date).fromNow()}</span>
+                <span className="text-sm text-gray-400">{formatDistanceToNow(new Date(topic.created_date), { addSuffix: true })}</span>
                 <Badge className="bg-red-100 text-red-900 text-xs">
                   {category.icon} {category.label}
                 </Badge>
@@ -296,7 +296,7 @@ export default function ForumTopic() {
                     <Link to={createPageUrl(`UserProfile?email=${reply.author_email}`)} className="text-sm font-semibold text-gray-900 hover:text-red-900">
                       {reply.author_name}
                     </Link>
-                    <span className="text-sm text-gray-400">{moment(reply.created_date).fromNow()}</span>
+                    <span className="text-sm text-gray-400">{formatDistanceToNow(new Date(reply.created_date), { addSuffix: true })}</span>
                   </div>
 
                   {/* Edit mode */}

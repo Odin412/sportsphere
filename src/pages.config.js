@@ -1,119 +1,80 @@
 /**
  * pages.config.js - Page routing configuration
- * 
- * This file is AUTO-GENERATED. Do not add imports or modify PAGES manually.
- * Pages are auto-registered when you create files in the ./pages/ folder.
- * 
- * THE ONLY EDITABLE VALUE: mainPage
- * This controls which page is the landing page (shown when users visit the app).
- * 
- * Example file structure:
- * 
- *   import HomePage from './pages/HomePage';
- *   import Dashboard from './pages/Dashboard';
- *   import Settings from './pages/Settings';
- *   
- *   export const PAGES = {
- *       "HomePage": HomePage,
- *       "Dashboard": Dashboard,
- *       "Settings": Settings,
- *   }
- *   
- *   export const pagesConfig = {
- *       mainPage: "HomePage",
- *       Pages: PAGES,
- *   };
- * 
- * Example with Layout (wraps all pages):
  *
- *   import Home from './pages/Home';
- *   import Settings from './pages/Settings';
- *   import __Layout from './Layout.jsx';
- *
- *   export const PAGES = {
- *       "Home": Home,
- *       "Settings": Settings,
- *   }
- *
- *   export const pagesConfig = {
- *       mainPage: "Home",
- *       Pages: PAGES,
- *       Layout: __Layout,
- *   };
- *
- * To change the main page from HomePage to Dashboard, use find_replace:
- *   Old: mainPage: "HomePage",
- *   New: mainPage: "Dashboard",
- *
- * The mainPage value must match a key in the PAGES object exactly.
+ * All pages are lazy-loaded for optimal bundle splitting.
+ * Only the Layout and Feed page are eagerly loaded.
  */
-import Login from './pages/Login';
-import Admin from './pages/Admin';
-import AdminUsers from './pages/AdminUsers';
-import AdminContent from './pages/AdminContent';
-import AdminAnalytics from './pages/AdminAnalytics';
-import AdminSettings from './pages/AdminSettings';
-import AdminHealth from './pages/AdminHealth';
-import Advice from './pages/Advice';
-import Analytics from './pages/Analytics';
-import AthleteInsights from './pages/AthleteInsights';
-import BecomeCreator from './pages/BecomeCreator';
-import ChallengeDetail from './pages/ChallengeDetail';
-import Challenges from './pages/Challenges';
-import Coach from './pages/Coach';
-import CoachingSessionDetail from './pages/CoachingSessionDetail';
-import CreatePost from './pages/CreatePost';
-import CreateReel from './pages/CreateReel';
-import CreatorAI from './pages/CreatorAI';
-import CreatorHub from './pages/CreatorHub';
-import CreatorShop from './pages/CreatorShop';
-import Discover from './pages/Discover';
-import Events from './pages/Events';
-import Explore from './pages/Explore';
-import Feed from './pages/Feed';
-import ForYou from './pages/ForYou';
-import ForumTopic from './pages/ForumTopic';
-import Forums from './pages/Forums';
-import GetNoticed from './pages/GetNoticed';
-import GroupDetail from './pages/GroupDetail';
-import Groups from './pages/Groups';
-import Guidelines from './pages/Guidelines';
-import ImportVideos from './pages/ImportVideos';
-import Leaderboard from './pages/Leaderboard';
-import Live from './pages/Live';
-import LiveCoaching from './pages/LiveCoaching';
-import Messages from './pages/Messages';
-import ModerationQueue from './pages/ModerationQueue';
-import MyTraining from './pages/MyTraining';
-import Notifications from './pages/Notifications';
-import Onboarding from './pages/Onboarding';
-import OrgDashboard from './pages/OrgDashboard';
-import OrgMessages from './pages/OrgMessages';
-import OrgRoster from './pages/OrgRoster';
-import OrgSessions from './pages/OrgSessions';
-import ParentView from './pages/ParentView';
-import PerformanceHub from './pages/PerformanceHub';
-import Premium from './pages/Premium';
-import ProPathHub from './pages/ProPathHub';
-import ScoutCard from './pages/ScoutCard';
-import TheVault from './pages/TheVault';
-import Profile from './pages/Profile';
-import ProfileSettings from './pages/ProfileSettings';
-import Reels from './pages/Reels';
-import SavedContent from './pages/SavedContent';
-import ScoutingHub from './pages/ScoutingHub';
-import Search from './pages/Search';
-import SportHub from './pages/SportHub';
-import Terms from './pages/Terms';
-import TrainingPlanDetail from './pages/TrainingPlanDetail';
-import TrainingPlans from './pages/TrainingPlans';
-import TrendingChallenges from './pages/TrendingChallenges';
-import UploadVideo from './pages/UploadVideo';
-import UserProfile from './pages/UserProfile';
-import VideoReview from './pages/VideoReview';
-import ViewLive from './pages/ViewLive';
+import { lazy } from 'react';
 import __Layout from './Layout.jsx';
 
+// Eagerly load the main feed page (always needed)
+import Feed from './pages/Feed';
+
+// Lazy-load all other pages for code splitting
+const Login = lazy(() => import('./pages/Login'));
+const Admin = lazy(() => import('./pages/Admin'));
+const AdminUsers = lazy(() => import('./pages/AdminUsers'));
+const AdminContent = lazy(() => import('./pages/AdminContent'));
+const AdminAnalytics = lazy(() => import('./pages/AdminAnalytics'));
+const AdminSettings = lazy(() => import('./pages/AdminSettings'));
+const AdminHealth = lazy(() => import('./pages/AdminHealth'));
+const Advice = lazy(() => import('./pages/Advice'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const AthleteInsights = lazy(() => import('./pages/AthleteInsights'));
+const BecomeCreator = lazy(() => import('./pages/BecomeCreator'));
+const ChallengeDetail = lazy(() => import('./pages/ChallengeDetail'));
+const Challenges = lazy(() => import('./pages/Challenges'));
+const Coach = lazy(() => import('./pages/Coach'));
+const CoachingSessionDetail = lazy(() => import('./pages/CoachingSessionDetail'));
+const CreatePost = lazy(() => import('./pages/CreatePost'));
+const CreateReel = lazy(() => import('./pages/CreateReel'));
+const CreatorAI = lazy(() => import('./pages/CreatorAI'));
+const CreatorHub = lazy(() => import('./pages/CreatorHub'));
+const CreatorShop = lazy(() => import('./pages/CreatorShop'));
+const Discover = lazy(() => import('./pages/Discover'));
+const Events = lazy(() => import('./pages/Events'));
+const Explore = lazy(() => import('./pages/Explore'));
+const ForYou = lazy(() => import('./pages/ForYou'));
+const ForumTopic = lazy(() => import('./pages/ForumTopic'));
+const Forums = lazy(() => import('./pages/Forums'));
+const GetNoticed = lazy(() => import('./pages/GetNoticed'));
+const GroupDetail = lazy(() => import('./pages/GroupDetail'));
+const Groups = lazy(() => import('./pages/Groups'));
+const Guidelines = lazy(() => import('./pages/Guidelines'));
+const ImportVideos = lazy(() => import('./pages/ImportVideos'));
+const Leaderboard = lazy(() => import('./pages/Leaderboard'));
+const Live = lazy(() => import('./pages/Live'));
+const LiveCoaching = lazy(() => import('./pages/LiveCoaching'));
+const Messages = lazy(() => import('./pages/Messages'));
+const ModerationQueue = lazy(() => import('./pages/ModerationQueue'));
+const MyTraining = lazy(() => import('./pages/MyTraining'));
+const Notifications = lazy(() => import('./pages/Notifications'));
+const Onboarding = lazy(() => import('./pages/Onboarding'));
+const OrgDashboard = lazy(() => import('./pages/OrgDashboard'));
+const OrgMessages = lazy(() => import('./pages/OrgMessages'));
+const OrgRoster = lazy(() => import('./pages/OrgRoster'));
+const OrgSessions = lazy(() => import('./pages/OrgSessions'));
+const ParentView = lazy(() => import('./pages/ParentView'));
+const PerformanceHub = lazy(() => import('./pages/PerformanceHub'));
+const Premium = lazy(() => import('./pages/Premium'));
+const ProPathHub = lazy(() => import('./pages/ProPathHub'));
+const ScoutCard = lazy(() => import('./pages/ScoutCard'));
+const TheVault = lazy(() => import('./pages/TheVault'));
+const Profile = lazy(() => import('./pages/Profile'));
+const ProfileSettings = lazy(() => import('./pages/ProfileSettings'));
+const Reels = lazy(() => import('./pages/Reels'));
+const SavedContent = lazy(() => import('./pages/SavedContent'));
+const ScoutingHub = lazy(() => import('./pages/ScoutingHub'));
+const Search = lazy(() => import('./pages/Search'));
+const SportHub = lazy(() => import('./pages/SportHub'));
+const Terms = lazy(() => import('./pages/Terms'));
+const TrainingPlanDetail = lazy(() => import('./pages/TrainingPlanDetail'));
+const TrainingPlans = lazy(() => import('./pages/TrainingPlans'));
+const TrendingChallenges = lazy(() => import('./pages/TrendingChallenges'));
+const UploadVideo = lazy(() => import('./pages/UploadVideo'));
+const UserProfile = lazy(() => import('./pages/UserProfile'));
+const VideoReview = lazy(() => import('./pages/VideoReview'));
+const ViewLive = lazy(() => import('./pages/ViewLive'));
 
 export const PAGES = {
     "Login": Login,

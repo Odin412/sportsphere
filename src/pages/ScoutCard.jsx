@@ -57,7 +57,7 @@ export default function ScoutCard() {
   const metricBests = {};
   statEntries.forEach((entry) => {
     (entry.metrics || []).forEach((m) => {
-      if (!metricBests[m.name] || m.value > metricBests[m.name]) {
+      if (!metricBests[m.name] || m.value > metricBests[m.name].value) {
         metricBests[m.name] = { value: m.value, unit: m.unit || "" };
       }
     });

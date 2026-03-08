@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { toast } from "sonner";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 import SharePostDialog from "../messages/SharePostDialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import EnhancedVideoPlayer from "../video/EnhancedVideoPlayer";
@@ -238,7 +238,7 @@ export default function ReelCard({ item, currentUser, isActive }) {
             <div>
               <p className="font-bold text-white text-sm">{item.author_name || item.host_name}</p>
               <p className="text-xs text-gray-400">
-                {moment(item.created_date || item.started_at).fromNow()}
+                {formatDistanceToNow(new Date(item.created_date || item.started_at), { addSuffix: true })}
               </p>
             </div>
           </Link>

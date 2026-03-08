@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Switch } from "@/components/ui/switch";
 import { Calendar, Clock, Plus, Bell, Users, Trash2, Radio, Crown, Loader2 } from "lucide-react";
-import moment from "moment";
+import { format } from "date-fns";
 import { toast } from "sonner";
 
 const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
@@ -68,7 +68,7 @@ export default function StreamScheduler({ user }) {
         recipient_email: f.follower_email,
         type: "stream_scheduled",
         title: `${user.full_name} scheduled a live stream`,
-        message: `"${stream.title}" - ${moment(stream.scheduled_at).format("MMM D [at] h:mm A")}`,
+        message: `"${stream.title}" - ${format(new Date(stream.scheduled_at), "MMM d 'at' h:mm a")}`,
         actor_email: user.email,
         actor_name: user.full_name,
         actor_avatar: user.avatar_url,
@@ -132,8 +132,8 @@ export default function StreamScheduler({ user }) {
                   {s.sport && <Badge variant="secondary" className="text-[10px]">{s.sport}</Badge>}
                 </div>
                 <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
-                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{moment(s.scheduled_at).format("MMM D, YYYY")}</span>
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{moment(s.scheduled_at).format("h:mm A")}</span>
+                  <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{format(new Date(s.scheduled_at), "MMM d, yyyy")}</span>
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{format(new Date(s.scheduled_at), "h:mm a")}</span>
                   <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{s.duration_minutes}min</span>
                   <span className="flex items-center gap-1"><Users className="w-3 h-3" />{s.rsvp_emails?.length || 0} RSVPs</span>
                 </div>
@@ -173,7 +173,7 @@ export default function StreamScheduler({ user }) {
               <div key={s.id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 text-sm text-gray-500">
                 <Calendar className="w-4 h-4 flex-shrink-0" />
                 <span className="flex-1 truncate">{s.title}</span>
-                <span>{moment(s.scheduled_at).format("MMM D")}</span>
+                <span>{format(new Date(s.scheduled_at), "MMM d")}</span>
                 <Badge className={s.status === "cancelled" ? "bg-red-100 text-red-600" : "bg-gray-100 text-gray-500"} >{s.status}</Badge>
               </div>
             ))}

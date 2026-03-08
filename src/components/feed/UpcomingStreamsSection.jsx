@@ -7,14 +7,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Clock, Bell, BellOff, Crown, DollarSign, Users, Radio, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import moment from "moment";
+import { format, formatDistanceToNow, differenceInHours } from "date-fns";
 import { toast } from "sonner";
 
 function StreamCard({ stream, user, reminders, onReminderToggle }) {
   const isReminderSet = reminders?.includes(stream.id);
   const isOwn = stream.host_email === user?.email;
-  const startsIn = moment(stream.scheduled_at).fromNow();
-  const isSoon = moment(stream.scheduled_at).diff(moment(), "hours") <= 24;
+  const startsIn = formatDistanceToNow(new Date(stream.scheduled_at), { addSuffix: true });
+  const isSoon = Math.abs(differenceInHours(new Date(stream.scheduled_at), new Date())) <= 24;
 
   return (
     <div className="flex-shrink-0 w-64 bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md hover:border-red-200 transition-all">
@@ -43,11 +43,11 @@ function StreamCard({ stream, user, reminders, onReminderToggle }) {
         <div className="space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
             <Calendar className="w-3 h-3 flex-shrink-0 text-purple-500" />
-            <span>{moment(stream.scheduled_at).format("MMM D, YYYY")}</span>
+            <span>{format(new Date(stream.scheduled_at), "MMM d, yyyy")}</span>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-gray-500">
             <Clock className="w-3 h-3 flex-shrink-0 text-blue-500" />
-            <span>{moment(stream.scheduled_at).format("h:mm A")} · {stream.duration_minutes}min</span>
+            <span>{format(new Date(stream.scheduled_at), "h:mm a")} · {stream.duration_minutes}min</span>
           </div>
           {stream.rsvp_emails?.length > 0 && (
             <div className="flex items-center gap-1.5 text-xs text-gray-500">

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Calendar, MapPin, Users, Check } from "lucide-react";
-import moment from "moment";
+import { format } from "date-fns";
 
 export default function EventCard({ event, currentUser, onUpdate }) {
   const [isAttending, setIsAttending] = useState(event.attendees?.includes(currentUser?.email));
@@ -28,7 +28,7 @@ export default function EventCard({ event, currentUser, onUpdate }) {
       <div className="space-y-2 text-sm text-slate-500">
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-orange-500" />
-          <span>{moment(event.date).format("MMM D, YYYY · h:mm A")}</span>
+          <span>{format(new Date(event.date), "MMM d, yyyy · h:mm a")}</span>
         </div>
         {event.location && (
           <div className="flex items-center gap-2">

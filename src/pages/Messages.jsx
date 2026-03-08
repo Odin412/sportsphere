@@ -12,7 +12,7 @@ import VideoCallModal from "@/components/messages/VideoCallModal";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import moment from "moment";
+import { formatDistanceToNow } from "date-fns";
 
 const LANGUAGES = [
   { code: "en", label: "🇬🇧 English" }, { code: "es", label: "🇪🇸 Español" },
@@ -295,7 +295,7 @@ export default function Messages() {
                        <p className="font-semibold text-sm text-slate-900 truncate">{getOtherName(conv)}</p>
                        {conv.last_message_time && (
                          <span className="text-[10px] text-slate-400 flex-shrink-0 ml-1">
-                           {moment(conv.last_message_time).fromNow()}
+                           {formatDistanceToNow(new Date(conv.last_message_time), { addSuffix: true })}
                          </span>
                        )}
                      </div>

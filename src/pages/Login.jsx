@@ -220,10 +220,16 @@ export default function Login() {
       return;
     }
     setLoading(true);
+    // For parent accounts: the profile belongs to the CHILD (athlete).
+    // Parent's name is stored as parent_name; child's name becomes full_name.
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName, role: selectedRole, ...(isParent ? { child_name: childName } : {}) } },
+      options: {
+        data: isParent
+          ? { full_name: childName, parent_name: fullName, role: "athlete", is_parent_managed: true }
+          : { full_name: fullName, role: selectedRole },
+      },
     });
     if (error) {
       const msg = error.message?.toLowerCase();
@@ -477,34 +483,34 @@ export default function Login() {
                   </div>
 
                   <form onSubmit={handleSignUp} className="space-y-4">
+                    {selectedRoleCard?.id === "parent" && (
+                      <div className="space-y-1.5">
+                        <Label htmlFor="childName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Athlete's Name (Your Child)</Label>
+                        <Input
+                          id="childName"
+                          type="text"
+                          value={childName}
+                          onChange={(e) => setChildName(e.target.value)}
+                          placeholder="Your child's full name"
+                          className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
+                          required
+                        />
+                      </div>
+                    )}
                     <div className="space-y-1.5">
                       <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">
-                        {selectedRoleCard?.id === "parent" ? "Your Name (Parent)" : "Full Name"}
+                        {selectedRoleCard?.id === "parent" ? "Your Name (Parent/Guardian)" : "Full Name"}
                       </Label>
                       <Input
                         id="fullName"
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder={selectedRoleCard?.id === "parent" ? "Parent's full name" : "Your name"}
+                        placeholder={selectedRoleCard?.id === "parent" ? "Parent or guardian name" : "Your name"}
                         className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                         required
                       />
                     </div>
-                    {selectedRoleCard?.id === "parent" && (
-                      <div className="space-y-1.5">
-                        <Label htmlFor="childName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Child's Name</Label>
-                        <Input
-                          id="childName"
-                          type="text"
-                          value={childName}
-                          onChange={(e) => setChildName(e.target.value)}
-                          placeholder="Athlete's full name"
-                          className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
-                          required
-                        />
-                      </div>
-                    )}
                     <div className="space-y-1.5">
                       <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
                       <div className="relative">

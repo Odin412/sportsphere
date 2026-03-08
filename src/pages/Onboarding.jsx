@@ -662,6 +662,9 @@ export default function Onboarding() {
           <div className="bg-white rounded-2xl p-4 border border-gray-100 text-left space-y-2">
             <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">Profile Summary</p>
             <p className="text-sm font-semibold text-gray-900">{user.full_name || user.email}</p>
+            {user.parent_name && (
+              <p className="text-xs text-gray-400">Managed by {user.parent_name}</p>
+            )}
             {(role === "athlete") && stepData.sport && (
               <p className="text-xs text-gray-500 flex items-center gap-1"><Dumbbell className="w-3 h-3" /> {stepData.sport} · {stepData.level}</p>
             )}

@@ -67,14 +67,17 @@ export const AuthProvider = ({ children }) => {
     }
 
     // No profile yet — try to create one.
+    const meta = authUser.user_metadata || {};
     const { data: newProfile } = await supabase
       .from('profiles')
       .insert({
         id: authUser.id,
         email: authUser.email,
-        full_name: authUser.user_metadata?.full_name || '',
-        avatar_url: authUser.user_metadata?.avatar_url || '',
-        role: authUser.user_metadata?.role || 'athlete',
+        full_name: meta.full_name || '',
+        avatar_url: meta.avatar_url || '',
+        role: meta.role || 'athlete',
+        ...(meta.parent_name ? { parent_name: meta.parent_name } : {}),
+        ...(meta.is_parent_managed ? { is_parent_managed: true } : {}),
       })
       .select()
       .maybeSingle();

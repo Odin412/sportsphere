@@ -29,7 +29,7 @@ export default function MentionInput({ value, onChange, placeholder, className }
   }, [value, cursorPosition]);
 
   const searchUsers = async (query) => {
-    const users = await db.entities.User.list();
+    const users = await db.entities.User.list(null, 500);
     const filtered = users.filter(u => 
       u.full_name?.toLowerCase().includes(query.toLowerCase()) ||
       u.email?.toLowerCase().includes(query.toLowerCase())

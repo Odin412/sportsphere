@@ -17,7 +17,7 @@ export default function RecommendedUsers({ profiles: propProfiles, currentUser: 
 
   const { data: allProfiles = [] } = useQuery({
     queryKey: ["all-profiles-for-suggestions"],
-    queryFn: () => db.entities.User.list(),
+    queryFn: () => db.entities.User.list(null, 500),
     enabled: !propProfiles?.length && !!currentUser,
     staleTime: 5 * 60 * 1000,
   });

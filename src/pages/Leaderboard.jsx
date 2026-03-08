@@ -28,7 +28,7 @@ export default function Leaderboard() {
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["users"],
-    queryFn: () => db.entities.User.list(),
+    queryFn: () => db.entities.User.list(null, 500),
     staleTime: 5 * 60 * 1000,
   });
 

@@ -148,7 +148,7 @@ export default function CreatePost() {
 
       // Notify mentioned users (fire-and-forget — don't block navigation)
       if (mentions.length > 0) {
-        db.entities.User.list().then(allUsers => {
+        db.entities.User.list(null, 500).then(allUsers => {
           for (const mention of mentions) {
             const mentionedUser = allUsers.find(u => u.full_name?.toLowerCase() === mention.toLowerCase());
             if (mentionedUser && mentionedUser.email !== user.email) {

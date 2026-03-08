@@ -250,7 +250,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
     }
 
     if (mentions.length > 0) {
-      const allUsers = await db.entities.User.list().catch(() => []);
+      const allUsers = await db.entities.User.list(null, 500).catch(() => []);
       for (const mention of mentions) {
         const mentioned = allUsers.find(u => u.full_name?.toLowerCase() === mention.toLowerCase());
         if (mentioned && mentioned.email !== currentUser.email) {

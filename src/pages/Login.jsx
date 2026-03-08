@@ -161,6 +161,7 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
+  const [childName, setChildName] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -169,6 +170,7 @@ export default function Login() {
     setSignupStep("role-select");
     setSelectedRoleCard(null);
     setSelectedRole("");
+    setChildName("");
   };
 
   const switchToSignin = () => {
@@ -176,6 +178,7 @@ export default function Login() {
     setSignupStep("role-select");
     setSelectedRoleCard(null);
     setSelectedRole("");
+    setChildName("");
   };
 
   const handleRoleCardClick = (card) => {
@@ -208,7 +211,9 @@ export default function Login() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    const isParent = selectedRoleCard?.id === "parent";
     if (!email || !password || !fullName || !selectedRole) return;
+    if (isParent && !childName) return;
     if (password.length < 6) {
       toast.error("Password must be at least 6 characters.");
       return;
@@ -217,7 +222,7 @@ export default function Login() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { full_name: fullName, role: selectedRole } },
+      options: { data: { full_name: fullName, role: selectedRole, ...(isParent ? { child_name: childName } : {}) } },
     });
     if (error) {
       toast.error(error.message);
@@ -445,17 +450,33 @@ export default function Login() {
 
                   <form onSubmit={handleSignUp} className="space-y-4">
                     <div className="space-y-1.5">
-                      <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Full Name</Label>
+                      <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">
+                        {selectedRoleCard?.id === "parent" ? "Your Name (Parent)" : "Full Name"}
+                      </Label>
                       <Input
                         id="fullName"
                         type="text"
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Your name"
+                        placeholder={selectedRoleCard?.id === "parent" ? "Parent's full name" : "Your name"}
                         className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
                         required
                       />
                     </div>
+                    {selectedRoleCard?.id === "parent" && (
+                      <div className="space-y-1.5">
+                        <Label htmlFor="childName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Child's Name</Label>
+                        <Input
+                          id="childName"
+                          type="text"
+                          value={childName}
+                          onChange={(e) => setChildName(e.target.value)}
+                          placeholder="Athlete's full name"
+                          className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                          required
+                        />
+                      </div>
+                    )}
                     <div className="space-y-1.5">
                       <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
                       <div className="relative">
@@ -496,7 +517,7 @@ export default function Login() {
                     </div>
                     <Button
                       type="submit"
-                      disabled={loading || !email || !password || !fullName}
+                      disabled={loading || !email || !password || !fullName || (selectedRoleCard?.id === "parent" && !childName)}
                       className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
                     >
                       {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}

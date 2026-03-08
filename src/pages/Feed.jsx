@@ -79,6 +79,42 @@ export default function Feed() {
     retryDelay: 1000,
   });
 
+  // Batch-fetch user's highlights, follows, and subscriptions to avoid N+1 queries in PostCard
+  const { data: userHighlights = [] } = useQuery({
+    queryKey: ["user-highlights", user?.email],
+    queryFn: () => db.entities.Highlight.filter({ user_email: user.email, item_type: "post" }),
+    enabled: !!user?.email,
+    staleTime: 60000,
+  });
+
+  const { data: userFollowsList = [] } = useQuery({
+    queryKey: ["user-follows-list", user?.email],
+    queryFn: () => db.entities.Follow.filter({ follower_email: user.email }),
+    enabled: !!user?.email,
+    staleTime: 60000,
+  });
+
+  const { data: userSubscriptions = [] } = useQuery({
+    queryKey: ["user-subscriptions", user?.email],
+    queryFn: () => db.entities.Subscription.filter({ subscriber_email: user.email, status: "active" }),
+    enabled: !!user?.email,
+    staleTime: 60000,
+  });
+
+  // Pre-compute lookup sets for O(1) checks in PostCard
+  const highlightedPostIds = React.useMemo(
+    () => new Set(userHighlights.map(h => h.item_id)),
+    [userHighlights]
+  );
+  const followingEmails = React.useMemo(
+    () => new Set(userFollowsList.map(f => f.following_email)),
+    [userFollowsList]
+  );
+  const subscribedCreators = React.useMemo(
+    () => new Set(userSubscriptions.map(s => s.creator_email)),
+    [userSubscriptions]
+  );
+
 
   const filteredPosts = allPosts?.filter(post => {
     if (preferences?.excluded_sports?.includes(post.sport)) return false;
@@ -205,7 +241,15 @@ export default function Feed() {
         ) : (
           <div className="space-y-3">
             {posts?.map((post) => (
-              <PostCard key={post.id} post={post} currentUser={user} onUpdate={refetch} />
+              <PostCard
+                key={post.id}
+                post={post}
+                currentUser={user}
+                onUpdate={refetch}
+                initialHighlighted={highlightedPostIds.has(post.id)}
+                initialFollowing={followingEmails.has(post.author_email)}
+                initialHasAccess={!post.is_premium || post.author_email === user?.email || subscribedCreators.has(post.author_email)}
+              />
             ))}
           </div>
         )}

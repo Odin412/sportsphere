@@ -56,7 +56,7 @@ const POST_REACTIONS = [
   { emoji: "😮", label: "Wow" },
 ];
 
-export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
+export default function PostCard({ post, currentUser, onUpdate, onDelete, initialHighlighted, initialFollowing, initialHasAccess }) {
   const [liked, setLiked] = useState(post.likes?.includes(currentUser?.email));
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
   const [showComments, setShowComments] = useState(false);
@@ -68,13 +68,13 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
   const [reportReason, setReportReason] = useState("");
   const [reportDetails, setReportDetails] = useState("");
   const [submittingReport, setSubmittingReport] = useState(false);
-  const [isHighlighted, setIsHighlighted] = useState(false);
-  const [hasAccess, setHasAccess] = useState(false);
+  const [isHighlighted, setIsHighlighted] = useState(initialHighlighted ?? false);
+  const [hasAccess, setHasAccess] = useState(initialHasAccess ?? false);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerStartIndex, setViewerStartIndex] = useState(0);
   const [showShareDialog, setShowShareDialog] = useState(false);
   const [commentsDisabled, setCommentsDisabled] = useState(post.comments_disabled || false);
-  const [following, setFollowing] = useState(false);
+  const [following, setFollowing] = useState(initialFollowing ?? false);
   const reactionKey = `reaction-${post.id}-${currentUser?.email}`;
   const [myReaction, setMyReaction] = useState(() => (typeof window !== "undefined" ? localStorage.getItem(reactionKey) : null));
   const [showReactionPicker, setShowReactionPicker] = useState(false);
@@ -84,23 +84,29 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete }) {
 
   useEffect(() => {
     if (!currentUser) return;
-    db.entities.Highlight.filter({ user_email: currentUser.email, item_type: "post", item_id: post.id })
-      .then(h => setIsHighlighted(h.length > 0))
-      .catch(() => {});
+
+    // Only fetch individually if batch data wasn't provided via props (e.g. PostCard used outside Feed)
+    if (initialHighlighted === undefined) {
+      db.entities.Highlight.filter({ user_email: currentUser.email, item_type: "post", item_id: post.id })
+        .then(h => setIsHighlighted(h.length > 0))
+        .catch(() => {});
+    }
 
     trackView();
 
-    if (post.is_premium && post.author_email !== currentUser.email) {
-      db.entities.Subscription.filter({
-        subscriber_email: currentUser.email,
-        creator_email: post.author_email,
-        status: "active"
-      }).then(subs => setHasAccess(subs.length > 0)).catch(() => setHasAccess(false));
-    } else {
-      setHasAccess(true);
+    if (initialHasAccess === undefined) {
+      if (post.is_premium && post.author_email !== currentUser.email) {
+        db.entities.Subscription.filter({
+          subscriber_email: currentUser.email,
+          creator_email: post.author_email,
+          status: "active"
+        }).then(subs => setHasAccess(subs.length > 0)).catch(() => setHasAccess(false));
+      } else {
+        setHasAccess(true);
+      }
     }
 
-    if (post.author_email !== currentUser.email) {
+    if (initialFollowing === undefined && post.author_email !== currentUser.email) {
       db.entities.Follow.filter({ follower_email: currentUser.email, following_email: post.author_email })
         .then(f => setFollowing(f.length > 0))
         .catch(() => {});

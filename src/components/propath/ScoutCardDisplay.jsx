@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, RotateCcw, Share2, Mail, Download, Trophy, MapPin, Clock, Star } from "lucide-react";
@@ -42,31 +42,6 @@ if (typeof document !== "undefined" && !document.getElementById(CSS_ID)) {
   const s = document.createElement("style");
   s.id = CSS_ID;
   s.textContent = `
-    @keyframes refractorSweep {
-      0%   { background-position: -200% 0; }
-      100% { background-position: 200% 0; }
-    }
-    .refractor-rainbow {
-      position: absolute; inset: 0; border-radius: inherit;
-      background: linear-gradient(105deg,
-        transparent 20%, rgba(255,0,0,0.15) 25%, rgba(255,154,0,0.18) 30%,
-        rgba(255,255,0,0.15) 35%, rgba(0,255,0,0.18) 40%, rgba(0,200,255,0.2) 45%,
-        rgba(100,0,255,0.18) 50%, rgba(255,0,200,0.15) 55%, transparent 60%
-      );
-      background-size: 200% 100%;
-      animation: refractorSweep 3s linear infinite;
-      mix-blend-mode: screen; pointer-events: none; z-index: 5;
-    }
-    @keyframes specularPulse {
-      0%, 100% { opacity: 0.25; transform: scale(1); }
-      50%      { opacity: 0.5; transform: scale(1.1); }
-    }
-    .refractor-specular {
-      position: absolute; inset: 0; border-radius: inherit;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.1) 20%, transparent 50%);
-      animation: specularPulse 4s ease-in-out infinite;
-      pointer-events: none; z-index: 6;
-    }
     .refractor-foil {
       position: absolute; inset: 0; border-radius: inherit;
       background-image:
@@ -84,6 +59,76 @@ if (typeof document !== "undefined" && !document.getElementById(CSS_ID)) {
     }
   `;
   document.head.appendChild(s);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MOUSE-TRACKED REFRACTOR HOOK — rainbow + specular follow cursor
+   ═══════════════════════════════════════════════════════════════════════════════ */
+function useRefractorEffect(cardRef) {
+  const [pos, setPos] = useState({ x: 50, y: 50, active: false });
+  const raf = useRef(null);
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+
+  const onMove = useCallback((e) => {
+    if (!cardRef.current) return;
+    if (raf.current) cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(() => {
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      setPos({ x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)), active: true });
+    });
+  }, [cardRef]);
+
+  const onLeave = useCallback(() => {
+    setPos({ x: 50, y: 50, active: false });
+    if (raf.current) cancelAnimationFrame(raf.current);
+  }, []);
+
+  useEffect(() => () => { if (raf.current) cancelAnimationFrame(raf.current); }, []);
+
+  // Compute rainbow angle from cursor position
+  const angle = Math.atan2(pos.x - 50, pos.y - 50) * (180 / Math.PI) + 180;
+
+  // Rainbow gradient — rotates based on mouse angle, centered on cursor
+  const rainbowStyle = {
+    position: "absolute", inset: 0, borderRadius: "inherit",
+    background: pos.active
+      ? `linear-gradient(${angle}deg,
+          transparent 10%,
+          rgba(255,0,0,0.18) 20%,
+          rgba(255,154,0,0.22) 28%,
+          rgba(255,255,0,0.18) 36%,
+          rgba(0,255,0,0.22) 44%,
+          rgba(0,200,255,0.25) 52%,
+          rgba(100,0,255,0.22) 60%,
+          rgba(255,0,200,0.18) 68%,
+          transparent 78%
+        )`
+      : "none",
+    opacity: pos.active ? 1 : 0,
+    transition: pos.active ? "opacity 0.15s ease" : "opacity 0.6s ease",
+    mixBlendMode: "screen",
+    pointerEvents: "none",
+    zIndex: 5,
+  };
+
+  // Specular highlight — bright spot that follows cursor
+  const specularStyle = {
+    position: "absolute", inset: 0, borderRadius: "inherit",
+    background: pos.active
+      ? `radial-gradient(ellipse at ${pos.x}% ${pos.y}%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.12) 25%, transparent 55%)`
+      : "none",
+    opacity: pos.active ? 1 : 0,
+    transition: pos.active ? "opacity 0.15s ease" : "opacity 0.6s ease",
+    pointerEvents: "none",
+    zIndex: 6,
+  };
+
+  const handlers = isMobile ? {} : { onMouseMove: onMove, onMouseLeave: onLeave };
+
+  return { rainbowStyle, specularStyle, handlers, isMobile };
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -343,6 +388,7 @@ export default function ScoutCardDisplay({
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const cardRef = useRef(null);
+  const refractor = useRefractorEffect(cardRef);
 
   if (!profile) return null;
 
@@ -401,7 +447,7 @@ export default function ScoutCardDisplay({
 
   /* ── Full-size trading card ──────────────────────────────────────────────── */
   return (
-    <div style={{ perspective: 1000 }} className="mx-auto" ref={cardRef}>
+    <div style={{ perspective: 1000 }} className="mx-auto" ref={cardRef} {...refractor.handlers}>
       <div className="refractor-card-outer" style={{ maxWidth: 380, margin: "0 auto" }}>
         <motion.div
           animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -415,16 +461,15 @@ export default function ScoutCardDisplay({
               ...cardShellStyle,
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
-              // Opacity fallback for browsers where backfaceVisibility fails
               opacity: isFlipped ? 0 : 1,
               transition: "opacity 0.15s ease",
               overflow: "hidden",
             }}
             data-card-capture
           >
-            {/* Holographic layers */}
-            <div className="refractor-rainbow" />
-            <div className="refractor-specular" />
+            {/* Mouse-tracked holographic layers */}
+            <div style={refractor.rainbowStyle} />
+            <div style={refractor.specularStyle} />
             <div className="refractor-foil" />
             {/* Inner metallic border */}
             <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
@@ -446,16 +491,15 @@ export default function ScoutCardDisplay({
               backfaceVisibility: "hidden",
               WebkitBackfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
-              // Opacity fallback
               opacity: isFlipped ? 1 : 0,
               transition: "opacity 0.15s ease",
               overflow: "hidden",
               pointerEvents: isFlipped ? "auto" : "none",
             }}
           >
-            {/* Holographic layers */}
-            <div className="refractor-rainbow" />
-            <div className="refractor-specular" />
+            {/* Mouse-tracked holographic layers */}
+            <div style={refractor.rainbowStyle} />
+            <div style={refractor.specularStyle} />
             <div className="refractor-foil" />
             {/* Inner metallic border */}
             <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"

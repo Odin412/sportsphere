@@ -212,7 +212,7 @@ export default function Reels() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.2 }}
-          className="max-w-2xl mx-auto px-4 py-4"
+          className="max-w-2xl mx-auto px-4 py-4 pb-20 md:pb-4"
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-4">

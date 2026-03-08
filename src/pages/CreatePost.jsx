@@ -197,7 +197,7 @@ export default function CreatePost() {
             value={content}
             onChange={e => setContent(e.target.value)}
             placeholder="Share your training, highlight, or motivation... (type @ to mention users)"
-            className="min-h-[120px] border-0 bg-slate-50 rounded-xl text-sm resize-none focus:ring-2 focus:ring-orange-200"
+            className="min-h-[120px] border-0 bg-slate-50 rounded-xl text-sm text-slate-900 placeholder:text-slate-500 resize-none focus:ring-2 focus:ring-orange-200"
           />
           <p className="text-xs text-slate-400">Tip: Type @ to mention other athletes</p>
         </div>

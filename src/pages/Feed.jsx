@@ -134,7 +134,7 @@ export default function Feed() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2 }}
-      className="max-w-[1140px] mx-auto px-4 py-4"
+      className="max-w-[1140px] mx-auto px-4 py-4 pb-20 md:pb-4"
     >
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_296px] lg:gap-6 lg:items-start">
 

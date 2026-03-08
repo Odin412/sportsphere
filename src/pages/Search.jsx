@@ -204,7 +204,7 @@ export default function SearchPage() {
             value={query}
             onChange={handleQueryChange}
             placeholder="Search for anything..."
-            className="pl-12 pr-12 py-6 text-lg bg-slate-800/80 border-cyan-500/30 text-white placeholder:text-slate-500 rounded-2xl focus:border-cyan-400/60 focus:ring-cyan-400/20"
+            className="pl-12 pr-12 py-6 text-lg bg-slate-800/80 border-cyan-500/30 text-white placeholder:text-slate-300 rounded-2xl focus:border-cyan-400/60 focus:ring-cyan-400/20"
             autoFocus
           />
           {query && (
@@ -232,7 +232,7 @@ export default function SearchPage() {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all ${
+                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all focus:ring-2 focus:ring-cyan-400 focus:outline-none ${
                     activeTab === tab.id
                       ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
                       : "bg-slate-800/60 text-slate-400 hover:bg-slate-700/60 hover:text-white"

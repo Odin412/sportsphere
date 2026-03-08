@@ -27,7 +27,6 @@ const ROLE_CARDS = [
     label: "Athlete",
     icon: Dumbbell,
     desc: "Track performance, get scouted, build your brand",
-    color: "from-red-500 to-orange-500",
     bg: "bg-red-50 border-red-200 hover:border-red-400",
     iconBg: "bg-red-100 text-red-600",
     role: "athlete",
@@ -38,7 +37,6 @@ const ROLE_CARDS = [
     label: "Coach",
     icon: UserCheck,
     desc: "Manage athletes, share content, grow your coaching practice",
-    color: "from-blue-500 to-cyan-500",
     bg: "bg-blue-50 border-blue-200 hover:border-blue-400",
     iconBg: "bg-blue-100 text-blue-600",
     role: "coach",
@@ -49,7 +47,6 @@ const ROLE_CARDS = [
     label: "Organization",
     icon: Building2,
     desc: "Leagues, clubs, schools — manage teams and events",
-    color: "from-purple-500 to-violet-500",
     bg: "bg-purple-50 border-purple-200 hover:border-purple-400",
     iconBg: "bg-purple-100 text-purple-600",
     role: "admin",
@@ -60,7 +57,6 @@ const ROLE_CARDS = [
     label: "Parent",
     icon: Heart,
     desc: "Follow your child's sport journey and stay connected",
-    color: "from-green-500 to-emerald-500",
     bg: "bg-green-50 border-green-200 hover:border-green-400",
     iconBg: "bg-green-100 text-green-600",
     role: "parent",
@@ -80,85 +76,12 @@ const ORG_SUB = [
   { id: "other", label: "Other Organization" },
 ];
 
-export default function Login() {
-  const [tab, setTab] = useState("signin"); // "signin" | "signup"
-  const [signupStep, setSignupStep] = useState("role-select"); // "role-select" | "role-sub" | "form"
-  const [selectedRoleCard, setSelectedRoleCard] = useState(null); // the ROLE_CARDS entry
-  const [selectedRole, setSelectedRole] = useState(""); // db role value
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const switchToSignup = () => {
-    setTab("signup");
-    setSignupStep("role-select");
-    setSelectedRoleCard(null);
-    setSelectedRole("");
-  };
-
-  const switchToSignin = () => {
-    setTab("signin");
-    setSignupStep("role-select");
-    setSelectedRoleCard(null);
-    setSelectedRole("");
-  };
-
-  const handleRoleCardClick = (card) => {
-    setSelectedRoleCard(card);
-    if (card.hasSub) {
-      setSignupStep("role-sub");
-    } else {
-      setSelectedRole(card.role);
-      setSignupStep("form");
-    }
-  };
-
-  const handleSubChoice = () => {
-    // All sub-choices collapse to the parent card's db role
-    setSelectedRole(selectedRoleCard.role);
-    setSignupStep("form");
-  };
-
-  const handleSignIn = async (e) => {
-    e.preventDefault();
-    if (!email || !password) return;
-    setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      toast.error(error.message === "Invalid login credentials"
-        ? "Incorrect email or password."
-        : error.message);
-    }
-    setLoading(false);
-  };
-
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    if (!email || !password || !fullName || !selectedRole) return;
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters.");
-      return;
-    }
-    setLoading(true);
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: { data: { full_name: fullName, role: selectedRole } },
-    });
-    if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Account created! Setting up your profile...");
-    }
-    setLoading(false);
-  };
-
-  const HeroPanel = () => (
+// HeroPanel lives outside Login so it never remounts on Login state changes
+function HeroPanel() {
+  return (
     <div className="hidden lg:flex flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-800 to-red-950 p-12 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-5"
+      <div
+        className="absolute inset-0 opacity-5"
         style={{
           backgroundImage: "radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px)",
           backgroundSize: "40px 40px",
@@ -228,179 +151,85 @@ export default function Login() {
       </motion.div>
     </div>
   );
+}
 
-  const RoleSelectScreen = () => (
-    <motion.div
-      key="role-select"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.25 }}
-      className="space-y-4"
-    >
-      <div className="text-center">
-        <h2 className="text-lg font-black text-white lg:text-slate-900">I am joining as a...</h2>
-        <p className="text-xs text-slate-400 mt-1">Choose the option that best describes you</p>
-      </div>
-      <div className="grid grid-cols-2 gap-3">
-        {ROLE_CARDS.map((card) => {
-          const Icon = card.icon;
-          return (
-            <button
-              key={card.id}
-              onClick={() => handleRoleCardClick(card)}
-              className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all text-left bg-white ${card.bg}`}
-            >
-              <span className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.iconBg}`}>
-                <Icon className="w-5 h-5" />
-              </span>
-              <div className="text-center">
-                <p className="font-bold text-sm text-slate-900">{card.label}</p>
-                <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{card.desc}</p>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-      <p className="text-center text-xs text-slate-400">
-        Already have an account?{" "}
-        <button onClick={switchToSignin} className="text-red-600 font-semibold hover:underline">Sign in</button>
-      </p>
-    </motion.div>
-  );
+export default function Login() {
+  const [tab, setTab] = useState("signin");
+  const [signupStep, setSignupStep] = useState("role-select");
+  const [selectedRoleCard, setSelectedRoleCard] = useState(null);
+  const [selectedRole, setSelectedRole] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const RoleSubScreen = () => {
-    const isCoach = selectedRoleCard?.id === "coach";
-    const items = isCoach ? COACH_SUB : ORG_SUB;
-    return (
-      <motion.div
-        key="role-sub"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -12 }}
-        transition={{ duration: 0.25 }}
-        className="space-y-4"
-      >
-        <div className="flex items-center gap-2">
-          <button onClick={() => setSignupStep("role-select")} className="text-slate-400 hover:text-slate-600 transition-colors">
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <div>
-            <h2 className="text-base font-black text-white lg:text-slate-900">
-              {isCoach ? "What type of coach are you?" : "What type of organization?"}
-            </h2>
-          </div>
-        </div>
-        <div className="space-y-2">
-          {items.map((item) => (
-            <button
-              key={item.id}
-              onClick={handleSubChoice}
-              className="w-full flex items-start gap-3 p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white hover:bg-slate-50 transition-all text-left"
-            >
-              <div>
-                <p className="font-bold text-sm text-slate-900">{item.label}</p>
-                {item.desc && <p className="text-xs text-slate-500 mt-0.5">{item.desc}</p>}
-              </div>
-            </button>
-          ))}
-        </div>
-      </motion.div>
-    );
+  const switchToSignup = () => {
+    setTab("signup");
+    setSignupStep("role-select");
+    setSelectedRoleCard(null);
+    setSelectedRole("");
   };
 
-  const SignupFormScreen = () => (
-    <motion.div
-      key="signup-form"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.25 }}
-      className="space-y-4"
-    >
-      {/* Role badge */}
-      <div className="flex items-center gap-2">
-        <button onClick={() => setSignupStep(selectedRoleCard?.hasSub ? "role-sub" : "role-select")} className="text-slate-400 hover:text-slate-600 transition-colors">
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <div className="flex items-center gap-2">
-          {selectedRoleCard && (() => {
-            const Icon = selectedRoleCard.icon;
-            return (
-              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${selectedRoleCard.iconBg}`}>
-                <Icon className="w-3.5 h-3.5" />
-                {selectedRoleCard.label}
-              </span>
-            );
-          })()}
-          <span className="text-sm font-bold text-white lg:text-slate-900">Create your account</span>
-        </div>
-      </div>
+  const switchToSignin = () => {
+    setTab("signin");
+    setSignupStep("role-select");
+    setSelectedRoleCard(null);
+    setSelectedRole("");
+  };
 
-      <form onSubmit={handleSignUp} className="space-y-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Full Name</Label>
-          <Input
-            id="fullName"
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            placeholder="Your name"
-            className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
-            required
-          />
-        </div>
+  const handleRoleCardClick = (card) => {
+    setSelectedRoleCard(card);
+    if (card.hasSub) {
+      setSignupStep("role-sub");
+    } else {
+      setSelectedRole(card.role);
+      setSignupStep("form");
+    }
+  };
 
-        <div className="space-y-1.5">
-          <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input
-              id="emailSignup"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
-              required
-            />
-          </div>
-        </div>
+  const handleSubChoice = () => {
+    setSelectedRole(selectedRoleCard.role);
+    setSignupStep("form");
+  };
 
-        <div className="space-y-1.5">
-          <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input
-              id="passwordSignup"
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Min. 6 characters"
-              className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
-              aria-label="Toggle password visibility"
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
-        </div>
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    if (!email || !password) return;
+    setLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    if (error) {
+      toast.error(error.message === "Invalid login credentials"
+        ? "Incorrect email or password."
+        : error.message);
+    }
+    setLoading(false);
+  };
 
-        <Button
-          type="submit"
-          disabled={loading || !email || !password || !fullName}
-          className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
-        >
-          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
-        </Button>
-      </form>
-    </motion.div>
-  );
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    if (!email || !password || !fullName || !selectedRole) return;
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters.");
+      return;
+    }
+    setLoading(true);
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { full_name: fullName, role: selectedRole } },
+    });
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Account created! Setting up your profile...");
+    }
+    setLoading(false);
+  };
+
+  const isCoach = selectedRoleCard?.id === "coach";
+  const subItems = isCoach ? COACH_SUB : ORG_SUB;
+  const RoleIcon = selectedRoleCard?.icon;
 
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
@@ -423,13 +252,15 @@ export default function Login() {
             <span className="text-2xl font-black text-white lg:text-slate-900">Sportsphere</span>
           </div>
 
-          {/* Tab switcher — only show when not in signup sub-steps */}
+          {/* Tab switcher — hidden during sub-steps */}
           {(tab === "signin" || signupStep === "role-select") && (
             <div className="flex rounded-xl bg-gray-800 lg:bg-slate-100 p-1">
               <button
                 onClick={switchToSignin}
                 className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
-                  tab === "signin" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
+                  tab === "signin"
+                    ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900"
+                    : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
                 }`}
               >
                 Sign In
@@ -437,7 +268,9 @@ export default function Login() {
               <button
                 onClick={switchToSignup}
                 className={`flex-1 py-2 rounded-lg text-sm font-bold transition-all ${
-                  tab === "signup" ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900" : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
+                  tab === "signup"
+                    ? "bg-gray-700 lg:bg-white shadow text-white lg:text-slate-900"
+                    : "text-slate-400 lg:text-slate-500 hover:text-white lg:hover:text-slate-700"
                 }`}
               >
                 Create Account
@@ -445,7 +278,8 @@ export default function Login() {
             </div>
           )}
 
-          {tab === "signin" ? (
+          {/* ── Sign In ── */}
+          {tab === "signin" && (
             <form onSubmit={handleSignIn} className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="email" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
@@ -462,7 +296,6 @@ export default function Login() {
                   />
                 </div>
               </div>
-
               <div className="space-y-1.5">
                 <Label htmlFor="password" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
                 <div className="relative">
@@ -486,7 +319,6 @@ export default function Login() {
                   </button>
                 </div>
               </div>
-
               <Button
                 type="submit"
                 disabled={loading || !email || !password}
@@ -494,17 +326,184 @@ export default function Login() {
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
               </Button>
-
               <p className="text-center text-xs text-slate-400">
                 Don't have an account?{" "}
-                <button type="button" onClick={switchToSignup} className="text-red-600 font-semibold hover:underline">Create one</button>
+                <button type="button" onClick={switchToSignup} className="text-red-600 font-semibold hover:underline">
+                  Create one
+                </button>
               </p>
             </form>
-          ) : (
+          )}
+
+          {/* ── Sign Up: Role Select ── */}
+          {tab === "signup" && (
             <AnimatePresence mode="wait">
-              {signupStep === "role-select" && <RoleSelectScreen key="role-select" />}
-              {signupStep === "role-sub" && <RoleSubScreen key="role-sub" />}
-              {signupStep === "form" && <SignupFormScreen key="signup-form" />}
+              {signupStep === "role-select" && (
+                <motion.div
+                  key="role-select"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-4"
+                >
+                  <div className="text-center">
+                    <h2 className="text-lg font-black text-white lg:text-slate-900">I am joining as a...</h2>
+                    <p className="text-xs text-slate-400 mt-1">Choose the option that best describes you</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {ROLE_CARDS.map((card) => {
+                      const Icon = card.icon;
+                      return (
+                        <button
+                          key={card.id}
+                          onClick={() => handleRoleCardClick(card)}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all text-left bg-white ${card.bg}`}
+                        >
+                          <span className={`w-10 h-10 rounded-xl flex items-center justify-center ${card.iconBg}`}>
+                            <Icon className="w-5 h-5" />
+                          </span>
+                          <div className="text-center">
+                            <p className="font-bold text-sm text-slate-900">{card.label}</p>
+                            <p className="text-[10px] text-slate-500 leading-tight mt-0.5">{card.desc}</p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="text-center text-xs text-slate-400">
+                    Already have an account?{" "}
+                    <button onClick={switchToSignin} className="text-red-600 font-semibold hover:underline">
+                      Sign in
+                    </button>
+                  </p>
+                </motion.div>
+              )}
+
+              {signupStep === "role-sub" && (
+                <motion.div
+                  key="role-sub"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setSignupStep("role-select")}
+                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    <h2 className="text-base font-black text-white lg:text-slate-900">
+                      {isCoach ? "What type of coach are you?" : "What type of organization?"}
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {subItems.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={handleSubChoice}
+                        className="w-full flex items-start gap-3 p-3.5 rounded-xl border-2 border-slate-200 hover:border-slate-400 bg-white hover:bg-slate-50 transition-all text-left"
+                      >
+                        <div>
+                          <p className="font-bold text-sm text-slate-900">{item.label}</p>
+                          {item.desc && <p className="text-xs text-slate-500 mt-0.5">{item.desc}</p>}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {signupStep === "form" && (
+                <motion.div
+                  key="signup-form"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.2 }}
+                  className="space-y-4"
+                >
+                  {/* Role badge + back */}
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setSignupStep(selectedRoleCard?.hasSub ? "role-sub" : "role-select")}
+                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                    >
+                      <ChevronLeft className="w-5 h-5" />
+                    </button>
+                    {selectedRoleCard && RoleIcon && (
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${selectedRoleCard.iconBg}`}>
+                        <RoleIcon className="w-3.5 h-3.5" />
+                        {selectedRoleCard.label}
+                      </span>
+                    )}
+                    <span className="text-sm font-bold text-white lg:text-slate-900">Create your account</span>
+                  </div>
+
+                  <form onSubmit={handleSignUp} className="space-y-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="fullName" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Full Name</Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        placeholder="Your name"
+                        className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                        required
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <Input
+                          id="emailSignup"
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="you@example.com"
+                          className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <Input
+                          id="passwordSignup"
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Min. 6 characters"
+                          className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                          required
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
+                          aria-label="Toggle password visibility"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+                    <Button
+                      type="submit"
+                      disabled={loading || !email || !password || !fullName}
+                      className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
+                    >
+                      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
+                    </Button>
+                  </form>
+                </motion.div>
+              )}
             </AnimatePresence>
           )}
 

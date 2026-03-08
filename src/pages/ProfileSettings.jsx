@@ -88,6 +88,7 @@ export default function ProfileSettings() {
     contact_email: "",
     contact_phone: "",
     contact_preferences: { allow_messages: true, allow_email_contact: false, allow_phone_contact: false },
+    comments_disabled: false,
   });
   const [usernameError, setUsernameError] = useState("");
 
@@ -113,6 +114,7 @@ export default function ProfileSettings() {
         contact_email: u.contact_email || "",
         contact_phone: u.contact_phone || "",
         contact_preferences: u.contact_preferences || { allow_messages: true, allow_email_contact: false, allow_phone_contact: false },
+        comments_disabled: u.comments_disabled || false,
       });
     }).catch(() => db.auth.redirectToLogin());
   }, []);
@@ -386,6 +388,26 @@ export default function ProfileSettings() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Privacy */}
+          <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 space-y-4">
+            <h2 className="font-bold text-slate-900">Privacy</h2>
+            <div className="flex items-center justify-between p-3 rounded-xl hover:bg-slate-50 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <MessageCircle className="w-4 h-4 text-blue-500" />
+                </div>
+                <div>
+                  <Label className="text-sm font-medium text-slate-700">Allow Comments on Posts</Label>
+                  <p className="text-xs text-slate-500">Let others comment on your posts by default</p>
+                </div>
+              </div>
+              <Switch
+                checked={!form.comments_disabled}
+                onCheckedChange={v => setForm(prev => ({ ...prev, comments_disabled: !v }))}
+              />
+            </div>
           </div>
 
           {/* Replay Tutorial */}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -6,10 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Share2, Mail, ArrowLeft, ShieldCheck } from "lucide-react";
+import { Loader2, ArrowLeft, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
+import html2canvas from "html2canvas";
 import ScoutCardDisplay from "@/components/propath/ScoutCardDisplay";
 
 export default function ScoutCard() {
@@ -22,6 +23,7 @@ export default function ScoutCard() {
   const [showContact, setShowContact] = useState(false);
   const [contactForm, setContactForm] = useState({ name: "", role: "", email: "", message: "" });
   const [sendingContact, setSendingContact] = useState(false);
+  const cardWrapperRef = useRef(null);
 
   useEffect(() => {
     db.auth.me().then(setCurrentUser).catch(() => {});
@@ -53,7 +55,7 @@ export default function ScoutCard() {
 
   const profile = profiles[0];
 
-  // Compute top 3 metrics from all stat entries
+  // Compute all metrics from stat entries
   const metricBests = {};
   statEntries.forEach((entry) => {
     (entry.metrics || []).forEach((m) => {
@@ -98,10 +100,39 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
       .finally(() => setLoadingNarrative(false));
   }, [profile, statEntries.length]);
 
-  const handleShare = () => {
+  const handleShare = useCallback(() => {
     const url = window.location.href;
-    navigator.clipboard.writeText(url).then(() => toast.success("Scout Card link copied!"));
-  };
+    if (navigator.share) {
+      navigator.share({ title: `${profile?.user_name} Scout Card`, url }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url).then(() => toast.success("Scout Card link copied!"));
+    }
+  }, [profile]);
+
+  const handleDownload = useCallback(async () => {
+    if (!cardWrapperRef.current) return;
+    try {
+      toast.info("Generating card image...");
+      const cardEl = cardWrapperRef.current.querySelector("[data-card-capture]") || cardWrapperRef.current;
+      const canvas = await html2canvas(cardEl, {
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
+        logging: false,
+      });
+      const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/png"));
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${(profile?.user_name || "athlete").replace(/\s+/g, "-").toLowerCase()}-scout-card.png`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("Card saved!");
+    } catch (err) {
+      console.error("Download failed:", err);
+      toast.error("Failed to save card image");
+    }
+  }, [profile]);
 
   const handleContact = async () => {
     if (!contactForm.name || !contactForm.email || !contactForm.message) {
@@ -131,7 +162,7 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
   if (!targetEmail) {
     return (
       <div className="max-w-lg mx-auto px-4 py-20 text-center">
-        <p className="text-5xl mb-4">🃏</p>
+        <p className="text-5xl mb-4">&#127183;</p>
         <h2 className="text-white font-bold text-xl">No athlete selected</h2>
         <p className="text-gray-400 text-sm mt-2">Use a Scout Card link shared by an athlete.</p>
         <Link to={createPageUrl("GetNoticed")}>
@@ -161,22 +192,29 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
           <span className="text-white font-black text-lg">ProPath Scout Card</span>
           {statEntries.length > 0 && (
             <Badge className="bg-green-900/50 text-green-400 border border-green-700 text-xs">
-              Verified ✓
+              Verified
             </Badge>
           )}
         </div>
       </div>
 
       {/* Scout Card */}
-      <ScoutCardDisplay
-        profile={profile}
-        topMetrics={topMetrics}
-        headline={narrative?.headline}
-        narrative={narrative?.narrative}
-        onContact={() => setShowContact(true)}
-        onShare={handleShare}
-        compact={false}
-      />
+      <div ref={cardWrapperRef}>
+        <ScoutCardDisplay
+          profile={profile}
+          topMetrics={topMetrics}
+          allMetrics={metricBests}
+          headline={narrative?.headline}
+          narrative={narrative?.narrative}
+          achievements={profile.achievements}
+          bio={profile.bio}
+          statCount={statEntries.length}
+          onContact={() => setShowContact(true)}
+          onShare={handleShare}
+          onDownload={handleDownload}
+          compact={false}
+        />
+      </div>
 
       {/* AI narrative loading */}
       {loadingNarrative && (
@@ -185,44 +223,6 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
           Generating scout narrative...
         </div>
       )}
-
-      {/* Stats summary */}
-      {statEntries.length > 0 && (
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-          <h3 className="text-white font-bold mb-3 flex items-center gap-2">
-            📊 Verified Stats
-            <span className="text-gray-500 text-sm font-normal">({statEntries.length} sessions logged)</span>
-          </h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {Object.entries(metricBests).map(([name, { value, unit }]) => (
-              <div key={name} className="bg-gray-800 rounded-xl p-3 text-center">
-                <p className="text-gray-400 text-xs truncate">{name}</p>
-                <p className="text-white font-bold text-xl mt-1">
-                  {value}
-                  <span className="text-gray-500 text-xs ml-1 font-normal">{unit}</span>
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Action buttons */}
-      <div className="flex gap-3">
-        <Button
-          onClick={handleShare}
-          variant="outline"
-          className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl gap-2"
-        >
-          <Share2 className="w-4 h-4" /> Share Scout Card
-        </Button>
-        <Button
-          onClick={() => setShowContact(true)}
-          className="flex-1 bg-gradient-to-r from-red-900 to-red-700 hover:from-red-800 hover:to-red-600 text-white rounded-xl gap-2"
-        >
-          <Mail className="w-4 h-4" /> Contact Athlete
-        </Button>
-      </div>
 
       {/* Contact Dialog */}
       <Dialog open={showContact} onOpenChange={setShowContact}>

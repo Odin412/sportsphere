@@ -4,41 +4,25 @@ import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { ImagePlus, Video, X, Loader2, ArrowLeft, Crown, Sliders, MessageCircle } from "lucide-react";
+import { ImagePlus, Video, X, Loader2, ArrowLeft, Crown, Sliders } from "lucide-react";
 import { Link } from "react-router-dom";
-import AIPostGenerator from "@/components/feed/AIPostGenerator";
 import VideoEditor from "@/components/video/VideoEditor";
 import { awardPoints } from "@/components/gamification/PointsHelper";
 import { toast } from "sonner";
-
-const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
-const CATEGORIES = [
-  { value: "training", label: "Training", icon: "🏋️" },
-  { value: "game", label: "Game / Match", icon: "🏟️" },
-  { value: "coaching", label: "Coaching", icon: "📋" },
-  { value: "instruction", label: "Instruction", icon: "📚" },
-  { value: "motivation", label: "Motivation", icon: "🔥" },
-  { value: "highlight", label: "Highlight", icon: "⭐" },
-  { value: "other", label: "Other", icon: "💬" },
-];
 
 export default function CreatePost() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [content, setContent] = useState("");
-  const [sport, setSport] = useState("");
-  const [category, setCategory] = useState("");
   const [mediaFiles, setMediaFiles] = useState([]);
   const [mediaPreviews, setMediaPreviews] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [posting, setPosting] = useState(false);
   const [isPremium, setIsPremium] = useState(false);
-  const [commentsDisabled, setCommentsDisabled] = useState(false);
   const [editingVideoIndex, setEditingVideoIndex] = useState(null);
-  const [videoMeta, setVideoMeta] = useState({}); // index -> { trimStart, trimEnd, thumbnailFile, thumbnailPreview, chapters, filter, textOverlays }
+  const [videoMeta, setVideoMeta] = useState({});
 
   useEffect(() => {
     db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
@@ -76,8 +60,8 @@ export default function CreatePost() {
   const handlePost = async () => {
     if (!content.trim() && mediaFiles.length === 0) return;
     setPosting(true);
-    
-    // AI Content moderation check
+
+    // AI Content moderation check (non-blocking)
     if (content.trim()) {
       try {
         const modResult = await db.functions.invoke("moderateContent", {
@@ -87,9 +71,9 @@ export default function CreatePost() {
           author_email: user.email,
           author_name: user.full_name,
         });
-        const { action, severity } = modResult?.data || {};
+        const { action, severity } = modResult?.data || modResult || {};
         if (action === "auto_remove" && severity === "critical") {
-          toast.error("Post blocked: content violates community guidelines. Please keep SportHub sports-focused.");
+          toast.error("Post blocked: content violates community guidelines.");
           setPosting(false);
           return;
         }
@@ -98,18 +82,17 @@ export default function CreatePost() {
         }
       } catch (e) {
         // moderation errors shouldn't block posting
+        console.warn("Moderation check skipped:", e.message);
       }
     }
-    
+
     try {
-      // Extract mentions
       const mentionRegex = /@(\w+(?:\s+\w+)*)/g;
       const mentions = [...content.matchAll(mentionRegex)].map(m => m[1]);
 
       const hasVideo = mediaPreviews.some(m => m.type === "video");
       const hasImage = mediaPreviews.some(m => m.type === "image");
 
-      // Upload custom thumbnails if set
       const finalMediaUrls = [...mediaFiles];
       let thumbnailUrl = undefined;
       for (const [idxStr, meta] of Object.entries(videoMeta)) {
@@ -119,7 +102,6 @@ export default function CreatePost() {
         }
       }
 
-      // Collect chapters from all video meta
       const allChapters = Object.values(videoMeta).flatMap(m => m.chapters || []);
       const allTrimInfo = Object.entries(videoMeta)
         .filter(([, m]) => m.trimStart !== undefined)
@@ -130,8 +112,7 @@ export default function CreatePost() {
         author_name: user.full_name,
         author_avatar: user.avatar_url,
         content,
-        sport: sport || undefined,
-        category: category || undefined,
+        created_date: new Date().toISOString(),
         media_urls: finalMediaUrls,
         media_type: hasVideo && hasImage ? "mixed" : hasVideo ? "video" : hasImage ? "image" : undefined,
         thumbnail_url: thumbnailUrl,
@@ -143,10 +124,10 @@ export default function CreatePost() {
         shares: 0,
         mentioned_users: mentions.length > 0 ? mentions : [],
         is_premium: isPremium,
-        comments_disabled: commentsDisabled,
+        comments_disabled: user?.comments_disabled || false,
       });
 
-      // Notify mentioned users (fire-and-forget — don't block navigation)
+      // Notify mentioned users (fire-and-forget)
       if (mentions.length > 0) {
         db.entities.User.list(null, 500).then(allUsers => {
           for (const mention of mentions) {
@@ -166,11 +147,10 @@ export default function CreatePost() {
         }).catch(() => {});
       }
 
-      // Award points for creating a post (fire-and-forget)
       awardPoints(user.email, "POST_CREATED").catch(() => {});
-
       navigate(createPageUrl("Feed"));
     } catch (error) {
+      console.error("Post creation failed:", error);
       toast.error("Failed to publish post. Please try again.");
       setPosting(false);
     }
@@ -186,12 +166,6 @@ export default function CreatePost() {
       </div>
 
       <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 space-y-5">
-        <AIPostGenerator
-          sport={sport}
-          category={category}
-          onUseContent={(text) => setContent(text)}
-        />
-
         <div className="space-y-2">
           <Textarea
             value={content}
@@ -257,50 +231,6 @@ export default function CreatePost() {
             ))}
           </div>
         )}
-
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1.5">
-            <Label className="text-xs text-slate-500 font-medium">Sport</Label>
-            <Select value={sport} onValueChange={setSport}>
-              <SelectTrigger className="rounded-xl bg-slate-50 border-0">
-                <SelectValue placeholder="Select sport" />
-              </SelectTrigger>
-              <SelectContent>
-                {SPORTS.map(s => (
-                  <SelectItem key={s} value={s}>{s}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-1.5">
-            <Label className="text-xs text-slate-500 font-medium">Category</Label>
-            <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="rounded-xl bg-slate-50 border-0">
-                <SelectValue placeholder="Select type" />
-              </SelectTrigger>
-              <SelectContent>
-                {CATEGORIES.map(c => (
-                  <SelectItem key={c.value} value={c.value}>
-                    <span className="flex items-center gap-2">{c.icon} {c.label}</span>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {/* Comments Toggle */}
-        <div className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-xl">
-          <div className="flex items-center gap-2">
-            <MessageCircle className="w-4 h-4 text-slate-500" />
-            <div>
-              <Label className="text-sm font-medium text-slate-700">Allow Comments</Label>
-              <p className="text-xs text-slate-500">Let others comment on this post</p>
-            </div>
-          </div>
-          <Switch checked={!commentsDisabled} onCheckedChange={v => setCommentsDisabled(!v)} />
-        </div>
 
         {/* Premium Toggle */}
         {user?.subscription_price > 0 && (

@@ -305,7 +305,7 @@ export default function Login() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                    className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                     required
                   />
                 </div>
@@ -320,7 +320,7 @@ export default function Login() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                    className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                     required
                   />
                   <button
@@ -487,7 +487,7 @@ export default function Login() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder={selectedRoleCard?.id === "parent" ? "Parent's full name" : "Your name"}
-                        className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                        className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                         required
                       />
                     </div>
@@ -500,7 +500,7 @@ export default function Login() {
                           value={childName}
                           onChange={(e) => setChildName(e.target.value)}
                           placeholder="Athlete's full name"
-                          className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                          className="rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                           required
                         />
                       </div>
@@ -515,7 +515,7 @@ export default function Login() {
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="you@example.com"
-                          className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                          className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                           required
                         />
                       </div>
@@ -530,7 +530,7 @@ export default function Login() {
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="Min. 6 characters"
-                          className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-slate-900"
+                          className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
                           required
                         />
                         <button

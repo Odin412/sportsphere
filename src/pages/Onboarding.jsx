@@ -69,7 +69,7 @@ function AthleteSteps({ step, data, setData }) {
           value={data.position}
           onChange={e => setData(d => ({ ...d, position: e.target.value }))}
           placeholder="e.g. Point Guard, 100m Sprinter"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="Skill Level">
@@ -98,7 +98,7 @@ function AthleteSteps({ step, data, setData }) {
           value={data.bio}
           onChange={e => setData(d => ({ ...d, bio: e.target.value }))}
           placeholder="Tell people about yourself — your background, style of play, what drives you..."
-          className="rounded-xl resize-none"
+          className="rounded-xl resize-none text-gray-900"
           rows={3}
         />
       </FieldRow>
@@ -107,7 +107,7 @@ function AthleteSteps({ step, data, setData }) {
           value={data.location}
           onChange={e => setData(d => ({ ...d, location: e.target.value }))}
           placeholder="e.g. Atlanta, GA"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="School or Team (optional)">
@@ -115,7 +115,7 @@ function AthleteSteps({ step, data, setData }) {
           value={data.school}
           onChange={e => setData(d => ({ ...d, school: e.target.value }))}
           placeholder="e.g. Jefferson High School, City Hoops Club"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
     </StepCard>
@@ -138,7 +138,7 @@ function AthleteSteps({ step, data, setData }) {
                 value={a}
                 onChange={e => updateAchievement(i, e.target.value)}
                 placeholder={`Achievement ${i + 1} — e.g. State Champion 2024`}
-                className="rounded-xl"
+                className="rounded-xl text-gray-900"
               />
             ))}
           </div>
@@ -148,7 +148,7 @@ function AthleteSteps({ step, data, setData }) {
             value={data.goal}
             onChange={e => setData(d => ({ ...d, goal: e.target.value }))}
             placeholder="e.g. Make varsity, improve vertical by 3 inches"
-            className="rounded-xl"
+            className="rounded-xl text-gray-900"
           />
         </FieldRow>
       </StepCard>
@@ -175,7 +175,7 @@ function CoachSteps({ step, data, setData }) {
           value={data.specialty}
           onChange={e => setData(d => ({ ...d, specialty: e.target.value }))}
           placeholder="e.g. Strength & Conditioning, Skill Development, Youth Coaching"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="Years of Coaching Experience">
@@ -186,7 +186,7 @@ function CoachSteps({ step, data, setData }) {
           value={data.years_experience}
           onChange={e => setData(d => ({ ...d, years_experience: e.target.value }))}
           placeholder="e.g. 5"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
     </StepCard>
@@ -199,7 +199,7 @@ function CoachSteps({ step, data, setData }) {
           value={data.certifications}
           onChange={e => setData(d => ({ ...d, certifications: e.target.value }))}
           placeholder="e.g. NSCA-CSCS, USA Basketball Level 2, NASM-CPT..."
-          className="rounded-xl resize-none"
+          className="rounded-xl resize-none text-gray-900"
           rows={3}
         />
       </FieldRow>
@@ -208,7 +208,7 @@ function CoachSteps({ step, data, setData }) {
           value={data.current_team}
           onChange={e => setData(d => ({ ...d, current_team: e.target.value }))}
           placeholder="e.g. Riverside Athletic Club"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="City, State">
@@ -216,7 +216,7 @@ function CoachSteps({ step, data, setData }) {
           value={data.location}
           onChange={e => setData(d => ({ ...d, location: e.target.value }))}
           placeholder="e.g. Chicago, IL"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
     </StepCard>
@@ -258,7 +258,7 @@ function CoachSteps({ step, data, setData }) {
               value={data.teamName || ""}
               onChange={e => setData(d => ({ ...d, teamName: e.target.value }))}
               placeholder="e.g. City Hoops Academy"
-              className="rounded-xl"
+              className="rounded-xl text-gray-900"
             />
           </FieldRow>
           <FieldRow label="Team Sport">
@@ -290,7 +290,7 @@ function OrgSteps({ step, data, setData }) {
           value={data.name}
           onChange={e => setData(d => ({ ...d, name: e.target.value }))}
           placeholder="e.g. Eagles Basketball League"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="Organization Type">
@@ -322,7 +322,7 @@ function OrgSteps({ step, data, setData }) {
           value={data.location}
           onChange={e => setData(d => ({ ...d, location: e.target.value }))}
           placeholder="e.g. Miami, FL"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="Website (optional)">
@@ -330,7 +330,7 @@ function OrgSteps({ step, data, setData }) {
           value={data.website}
           onChange={e => setData(d => ({ ...d, website: e.target.value }))}
           placeholder="https://yourorg.com"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <FieldRow label="Contact Email">
@@ -339,7 +339,7 @@ function OrgSteps({ step, data, setData }) {
           value={data.contact_email}
           onChange={e => setData(d => ({ ...d, contact_email: e.target.value }))}
           placeholder="contact@yourorg.com"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
     </StepCard>
@@ -352,7 +352,7 @@ function OrgSteps({ step, data, setData }) {
           value={data.description}
           onChange={e => setData(d => ({ ...d, description: e.target.value }))}
           placeholder="Tell athletes and coaches what your organization is about..."
-          className="rounded-xl resize-none"
+          className="rounded-xl resize-none text-gray-900"
           rows={3}
         />
       </FieldRow>
@@ -397,7 +397,7 @@ function ParentSteps({ step, data, setData, userEmail }) {
           value={data.location}
           onChange={e => setData(d => ({ ...d, location: e.target.value }))}
           placeholder="e.g. Dallas, TX"
-          className="rounded-xl"
+          className="rounded-xl text-gray-900"
         />
       </FieldRow>
       <p className="text-xs text-gray-400">Your email: <strong>{userEmail}</strong></p>

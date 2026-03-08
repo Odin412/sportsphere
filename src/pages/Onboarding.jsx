@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { db, supabase } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { ArrowRight, ArrowLeft, Loader2, Check, Sparkles, Trophy, MapPin, Target, Dumbbell, UserCheck, Building2, Heart, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -137,7 +138,7 @@ function AthleteSteps({ step, data, setData }) {
                 key={i}
                 value={a}
                 onChange={e => updateAchievement(i, e.target.value)}
-                placeholder={`Achievement ${i + 1} — e.g. State Champion 2024`}
+                placeholder={`Achievement ${i + 1} — e.g. State Champion ${new Date().getFullYear()}`}
                 className="rounded-xl text-gray-900"
               />
             ))}
@@ -502,6 +503,7 @@ export default function Onboarding() {
   const [done, setDone] = useState(false);
   const [stepData, setStepData] = useState({});
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const role = user?.role || "athlete";
   const config = ROLE_CONFIG[role] || ROLE_CONFIG.athlete;
@@ -673,14 +675,14 @@ export default function Onboarding() {
           <Button
             onClick={() => {
               localStorage.setItem("tutorial_pending", "1");
-              window.location.href = createPageUrl(config.welcomeUrl);
+              navigate(createPageUrl(config.welcomeUrl));
             }}
             className="w-full bg-gradient-to-r from-red-900 to-red-700 text-white rounded-xl px-8 font-bold"
           >
             <Sparkles className="w-4 h-4 mr-2" /> {config.welcomeCTA} <ArrowRight className="w-4 h-4 ml-2" />
           </Button>
           <button
-            onClick={() => window.location.href = createPageUrl("Feed")}
+            onClick={() => navigate(createPageUrl("Feed"))}
             className="block w-full text-center text-sm text-gray-400 hover:text-gray-600 py-2 transition-colors"
           >
             Go to Feed

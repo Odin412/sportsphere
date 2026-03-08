@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import { createPageUrl } from "@/utils";
 import { ArrowRight, ArrowLeft, Loader2, Check, Sparkles, Trophy, MapPin, Target, Dumbbell, UserCheck, Building2, Heart, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -497,16 +498,10 @@ const ROLE_CONFIG = {
 
 export default function Onboarding() {
   const [step, setStep] = useState(1);
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [done, setDone] = useState(false);
   const [stepData, setStepData] = useState({});
-
-  useEffect(() => {
-    db.auth.me().then(u => {
-      setUser(u);
-    }).catch(() => {});
-  }, []);
+  const { user } = useAuth();
 
   const role = user?.role || "athlete";
   const config = ROLE_CONFIG[role] || ROLE_CONFIG.athlete;

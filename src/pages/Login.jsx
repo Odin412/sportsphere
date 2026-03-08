@@ -3,7 +3,7 @@ import { supabase } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff, ChevronLeft, Dumbbell, UserCheck, Building2, Heart } from "lucide-react";
+import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff, ChevronLeft, Dumbbell, UserCheck, Building2, Heart, Check } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -164,6 +164,7 @@ export default function Login() {
   const [childName, setChildName] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [signupDone, setSignupDone] = useState(false);
 
   const switchToSignup = () => {
     setTab("signup");
@@ -227,7 +228,7 @@ export default function Login() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Account created! Setting up your profile...");
+      setSignupDone(true);
     }
     setLoading(false);
   };
@@ -422,7 +423,26 @@ export default function Login() {
                 </motion.div>
               )}
 
-              {signupStep === "form" && (
+              {signupStep === "form" && signupDone && (
+                <motion.div
+                  key="signup-success"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center gap-4 py-8 text-center"
+                >
+                  <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center">
+                    <Check className="w-8 h-8 text-green-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-black text-white lg:text-slate-900">Account created!</h2>
+                    <p className="text-sm text-slate-400 mt-1">
+                      Check your email to confirm your account, then you'll be taken to set up your profile.
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+
+              {signupStep === "form" && !signupDone && (
                 <motion.div
                   key="signup-form"
                   initial={{ opacity: 0, y: 12 }}

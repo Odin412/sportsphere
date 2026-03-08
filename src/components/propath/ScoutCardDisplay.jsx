@@ -1,428 +1,332 @@
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { CheckCircle, RotateCcw, Share2, Mail, Download } from "lucide-react";
+import { CheckCircle, RotateCcw, Share2, Mail, Download, Trophy, MapPin, Clock, Star } from "lucide-react";
 
-// ── Sport Themes ─────────────────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SPORT THEMES
+   ═══════════════════════════════════════════════════════════════════════════════ */
 const SPORT_THEMES = {
-  Basketball: { bg: "from-orange-950 via-orange-900 to-red-950", accent: "#f97316", border: "#fb923c", glow: "rgba(249,115,22,0.4)" },
-  Soccer:     { bg: "from-green-950 via-teal-900 to-teal-950",   accent: "#14b8a6", border: "#2dd4bf", glow: "rgba(20,184,166,0.4)" },
-  Football:   { bg: "from-amber-950 via-amber-900 to-amber-950", accent: "#d97706", border: "#fbbf24", glow: "rgba(217,119,6,0.4)" },
-  Baseball:   { bg: "from-blue-950 via-blue-900 to-blue-950",    accent: "#3b82f6", border: "#60a5fa", glow: "rgba(59,130,246,0.4)" },
-  Tennis:     { bg: "from-yellow-950 via-yellow-900 to-amber-950", accent: "#eab308", border: "#facc15", glow: "rgba(234,179,8,0.4)" },
-  Swimming:   { bg: "from-cyan-950 via-cyan-900 to-blue-950",    accent: "#06b6d4", border: "#22d3ee", glow: "rgba(6,182,212,0.4)" },
-  Track:      { bg: "from-purple-950 via-purple-900 to-purple-950", accent: "#a855f7", border: "#c084fc", glow: "rgba(168,85,247,0.4)" },
-  Hockey:     { bg: "from-slate-900 via-blue-950 to-slate-950",  accent: "#64748b", border: "#94a3b8", glow: "rgba(100,116,139,0.4)" },
-  MMA:        { bg: "from-red-950 via-red-900 to-slate-950",     accent: "#ef4444", border: "#f87171", glow: "rgba(239,68,68,0.4)" },
-  Boxing:     { bg: "from-red-950 via-rose-900 to-slate-950",    accent: "#e11d48", border: "#fb7185", glow: "rgba(225,29,72,0.4)" },
-  CrossFit:   { bg: "from-rose-950 via-pink-900 to-red-950",     accent: "#ec4899", border: "#f472b6", glow: "rgba(236,72,153,0.4)" },
-  Golf:       { bg: "from-emerald-950 via-green-900 to-green-950", accent: "#10b981", border: "#34d399", glow: "rgba(16,185,129,0.4)" },
-  Volleyball: { bg: "from-indigo-950 via-indigo-900 to-violet-950", accent: "#6366f1", border: "#818cf8", glow: "rgba(99,102,241,0.4)" },
-  Cycling:    { bg: "from-sky-950 via-sky-900 to-blue-950",      accent: "#0ea5e9", border: "#38bdf8", glow: "rgba(14,165,233,0.4)" },
-  Yoga:       { bg: "from-violet-950 via-purple-900 to-fuchsia-950", accent: "#8b5cf6", border: "#a78bfa", glow: "rgba(139,92,246,0.4)" },
-  Softball:   { bg: "from-lime-950 via-green-900 to-emerald-950", accent: "#84cc16", border: "#a3e635", glow: "rgba(132,204,22,0.4)" },
-  default:    { bg: "from-gray-950 via-gray-900 to-slate-950",   accent: "#ef4444", border: "#f87171", glow: "rgba(239,68,68,0.4)" },
+  Basketball: { bg: "#1a0800", bg2: "#2d1200", accent: "#f97316", border: "#fb923c", glow: "rgba(249,115,22,0.5)" },
+  Soccer:     { bg: "#001a14", bg2: "#002d22", accent: "#14b8a6", border: "#2dd4bf", glow: "rgba(20,184,166,0.5)" },
+  Football:   { bg: "#1a1000", bg2: "#2d1c00", accent: "#d97706", border: "#fbbf24", glow: "rgba(217,119,6,0.5)" },
+  Baseball:   { bg: "#000a1a", bg2: "#00122d", accent: "#3b82f6", border: "#60a5fa", glow: "rgba(59,130,246,0.5)" },
+  Tennis:     { bg: "#1a1500", bg2: "#2d2400", accent: "#eab308", border: "#facc15", glow: "rgba(234,179,8,0.5)" },
+  Swimming:   { bg: "#001419", bg2: "#00222d", accent: "#06b6d4", border: "#22d3ee", glow: "rgba(6,182,212,0.5)" },
+  Track:      { bg: "#0f001a", bg2: "#1a002d", accent: "#a855f7", border: "#c084fc", glow: "rgba(168,85,247,0.5)" },
+  Hockey:     { bg: "#0a0e14", bg2: "#141c28", accent: "#64748b", border: "#94a3b8", glow: "rgba(100,116,139,0.5)" },
+  MMA:        { bg: "#1a0000", bg2: "#2d0000", accent: "#ef4444", border: "#f87171", glow: "rgba(239,68,68,0.5)" },
+  Boxing:     { bg: "#1a0008", bg2: "#2d0010", accent: "#e11d48", border: "#fb7185", glow: "rgba(225,29,72,0.5)" },
+  CrossFit:   { bg: "#1a000f", bg2: "#2d001a", accent: "#ec4899", border: "#f472b6", glow: "rgba(236,72,153,0.5)" },
+  Golf:       { bg: "#001a0d", bg2: "#002d16", accent: "#10b981", border: "#34d399", glow: "rgba(16,185,129,0.5)" },
+  Volleyball: { bg: "#0a001a", bg2: "#12002d", accent: "#6366f1", border: "#818cf8", glow: "rgba(99,102,241,0.5)" },
+  Cycling:    { bg: "#001019", bg2: "#001c2d", accent: "#0ea5e9", border: "#38bdf8", glow: "rgba(14,165,233,0.5)" },
+  Yoga:       { bg: "#0d001a", bg2: "#18002d", accent: "#8b5cf6", border: "#a78bfa", glow: "rgba(139,92,246,0.5)" },
+  Softball:   { bg: "#0d1a00", bg2: "#162d00", accent: "#84cc16", border: "#a3e635", glow: "rgba(132,204,22,0.5)" },
+  default:    { bg: "#0f0f0f", bg2: "#1a1a1a", accent: "#ef4444", border: "#f87171", glow: "rgba(239,68,68,0.5)" },
 };
 
 function serialFromId(id) {
   if (!id) return "#0001";
   let hash = 0;
   const str = String(id);
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0;
-  }
+  for (let i = 0; i < str.length; i++) hash = ((hash << 5) - hash + str.charCodeAt(i)) | 0;
   return `#${String(Math.abs(hash) % 10000).padStart(4, "0")}`;
 }
 
-// ── Inject CSS once ──────────────────────────────────────────────────────────
-const CSS_ID = "scout-card-css";
+/* ═══════════════════════════════════════════════════════════════════════════════
+   GLOBAL CSS — holographic effects
+   ═══════════════════════════════════════════════════════════════════════════════ */
+const CSS_ID = "scout-refractor-css";
 if (typeof document !== "undefined" && !document.getElementById(CSS_ID)) {
   const s = document.createElement("style");
   s.id = CSS_ID;
   s.textContent = `
-    @keyframes holoSweep {
-      0%   { transform: translateX(-100%) rotate(25deg); }
-      100% { transform: translateX(200%) rotate(25deg); }
+    @keyframes refractorSweep {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
     }
-    @keyframes holoShine {
-      0%, 100% { opacity: 0.3; }
-      50%      { opacity: 0.7; }
-    }
-    .scout-holo-sweep {
-      position: absolute; inset: -50%; width: 200%; height: 200%;
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255,0,0,0.12) 8%,
-        rgba(255,165,0,0.15) 16%,
-        rgba(255,255,0,0.12) 24%,
-        rgba(0,255,100,0.15) 32%,
-        rgba(0,200,255,0.15) 40%,
-        rgba(80,0,255,0.12) 48%,
-        rgba(255,0,200,0.12) 56%,
-        transparent 64%
+    .refractor-rainbow {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: linear-gradient(105deg,
+        transparent 20%, rgba(255,0,0,0.15) 25%, rgba(255,154,0,0.18) 30%,
+        rgba(255,255,0,0.15) 35%, rgba(0,255,0,0.18) 40%, rgba(0,200,255,0.2) 45%,
+        rgba(100,0,255,0.18) 50%, rgba(255,0,200,0.15) 55%, transparent 60%
       );
-      animation: holoSweep 3s ease-in-out infinite;
-      pointer-events: none;
-      mix-blend-mode: screen;
+      background-size: 200% 100%;
+      animation: refractorSweep 3s linear infinite;
+      mix-blend-mode: screen; pointer-events: none; z-index: 5;
     }
-    .scout-foil-pattern {
+    @keyframes specularPulse {
+      0%, 100% { opacity: 0.25; transform: scale(1); }
+      50%      { opacity: 0.5; transform: scale(1.1); }
+    }
+    .refractor-specular {
+      position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.1) 20%, transparent 50%);
+      animation: specularPulse 4s ease-in-out infinite;
+      pointer-events: none; z-index: 6;
+    }
+    .refractor-foil {
+      position: absolute; inset: 0; border-radius: inherit;
       background-image:
-        repeating-linear-gradient(
-          0deg,
-          transparent,
-          transparent 2px,
-          rgba(255,255,255,0.02) 2px,
-          rgba(255,255,255,0.02) 4px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          transparent,
-          transparent 2px,
-          rgba(255,255,255,0.015) 2px,
-          rgba(255,255,255,0.015) 4px
-        );
-      pointer-events: none;
+        repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,0.03) 1px, rgba(255,255,255,0.03) 2px),
+        repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255,255,255,0.02) 1px, rgba(255,255,255,0.02) 2px);
+      pointer-events: none; z-index: 4;
     }
-    .scout-card-tilt {
-      transition: transform 0.15s ease-out;
-      will-change: transform;
+    @media (hover: hover) {
+      .refractor-card-outer:hover { transform: perspective(800px) rotateX(2deg) rotateY(-3deg) scale(1.02); }
     }
-    .scout-card-tilt-reset {
-      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    .refractor-card-outer { transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+    @keyframes borderGlow {
+      0%, 100% { opacity: 0.6; }
+      50%      { opacity: 1; }
     }
   `;
   document.head.appendChild(s);
 }
 
-// ── Holographic Tilt Hook ────────────────────────────────────────────────────
-function useHolographicTilt(ref) {
-  const [state, setState] = useState({ rx: 0, ry: 0, mx: 50, my: 50, hovering: false });
-  const raf = useRef(null);
-  const isMobile = typeof window !== "undefined" && window.matchMedia("(hover: none)").matches;
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD FRONT — Full-bleed photo, name at bottom. Like a real Topps card.
+   ═══════════════════════════════════════════════════════════════════════════════ */
+function CardFront({ profile, theme, serial, onFlip }) {
+  const initials = (profile.user_name || "?").charAt(0).toUpperCase();
 
-  const onMove = useCallback((e) => {
-    if (!ref.current || isMobile) return;
-    if (raf.current) cancelAnimationFrame(raf.current);
-    raf.current = requestAnimationFrame(() => {
-      if (!ref.current) return;
-      const r = ref.current.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;   // 0-1
-      const py = (e.clientY - r.top) / r.height;    // 0-1
-      const ry = (px - 0.5) * 24;    // ±12 deg
-      const rx = -(py - 0.5) * 24;   // ±12 deg
-      setState({ rx, ry, mx: px * 100, my: py * 100, hovering: true });
-    });
-  }, [ref, isMobile]);
-
-  const onEnter = useCallback(() => setState(s => ({ ...s, hovering: true })), []);
-  const onLeave = useCallback(() => {
-    setState({ rx: 0, ry: 0, mx: 50, my: 50, hovering: false });
-    if (raf.current) cancelAnimationFrame(raf.current);
-  }, []);
-
-  useEffect(() => () => { if (raf.current) cancelAnimationFrame(raf.current); }, []);
-
-  const angle = Math.atan2(state.mx - 50, state.my - 50) * (180 / Math.PI) + 180;
-
-  return {
-    isMobile,
-    tiltClass: state.hovering ? "scout-card-tilt" : "scout-card-tilt-reset",
-    tiltTransform: isMobile ? "" : `perspective(800px) rotateX(${state.rx}deg) rotateY(${state.ry}deg)`,
-    // Rainbow prismatic sweep — follows mouse angle
-    shimmerBg: `linear-gradient(${angle}deg,
-      transparent 0%,
-      rgba(255,50,50,0.18) 10%,
-      rgba(255,180,0,0.20) 18%,
-      rgba(255,255,0,0.18) 26%,
-      rgba(0,255,120,0.20) 34%,
-      rgba(0,180,255,0.22) 42%,
-      rgba(120,0,255,0.18) 50%,
-      rgba(255,0,180,0.18) 58%,
-      rgba(255,50,50,0.15) 66%,
-      transparent 74%
-    )`,
-    // Bright specular highlight that follows cursor
-    specularBg: `radial-gradient(
-      ellipse at ${state.mx}% ${state.my}%,
-      rgba(255,255,255,0.4) 0%,
-      rgba(255,255,255,0.15) 25%,
-      rgba(255,255,255,0.03) 50%,
-      transparent 70%
-    )`,
-    handlers: isMobile ? {} : { onMouseMove: onMove, onMouseEnter: onEnter, onMouseLeave: onLeave },
-  };
-}
-
-// ── CardFront ────────────────────────────────────────────────────────────────
-function CardFront({ profile, topMetrics, theme, serial, statCount, onFlip }) {
-  const initials = profile.user_name?.[0]?.toUpperCase() || "?";
   return (
-    <div className="w-full h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-2 relative z-20">
-        <div>
-          <p
-            className="text-[10px] font-black tracking-[0.3em]"
-            style={{ color: theme.border, textShadow: `0 0 10px ${theme.glow}` }}
-          >
-            PROPATH
-          </p>
-          {statCount > 0 && (
-            <div className="flex items-center gap-1 mt-0.5">
-              <CheckCircle className="w-3 h-3" style={{ color: theme.border }} />
-              <span className="text-[9px] font-bold tracking-wide" style={{ color: theme.border }}>VERIFIED</span>
-            </div>
-          )}
-        </div>
-        <div
-          className="px-2.5 py-1 rounded-lg border"
-          style={{ borderColor: `${theme.border}44`, backgroundColor: `${theme.accent}15` }}
-        >
-          <p className="text-[11px] font-bold text-white/90">{profile.sport || "Athlete"}</p>
-        </div>
-      </div>
-
-      {/* Photo area */}
-      <div className="relative flex-1 mx-3 rounded-xl overflow-hidden min-h-0 z-20">
-        {profile.avatar_url ? (
-          <img src={profile.avatar_url} alt={profile.user_name} className="w-full h-full object-cover" />
-        ) : (
-          <div
-            className="w-full h-full flex items-center justify-center"
-            style={{ background: `linear-gradient(135deg, ${theme.accent}33, ${theme.accent}11)` }}
-          >
-            <span className="text-7xl font-black" style={{ color: `${theme.border}40` }}>{initials}</span>
-          </div>
-        )}
-        {/* Vignette overlay */}
-        <div className="absolute inset-0 shadow-[inset_0_0_30px_rgba(0,0,0,0.5)]" />
-        {/* Bottom fade */}
-        <div className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-        {/* Name overlay on photo */}
-        <div className="absolute bottom-0 inset-x-0 px-3 pb-2">
-          <h2
-            className="text-xl font-black text-white tracking-tight leading-tight"
-            style={{
-              textShadow: `0 2px 4px rgba(0,0,0,0.8), 0 0 30px ${theme.glow}, 0 0 60px ${theme.glow}`,
-            }}
-          >
-            {profile.user_name}
-          </h2>
-          <p className="text-[11px] text-white/60 font-semibold">
-            {[profile.position, profile.team].filter(Boolean).join(" \u00B7 ") || profile.location || ""}
-          </p>
-        </div>
-      </div>
-
-      {/* Metallic divider */}
-      <div className="mx-4 my-2 h-px relative z-20" style={{
-        background: `linear-gradient(90deg, transparent, ${theme.border}80, ${theme.border}, ${theme.border}80, transparent)`
-      }} />
-
-      {/* Stats */}
-      {topMetrics.length > 0 ? (
-        <div className="flex gap-2 px-4 pb-2 relative z-20">
-          {topMetrics.slice(0, 3).map((m, i) => (
-            <div
-              key={i}
-              className="flex-1 rounded-xl py-2.5 text-center border"
-              style={{
-                backgroundColor: "rgba(0,0,0,0.4)",
-                borderColor: `${theme.border}25`,
-                boxShadow: `inset 0 1px 0 ${theme.border}15`,
-              }}
-            >
-              <p className="text-lg font-black text-white leading-none" style={{ textShadow: `0 0 12px ${theme.glow}` }}>
-                {m.value}
-                {m.unit && m.unit.length <= 3 && <span className="text-[9px] font-bold text-white/40 ml-0.5">{m.unit}</span>}
-              </p>
-              <p className="text-[7px] font-bold uppercase tracking-widest mt-1 truncate px-1" style={{ color: `${theme.border}99` }}>
-                {m.name}
-              </p>
-            </div>
-          ))}
-        </div>
+    <div className="absolute inset-0 flex flex-col">
+      {/* Full-bleed athlete photo */}
+      {profile.avatar_url ? (
+        <img src={profile.avatar_url} alt={profile.user_name}
+          className="absolute inset-0 w-full h-full object-cover" />
       ) : (
-        <div className="flex-1" />
+        <div className="absolute inset-0 flex items-center justify-center"
+          style={{ background: `linear-gradient(160deg, ${theme.bg2}, ${theme.bg})` }}>
+          <span className="text-[120px] font-black" style={{ color: `${theme.accent}20` }}>{initials}</span>
+        </div>
       )}
 
-      {/* Serial + Flip */}
-      <div className="flex items-center justify-between px-4 pb-3 relative z-20">
-        <div className="flex items-center gap-2">
-          <span className="text-[8px] font-black tracking-[0.2em]" style={{ color: `${theme.border}40` }}>SPORTSPHERE</span>
-          <span className="text-[10px] font-mono font-bold" style={{ color: `${theme.border}50` }}>{serial}</span>
+      {/* Top overlay — PROPATH logo + sport pill */}
+      <div className="relative z-10 flex items-center justify-between px-4 pt-3">
+        <span className="text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-lg"
+          style={{ color: theme.border }}>
+          PROPATH
+        </span>
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-md drop-shadow-lg"
+          style={{ backgroundColor: `${theme.accent}cc`, color: "#000" }}>
+          {profile.sport || "Athlete"}
+        </span>
+      </div>
+
+      {/* Spacer */}
+      <div className="flex-1" />
+
+      {/* Bottom name bar — heavy gradient fade */}
+      <div className="relative z-10"
+        style={{ background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 40%, rgba(0,0,0,0.4) 70%, transparent 100%)" }}>
+        <div className="px-4 pt-10 pb-3">
+          <div className="flex items-end justify-between">
+            <div className="flex-1 min-w-0">
+              <h2 className="text-2xl font-black text-white leading-tight truncate"
+                style={{ textShadow: `0 0 20px ${theme.glow}, 0 2px 8px rgba(0,0,0,1)` }}>
+                {profile.user_name || "Unknown Athlete"}
+              </h2>
+              <p className="text-[11px] text-white/60 font-semibold mt-0.5 truncate">
+                {[profile.position, profile.sport].filter(Boolean).join(" \u00B7 ")}
+              </p>
+            </div>
+            <span className="text-[11px] font-mono font-bold ml-2 flex-shrink-0"
+              style={{ color: `${theme.border}70` }}>{serial}</span>
+          </div>
+          {/* Flip icon */}
+          <div className="flex justify-end mt-2">
+            <button onClick={(e) => { e.stopPropagation(); onFlip(); }}
+              className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+              style={{ backgroundColor: `${theme.accent}40`, border: `1.5px solid ${theme.border}60` }}>
+              <RotateCcw className="w-3.5 h-3.5" style={{ color: theme.border }} />
+            </button>
+          </div>
         </div>
-        <button
-          onClick={(e) => { e.stopPropagation(); onFlip(); }}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-          style={{
-            background: `linear-gradient(135deg, ${theme.border}30, ${theme.accent}20)`,
-            border: `1.5px solid ${theme.border}50`,
-            boxShadow: `0 0 12px ${theme.glow}`,
-          }}
-          aria-label="Flip card"
-        >
-          <RotateCcw className="w-3.5 h-3.5" style={{ color: theme.border }} />
-        </button>
       </div>
     </div>
   );
 }
 
-// ── CardBack ─────────────────────────────────────────────────────────────────
-function CardBack({ profile, allMetrics, narrative, headline, achievements, bio, theme, serial, onFlip, onContact, onShare, onDownload }) {
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CARD BACK — Avatar header, stats table, narrative, achievements, actions
+   ═══════════════════════════════════════════════════════════════════════════════ */
+function CardBack({ profile, allMetrics, topMetrics, narrative, headline, achievements, bio, theme, serial, statCount, onFlip, onContact, onShare, onDownload }) {
   return (
-    <div className="w-full h-full flex flex-col overflow-y-auto">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 pt-4 pb-2 relative z-20">
-        <div>
-          <p className="text-[10px] font-black tracking-[0.2em]" style={{ color: theme.border }}>SCOUT REPORT</p>
-          <p className="text-sm font-black text-white mt-0.5">{profile.user_name}</p>
+    <div className="absolute inset-0 flex flex-col overflow-y-auto"
+      style={{ background: `linear-gradient(180deg, ${theme.bg2}, ${theme.bg})` }}>
+
+      {/* ── Player header with avatar ── */}
+      <div className="flex items-start gap-3 px-4 pt-4 pb-2">
+        <Avatar className="w-12 h-12 flex-shrink-0"
+          style={{ border: `2px solid ${theme.border}`, boxShadow: `0 0 10px ${theme.glow}` }}>
+          <AvatarImage src={profile.avatar_url} />
+          <AvatarFallback style={{ backgroundColor: `${theme.accent}20`, color: "white" }} className="font-bold">
+            {(profile.user_name || "?").charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-start justify-between">
+            <div className="min-w-0">
+              <h3 className="text-base font-black text-white leading-tight truncate">{profile.user_name}</h3>
+              <p className="text-[11px] font-semibold mt-0.5" style={{ color: theme.border }}>
+                {[profile.position, profile.sport].filter(Boolean).join(" \u00B7 ")}
+              </p>
+            </div>
+            <span className="text-[10px] font-mono font-bold flex-shrink-0 ml-2" style={{ color: `${theme.border}50` }}>{serial}</span>
+          </div>
+          {/* Personal details */}
+          <div className="flex flex-wrap gap-x-2 gap-y-0.5 mt-1">
+            {profile.level && (
+              <span className="text-[9px] font-bold capitalize" style={{ color: `${theme.border}90` }}>{profile.level}</span>
+            )}
+            {profile.years_experience && (
+              <span className="text-[9px] text-white/40">{profile.years_experience} yrs exp</span>
+            )}
+            {profile.location && (
+              <span className="text-[9px] text-white/40">{profile.location}</span>
+            )}
+          </div>
         </div>
-        <span className="text-[11px] font-mono font-bold" style={{ color: `${theme.border}50` }}>{serial}</span>
       </div>
 
-      {/* Metallic divider */}
-      <div className="mx-4 mb-3 h-px" style={{
-        background: `linear-gradient(90deg, transparent, ${theme.border}80, ${theme.border}, ${theme.border}80, transparent)`
-      }} />
+      {/* ── Metallic divider ── */}
+      <div className="mx-4 my-1 h-[1.5px]"
+        style={{ background: `linear-gradient(90deg, transparent, ${theme.border}, transparent)` }} />
 
-      {/* Stat grid */}
+      {/* ── Stats Table ── */}
       {allMetrics && Object.keys(allMetrics).length > 0 && (
-        <div className="mx-4 mb-3 rounded-xl overflow-hidden border relative z-20" style={{
-          backgroundColor: "rgba(0,0,0,0.3)",
-          borderColor: `${theme.border}20`,
-        }}>
-          {Object.entries(allMetrics).map(([name, { value, unit }], i) => (
-            <div
-              key={name}
-              className="flex items-center justify-between px-3 py-2"
-              style={{
-                borderBottom: `1px solid ${theme.border}10`,
-                backgroundColor: i % 2 === 0 ? `${theme.accent}06` : "transparent",
-              }}
-            >
-              <span className="text-[10px] text-white/50 font-semibold truncate mr-2">{name}</span>
-              <span className="text-xs font-black text-white whitespace-nowrap">
-                {value}{unit && <span className="text-[9px] text-white/40 ml-0.5">{unit}</span>}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* AI Narrative */}
-      {(narrative || headline) && (
-        <div className="mx-4 mb-3 rounded-xl p-3 border relative z-20" style={{
-          backgroundColor: "rgba(0,0,0,0.25)",
-          borderColor: `${theme.border}15`,
-        }}>
-          {headline && (
-            <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: `${theme.border}80` }}>{headline}</p>
-          )}
-          <p className="text-[11px] text-white/80 leading-relaxed italic">
-            &ldquo;{narrative || `${profile.user_name} is a dedicated ${profile.sport || "athlete"}.`}&rdquo;
+        <div className="mx-4 mt-2 mb-2">
+          <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1.5" style={{ color: theme.accent }}>
+            Career Stats
           </p>
-        </div>
-      )}
-
-      {/* Achievements */}
-      {achievements?.length > 0 && (
-        <div className="mx-4 mb-3 relative z-20">
-          <p className="text-[9px] font-black uppercase tracking-widest mb-1.5" style={{ color: `${theme.border}70` }}>Achievements</p>
-          <div className="space-y-1">
-            {achievements.slice(0, 4).map((a, i) => (
-              <div key={i} className="flex items-start gap-1.5">
-                <span className="text-[10px] mt-px" style={{ color: theme.border }}>&#9733;</span>
-                <span className="text-[10px] text-white/70 font-medium">{a}</span>
+          <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${theme.border}30` }}>
+            {/* Table header */}
+            <div className="flex px-3 py-1.5" style={{ backgroundColor: `${theme.accent}20` }}>
+              <span className="flex-1 text-[9px] font-black uppercase tracking-wider" style={{ color: theme.border }}>Metric</span>
+              <span className="text-[9px] font-black uppercase tracking-wider text-right" style={{ color: theme.border }}>Best</span>
+            </div>
+            {/* Table rows */}
+            {Object.entries(allMetrics).map(([name, { value, unit }], i) => (
+              <div key={name} className="flex items-center px-3 py-1.5"
+                style={{
+                  backgroundColor: i % 2 === 0 ? "rgba(255,255,255,0.03)" : "transparent",
+                  borderTop: `1px solid ${theme.border}12`,
+                }}>
+                <span className="flex-1 text-[10px] text-white/60 font-medium truncate mr-2">{name}</span>
+                <span className="text-[11px] font-black text-white whitespace-nowrap">
+                  {value}{unit && <span className="text-[9px] text-white/40 ml-0.5">{unit}</span>}
+                </span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* Details */}
-      <div className="mx-4 mb-3 flex flex-wrap gap-x-3 gap-y-1 relative z-20">
-        {profile.level && (
-          <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold capitalize" style={{
-            backgroundColor: `${theme.accent}20`, color: theme.border,
-          }}>{profile.level}</span>
-        )}
-        {profile.years_experience && (
-          <span className="text-[10px] text-white/40 py-0.5">{profile.years_experience} yrs exp</span>
-        )}
-        {profile.location && (
-          <span className="text-[10px] text-white/40 py-0.5">{profile.location}</span>
-        )}
-      </div>
+      {/* ── Metallic divider ── */}
+      {(narrative || headline) && (
+        <div className="mx-4 my-1 h-[1.5px]"
+          style={{ background: `linear-gradient(90deg, transparent, ${theme.border}60, transparent)` }} />
+      )}
 
-      {/* Bio */}
-      {bio && (
-        <div className="mx-4 mb-3 relative z-20">
-          <p className="text-[10px] text-white/50 leading-relaxed line-clamp-3">{bio}</p>
+      {/* ── AI Scout Narrative ── */}
+      {(narrative || headline) && (
+        <div className="mx-4 mt-1 mb-2">
+          <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1" style={{ color: theme.accent }}>
+            Scout Report
+          </p>
+          {headline && (
+            <p className="text-[10px] font-bold text-white/90 mb-0.5">{headline}</p>
+          )}
+          <p className="text-[10px] text-white/60 leading-relaxed italic">
+            "{narrative || `${profile.user_name} is a dedicated ${profile.sport || "athlete"}.`}"
+          </p>
         </div>
       )}
 
-      <div className="flex-1" />
+      {/* ── Achievements ── */}
+      {achievements?.length > 0 && (
+        <div className="mx-4 mb-2">
+          <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1" style={{ color: theme.accent }}>
+            Achievements
+          </p>
+          <div className="space-y-0.5">
+            {achievements.slice(0, 4).map((a, i) => (
+              <div key={i} className="flex items-start gap-1.5">
+                <Star className="w-3 h-3 mt-px flex-shrink-0" style={{ color: theme.accent }} />
+                <span className="text-[10px] text-white/60 font-medium">{a}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
-      {/* Metallic divider */}
-      <div className="mx-4 mb-2 h-px" style={{
-        background: `linear-gradient(90deg, transparent, ${theme.border}60, ${theme.border}90, ${theme.border}60, transparent)`
-      }} />
+      {/* ── Bio ── */}
+      {bio && (
+        <div className="mx-4 mb-2">
+          <p className="text-[10px] text-white/35 leading-relaxed line-clamp-2">{bio}</p>
+        </div>
+      )}
 
-      {/* Actions */}
-      <div className="flex gap-2 px-4 pb-2 relative z-20">
+      <div className="flex-1 min-h-[4px]" />
+
+      {/* ── Divider ── */}
+      <div className="mx-4 mb-1.5 h-[1.5px]"
+        style={{ background: `linear-gradient(90deg, transparent, ${theme.border}60, transparent)` }} />
+
+      {/* ── Action buttons ── */}
+      <div className="flex gap-1.5 px-3 pb-1.5">
         {onContact && (
-          <button
-            onClick={(e) => { e.stopPropagation(); onContact(); }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold transition-all hover:scale-[1.02] active:scale-[0.98]"
-            style={{ backgroundColor: theme.border, color: "#111" }}
-          >
+          <button onClick={(e) => { e.stopPropagation(); onContact(); }}
+            className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-[10px] font-black transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{ backgroundColor: theme.accent, color: "#000" }}>
             <Mail className="w-3 h-3" /> Contact
           </button>
         )}
         {onShare && (
-          <button
-            onClick={(e) => { e.stopPropagation(); onShare(); }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-            style={{ backgroundColor: `${theme.accent}30`, border: `1px solid ${theme.border}40` }}
-          >
+          <button onClick={(e) => { e.stopPropagation(); onShare(); }}
+            className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-[10px] font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{ backgroundColor: "rgba(255,255,255,0.08)", border: `1px solid ${theme.border}30` }}>
             <Share2 className="w-3 h-3" /> Share
           </button>
         )}
         {onDownload && (
-          <button
-            onClick={(e) => { e.stopPropagation(); onDownload(); }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[11px] font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
-            style={{ backgroundColor: `${theme.accent}30`, border: `1px solid ${theme.border}40` }}
-          >
+          <button onClick={(e) => { e.stopPropagation(); onDownload(); }}
+            className="flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-[10px] font-bold text-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+            style={{ backgroundColor: "rgba(255,255,255,0.08)", border: `1px solid ${theme.border}30` }}>
             <Download className="w-3 h-3" /> Save
           </button>
         )}
       </div>
 
-      {/* Bottom */}
-      <div className="flex items-center justify-between px-4 pb-3 relative z-20">
-        <span className="text-[8px] font-black tracking-[0.2em]" style={{ color: `${theme.border}30` }}>SPORTSPHERE</span>
-        <button
-          onClick={(e) => { e.stopPropagation(); onFlip(); }}
-          className="w-8 h-8 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-          style={{
-            background: `linear-gradient(135deg, ${theme.border}30, ${theme.accent}20)`,
-            border: `1.5px solid ${theme.border}50`,
-            boxShadow: `0 0 12px ${theme.glow}`,
-          }}
-          aria-label="Flip card"
-        >
-          <RotateCcw className="w-3.5 h-3.5" style={{ color: theme.border }} />
+      {/* ── Footer ── */}
+      <div className="flex items-center justify-between px-4 pb-2.5">
+        <div className="flex items-center gap-2">
+          <span className="text-[7px] font-black tracking-[0.3em] uppercase" style={{ color: `${theme.border}25` }}>
+            SPORTSPHERE
+          </span>
+          {statCount > 0 && (
+            <span className="flex items-center gap-0.5 text-[8px] font-bold" style={{ color: `${theme.border}60` }}>
+              <CheckCircle className="w-2.5 h-2.5" /> Verified
+            </span>
+          )}
+        </div>
+        <button onClick={(e) => { e.stopPropagation(); onFlip(); }}
+          className="w-7 h-7 rounded-full flex items-center justify-center transition-all hover:scale-110 active:scale-90"
+          style={{ backgroundColor: `${theme.accent}40`, border: `1.5px solid ${theme.border}60` }}>
+          <RotateCcw className="w-3 h-3" style={{ color: theme.border }} />
         </button>
       </div>
     </div>
   );
 }
 
-// ── Main Component ───────────────────────────────────────────────────────────
+/* ═══════════════════════════════════════════════════════════════════════════════
+   MAIN COMPONENT
+   ═══════════════════════════════════════════════════════════════════════════════ */
 export default function ScoutCardDisplay({
   profile,
   topMetrics = [],
@@ -439,161 +343,143 @@ export default function ScoutCardDisplay({
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const cardRef = useRef(null);
-  const holo = useHolographicTilt(cardRef);
 
   if (!profile) return null;
 
   const theme = SPORT_THEMES[profile.sport] || SPORT_THEMES.default;
   const serial = serialFromId(profile.id);
-  const initials = profile.user_name?.[0]?.toUpperCase() || "?";
+  const initials = (profile.user_name || "?").charAt(0).toUpperCase();
 
-  // ── Compact mode ───────────────────────────────────────────────────────────
+  // ── Shared card shell styles ──
+  const cardShellStyle = {
+    aspectRatio: "2.5/3.5",
+    border: `3px solid ${theme.border}`,
+    boxShadow: `inset 0 0 60px ${theme.glow}, 0 0 40px ${theme.glow}, 0 20px 60px rgba(0,0,0,0.7)`,
+  };
+
+  /* ── Compact mode (ProPathHub preview) ─────────────────────────────────── */
   if (compact) {
     return (
-      <div
-        className={`relative rounded-2xl bg-gradient-to-br ${theme.bg} text-white shadow-xl overflow-hidden`}
+      <div className="relative rounded-2xl overflow-hidden text-white"
         style={{
           aspectRatio: "2/3",
           maxWidth: 160,
+          background: `linear-gradient(160deg, ${theme.bg2}, ${theme.bg})`,
           border: `2px solid ${theme.border}`,
-          boxShadow: `inset 0 0 20px ${theme.glow}, 0 4px 20px rgba(0,0,0,0.4)`,
-        }}
-      >
-        {/* Animated shimmer */}
-        <div className="absolute inset-0 overflow-hidden rounded-2xl pointer-events-none">
-          <div className="scout-holo-sweep" />
-        </div>
-        <div className="scout-foil-pattern absolute inset-0 rounded-2xl" />
-
+          boxShadow: `0 0 20px ${theme.glow}, 0 8px 30px rgba(0,0,0,0.5)`,
+        }}>
+        <div className="refractor-rainbow" />
+        <div className="refractor-foil" />
         <div className="absolute top-2 left-2 right-2 flex items-center justify-between z-10">
-          <span className="text-[7px] font-black tracking-[0.2em]" style={{ color: `${theme.border}80` }}>PROPATH</span>
-          {statCount > 0 && <CheckCircle className="w-2.5 h-2.5" style={{ color: `${theme.border}80` }} />}
+          <span className="text-[7px] font-black tracking-[0.2em]" style={{ color: theme.accent }}>PROPATH</span>
+          {statCount > 0 && <CheckCircle className="w-2.5 h-2.5" style={{ color: theme.accent }} />}
         </div>
         <div className="flex flex-col items-center justify-center h-full gap-1.5 pt-5 pb-3 px-2 relative z-10">
-          <Avatar className="w-14 h-14 shadow-lg" style={{ boxShadow: `0 0 15px ${theme.glow}`, border: `2px solid ${theme.border}` }}>
+          <Avatar className="w-14 h-14 shadow-lg"
+            style={{ border: `2px solid ${theme.border}`, boxShadow: `0 0 15px ${theme.glow}` }}>
             <AvatarImage src={profile.avatar_url} />
-            <AvatarFallback className="bg-white/20 text-white font-bold text-lg">{initials}</AvatarFallback>
+            <AvatarFallback style={{ backgroundColor: `${theme.accent}20`, color: "white" }} className="font-bold text-lg">{initials}</AvatarFallback>
           </Avatar>
           <div className="text-center">
             <p className="text-[11px] font-black leading-tight">{profile.user_name}</p>
-            <p className="text-[8px] font-medium" style={{ color: `${theme.border}90` }}>{profile.sport}</p>
+            <p className="text-[8px] font-bold" style={{ color: theme.accent }}>{profile.sport}</p>
           </div>
           {topMetrics.slice(0, 2).map((m, i) => (
-            <div key={i} className="rounded-lg px-2 py-1 text-center w-full" style={{
-              backgroundColor: "rgba(0,0,0,0.35)", border: `1px solid ${theme.border}20`,
-            }}>
+            <div key={i} className="rounded-lg px-2 py-1 text-center w-full"
+              style={{ backgroundColor: "rgba(255,255,255,0.06)", border: `1px solid ${theme.border}20` }}>
               <p className="text-sm font-black leading-none">{m.value}{m.unit && m.unit.length <= 3 ? m.unit : ""}</p>
-              <p className="text-[7px] font-bold uppercase tracking-wide" style={{ color: `${theme.border}70` }}>{m.name}</p>
+              <p className="text-[7px] font-bold uppercase tracking-wide" style={{ color: theme.accent }}>{m.name}</p>
             </div>
           ))}
         </div>
         <div className="absolute bottom-1.5 left-0 right-0 text-center z-10">
-          <span className="text-[6px] font-black tracking-[0.15em]" style={{ color: `${theme.border}20` }}>SPORTSPHERE</span>
+          <span className="text-[6px] font-black tracking-[0.15em]" style={{ color: `${theme.border}15` }}>SPORTSPHERE</span>
         </div>
       </div>
     );
   }
 
-  // ── Full card ──────────────────────────────────────────────────────────────
+  /* ── Full-size trading card ──────────────────────────────────────────────── */
   return (
-    <div
-      ref={cardRef}
-      className={`mx-auto ${holo.tiltClass}`}
-      style={{
-        perspective: 1200,
-        maxWidth: 360,
-        width: "100%",
-        transform: holo.tiltTransform || undefined,
-      }}
-      {...holo.handlers}
-    >
-      {/* Flip container — only handles rotateY for flip */}
-      <motion.div
-        animate={{ rotateY: isFlipped ? 180 : 0 }}
-        transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        {/* Card shell — outer border + inner border for metallic frame */}
-        <div
-          className={`relative rounded-3xl bg-gradient-to-br ${theme.bg} text-white`}
-          style={{
-            aspectRatio: "2.5/3.5",
-            border: `3px solid ${theme.border}`,
-            boxShadow: `
-              inset 0 0 40px ${theme.glow},
-              inset 0 1px 0 rgba(255,255,255,0.1),
-              0 0 30px ${theme.glow},
-              0 10px 40px rgba(0,0,0,0.6)
-            `,
-          }}
+    <div style={{ perspective: 1000 }} className="mx-auto" ref={cardRef}>
+      <div className="refractor-card-outer" style={{ maxWidth: 380, margin: "0 auto" }}>
+        <motion.div
+          animate={{ rotateY: isFlipped ? 180 : 0 }}
+          transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}
+          style={{ transformStyle: "preserve-3d", position: "relative" }}
         >
-          {/* Inner metallic frame */}
+          {/* ═══ FRONT FACE ═══ */}
           <div
-            className="absolute inset-[3px] rounded-[21px] pointer-events-none z-0"
-            style={{ border: `1px solid ${theme.border}30` }}
-          />
-
-          {/* ── Holographic layers ── */}
-          {/* 1. Foil micro-pattern (always visible) */}
-          <div className="scout-foil-pattern absolute inset-0 rounded-3xl z-[15]" />
-
-          {/* 2. Rainbow prismatic gradient (mouse-tracked on desktop, sweep on mobile) */}
-          {holo.isMobile ? (
-            <div className="absolute inset-0 overflow-hidden rounded-3xl z-[15] pointer-events-none">
-              <div className="scout-holo-sweep" />
-            </div>
-          ) : (
-            <div
-              className="absolute inset-0 rounded-3xl z-[15] pointer-events-none mix-blend-screen"
-              style={{ background: holo.shimmerBg }}
-            />
-          )}
-
-          {/* 3. Specular highlight (desktop only) */}
-          {!holo.isMobile && (
-            <div
-              className="absolute inset-0 rounded-3xl z-[16] pointer-events-none"
-              style={{ background: holo.specularBg }}
-            />
-          )}
-
-          {/* ── FRONT FACE ── */}
-          <div
-            className="absolute inset-0 rounded-3xl overflow-hidden"
-            style={{ backfaceVisibility: "hidden" }}
+            className="relative rounded-2xl"
+            style={{
+              ...cardShellStyle,
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+              // Opacity fallback for browsers where backfaceVisibility fails
+              opacity: isFlipped ? 0 : 1,
+              transition: "opacity 0.15s ease",
+              overflow: "hidden",
+            }}
+            data-card-capture
           >
+            {/* Holographic layers */}
+            <div className="refractor-rainbow" />
+            <div className="refractor-specular" />
+            <div className="refractor-foil" />
+            {/* Inner metallic border */}
+            <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
+              style={{ border: `1px solid ${theme.border}35`, animation: "borderGlow 3s ease-in-out infinite" }} />
+            {/* Front content */}
             <CardFront
               profile={profile}
-              topMetrics={topMetrics}
               theme={theme}
               serial={serial}
-              statCount={statCount}
               onFlip={() => setIsFlipped(true)}
             />
           </div>
 
-          {/* ── BACK FACE ── */}
+          {/* ═══ BACK FACE ═══ */}
           <div
-            className="absolute inset-0 rounded-3xl overflow-hidden"
-            style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+            className="absolute inset-0 rounded-2xl"
+            style={{
+              ...cardShellStyle,
+              backfaceVisibility: "hidden",
+              WebkitBackfaceVisibility: "hidden",
+              transform: "rotateY(180deg)",
+              // Opacity fallback
+              opacity: isFlipped ? 1 : 0,
+              transition: "opacity 0.15s ease",
+              overflow: "hidden",
+              pointerEvents: isFlipped ? "auto" : "none",
+            }}
           >
+            {/* Holographic layers */}
+            <div className="refractor-rainbow" />
+            <div className="refractor-specular" />
+            <div className="refractor-foil" />
+            {/* Inner metallic border */}
+            <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
+              style={{ border: `1px solid ${theme.border}35`, animation: "borderGlow 3s ease-in-out infinite" }} />
+            {/* Back content */}
             <CardBack
               profile={profile}
               allMetrics={allMetrics}
+              topMetrics={topMetrics}
               narrative={narrative}
               headline={headline}
               achievements={achievements}
               bio={bio}
               theme={theme}
               serial={serial}
+              statCount={statCount}
               onFlip={() => setIsFlipped(false)}
               onContact={onContact}
               onShare={onShare}
               onDownload={onDownload}
             />
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }

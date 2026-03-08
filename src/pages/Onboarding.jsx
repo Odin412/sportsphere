@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { db } from "@/api/db";
+import { db, supabase } from "@/api/db";
 import { useAuth } from "@/lib/AuthContext";
 import { createPageUrl } from "@/utils";
 import { ArrowRight, ArrowLeft, Loader2, Check, Sparkles, Trophy, MapPin, Target, Dumbbell, UserCheck, Building2, Heart, Plus, X } from "lucide-react";
@@ -613,8 +613,11 @@ export default function Onboarding() {
         profileUpdate.location = stepData.location || "";
       }
 
-      await db.auth.updateMe(profileUpdate).catch(() => {});
-      if (user?.id) localStorage.setItem(`ob_${user.id}`, "1");
+      // Try to update profile in DB; always set localStorage as reliable fallback
+      if (user?.id) {
+        await supabase.from('profiles').update(profileUpdate).eq('id', user.id).catch(() => {});
+        localStorage.setItem(`ob_${user.id}`, "1");
+      }
       localStorage.setItem("user_role", role);
     } catch (err) {
       console.error("Onboarding finish error:", err);

@@ -27,9 +27,19 @@ const OnboardingRedirect = () => {
 
   useEffect(() => {
     if (!user) return;
-    // localStorage fallback for missing onboarding_complete DB column
     const localDone = localStorage.getItem(`ob_${user.id}`) === '1';
     const isDone = user.onboarding_complete || localDone;
+
+    // Auto-bypass for accounts created more than 1 hour ago — existing users
+    // shouldn't be forced through onboarding they've never seen before.
+    if (!isDone && user.created_at) {
+      const ageMs = Date.now() - new Date(user.created_at).getTime();
+      if (ageMs > 60 * 60 * 1000) {
+        localStorage.setItem(`ob_${user.id}`, '1');
+        return;
+      }
+    }
+
     if (
       !isDone &&
       !location.pathname.includes('Onboarding') &&

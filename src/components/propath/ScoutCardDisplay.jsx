@@ -49,10 +49,7 @@ if (typeof document !== "undefined" && !document.getElementById(CSS_ID)) {
         repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255,255,255,0.02) 1px, rgba(255,255,255,0.02) 2px);
       pointer-events: none; z-index: 4;
     }
-    @media (hover: hover) {
-      .refractor-card-outer:hover { transform: perspective(800px) rotateX(2deg) rotateY(-3deg) scale(1.02); }
-    }
-    .refractor-card-outer { transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+    .refractor-card-outer { transition: transform 0.12s ease-out; will-change: transform; }
     @keyframes borderGlow {
       0%, 100% { opacity: 0.6; }
       50%      { opacity: 1; }
@@ -126,9 +123,14 @@ function useRefractorEffect(cardRef) {
     zIndex: 6,
   };
 
+  // 3D tilt — ±15° range, follows mouse position
+  const tiltStyle = pos.active
+    ? { transform: `perspective(800px) rotateX(${-(pos.y - 50) * 0.3}deg) rotateY(${(pos.x - 50) * 0.3}deg) scale(1.03)` }
+    : { transform: "perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)", transition: "transform 0.5s cubic-bezier(0.23, 1, 0.32, 1)" };
+
   const handlers = isMobile ? {} : { onMouseMove: onMove, onMouseLeave: onLeave };
 
-  return { rainbowStyle, specularStyle, handlers, isMobile };
+  return { rainbowStyle, specularStyle, tiltStyle, handlers, isMobile };
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════════
@@ -448,7 +450,7 @@ export default function ScoutCardDisplay({
   /* ── Full-size trading card ──────────────────────────────────────────────── */
   return (
     <div style={{ perspective: 1000 }} className="mx-auto" ref={cardRef} {...refractor.handlers}>
-      <div className="refractor-card-outer" style={{ maxWidth: 380, margin: "0 auto" }}>
+      <div className="refractor-card-outer" style={{ maxWidth: 380, margin: "0 auto", ...refractor.tiltStyle }}>
         <motion.div
           animate={{ rotateY: isFlipped ? 180 : 0 }}
           transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1] }}

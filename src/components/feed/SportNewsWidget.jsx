@@ -119,7 +119,7 @@ export default function SportNewsWidget({ compact = false }) {
           <span className="text-base">📰</span>
           <h3 className="font-bold text-white text-xs tracking-widest uppercase">Sports News</h3>
         </div>
-        <p className="text-gray-500 text-xs text-center py-2">Live sports news loading...</p>
+        <p className="text-gray-500 text-xs text-center py-2">No news available right now. Check back soon.</p>
       </div>
     );
   }
@@ -165,7 +165,7 @@ export default function SportNewsWidget({ compact = false }) {
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-xl">{SPORT_EMOJIS[selectedArticle.sport] || "🏆"}</span>
                 <span className="text-xs text-gray-500 font-semibold">{selectedArticle.source}</span>
-                <span className="text-xs text-gray-600 ml-auto">{moment(selectedArticle.pubDate).fromNow()}</span>
+                <span className="text-xs text-gray-600 ml-auto">{formatDistanceToNow(new Date(selectedArticle.pubDate), { addSuffix: true })}</span>
               </div>
               <h2 className="text-white font-bold text-lg leading-snug mb-3">{selectedArticle.title}</h2>
               {selectedArticle.description && (
@@ -233,7 +233,7 @@ export default function SportNewsWidget({ compact = false }) {
               <span className="text-xl">{SPORT_EMOJIS[selectedArticle.sport] || "🏆"}</span>
               <span className="text-xs text-gray-500 font-semibold">{selectedArticle.source}</span>
               <span className="text-xs text-gray-600 ml-auto">
-                {moment(selectedArticle.pubDate).fromNow()}
+                {formatDistanceToNow(new Date(selectedArticle.pubDate), { addSuffix: true })}
               </span>
             </div>
 

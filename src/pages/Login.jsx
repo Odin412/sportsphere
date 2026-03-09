@@ -167,6 +167,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [signupDone, setSignupDone] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const switchToSignup = () => {
     setTab("signup");
@@ -203,11 +204,14 @@ export default function Login() {
     e.preventDefault();
     if (!email || !password) return;
     setLoading(true);
+    setLoginError("");
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
-      toast.error(error.message === "Invalid login credentials"
+      const msg = error.message === "Invalid login credentials"
         ? "Incorrect email or password."
-        : error.message);
+        : error.message;
+      setLoginError(msg);
+      toast.error(msg);
     } else {
       navigate("/", { replace: true });
     }
@@ -353,6 +357,12 @@ export default function Login() {
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
               </Button>
+              {loginError && (
+                <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/50 border border-red-800 text-red-300 text-sm" data-testid="login-error">
+                  <Shield className="w-4 h-4 flex-shrink-0 text-red-400" />
+                  {loginError}
+                </div>
+              )}
               <p className="text-center text-xs text-slate-400">
                 Don't have an account?{" "}
                 <button type="button" onClick={switchToSignup} className="text-red-600 font-semibold hover:underline">

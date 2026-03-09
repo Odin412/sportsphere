@@ -53,6 +53,13 @@ export default function ScoutCard() {
     enabled: !!targetEmail,
   });
 
+  const { data: cardCustomizations = [] } = useQuery({
+    queryKey: ["scout-card-customization", targetEmail],
+    queryFn: () => db.entities.CardCustomization.filter({ user_email: targetEmail }),
+    enabled: !!targetEmail,
+  });
+  const activeCustomization = cardCustomizations.find((c) => c.is_active) || cardCustomizations[0] || null;
+
   const profile = profiles[0];
 
   // Compute all metrics from stat entries
@@ -213,6 +220,7 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
           onShare={handleShare}
           onDownload={handleDownload}
           compact={false}
+          customization={activeCustomization}
         />
       </div>
 

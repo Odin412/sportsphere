@@ -306,6 +306,7 @@ const entities = {
 
   // ProPath
   ProfileView: makeEntity('profile_views'),
+  CardCustomization: makeEntity('card_customizations'),
 
   // Social
   Post: makeEntity('posts'),

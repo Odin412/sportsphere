@@ -8,17 +8,19 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   ShieldCheck, Share2, FileText, Lock, ChevronRight,
-  Loader2, Trophy, BarChart2, Flame,
+  Loader2, Trophy, BarChart2, Flame, Palette,
 } from "lucide-react";
 import { toast } from "sonner";
 import ScoutCardDisplay from "@/components/propath/ScoutCardDisplay";
 import TrainingStreak from "@/components/propath/TrainingStreak";
 import WhosScouting from "@/components/propath/WhosScouting";
 import GameChangerPDFImport from "@/components/propath/GameChangerPDFImport";
+import CustomizeCardModal from "@/components/propath/CustomizeCardModal";
 
 export default function ProPathHub() {
   const { user } = useAuth();
   const [showGCImport, setShowGCImport] = useState(false);
+  const [showCustomize, setShowCustomize] = useState(false);
   const [narrative, setNarrative] = useState(null);
   const [loadingNarrative, setLoadingNarrative] = useState(false);
 
@@ -47,6 +49,15 @@ export default function ProPathHub() {
     },
     enabled: !!user,
   });
+
+  // Card customizations
+  const queryClient = useQueryClient();
+  const { data: cardCustomizations = [] } = useQuery({
+    queryKey: ["card-customizations", user?.email],
+    queryFn: () => db.entities.CardCustomization.filter({ user_email: user.email }),
+    enabled: !!user,
+  });
+  const activeCustomization = cardCustomizations.find((c) => c.is_active) || cardCustomizations[0] || null;
 
   // Top 3 metrics
   const metricBests = {};
@@ -157,6 +168,14 @@ Be specific, use active voice, highlight what makes this athlete stand out.`,
                 </h2>
                 <div className="flex gap-2">
                   <Button
+                    onClick={() => setShowCustomize(true)}
+                    size="sm"
+                    variant="outline"
+                    className="border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl gap-2 text-xs"
+                  >
+                    <Palette className="w-3 h-3" /> Customize
+                  </Button>
+                  <Button
                     onClick={shareScoutCard}
                     size="sm"
                     variant="outline"
@@ -189,6 +208,7 @@ Be specific, use active voice, highlight what makes this athlete stand out.`,
                   onShare={shareScoutCard}
                   onContact={() => {}}
                   compact={true}
+                  customization={activeCustomization}
                 />
               )}
             </div>
@@ -310,6 +330,21 @@ Be specific, use active voice, highlight what makes this athlete stand out.`,
           onClose={() => setShowGCImport(false)}
           userEmail={user.email}
           sportProfileId={profile?.id}
+        />
+      )}
+
+      {/* Customize Card modal */}
+      {showCustomize && profile && (
+        <CustomizeCardModal
+          open={showCustomize}
+          onClose={() => setShowCustomize(false)}
+          profile={profile}
+          topMetrics={topMetrics}
+          headline={narrative?.headline}
+          narrative={narrative?.narrative}
+          userEmail={user.email}
+          customizations={cardCustomizations}
+          onSaved={() => queryClient.invalidateQueries({ queryKey: ["card-customizations", user.email] })}
         />
       )}
     </div>

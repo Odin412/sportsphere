@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, RotateCcw, Share2, Mail, Download, Trophy, MapPin, Clock, Star } from "lucide-react";
+import { CARD_TEMPLATES } from "./CardTemplates";
 
 /* ═══════════════════════════════════════════════════════════════════════════════
    SPORT THEMES
@@ -136,7 +137,7 @@ function useRefractorEffect(cardRef) {
 /* ═══════════════════════════════════════════════════════════════════════════════
    CARD FRONT — Full-bleed photo, name at bottom. Like a real Topps card.
    ═══════════════════════════════════════════════════════════════════════════════ */
-function CardFront({ profile, theme, serial, onFlip }) {
+function CardFront({ profile, theme, serial, customization, onFlip }) {
   const initials = (profile.user_name || "?").charAt(0).toUpperCase();
 
   return (
@@ -152,12 +153,17 @@ function CardFront({ profile, theme, serial, onFlip }) {
         </div>
       )}
 
-      {/* Top overlay — PROPATH logo + sport pill */}
+      {/* Top overlay — PROPATH logo + sport pill + team logo */}
       <div className="relative z-10 flex items-center justify-between px-4 pt-3">
-        <span className="text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-lg"
-          style={{ color: theme.border }}>
-          PROPATH
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-lg"
+            style={{ color: theme.border }}>
+            PROPATH
+          </span>
+          {customization?.team_logo_url && (
+            <img src={customization.team_logo_url} alt="team" className="w-7 h-7 rounded-full object-cover border border-white/30 drop-shadow-lg" />
+          )}
+        </div>
         <span className="text-[10px] font-bold px-2 py-0.5 rounded-md drop-shadow-lg"
           style={{ backgroundColor: `${theme.accent}cc`, color: "#000" }}>
           {profile.sport || "Athlete"}
@@ -177,6 +183,9 @@ function CardFront({ profile, theme, serial, onFlip }) {
                 style={{ textShadow: `0 0 20px ${theme.glow}, 0 2px 8px rgba(0,0,0,1)` }}>
                 {profile.user_name || "Unknown Athlete"}
               </h2>
+              {customization?.team_name && (
+                <p className="text-[11px] font-bold" style={{ color: theme.accent }}>{customization.team_name}</p>
+              )}
               <p className="text-[11px] text-white/60 font-semibold mt-0.5 truncate">
                 {[profile.position, profile.sport].filter(Boolean).join(" \u00B7 ")}
               </p>
@@ -184,6 +193,10 @@ function CardFront({ profile, theme, serial, onFlip }) {
             <span className="text-[11px] font-mono font-bold ml-2 flex-shrink-0"
               style={{ color: `${theme.border}70` }}>{serial}</span>
           </div>
+          {/* Signature */}
+          {customization?.signature_url && (
+            <img src={customization.signature_url} alt="signature" className="h-8 mt-1 opacity-50" />
+          )}
           {/* Flip icon */}
           <div className="flex justify-end mt-2">
             <button onClick={(e) => { e.stopPropagation(); onFlip(); }}
@@ -387,6 +400,7 @@ export default function ScoutCardDisplay({
   onShare,
   onDownload,
   compact = false,
+  customization = null,
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const cardRef = useRef(null);
@@ -394,9 +408,22 @@ export default function ScoutCardDisplay({
 
   if (!profile) return null;
 
-  const theme = SPORT_THEMES[profile.sport] || SPORT_THEMES.default;
+  // Build theme — start with sport default, override with customization colors
+  const baseTheme = SPORT_THEMES[profile.sport] || SPORT_THEMES.default;
+  const theme = customization ? {
+    ...baseTheme,
+    ...(customization.primary_color ? { bg: customization.primary_color, bg2: customization.primary_color } : {}),
+    ...(customization.secondary_color ? { accent: customization.secondary_color } : {}),
+    ...(customization.border_color ? {
+      border: customization.border_color,
+      glow: `${customization.border_color}80`,
+    } : {}),
+  } : baseTheme;
+
   const serial = serialFromId(profile.id);
   const initials = (profile.user_name || "?").charAt(0).toUpperCase();
+  const templateId = customization?.template || "classic";
+  const tmpl = CARD_TEMPLATES[templateId];
 
   // ── Shared card shell styles ──
   const cardShellStyle = {
@@ -476,13 +503,12 @@ export default function ScoutCardDisplay({
             {/* Inner metallic border */}
             <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
               style={{ border: `1px solid ${theme.border}35`, animation: "borderGlow 3s ease-in-out infinite" }} />
-            {/* Front content */}
-            <CardFront
-              profile={profile}
-              theme={theme}
-              serial={serial}
-              onFlip={() => setIsFlipped(true)}
-            />
+            {/* Front content — delegate to template if not classic */}
+            {tmpl?.Front ? (
+              <tmpl.Front profile={profile} theme={theme} serial={serial} customization={customization} onFlip={() => setIsFlipped(true)} />
+            ) : (
+              <CardFront profile={profile} theme={theme} serial={serial} customization={customization} onFlip={() => setIsFlipped(true)} />
+            )}
           </div>
 
           {/* ═══ BACK FACE ═══ */}
@@ -507,22 +533,11 @@ export default function ScoutCardDisplay({
             <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
               style={{ border: `1px solid ${theme.border}35`, animation: "borderGlow 3s ease-in-out infinite" }} />
             {/* Back content */}
-            <CardBack
-              profile={profile}
-              allMetrics={allMetrics}
-              topMetrics={topMetrics}
-              narrative={narrative}
-              headline={headline}
-              achievements={achievements}
-              bio={bio}
-              theme={theme}
-              serial={serial}
-              statCount={statCount}
-              onFlip={() => setIsFlipped(false)}
-              onContact={onContact}
-              onShare={onShare}
-              onDownload={onDownload}
-            />
+            {tmpl?.Back ? (
+              <tmpl.Back profile={profile} allMetrics={allMetrics} topMetrics={topMetrics} narrative={narrative} headline={headline} achievements={achievements} bio={bio} theme={theme} serial={serial} statCount={statCount} onFlip={() => setIsFlipped(false)} onContact={onContact} onShare={onShare} onDownload={onDownload} />
+            ) : (
+              <CardBack profile={profile} allMetrics={allMetrics} topMetrics={topMetrics} narrative={narrative} headline={headline} achievements={achievements} bio={bio} theme={theme} serial={serial} statCount={statCount} onFlip={() => setIsFlipped(false)} onContact={onContact} onShare={onShare} onDownload={onDownload} />
+            )}
           </div>
         </motion.div>
       </div>

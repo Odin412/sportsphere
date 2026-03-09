@@ -97,6 +97,7 @@ const AuthenticatedApp = () => {
       }>
         <ErrorBoundary>
           <Routes>
+            <Route path="/login" element={<Navigate to="/" replace />} />
             <Route path="/" element={
               <LayoutWrapper currentPageName={mainPageKey}>
                 <MainPage />

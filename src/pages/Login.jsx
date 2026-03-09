@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -154,6 +155,7 @@ function HeroPanel() {
 }
 
 export default function Login() {
+  const navigate = useNavigate();
   const [tab, setTab] = useState("signin");
   const [signupStep, setSignupStep] = useState("role-select");
   const [selectedRoleCard, setSelectedRoleCard] = useState(null);
@@ -206,6 +208,8 @@ export default function Login() {
       toast.error(error.message === "Invalid login credentials"
         ? "Incorrect email or password."
         : error.message);
+    } else {
+      navigate("/", { replace: true });
     }
     setLoading(false);
   };
@@ -241,6 +245,9 @@ export default function Login() {
     } else if (data?.user && data.user.identities?.length === 0) {
       // Supabase silent duplicate — email already registered
       toast.error("An account with this email already exists. Try signing in instead.");
+    } else if (data?.session) {
+      // Auto-confirmed — user is already signed in, redirect
+      navigate("/", { replace: true });
     } else {
       setSignupDone(true);
     }

@@ -15,6 +15,7 @@ const TEMPLATE_KEYS = ["classic", "chrome", "prizm", "retro"];
 
 export default function CustomizeCardModal({
   open,
+  onClose,
   onOpenChange,
   profile,
   topMetrics = [],
@@ -25,9 +26,12 @@ export default function CustomizeCardModal({
   achievements = null,
   bio = null,
   userEmail,
-  existingCustomizations = [],
+  customizations,
+  existingCustomizations,
   onSaved,
 }) {
+  const closeModal = onClose || ((v) => onOpenChange?.(v));
+  const initialCards = customizations || existingCustomizations || [];
   // ── State ──
   const [cards, setCards] = useState([]);
   const [activeIdx, setActiveIdx] = useState(0);
@@ -39,9 +43,9 @@ export default function CustomizeCardModal({
   // Initialize cards from existing customizations or create a default
   useEffect(() => {
     if (open) {
-      if (existingCustomizations.length > 0) {
-        setCards(existingCustomizations.map(c => ({ ...c })));
-        const activeI = existingCustomizations.findIndex(c => c.is_active);
+      if (initialCards.length > 0) {
+        setCards(initialCards.map(c => ({ ...c })));
+        const activeI = initialCards.findIndex(c => c.is_active);
         setActiveIdx(activeI >= 0 ? activeI : 0);
       } else {
         setCards([{
@@ -59,7 +63,7 @@ export default function CustomizeCardModal({
         setActiveIdx(0);
       }
     }
-  }, [open, existingCustomizations]);
+  }, [open]);
 
   const current = cards[activeIdx] || {};
 
@@ -165,7 +169,7 @@ export default function CustomizeCardModal({
       }
       toast.success("Card customization saved!");
       onSaved?.();
-      onOpenChange(false);
+      closeModal();
     } catch (err) {
       console.error("Save failed:", err);
       toast.error("Failed to save customization");
@@ -186,7 +190,7 @@ export default function CustomizeCardModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(v) => { if (!v) closeModal(); }}>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden p-0 rounded-2xl bg-gray-950 border-gray-800">
         <div className="flex flex-col lg:flex-row h-full max-h-[90vh]">
           {/* ═══ LEFT: Live Preview ═══ */}
@@ -212,7 +216,7 @@ export default function CustomizeCardModal({
               <h2 className="text-lg font-black text-white flex items-center gap-2">
                 <Palette className="w-5 h-5 text-orange-400" /> Customize Card
               </h2>
-              <button onClick={() => onOpenChange(false)} className="text-gray-500 hover:text-white transition-colors">
+              <button onClick={() => closeModal()} className="text-gray-500 hover:text-white transition-colors">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -373,7 +377,7 @@ export default function CustomizeCardModal({
                 {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                 Save Changes
               </Button>
-              <Button variant="outline" onClick={() => onOpenChange(false)}
+              <Button variant="outline" onClick={() => closeModal()}
                 className="rounded-xl h-10 border-gray-700 text-gray-400 hover:bg-gray-800">
                 Cancel
               </Button>

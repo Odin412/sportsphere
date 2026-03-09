@@ -33,7 +33,7 @@ const CreatorHub = lazy(() => import('./pages/CreatorHub'));
 const CreatorShop = lazy(() => import('./pages/CreatorShop'));
 const Discover = lazy(() => import('./pages/Discover'));
 const Events = lazy(() => import('./pages/Events'));
-const Explore = lazy(() => import('./pages/Explore'));
+const Explore = lazy(() => import('./pages/Search'));
 const ForYou = lazy(() => import('./pages/ForYou'));
 const ForumTopic = lazy(() => import('./pages/ForumTopic'));
 const Forums = lazy(() => import('./pages/Forums'));
@@ -65,7 +65,7 @@ const ProfileSettings = lazy(() => import('./pages/ProfileSettings'));
 const Reels = lazy(() => import('./pages/Reels'));
 const SavedContent = lazy(() => import('./pages/SavedContent'));
 const ScoutingHub = lazy(() => import('./pages/ScoutingHub'));
-const Search = lazy(() => import('./pages/Search'));
+const SearchPage = lazy(() => import('./pages/Search'));
 const SportHub = lazy(() => import('./pages/SportHub'));
 const Terms = lazy(() => import('./pages/Terms'));
 const TrainingPlanDetail = lazy(() => import('./pages/TrainingPlanDetail'));
@@ -132,7 +132,7 @@ export const PAGES = {
     "Reels": Reels,
     "SavedContent": SavedContent,
     "ScoutingHub": ScoutingHub,
-    "Search": Search,
+    "Search": SearchPage,
     "SportHub": SportHub,
     "Terms": Terms,
     "TrainingPlanDetail": TrainingPlanDetail,

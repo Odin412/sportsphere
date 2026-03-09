@@ -19,7 +19,7 @@ import AppTour from "./components/onboarding/AppTour";
 // Primary nav items shown in sidebar + mobile bottom nav
 const PRIMARY_NAV = [
   { name: "Feed", page: "Feed", icon: Home },
-  { name: "Search", page: "Search", icon: Search },
+  { name: "Explore", page: "Explore", icon: Compass },
   { name: "Reels", page: "Reels", icon: Flame },
   { name: "ProPath", page: "ProPathHub", icon: ShieldCheck },
   { name: "Live", page: "Live", icon: Radio },
@@ -32,7 +32,6 @@ const SECONDARY_NAV = [
   { name: "For You", page: "ForYou", icon: Sparkles },
   { name: "Get Noticed", page: "GetNoticed", icon: Eye },
   { name: "The Vault", page: "TheVault", icon: Lock },
-  { name: "Discover", page: "Discover", icon: Compass },
   { name: "Challenges", page: "Challenges", icon: Trophy },
   { name: "Performance", page: "PerformanceHub", icon: BarChart2 },
   { name: "Scouting Hub", page: "ScoutingHub", icon: Crosshair },
@@ -53,7 +52,7 @@ const SECONDARY_NAV = [
 // Mobile bottom bar — 5 items only (center is Create button)
 const MOBILE_BOTTOM = [
   { name: "Home", page: "Feed", icon: Home },
-  { name: "Search", page: "Search", icon: Search },
+  { name: "Explore", page: "Explore", icon: Compass },
   null, // placeholder for center Create button
   { name: "Reels", page: "Reels", icon: Flame },
   { name: "Profile", page: "Profile", icon: User },

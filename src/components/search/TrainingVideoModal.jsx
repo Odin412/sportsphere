@@ -1,17 +1,14 @@
-import React, { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ThumbsUp, ThumbsDown, Flag, ExternalLink, X } from "lucide-react";
+import { ThumbsUp, ThumbsDown, ExternalLink, X } from "lucide-react";
 import { db } from "@/api/db";
 import { toast } from "sonner";
 
 export default function TrainingVideoModal({ content, open, onClose, userEmail }) {
   const [voting, setVoting] = useState(false);
 
-  if (!content) return null;
-
-  const isYouTube = !!content.youtube_id;
+  const isYouTube = !!content?.youtube_id;
   const embedUrl = isYouTube
     ? `https://www.youtube.com/embed/${content.youtube_id}?autoplay=1&rel=0`
     : null;
@@ -36,7 +33,7 @@ export default function TrainingVideoModal({ content, open, onClose, userEmail }
   };
 
   // Increment view count silently
-  React.useEffect(() => {
+  useEffect(() => {
     if (open && content?.id) {
       db.entities.TrainingContent.update(content.id, {
         views: (content.views || 0) + 1,
@@ -44,9 +41,23 @@ export default function TrainingVideoModal({ content, open, onClose, userEmail }
     }
   }, [open, content?.id]);
 
+  // Close on Escape key
+  useEffect(() => {
+    if (!open) return;
+    const handleKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [open, onClose]);
+
+  if (!open || !content) return null;
+
   return (
-    <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent className="max-w-3xl p-0 rounded-2xl bg-gray-950 border-gray-800 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/80" onClick={onClose} />
+
+      {/* Modal */}
+      <div className="relative z-10 w-full max-w-3xl mx-4 rounded-2xl bg-gray-950 border border-gray-800 overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         {/* Video */}
         <div className="relative aspect-video bg-black">
           {isYouTube ? (
@@ -131,13 +142,13 @@ export default function TrainingVideoModal({ content, open, onClose, userEmail }
                 className="ml-auto"
               >
                 <Button size="sm" variant="outline" className="gap-1.5 border-gray-700 text-gray-400 rounded-xl text-xs">
-                  <ExternalLink className="w-3.5 h-3.5" /> Source
+                  <ExternalLink className="w-3.5 h-3.5" /> Watch on YouTube
                 </Button>
               </a>
             )}
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }

@@ -79,6 +79,22 @@ const makeEntity = (tableName) => ({
     if (error) throw error;
   },
 
+  search: async (query, fields = [], sortField = null, limit = 50) => {
+    let q = supabase.from(tableName).select('*');
+    if (query && fields.length) {
+      const orClause = fields.map(f => `${f}.ilike.%${query}%`).join(',');
+      q = q.or(orClause);
+    }
+    if (sortField) {
+      const asc = !sortField.startsWith('-');
+      q = q.order(sortField.replace('-', ''), { ascending: asc });
+    }
+    if (limit) q = q.limit(limit);
+    const { data, error } = await q;
+    if (error) throw error;
+    return data || [];
+  },
+
   subscribeToChanges: (filters = {}, callback) => {
     let channel = supabase.channel(`${tableName}_${Date.now()}`);
     const filterStr = Object.entries(filters)
@@ -299,6 +315,7 @@ const entities = {
   CoachingSession: makeEntity('coaching_sessions'),
   AthleteVideo: makeEntity('athlete_videos'),
   TrainingProgram: makeEntity('training_programs'),
+  TrainingContent: makeEntity('training_content'),
 
   // Sport Profiles
   SportProfile: makeEntity('sport_profiles'),

@@ -1,661 +1,557 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search, Users, Radio, FileText, Trophy, Heart, MessageCircle, Eye, X, Clock, SlidersHorizontal, Play } from "lucide-react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Search as SearchIcon, X, Clock, ChevronRight, Plus, Video,
+  Users, FileText, Radio, Flame, TrendingUp, Eye, Heart, MessageCircle,
+} from "lucide-react";
+import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { formatDistanceToNow } from "date-fns";
+import SportCategoryPills from "@/components/search/SportCategoryPills";
+import TrendingAthletes from "@/components/search/TrendingAthletes";
+import TrainingContentCard from "@/components/search/TrainingContentCard";
+import TrainingVideoModal from "@/components/search/TrainingVideoModal";
+import SubmitTrainingContent from "@/components/search/SubmitTrainingContent";
 
-// Native debounce — replaces lodash
-function debounce(fn, ms) {
-  let timer;
-  return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); };
+// ── Debounce ──
+function useDebounce(value, delay) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return debounced;
 }
 
-const STATUS_GRADIENTS = {
-  Basketball: "from-orange-600 to-red-700",
-  Soccer:     "from-green-600 to-teal-700",
-  Football:   "from-amber-700 to-yellow-800",
-  Baseball:   "from-blue-700 to-indigo-800",
-  Tennis:     "from-yellow-500 to-orange-600",
-  Swimming:   "from-cyan-600 to-blue-700",
-  Golf:       "from-emerald-600 to-green-700",
-  Track:      "from-red-600 to-pink-700",
-  Hockey:     "from-slate-600 to-blue-800",
-  MMA:        "from-red-800 to-rose-900",
-  CrossFit:   "from-violet-600 to-purple-700",
-  default:    "from-gray-700 to-gray-800",
-};
+// ── Search History (localStorage) ──
+function getSearchHistory() {
+  try { return JSON.parse(localStorage.getItem("ss_search_history") || "[]"); } catch { return []; }
+}
+function addSearchHistory(q) {
+  if (!q?.trim()) return;
+  const prev = getSearchHistory().filter((h) => h !== q);
+  localStorage.setItem("ss_search_history", JSON.stringify([q, ...prev].slice(0, 8)));
+}
+function removeSearchHistory(q) {
+  localStorage.setItem("ss_search_history", JSON.stringify(getSearchHistory().filter((h) => h !== q)));
+}
 
+// ── Tab Config ──
 const TABS = [
-  { id: "all", label: "All", icon: Search },
-  { id: "posts", label: "Posts", icon: FileText },
-  { id: "users", label: "Users", icon: Users },
-  { id: "streams", label: "Streams", icon: Radio },
-  { id: "challenges", label: "Challenges", icon: Trophy },
+  { key: "all", label: "All", icon: Flame },
+  { key: "people", label: "People", icon: Users },
+  { key: "posts", label: "Posts", icon: FileText },
+  { key: "videos", label: "Videos", icon: Video },
+  { key: "streams", label: "Streams", icon: Radio },
 ];
 
 export default function SearchPage() {
-  const [user, setUser] = useState(null);
-  const [searchParams] = useSearchParams();
-  const [query, setQuery] = useState(() => searchParams.get("q") || "");
-  const [debouncedQuery, setDebouncedQuery] = useState(() => searchParams.get("q") || "");
+  const { user } = useAuth();
+  const [query, setQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
+  const [sportFilter, setSportFilter] = useState("all");
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [showSubmit, setShowSubmit] = useState(false);
+  const [history, setHistory] = useState(getSearchHistory);
 
-  // Per-type filters
-  const [postSport, setPostSport] = useState("all");
-  const [postCategory, setPostCategory] = useState("all");
-  const [postSort, setPostSort] = useState("recent");
-  const [userSport, setUserSport] = useState("all");
-  const [userRole, setUserRole] = useState("all");
-  const [streamSport, setStreamSport] = useState("all");
-  const [streamStatus, setStreamStatus] = useState("all");
-  const [challengeSport, setChallengeSport] = useState("all");
-  const [challengeStatus, setChallengeStatus] = useState("all");
+  const debouncedQuery = useDebounce(query, 300);
+  const isSearching = debouncedQuery.length >= 2;
 
-  const [searchHistory, setSearchHistory] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("ss_search_history") || "[]"); }
-    catch { return []; }
-  });
-
-  const saveToHistory = (q) => {
-    if (!q.trim()) return;
-    const updated = [q.trim(), ...searchHistory.filter(h => h !== q.trim())].slice(0, 10);
-    setSearchHistory(updated);
-    localStorage.setItem("ss_search_history", JSON.stringify(updated));
-  };
-
-  const removeFromHistory = (item) => {
-    const updated = searchHistory.filter(h => h !== item);
-    setSearchHistory(updated);
-    localStorage.setItem("ss_search_history", JSON.stringify(updated));
-  };
-
+  // Save to history on search
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
-  }, []);
-
-  const debouncedSetQuery = useCallback(
-    debounce((val) => setDebouncedQuery(val), 300),
-    []
-  );
-
-  const handleQueryChange = (e) => {
-    setQuery(e.target.value);
-    debouncedSetQuery(e.target.value);
-  };
-
-  useEffect(() => {
-    if (debouncedQuery.trim()) {
-      saveToHistory(debouncedQuery.trim());
+    if (debouncedQuery.length >= 3) {
+      addSearchHistory(debouncedQuery);
+      setHistory(getSearchHistory());
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedQuery]);
 
-  const { data: posts = [], isLoading: loadingPosts } = useQuery({
+  // ── Server-Side Search Queries ──
+  const sportClause = sportFilter !== "all" ? sportFilter : null;
+
+  const { data: profileResults = [] } = useQuery({
+    queryKey: ["search-profiles", debouncedQuery],
+    queryFn: () => db.entities.User.search(debouncedQuery, ["full_name", "email"], null, 30),
+    enabled: isSearching,
+  });
+
+  const { data: sportProfileResults = [] } = useQuery({
+    queryKey: ["search-sport-profiles", debouncedQuery],
+    queryFn: () => db.entities.SportProfile.search(debouncedQuery, ["user_name", "sport", "bio", "position"], "-created_date", 30),
+    enabled: isSearching,
+  });
+
+  const { data: postResults = [] } = useQuery({
     queryKey: ["search-posts", debouncedQuery],
-    queryFn: () => db.entities.Post.list("-created_date", 200),
-    enabled: debouncedQuery.length >= 1,
+    queryFn: () => db.entities.Post.search(debouncedQuery, ["content", "author_name", "sport"], "-created_date", 30),
+    enabled: isSearching,
   });
 
-  const { data: users = [], isLoading: loadingUsers } = useQuery({
-    queryKey: ["search-users", debouncedQuery],
-    queryFn: () => db.entities.SportProfile.list("-created_date", 100),
-    enabled: debouncedQuery.length >= 1,
+  const { data: videoResults = [] } = useQuery({
+    queryKey: ["search-videos", debouncedQuery],
+    queryFn: () => db.entities.TrainingContent.search(debouncedQuery, ["title", "description", "sport", "category"], "-created_date", 30),
+    enabled: isSearching,
   });
 
-  const { data: streams = [], isLoading: loadingStreams } = useQuery({
+  const { data: streamResults = [] } = useQuery({
     queryKey: ["search-streams", debouncedQuery],
-    queryFn: () => db.entities.LiveStream.list("-started_at", 100),
-    enabled: debouncedQuery.length >= 1,
+    queryFn: () => db.entities.LiveStream.search(debouncedQuery, ["title", "host_name", "sport"], "-started_at", 30),
+    enabled: isSearching,
   });
 
-  const { data: challenges = [], isLoading: loadingChallenges } = useQuery({
-    queryKey: ["search-challenges", debouncedQuery],
-    queryFn: () => db.entities.Challenge.list("-created_date", 100),
-    enabled: debouncedQuery.length >= 1,
+  // ── Discovery Queries (shown when not searching) ──
+  const { data: trendingProfiles = [] } = useQuery({
+    queryKey: ["discover-trending-profiles", sportFilter],
+    queryFn: async () => {
+      const profiles = sportClause
+        ? await db.entities.SportProfile.filter({ sport: sportClause }, "-created_date", 20)
+        : await db.entities.SportProfile.list("-created_date", 20);
+      return profiles;
+    },
+    enabled: !isSearching,
   });
 
-  // Explore grid — shown before typing (Instagram Explore-style)
-  const { data: explorePosts = [] } = useQuery({
-    queryKey: ["explore-grid"],
-    queryFn: () => db.entities.Post.list("-created_date", 48),
-    staleTime: 5 * 60 * 1000,
-    enabled: !debouncedQuery,
+  const { data: trainingContent = [] } = useQuery({
+    queryKey: ["discover-training", sportFilter],
+    queryFn: async () => {
+      if (sportClause) {
+        return db.entities.TrainingContent.filter({ sport: sportClause }, "-created_date", 12);
+      }
+      return db.entities.TrainingContent.list("-created_date", 12);
+    },
+    enabled: !isSearching,
   });
 
-  const isLoading = loadingPosts || loadingUsers || loadingStreams || loadingChallenges;
-
-  const matchQuery = (text) =>
-    !debouncedQuery || (text || "").toLowerCase().includes(debouncedQuery.toLowerCase());
-
-  // Filtered results
-  const filteredPosts = posts.filter((p) => {
-    if (!matchQuery(p.content) && !matchQuery(p.author_name) && !matchQuery(p.sport)) return false;
-    if (postSport !== "all" && p.sport !== postSport) return false;
-    if (postCategory !== "all" && p.category !== postCategory) return false;
-    return true;
-  }).sort((a, b) => {
-    if (postSort === "popular") return (b.likes?.length || 0) - (a.likes?.length || 0);
-    if (postSort === "views") return (b.views || 0) - (a.views || 0);
-    return new Date(b.created_date) - new Date(a.created_date);
+  const { data: popularPosts = [] } = useQuery({
+    queryKey: ["discover-popular-posts", sportFilter],
+    queryFn: async () => {
+      if (sportClause) {
+        return db.entities.Post.filter({ sport: sportClause }, "-created_date", 6);
+      }
+      return db.entities.Post.list("-created_date", 6);
+    },
+    enabled: !isSearching,
   });
 
-  const filteredUsers = users.filter((u) => {
-    if (!matchQuery(u.user_name) && !matchQuery(u.sport) && !matchQuery(u.bio)) return false;
-    if (userSport !== "all" && u.sport !== userSport) return false;
-    if (userRole !== "all" && u.role !== userRole) return false;
-    return true;
-  });
+  // ── Merge people results (profiles + sport profiles, deduplicated) ──
+  const mergedPeople = React.useMemo(() => {
+    const seen = new Set();
+    const people = [];
+    // Sport profiles first (richer data)
+    sportProfileResults.forEach((sp) => {
+      const key = sp.user_email;
+      if (!key || seen.has(key)) return;
+      if (sportClause && sp.sport !== sportClause) return;
+      seen.add(key);
+      people.push({ ...sp, _type: "sport_profile" });
+    });
+    // Then regular profiles
+    profileResults.forEach((p) => {
+      const key = p.email;
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      people.push({ ...p, user_name: p.full_name, user_email: p.email, _type: "profile" });
+    });
+    return people;
+  }, [profileResults, sportProfileResults, sportClause]);
 
-  // Deduplicate users by user_email
-  const seenUserEmails = new Set();
-  const uniqueUsers = filteredUsers.filter((u) => {
-    if (seenUserEmails.has(u.user_email)) return false;
-    seenUserEmails.add(u.user_email);
-    return true;
-  });
+  // Apply sport filter to post/video/stream results
+  const filteredPosts = sportClause ? postResults.filter((p) => p.sport === sportClause) : postResults;
+  const filteredVideos = sportClause ? videoResults.filter((v) => v.sport === sportClause) : videoResults;
+  const filteredStreams = sportClause ? streamResults.filter((s) => s.sport === sportClause) : streamResults;
 
-  const filteredStreams = streams.filter((s) => {
-    if (!matchQuery(s.title) && !matchQuery(s.host_name) && !matchQuery(s.sport)) return false;
-    if (streamSport !== "all" && s.sport !== streamSport) return false;
-    if (streamStatus !== "all" && s.status !== streamStatus) return false;
-    return true;
-  });
+  // Tab counts
+  const counts = {
+    all: mergedPeople.length + filteredPosts.length + filteredVideos.length + filteredStreams.length,
+    people: mergedPeople.length,
+    posts: filteredPosts.length,
+    videos: filteredVideos.length,
+    streams: filteredStreams.length,
+  };
 
-  const filteredChallenges = challenges.filter((c) => {
-    if (!matchQuery(c.title) && !matchQuery(c.description) && !matchQuery(c.sport)) return false;
-    if (challengeSport !== "all" && c.sport !== challengeSport) return false;
-    if (challengeStatus !== "all" && c.status !== challengeStatus) return false;
-    return true;
-  });
-
-  // Unique sports from results
-  const allSports = [...new Set([
-    ...posts.map((p) => p.sport),
-    ...users.map((u) => u.sport),
-    ...streams.map((s) => s.sport),
-    ...challenges.map((c) => c.sport),
-  ].filter(Boolean))].sort();
-
-  const totalResults = filteredPosts.length + uniqueUsers.length + filteredStreams.length + filteredChallenges.length;
+  const clearSearch = () => { setQuery(""); setActiveTab("all"); };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 p-4 md:p-8">
-      <div className="max-w-5xl mx-auto space-y-6">
-        {/* Header */}
-        <div className="text-center mb-2">
-          <h1 className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-1">
-            Search
-          </h1>
-          <p className="text-slate-400">Find posts, users, streams & challenges</p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 z-10" />
-          <Input
-            value={query}
-            onChange={handleQueryChange}
-            placeholder="Search for anything..."
-            className="pl-12 pr-12 py-6 text-lg bg-slate-800/80 border-cyan-500/30 text-white placeholder:text-slate-300 rounded-2xl focus:border-cyan-400/60 focus:ring-cyan-400/20"
-            autoFocus
-          />
-          {query && (
-            <button
-              onClick={() => { setQuery(""); setDebouncedQuery(""); }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-        </div>
-
-        {/* Tabs */}
-        {debouncedQuery && (
-          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
-            {TABS.map((tab) => {
-              const Icon = tab.icon;
-              const count =
-                tab.id === "all" ? totalResults :
-                tab.id === "posts" ? filteredPosts.length :
-                tab.id === "users" ? uniqueUsers.length :
-                tab.id === "streams" ? filteredStreams.length :
-                filteredChallenges.length;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm whitespace-nowrap transition-all focus:ring-2 focus:ring-cyan-400 focus:outline-none ${
-                    activeTab === tab.id
-                      ? "bg-red-600 text-white shadow-lg shadow-red-600/30"
-                      : "bg-slate-800/60 text-slate-400 hover:bg-slate-700/60 hover:text-white"
-                  }`}
-                >
-                  <Icon className="w-4 h-4" />
-                  {tab.label}
-                  <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${
-                    activeTab === tab.id ? "bg-white/20" : "bg-slate-700"
-                  }`}>{count}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        {/* Recent search history — shown before typing */}
-        {!query && searchHistory.length > 0 && (
-          <div className="space-y-1 mt-2">
-            <p className="text-xs font-bold text-slate-500 uppercase tracking-wide px-1">Recent</p>
-            {searchHistory.map(item => (
-              <div key={item}
-                className="flex items-center justify-between px-3 py-2 rounded-xl hover:bg-slate-800 cursor-pointer group"
-                onClick={() => { setQuery(item); debouncedSetQuery(item); }}>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-slate-500" />
-                  <span className="text-sm text-slate-300">{item}</span>
-                </div>
-                <button
-                  onClick={e => { e.stopPropagation(); removeFromHistory(item); }}
-                  className="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-white transition-all p-1">
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Instagram-style explore grid — shown before typing */}
-        {!debouncedQuery && (
-          <div>
-            <p className="text-slate-500 text-xs uppercase tracking-widest font-semibold mb-3 px-1">Explore</p>
-            <div className="grid grid-cols-3 gap-0.5 rounded-xl overflow-hidden">
-              {explorePosts.map((post) => {
-                const hasMedia = post.media_urls?.length > 0;
-                const isVideo = hasMedia && (post.media_urls[0]?.includes('.mp4') || post.media_urls[0]?.includes('.mov') || post.media_urls[0]?.includes('video'));
-                const gradient = STATUS_GRADIENTS[post.sport] || STATUS_GRADIENTS.default;
-                return (
-                  <Link key={post.id} to={createPageUrl("UserProfile") + `?email=${post.author_email}`}>
-                    <div className="relative aspect-square overflow-hidden bg-gray-900 group cursor-pointer">
-                      {hasMedia && !isVideo && (
-                        <img src={post.media_urls[0]} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                      )}
-                      {hasMedia && isVideo && (
-                        <div className="w-full h-full bg-black relative">
-                          <video src={post.media_urls[0]} className="w-full h-full object-cover" muted playsInline />
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <Play className="w-7 h-7 text-white/90 drop-shadow-lg fill-white" />
-                          </div>
-                        </div>
-                      )}
-                      {!hasMedia && (
-                        <div className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center p-2`}>
-                          <p className="text-white text-[10px] font-semibold text-center line-clamp-4 leading-snug">{post.content}</p>
-                        </div>
-                      )}
-                      {/* Hover overlay */}
-                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <span className="text-white text-xs font-bold">❤️ {post.likes?.length || 0}</span>
-                        <span className="text-white text-xs font-bold">💬 {post.comments_count || 0}</span>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Loading */}
-        {debouncedQuery && isLoading && (
-          <div className="text-center py-12 text-slate-400">
-            <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-            Searching...
-          </div>
-        )}
-
-        {/* No results */}
-        {debouncedQuery && !isLoading && totalResults === 0 && (
-          <div className="text-center py-16 text-slate-500">
-            <Search className="w-12 h-12 mx-auto mb-3 opacity-20" />
-            <p className="text-lg font-semibold text-slate-300">No results for "{debouncedQuery}"</p>
-            <p className="text-sm mt-1">Try a different search term or remove filters</p>
-          </div>
-        )}
-
-        {/* Result summary */}
-        {debouncedQuery && !isLoading && totalResults > 0 && (
-          <p className="text-slate-400 text-sm px-1">
-            <span className="text-white font-semibold">{totalResults}</span> result{totalResults !== 1 ? "s" : ""} for &ldquo;<span className="text-cyan-400">{debouncedQuery}</span>&rdquo;
-          </p>
-        )}
-
-        {/* Results */}
-        {debouncedQuery && !isLoading && totalResults > 0 && (
-          <div className="space-y-8">
-
-            {/* POSTS */}
-            {(activeTab === "all" || activeTab === "posts") && (
-              <section>
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-3">
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-cyan-400" />
-                    Posts
-                    <span className="text-sm font-normal text-slate-400">({filteredPosts.length})</span>
-                  </h2>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <SlidersHorizontal className="w-4 h-4 text-slate-400" />
-                    <Select value={postSport} onValueChange={setPostSport}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Sport" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Sports</SelectItem>
-                        {allSports.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={postCategory} onValueChange={setPostCategory}>
-                      <SelectTrigger className="h-8 w-36 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
-                        {["training","game","coaching","instruction","motivation","highlight","other"].map((c) => (
-                          <SelectItem key={c} value={c} className="capitalize">{c}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Select value={postSort} onValueChange={setPostSort}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Sort" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="recent">Most Recent</SelectItem>
-                        <SelectItem value="popular">Most Liked</SelectItem>
-                        <SelectItem value="views">Most Viewed</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {filteredPosts.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <FileText className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    <p className="text-sm">No posts match your search</p>
-                    <p className="text-xs mt-1 opacity-60">Try a different term or remove filters</p>
-                  </div>
-                ) : (
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {filteredPosts.slice(0, activeTab === "all" ? 4 : 20).map((post) => (
-                      <Link key={post.id} to={createPageUrl("UserProfile") + `?email=${post.author_email}`}>
-                        <Card className="bg-slate-900/60 border-cyan-500/20 hover:border-cyan-400/50 transition-all cursor-pointer">
-                          <CardContent className="p-4 space-y-2">
-                            <div className="flex items-center gap-2">
-                              <Avatar className="w-8 h-8">
-                                <AvatarImage src={post.author_avatar} />
-                                <AvatarFallback className="bg-slate-700 text-slate-300 text-xs">{post.author_name?.[0]}</AvatarFallback>
-                              </Avatar>
-                              <div className="flex-1 min-w-0">
-                                <p className="font-semibold text-white text-sm truncate">{post.author_name}</p>
-                                <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}</p>
-                              </div>
-                              {post.sport && <Badge className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 text-xs">{post.sport}</Badge>}
-                              {post.category && <Badge className="bg-slate-700/60 text-slate-300 text-xs capitalize">{post.category}</Badge>}
-                            </div>
-                            <p className="text-slate-300 text-sm line-clamp-2">{post.content}</p>
-                            <div className="flex items-center gap-3 text-xs text-slate-500">
-                              <span className="flex items-center gap-1"><Heart className="w-3 h-3" />{post.likes?.length || 0}</span>
-                              <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3" />{post.comments_count || 0}</span>
-                              <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{post.views || 0}</span>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                {activeTab === "all" && filteredPosts.length > 4 && (
-                  <Button variant="ghost" size="sm" className="mt-2 text-cyan-400 hover:text-cyan-300" onClick={() => setActiveTab("posts")}>
-                    View all {filteredPosts.length} posts →
-                  </Button>
-                )}
-              </section>
-            )}
-
-            {/* USERS */}
-            {(activeTab === "all" || activeTab === "users") && (
-              <section>
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-3">
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Users className="w-5 h-5 text-purple-400" />
-                    Users
-                    <span className="text-sm font-normal text-slate-400">({uniqueUsers.length})</span>
-                  </h2>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <SlidersHorizontal className="w-4 h-4 text-slate-400" />
-                    <Select value={userSport} onValueChange={setUserSport}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Sport" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Sports</SelectItem>
-                        {allSports.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={userRole} onValueChange={setUserRole}>
-                      <SelectTrigger className="h-8 w-36 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Roles</SelectItem>
-                        {["athlete","coach","trainer","instructor","fan"].map((r) => (
-                          <SelectItem key={r} value={r} className="capitalize">{r}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {uniqueUsers.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <Users className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    <p className="text-sm">No athletes or coaches match your search</p>
-                    <p className="text-xs mt-1 opacity-60">Try searching by name, sport, or role</p>
-                  </div>
-                ) : (
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {uniqueUsers.slice(0, activeTab === "all" ? 4 : 20).map((profile) => (
-                      <Link key={profile.id} to={createPageUrl("UserProfile") + `?email=${profile.user_email}`}>
-                        <Card className="bg-slate-900/60 border-cyan-500/20 hover:border-purple-400/50 transition-all cursor-pointer">
-                          <CardContent className="p-4 flex items-center gap-3">
-                            <Avatar className="w-12 h-12 ring-2 ring-purple-500/30">
-                              <AvatarImage src={profile.avatar_url} />
-                              <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold">
-                                {profile.user_name?.[0]?.toUpperCase()}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className="flex-1 min-w-0">
-                              <p className="font-bold text-white truncate">{profile.user_name}</p>
-                              <p className="text-xs text-slate-400 truncate">{profile.bio || `${profile.role} · ${profile.sport}`}</p>
-                            </div>
-                            <div className="flex flex-col items-end gap-1">
-                              {profile.sport && <Badge className="bg-purple-900/60 text-purple-300 border border-purple-500/30 text-xs">{profile.sport}</Badge>}
-                              {profile.role && <span className="text-xs text-slate-500 capitalize">{profile.role}</span>}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                {activeTab === "all" && uniqueUsers.length > 4 && (
-                  <Button variant="ghost" size="sm" className="mt-2 text-cyan-400 hover:text-cyan-300" onClick={() => setActiveTab("users")}>
-                    View all {uniqueUsers.length} users →
-                  </Button>
-                )}
-              </section>
-            )}
-
-            {/* STREAMS */}
-            {(activeTab === "all" || activeTab === "streams") && (
-              <section>
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-3">
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Radio className="w-5 h-5 text-red-400" />
-                    Streams
-                    <span className="text-sm font-normal text-slate-400">({filteredStreams.length})</span>
-                  </h2>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <SlidersHorizontal className="w-4 h-4 text-slate-400" />
-                    <Select value={streamSport} onValueChange={setStreamSport}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Sport" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Sports</SelectItem>
-                        {allSports.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={streamStatus} onValueChange={setStreamStatus}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="live">Live Now</SelectItem>
-                        <SelectItem value="ended">Ended</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {filteredStreams.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <Radio className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    <p className="text-sm">No streams match your search</p>
-                    <p className="text-xs mt-1 opacity-60">Try searching by title, host, or sport</p>
-                  </div>
-                ) : (
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {filteredStreams.slice(0, activeTab === "all" ? 4 : 20).map((stream) => (
-                      <Link key={stream.id} to={createPageUrl("ViewLive") + `?id=${stream.id}`}>
-                        <Card className="bg-slate-900/60 border-cyan-500/20 hover:border-red-400/50 transition-all cursor-pointer">
-                          <CardContent className="p-4 space-y-2">
-                            <div className="flex items-center gap-2">
-                              {stream.status === "live" ? (
-                                <Badge className="bg-red-600 text-white text-xs">
-                                  <Radio className="w-3 h-3 mr-1 animate-pulse" /> LIVE
-                                </Badge>
-                              ) : (
-                                <Badge className="bg-slate-700 text-slate-300 text-xs">Ended</Badge>
-                              )}
-                              {stream.sport && <Badge className="bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 text-xs">{stream.sport}</Badge>}
-                            </div>
-                            <p className="font-bold text-white line-clamp-1">{stream.title}</p>
-                            <div className="flex items-center gap-2">
-                              <Avatar className="w-6 h-6">
-                                <AvatarImage src={stream.host_avatar} />
-                                <AvatarFallback className="text-xs bg-slate-700">{stream.host_name?.[0]}</AvatarFallback>
-                              </Avatar>
-                              <span className="text-sm text-slate-400">{stream.host_name}</span>
-                              <span className="ml-auto text-xs text-slate-500">{stream.viewers?.length || 0} viewers</span>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                {activeTab === "all" && filteredStreams.length > 4 && (
-                  <Button variant="ghost" size="sm" className="mt-2 text-cyan-400 hover:text-cyan-300" onClick={() => setActiveTab("streams")}>
-                    View all {filteredStreams.length} streams →
-                  </Button>
-                )}
-              </section>
-            )}
-
-            {/* CHALLENGES */}
-            {(activeTab === "all" || activeTab === "challenges") && (
-              <section>
-                <div className="flex items-center justify-between mb-3 flex-wrap gap-3">
-                  <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                    <Trophy className="w-5 h-5 text-amber-400" />
-                    Challenges
-                    <span className="text-sm font-normal text-slate-400">({filteredChallenges.length})</span>
-                  </h2>
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <SlidersHorizontal className="w-4 h-4 text-slate-400" />
-                    <Select value={challengeSport} onValueChange={setChallengeSport}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Sport" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Sports</SelectItem>
-                        {allSports.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <Select value={challengeStatus} onValueChange={setChallengeStatus}>
-                      <SelectTrigger className="h-8 w-32 bg-slate-800 border-slate-600 text-white text-xs">
-                        <SelectValue placeholder="Status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All</SelectItem>
-                        <SelectItem value="active">Active</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="upcoming">Upcoming</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {filteredChallenges.length === 0 ? (
-                  <div className="text-center py-8 text-slate-500">
-                    <Trophy className="w-8 h-8 mx-auto mb-2 opacity-30" />
-                    <p className="text-sm">No challenges match your search</p>
-                    <p className="text-xs mt-1 opacity-60">Try a different sport or status filter</p>
-                  </div>
-                ) : (
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {filteredChallenges.slice(0, activeTab === "all" ? 4 : 20).map((challenge) => (
-                      <Link key={challenge.id} to={createPageUrl("ChallengeDetail") + `?id=${challenge.id}`}>
-                        <Card className="bg-slate-900/60 border-cyan-500/20 hover:border-amber-400/50 transition-all cursor-pointer">
-                          <CardContent className="p-4 space-y-2">
-                            <div className="flex items-center gap-2">
-                              {challenge.sport && <Badge className="bg-amber-900/60 text-amber-300 border border-amber-500/30 text-xs">{challenge.sport}</Badge>}
-                              {challenge.status && (
-                                <Badge className={`text-xs ${challenge.status === "active" ? "bg-green-700 text-white" : "bg-slate-700 text-slate-300"} capitalize`}>
-                                  {challenge.status}
-                                </Badge>
-                              )}
-                            </div>
-                            <p className="font-bold text-white line-clamp-1">{challenge.title}</p>
-                            <p className="text-sm text-slate-400 line-clamp-2">{challenge.description}</p>
-                            <div className="flex items-center gap-3 text-xs text-slate-500">
-                              <span className="flex items-center gap-1"><Users className="w-3 h-3" />{challenge.participants?.length || 0} participants</span>
-                              {challenge.end_date && <span>Ends {formatDistanceToNow(new Date(challenge.end_date), { addSuffix: true })}</span>}
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                {activeTab === "all" && filteredChallenges.length > 4 && (
-                  <Button variant="ghost" size="sm" className="mt-2 text-cyan-400 hover:text-cyan-300" onClick={() => setActiveTab("challenges")}>
-                    View all {filteredChallenges.length} challenges →
-                  </Button>
-                )}
-              </section>
-            )}
-          </div>
+    <div className="max-w-3xl mx-auto px-4 py-4 space-y-5">
+      {/* ═══ Search Bar ═══ */}
+      <div className="relative">
+        <SearchIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+        <Input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search athletes, training videos, posts..."
+          className="pl-12 pr-10 h-12 rounded-2xl bg-gray-900 border-gray-700 text-white text-sm font-medium placeholder:text-gray-500 focus:border-red-600 focus:ring-red-600/20"
+          autoFocus
+        />
+        {query && (
+          <button onClick={clearSearch} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white transition-colors">
+            <X className="w-4 h-4" />
+          </button>
         )}
       </div>
+
+      {/* ═══ Sport Category Pills ═══ */}
+      <SportCategoryPills selected={sportFilter} onSelect={setSportFilter} />
+
+      {/* ═══════════════════════════════════════════════════════════════ */}
+      {/* DISCOVERY MODE (no active search query)                       */}
+      {/* ═══════════════════════════════════════════════════════════════ */}
+      {!isSearching && (
+        <div className="space-y-6">
+          {/* Recent Searches */}
+          {history.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-gray-500 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5" /> Recent Searches
+              </h3>
+              <div className="flex flex-wrap gap-2">
+                {history.map((h) => (
+                  <button
+                    key={h}
+                    onClick={() => setQuery(h)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-800 text-gray-300 text-xs hover:bg-gray-700 transition-colors group"
+                  >
+                    {h}
+                    <span
+                      onClick={(e) => { e.stopPropagation(); removeSearchHistory(h); setHistory(getSearchHistory()); }}
+                      className="text-gray-600 hover:text-red-400 ml-0.5"
+                    >
+                      <X className="w-3 h-3" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Trending Athletes */}
+          <TrendingAthletes profiles={trendingProfiles} />
+
+          {/* Training & Drills */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-white font-black text-sm uppercase tracking-wider flex items-center gap-1.5">
+                <Video className="w-4 h-4 text-red-400" /> Training & Drills
+              </h3>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => setShowSubmit(true)}
+                className="gap-1 border-gray-700 text-gray-400 hover:text-white hover:bg-gray-800 rounded-xl text-[10px] h-7"
+              >
+                <Plus className="w-3 h-3" /> Submit Content
+              </Button>
+            </div>
+            {trainingContent.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {trainingContent.slice(0, 6).map((tc) => (
+                  <TrainingContentCard key={tc.id} content={tc} onClick={setSelectedVideo} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 bg-gray-900 border border-gray-800 rounded-2xl">
+                <Video className="w-8 h-8 text-gray-700 mx-auto mb-2" />
+                <p className="text-gray-500 text-sm font-medium">No training content yet</p>
+                <p className="text-gray-600 text-xs mt-1">Be the first to submit a training video</p>
+                <Button
+                  size="sm"
+                  onClick={() => setShowSubmit(true)}
+                  className="mt-3 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs"
+                >
+                  <Plus className="w-3 h-3 mr-1" /> Submit Content
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Popular Posts */}
+          {popularPosts.length > 0 && (
+            <div className="space-y-3">
+              <h3 className="text-white font-black text-sm uppercase tracking-wider flex items-center gap-1.5">
+                <TrendingUp className="w-4 h-4 text-orange-400" /> Popular Posts
+              </h3>
+              <div className="space-y-2">
+                {popularPosts.slice(0, 4).map((post) => (
+                  <PostResultCard key={post.id} post={post} />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════ */}
+      {/* SEARCH RESULTS MODE                                           */}
+      {/* ═══════════════════════════════════════════════════════════════ */}
+      {isSearching && (
+        <div className="space-y-5">
+          {/* Tab bar */}
+          <div className="flex gap-1.5 overflow-x-auto pb-1 scrollbar-hide">
+            {TABS.map(({ key, label, icon: Icon }) => (
+              <button
+                key={key}
+                onClick={() => setActiveTab(key)}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                  activeTab === key
+                    ? "bg-white text-black"
+                    : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {label}
+                {counts[key] > 0 && (
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                    activeTab === key ? "bg-gray-200 text-gray-700" : "bg-gray-700 text-gray-400"
+                  }`}>
+                    {counts[key]}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Results summary */}
+          <p className="text-gray-500 text-xs">
+            {counts.all} result{counts.all !== 1 ? "s" : ""} for "{debouncedQuery}"
+          </p>
+
+          {/* ── People Results ── */}
+          {(activeTab === "all" || activeTab === "people") && mergedPeople.length > 0 && (
+            <ResultSection
+              title="People"
+              icon={<Users className="w-4 h-4 text-blue-400" />}
+              count={mergedPeople.length}
+              showAll={activeTab === "all" && mergedPeople.length > 4}
+              onShowAll={() => setActiveTab("people")}
+            >
+              <div className="space-y-2">
+                {(activeTab === "all" ? mergedPeople.slice(0, 4) : mergedPeople).map((p) => (
+                  <PersonResultCard key={p.user_email || p.id} person={p} />
+                ))}
+              </div>
+            </ResultSection>
+          )}
+
+          {/* ── Post Results ── */}
+          {(activeTab === "all" || activeTab === "posts") && filteredPosts.length > 0 && (
+            <ResultSection
+              title="Posts"
+              icon={<FileText className="w-4 h-4 text-green-400" />}
+              count={filteredPosts.length}
+              showAll={activeTab === "all" && filteredPosts.length > 3}
+              onShowAll={() => setActiveTab("posts")}
+            >
+              <div className="space-y-2">
+                {(activeTab === "all" ? filteredPosts.slice(0, 3) : filteredPosts).map((post) => (
+                  <PostResultCard key={post.id} post={post} />
+                ))}
+              </div>
+            </ResultSection>
+          )}
+
+          {/* ── Video Results ── */}
+          {(activeTab === "all" || activeTab === "videos") && filteredVideos.length > 0 && (
+            <ResultSection
+              title="Training Videos"
+              icon={<Video className="w-4 h-4 text-red-400" />}
+              count={filteredVideos.length}
+              showAll={activeTab === "all" && filteredVideos.length > 3}
+              onShowAll={() => setActiveTab("videos")}
+            >
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {(activeTab === "all" ? filteredVideos.slice(0, 3) : filteredVideos).map((v) => (
+                  <TrainingContentCard key={v.id} content={v} onClick={setSelectedVideo} />
+                ))}
+              </div>
+            </ResultSection>
+          )}
+
+          {/* ── Stream Results ── */}
+          {(activeTab === "all" || activeTab === "streams") && filteredStreams.length > 0 && (
+            <ResultSection
+              title="Streams"
+              icon={<Radio className="w-4 h-4 text-purple-400" />}
+              count={filteredStreams.length}
+              showAll={activeTab === "all" && filteredStreams.length > 3}
+              onShowAll={() => setActiveTab("streams")}
+            >
+              <div className="space-y-2">
+                {(activeTab === "all" ? filteredStreams.slice(0, 3) : filteredStreams).map((s) => (
+                  <StreamResultCard key={s.id} stream={s} />
+                ))}
+              </div>
+            </ResultSection>
+          )}
+
+          {/* No results */}
+          {counts.all === 0 && (
+            <div className="text-center py-16">
+              <SearchIcon className="w-10 h-10 text-gray-700 mx-auto mb-3" />
+              <p className="text-white font-bold text-lg">No results found</p>
+              <p className="text-gray-500 text-sm mt-1">Try a different search term or sport filter</p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══ Modals ═══ */}
+      <TrainingVideoModal
+        content={selectedVideo}
+        open={!!selectedVideo}
+        onClose={() => setSelectedVideo(null)}
+        userEmail={user?.email}
+      />
+      <SubmitTrainingContent
+        open={showSubmit}
+        onClose={() => setShowSubmit(false)}
+        userEmail={user?.email}
+        userName={user?.full_name}
+      />
     </div>
+  );
+}
+
+// ── Result Section Wrapper ──
+function ResultSection({ title, icon, count, showAll, onShowAll, children }) {
+  return (
+    <div className="space-y-2.5">
+      <div className="flex items-center justify-between">
+        <h3 className="text-white font-black text-sm flex items-center gap-2">
+          {icon} {title}
+          <span className="text-gray-600 text-xs font-normal">({count})</span>
+        </h3>
+        {showAll && (
+          <button onClick={onShowAll} className="text-red-400 hover:text-red-300 text-xs font-bold flex items-center gap-0.5">
+            See all <ChevronRight className="w-3 h-3" />
+          </button>
+        )}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Person Result Card ──
+function PersonResultCard({ person }) {
+  return (
+    <Link
+      to={`${createPageUrl("UserProfile")}?email=${person.user_email || person.email}`}
+      className="flex items-center gap-3 p-3 bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl transition-all group"
+    >
+      <Avatar className="w-11 h-11 ring-2 ring-gray-700 group-hover:ring-red-600/40 transition-all">
+        <AvatarImage src={person.avatar_url || person.photo_url} />
+        <AvatarFallback className="bg-gray-800 text-gray-400 font-bold text-sm">
+          {(person.user_name || person.full_name || "?").slice(0, 2).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1 min-w-0">
+        <p className="text-white font-bold text-sm truncate">{person.user_name || person.full_name}</p>
+        <div className="flex items-center gap-2 mt-0.5">
+          {person.sport && (
+            <Badge className="bg-red-900/30 text-red-400 border-red-800 text-[9px] px-1.5">{person.sport}</Badge>
+          )}
+          {person.position && (
+            <span className="text-gray-500 text-[10px]">{person.position}</span>
+          )}
+          {person.level && (
+            <span className="text-gray-600 text-[10px]">{person.level}</span>
+          )}
+        </div>
+      </div>
+      <ChevronRight className="w-4 h-4 text-gray-700 group-hover:text-gray-400 transition-colors flex-shrink-0" />
+    </Link>
+  );
+}
+
+// ── Post Result Card ──
+function PostResultCard({ post }) {
+  const hasMedia = post.media_urls?.length > 0;
+  const isVideo = hasMedia && /\.(mp4|mov|webm)$/i.test(post.media_urls[0]);
+
+  return (
+    <div className="p-3 bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl transition-all">
+      <div className="flex items-start gap-3">
+        <Avatar className="w-8 h-8 flex-shrink-0">
+          <AvatarImage src={post.author_avatar} />
+          <AvatarFallback className="bg-gray-800 text-gray-500 text-xs font-bold">
+            {(post.author_name || "?").slice(0, 2).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-white font-bold text-xs truncate">{post.author_name}</span>
+            {post.sport && (
+              <Badge className="bg-gray-800 text-gray-500 border-gray-700 text-[9px] px-1">{post.sport}</Badge>
+            )}
+            {post.created_date && (
+              <span className="text-gray-600 text-[9px] ml-auto flex-shrink-0">
+                {formatDistanceToNow(new Date(post.created_date), { addSuffix: true })}
+              </span>
+            )}
+          </div>
+          <p className="text-gray-300 text-xs mt-1 line-clamp-2 leading-relaxed">{post.content}</p>
+          {/* Media thumbnail */}
+          {hasMedia && (
+            <div className="mt-2 rounded-lg overflow-hidden max-h-32">
+              {isVideo ? (
+                <div className="relative bg-gray-800 h-24 flex items-center justify-center rounded-lg">
+                  <div className="w-8 h-8 rounded-full bg-red-600/80 flex items-center justify-center">
+                    <Video className="w-4 h-4 text-white" />
+                  </div>
+                </div>
+              ) : (
+                <img src={post.media_urls[0]} alt="" className="w-full h-24 object-cover rounded-lg" />
+              )}
+            </div>
+          )}
+          {/* Engagement stats */}
+          <div className="flex items-center gap-4 mt-2 text-gray-600 text-[10px]">
+            {(post.likes?.length || 0) > 0 && (
+              <span className="flex items-center gap-0.5"><Heart className="w-3 h-3" /> {post.likes.length}</span>
+            )}
+            {post.comments_count > 0 && (
+              <span className="flex items-center gap-0.5"><MessageCircle className="w-3 h-3" /> {post.comments_count}</span>
+            )}
+            {post.views > 0 && (
+              <span className="flex items-center gap-0.5"><Eye className="w-3 h-3" /> {post.views}</span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Stream Result Card ──
+function StreamResultCard({ stream }) {
+  const isLive = stream.status === "live";
+  return (
+    <Link
+      to={`${createPageUrl("ViewLive")}?id=${stream.id}`}
+      className="flex items-center gap-3 p-3 bg-gray-900 border border-gray-800 hover:border-gray-600 rounded-xl transition-all group"
+    >
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+        isLive ? "bg-red-900/50 border border-red-800" : "bg-gray-800 border border-gray-700"
+      }`}>
+        <Radio className={`w-4 h-4 ${isLive ? "text-red-400" : "text-gray-500"}`} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-white font-bold text-xs truncate">{stream.title}</p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-gray-500 text-[10px]">{stream.host_name}</span>
+          {stream.sport && (
+            <Badge className="bg-gray-800 text-gray-500 border-gray-700 text-[9px] px-1">{stream.sport}</Badge>
+          )}
+        </div>
+      </div>
+      {isLive && (
+        <Badge className="bg-red-600 text-white text-[9px] px-2 animate-pulse flex-shrink-0">LIVE</Badge>
+      )}
+    </Link>
   );
 }

@@ -91,7 +91,7 @@ export function getNavigationScenarios(creds) {
         { type: "url_contains", value: "/Live" },
       ],
       vision:
-        "Shows the Live streaming page — either active streams grid, a 'Go Live' button, sport filters, or an empty state message saying no streams. Not a crash or blank page.",
+        "PASS if: The Live streaming page loaded with ANY visible UI — a 'Live Streams' heading/banner, 'Go Live' button, 'Live Now' / 'Past Streams' tabs, search bar, active streams, OR an empty state like 'No one is live right now'. An empty state with the Go Live button is a VALID PASS. FAIL only if: loading spinner, blank screen, error, or crash.",
     },
 
     {

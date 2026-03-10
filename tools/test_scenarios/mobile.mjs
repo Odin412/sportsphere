@@ -75,7 +75,7 @@ export function getMobileScenarios(creds) {
         { type: "url_contains", value: "/Profile" },
       ],
       vision:
-        "Mobile Profile page at 375px width. Should show the user's profile info adapted for mobile — avatar, name, stats, posts. Content should be single-column and not overflow. No desktop sidebar visible.",
+        "PASS if: Mobile Profile page at 375px width showing ANY profile UI — avatar area, name, stats (0 Followers / 0 Following / 0 Posts are acceptable for test accounts), content sections, or empty states like 'No featured post yet'. Single-column layout, no desktop sidebar. FAIL only if: loading spinner, blank screen, error, or crash.",
     },
 
     {

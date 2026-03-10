@@ -37,6 +37,8 @@ const Explore = lazy(() => import('./pages/Search'));
 const ForYou = lazy(() => import('./pages/ForYou'));
 const ForumTopic = lazy(() => import('./pages/ForumTopic'));
 const Forums = lazy(() => import('./pages/Forums'));
+const GameDay = lazy(() => import('./pages/GameDay'));
+const GameRecap = lazy(() => import('./pages/GameRecap'));
 const GetNoticed = lazy(() => import('./pages/GetNoticed'));
 const GroupDetail = lazy(() => import('./pages/GroupDetail'));
 const Groups = lazy(() => import('./pages/Groups'));
@@ -104,6 +106,8 @@ export const PAGES = {
     "ForYou": ForYou,
     "ForumTopic": ForumTopic,
     "Forums": Forums,
+    "GameDay": GameDay,
+    "GameRecap": GameRecap,
     "GetNoticed": GetNoticed,
     "GroupDetail": GroupDetail,
     "Groups": Groups,

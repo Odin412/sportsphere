@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
-import { TrendingUp, Video, Calendar, Dumbbell, Loader2, Star } from "lucide-react";
+import { TrendingUp, Video, Calendar, Dumbbell, Loader2, Star, Radio } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import LiveNowWidget from "@/components/gameday/LiveNowWidget";
+import GameScheduleCard from "@/components/gameday/GameScheduleCard";
 
 export default function ParentView() {
   const [user, setUser] = useState(null);
@@ -57,6 +59,32 @@ export default function ParentView() {
     enabled: !!orgId,
   });
 
+  // Live games for this org
+  const { data: liveGames } = useQuery({
+    queryKey: ["parent-live-games", orgId],
+    queryFn: async () => {
+      const games = await db.entities.Game.filter({ status: "live" });
+      return games.filter(g => g.organization_id === orgId);
+    },
+    enabled: !!orgId,
+    refetchInterval: 5000,
+  });
+
+  // Upcoming games for this org (next 7 days)
+  const { data: upcomingGames } = useQuery({
+    queryKey: ["parent-upcoming-games", orgId],
+    queryFn: async () => {
+      const games = await db.entities.Game.filter({ status: "scheduled" });
+      const now = new Date();
+      const weekOut = new Date(now.getTime() + 7 * 86400000);
+      return games
+        .filter(g => g.organization_id === orgId && new Date(g.scheduled_at) >= now && new Date(g.scheduled_at) <= weekOut)
+        .sort((a, b) => new Date(a.scheduled_at) - new Date(b.scheduled_at));
+    },
+    enabled: !!orgId,
+    refetchInterval: 30000,
+  });
+
   if (!user) return null;
 
   if (!membership || membership.role !== "parent") {
@@ -86,6 +114,32 @@ export default function ParentView() {
       <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
         <TrendingUp className="w-6 h-6 text-red-900" /> My Child's Progress
       </h1>
+
+      {/* Live Games */}
+      {liveGames?.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-sm font-black text-gray-700 flex items-center gap-2">
+            <Radio className="w-4 h-4 text-red-500 animate-pulse" /> Live Now
+          </h2>
+          <div className="grid gap-3">
+            {liveGames.map(g => <LiveNowWidget key={g.id} game={g} />)}
+          </div>
+        </div>
+      )}
+
+      {/* Upcoming Games */}
+      {upcomingGames?.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-sm font-black text-gray-700 flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-blue-500" /> Upcoming Games
+          </h2>
+          <div className="space-y-2">
+            {upcomingGames.slice(0, 5).map(g => (
+              <GameScheduleCard key={g.id} game={g} compact />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Athlete cards */}
       {athleteProfiles?.map(athlete => (

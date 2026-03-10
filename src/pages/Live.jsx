@@ -12,6 +12,7 @@ import { Radio, Eye, VideoOff, Loader2, PlayCircle, Crown, Clock, Sparkles, X, U
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import StreamSearch from "@/components/discover/StreamSearch";
+import StartGameStream from "@/components/gameday/StartGameStream";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
@@ -78,6 +79,7 @@ export default function Live() {
   const [vodPublishing, setVodPublishing] = useState(false);
   const [tab, setTab] = useState("live");
   const [filters, setFilters] = useState({ query: "", sport: "all", sort: "recent" });
+  const [showGameStream, setShowGameStream] = useState(false);
 
   useEffect(() => { db.auth.me().then(setUser).catch(() => {}); }, []);
 
@@ -109,6 +111,16 @@ export default function Live() {
   const { data: myFollowers = [] } = useQuery({
     queryKey: ["my-followers-live", user?.email],
     queryFn: () => db.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
+    enabled: !!user,
+  });
+
+  // Check if user is a coach/admin in any org (for "Start Game Stream" button)
+  const { data: coachMembership } = useQuery({
+    queryKey: ["coach-membership", user?.email],
+    queryFn: async () => {
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
+      return memberships.find(m => m.role === "admin" || m.role === "coach") || null;
+    },
     enabled: !!user,
   });
 
@@ -271,10 +283,18 @@ export default function Live() {
             </div>
             {user && !myActiveStream?.[0] && (
               <div className="flex items-center gap-2">
+                {coachMembership && (
+                  <Button
+                    onClick={() => setShowGameStream(true)}
+                    className="bg-white text-red-700 hover:bg-white/90 rounded-xl gap-2 font-black shadow-xl"
+                  >
+                    <Radio className="w-4 h-4" /> Game Stream
+                  </Button>
+                )}
                 <Button
                   onClick={goLive}
                   disabled={goingLive}
-                  className="bg-white text-red-700 hover:bg-white/90 rounded-xl gap-2 font-black shadow-xl"
+                  className={`${coachMembership ? "bg-white/20 text-white hover:bg-white/30 border border-white/30" : "bg-white text-red-700 hover:bg-white/90 shadow-xl"} rounded-xl gap-2 font-black`}
                 >
                   {goingLive ? (
                     <><Loader2 className="w-4 h-4 animate-spin" /> Going Live...</>
@@ -491,6 +511,19 @@ export default function Live() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Game Stream Creation Wizard */}
+      {showGameStream && coachMembership && (
+        <StartGameStream
+          user={user}
+          membership={coachMembership}
+          onClose={() => setShowGameStream(false)}
+          onCreated={(gameId, streamId) => {
+            setShowGameStream(false);
+            navigate(createPageUrl("ViewLive") + `?id=${streamId}`);
+          }}
+        />
+      )}
     </motion.div>
   );
 }

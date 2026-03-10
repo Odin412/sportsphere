@@ -36,6 +36,7 @@ const SECONDARY_NAV = [
   { name: "Performance", page: "PerformanceHub", icon: BarChart2 },
   { name: "Scouting Hub", page: "ScoutingHub", icon: Crosshair },
   { name: "Events", page: "Events", icon: Trophy },
+  { name: "GameDay", page: "GameDay", icon: Radio },
   { name: "Forums", page: "Forums", icon: MessageCircle },
   { name: "Groups", page: "Groups", icon: Globe },
   { name: "Leaderboard", page: "Leaderboard", icon: Trophy },

@@ -352,6 +352,11 @@ const entities = {
   LiveChat: makeEntity('live_chats'),
   StreamPoll: makeEntity('stream_polls'),
 
+  // Game Day (live game viewing, scoring, events)
+  Game: makeEntity('games'),
+  GameScore: makeEntity('game_scores'),
+  GameEvent: makeEntity('game_events'),
+
   // Messaging
   Conversation: makeEntity('conversations'),
   Message: makeEntity('messages'),

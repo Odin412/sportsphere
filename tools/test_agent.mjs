@@ -48,6 +48,7 @@ import { getContentCreationScenarios } from "./test_scenarios/content_creation.m
 import { getRemainingPagesScenarios } from "./test_scenarios/remaining_pages.mjs";
 import { getInteractionScenarios } from "./test_scenarios/interactions.mjs";
 import { getCrossRoleScenarios } from "./test_scenarios/cross_role.mjs";
+import { getLiveFeatureScenarios } from "./test_scenarios/live_feature.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
@@ -68,7 +69,8 @@ const V10_PHASES = ["content_creation"];
 const V11_PHASES = ["remaining_pages"];
 const V12_PHASES = ["interactions"];
 const V13_PHASES = ["cross_role"];
-const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES, ...V4_PHASES, ...V5_PHASES, ...V6_PHASES, ...V7_PHASES, ...V8_PHASES, ...V9_PHASES, ...V10_PHASES, ...V11_PHASES, ...V12_PHASES, ...V13_PHASES];
+const V14_PHASES = ["live_feature"];
+const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES, ...V4_PHASES, ...V5_PHASES, ...V6_PHASES, ...V7_PHASES, ...V8_PHASES, ...V9_PHASES, ...V10_PHASES, ...V11_PHASES, ...V12_PHASES, ...V13_PHASES, ...V14_PHASES];
 
 // ── Parse CLI Args ─────────────────────────────────────────────────
 
@@ -104,6 +106,7 @@ function resolvePhases(phaseArg) {
   if (phaseArg === "v11") return V11_PHASES;
   if (phaseArg === "v12") return V12_PHASES;
   if (phaseArg === "v13") return V13_PHASES;
+  if (phaseArg === "v14") return V14_PHASES;
   if (phaseArg === "full") return ALL_PHASES;
   // Single phase
   const phases = [phaseArg];
@@ -572,6 +575,28 @@ async function main() {
       const results = await runScenario(desktopPage, anthropic, scenarios, outputDir, "cross_role", config);
       const passed = results.filter(r => r.severity === "PASS").length;
       console.log(`└─ cross_role: ${passed}/${results.length} passed\n`);
+      allResults.push(...results);
+    }
+  }
+
+  // ── V14: Live Feature (Full Functionality) ──────────────────────
+  if (phases.includes("live_feature")) {
+    console.log("  Logging in as test-athlete for live feature tests...");
+    const loggedIn = await loginAs(desktopPage, athleteCreds.email, athleteCreds.password);
+    if (loggedIn) {
+      console.log(`  ✓ Logged in as ${athleteCreds.email}`);
+      await bypassOnboarding(desktopPage, APP_URL);
+
+      const allCreds = {
+        athlete: athleteCreds,
+        coach: coachCreds,
+        loginFn: loginAs,
+      };
+      const scenarios = getLiveFeatureScenarios(allCreds, config);
+      console.log("┌─ Phase: LIVE_FEATURE ──────────────────────────────────────");
+      const results = await runScenario(desktopPage, anthropic, scenarios, outputDir, "live_feature", config);
+      const passed = results.filter(r => r.severity === "PASS").length;
+      console.log(`└─ live_feature: ${passed}/${results.length} passed\n`);
       allResults.push(...results);
     }
   }

@@ -20,6 +20,8 @@ import StreamPolls from "@/components/live/StreamPolls";
 import StreamQA from "@/components/live/StreamQA";
 import StreamSummaryPanel from "@/components/live/StreamSummaryPanel";
 import HighlightClipGenerator from "@/components/live/HighlightClipGenerator";
+import MuxPlayer from "@/components/live/MuxPlayer";
+import ScoreOverlay from "@/components/gameday/ScoreOverlay";
 import { formatDistanceToNow } from "date-fns";
 
 export default function ViewLive() {
@@ -54,6 +56,17 @@ export default function ViewLive() {
     queryFn: () => db.entities.LiveStream.filter({ id: streamId }).then(s => s[0]),
     enabled: !!streamId,
     refetchInterval: 8000,
+  });
+
+  // Check if this stream is linked to a game (for score overlay)
+  const { data: linkedGame } = useQuery({
+    queryKey: ["stream-game", streamId],
+    queryFn: async () => {
+      const games = await db.entities.Game.filter({ live_stream_id: streamId });
+      return games[0] || null;
+    },
+    enabled: !!streamId,
+    refetchInterval: 10000,
   });
 
   const { data: messages, refetch: refetchChat } = useQuery({
@@ -271,7 +284,20 @@ export default function ViewLive() {
               {hasAccess ? (
                 <div className="relative">
                   <div className="aspect-video bg-gradient-to-br from-slate-900 to-slate-800 relative">
-                    {stream.stream_url ? (
+                    {/* Mux HLS player (game streams) */}
+                    {(linkedGame?.mux_playback_id || stream.mux_playback_id) ? (
+                      <>
+                        <MuxPlayer
+                          playbackId={linkedGame?.mux_playback_id || stream.mux_playback_id}
+                          streamType={isLive ? "live" : "on-demand"}
+                          autoPlay
+                          muted={!isHost}
+                        />
+                        {linkedGame && (
+                          <ScoreOverlay game={linkedGame} />
+                        )}
+                      </>
+                    ) : stream.stream_url ? (
                       <iframe
                         src={stream.stream_url}
                         className="w-full h-full"

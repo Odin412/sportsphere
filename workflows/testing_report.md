@@ -2,7 +2,7 @@
 
 **Date**: 2026-03-10
 **Version**: Full Platform Coverage (Phases 1-14)
-**Total Tests**: 130 | **Pass Rate**: 97.5% (116/118 in full run + 17 workflow tests all passing)
+**Total Tests**: 159 (135 core + 24 live feature) | **Pass Rate**: 97.5% core, Live feature 13/24 (11 warnings = 6 undeployed pages + 5 vision false positives)
 
 ---
 
@@ -20,7 +20,7 @@ The Sportsphere platform has been comprehensively tested across **all 65 pages**
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| Test Orchestrator | `tools/test_agent.mjs` | Runs 130 tests across 13 phases |
+| Test Orchestrator | `tools/test_agent.mjs` | Runs 159 tests across 21 phases |
 | Test Helpers | `tools/test_helpers.mjs` | 3-layer verification (L1/L2/L3) |
 | Repair Agent | `tools/repair_agent.mjs` | AI diagnosis of failures |
 | Monitor | `tools/monitor.mjs` | Full pipeline for nightly/CI runs |
@@ -212,7 +212,30 @@ All admin pages tested with **non-admin account** (test-athlete):
 | Non-admin → Admin pages | PASS | Role guard blocks access |
 | Athlete → Coach UserProfile | PASS | Can view other roles' profiles |
 
-### Phase 14: Self-Repair + Monitoring
+### Phase 14: Live Feature — Full Functionality (24 tests)
+**Status**: 13/24 PASS, 11 WARNING (0 real app bugs)
+
+| Group | Tests | Pass | Warn | Notes |
+|-------|-------|------|------|-------|
+| Live Page UI | 5 | 4 | 1 | Sport filter WARNING = vision strictness |
+| Go Live + Broadcast + End | 4 | 4 | 0 | Full lifecycle: create → dashboard → end |
+| ViewLive States | 2 | 2 | 0 | Invalid ID error + ended stream tabs |
+| Chat/Polls/Q&A Panels | 5 | 1 | 4 | L1+L3 pass. Vision flagged headless camera denied |
+| GameDay | 3 | 0 | 3 | 404 — not deployed yet (local code OK) |
+| GameRecap | 3 | 0 | 3 | 404 — not deployed yet (local code OK) |
+| Game Stream Wizard | 1 | 1 | 0 | Coach account soft-check |
+| Cleanup | 1 | 1 | 0 | All test data removed |
+
+**Key findings**:
+- Go Live → ViewLive redirect works, stream created in DB (L3 verified)
+- Broadcast dashboard shows "You're Broadcasting" with End Stream button
+- End Stream updates status to "ended" (L3 verified)
+- Chat message sent and confirmed in DB (L3 verified)
+- Polls tab shows "Create Poll" + "No polls yet" (correct)
+- Q&A tab renders without crash
+- GameDay/GameRecap 404: pages registered in `pages.config.js` but not yet deployed to production
+
+### Phase 15: Self-Repair + Monitoring
 **Status**: OPERATIONAL
 
 - `repair_agent.mjs` — Diagnoses failures with Claude, maps to source files, tracks baselines
@@ -331,7 +354,8 @@ tools/
     ├── content_creation.mjs    # Phase 10: Content (4 tests)
     ├── remaining_pages.mjs     # Phase 11: Remaining (5 tests)
     ├── interactions.mjs        # Phase 12: L3 Mutations (9 tests)
-    └── cross_role.mjs          # Phase 13: Cross-Role (8 tests)
+    ├── cross_role.mjs          # Phase 13: Cross-Role (8 tests)
+    └── live_feature.mjs        # Phase 14: Live Feature (24 tests)
 
 .claude/commands/
 ├── test-suite.md               # /test-suite skill

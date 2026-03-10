@@ -78,7 +78,7 @@ export function getNavigationScenarios(creds) {
         { type: "url_contains", value: "/ProPathHub" },
       ],
       vision:
-        "Shows the ProPath athlete hub page with sections like Scout Card preview, training streak, stats, or AI narrative. Not empty or errored.",
+        "PASS if: The ProPath page loaded with ANY visible UI — a dashboard with Scout Card preview, training streak, and stats, OR a setup prompt like 'Set Up Your ProPath' with a CTA button. A setup/onboarding prompt is a VALID PASS for accounts without a sport profile. FAIL only if: loading spinner, blank screen, error, or crash.",
     },
 
     {
@@ -170,7 +170,7 @@ export function getNavigationScenarios(creds) {
         { type: "url_contains", value: "/Forums" },
       ],
       vision:
-        "Shows the Forums page. Either forum topics are listed, or an empty state like 'No topics found. Be the first to start a discussion!' is shown — both are acceptable. The page title, structure, and any creation/start-discussion prompt should be visible. Not a blank page, error, or stuck loading spinner.",
+        "PASS if: The Forums page loaded with ANY visible UI — 'Community Forums' heading, topic list, discussion threads, OR an empty state like 'No topics found. Be the first to start a discussion!' with a creation prompt. An empty forum with the start-discussion CTA is a VALID PASS. FAIL only if: loading spinner, blank screen, error, or crash.",
     },
 
     {

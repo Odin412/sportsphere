@@ -4,7 +4,7 @@
 
 The testing agent (Phases 1-2) is fully operational with **60/60 tests passing** across 8 test suites. However, only **27 of 65 pages** are currently tested (42% coverage). This plan lays out **14 phases** to achieve full platform coverage, with each phase building on the previous.
 
-**Current state**: 130 tests (113 page + 9 interaction + 8 cross-role), 65 pages covered, 0 pages untested (100% page coverage!)
+**Current state**: 130 tests (113 page + 9 interaction + 8 cross-role), 65 pages, 14 phases COMPLETE. Self-repair + monitoring operational.
 
 **Entry**: `node tools/test_agent.mjs --phase [phase|v1|v2|full] [--headed]`
 
@@ -27,8 +27,9 @@ The testing agent (Phases 1-2) is fully operational with **60/60 tests passing**
 | **11** | Live, Detail & Static Pages | 5 | DONE (5/5) |
 | **12** | Interaction Tests (L3 Data Mutations) | 9 | DONE (9/9) |
 | **13** | Cross-Role Workflows | 8 | DONE (8/8) |
+| **14** | Self-Repair + Monitoring | 0 | DONE (repair_agent + monitor + skill) |
 
-### All 65 Pages Tested + 17 Workflow Tests
+### All 65 Pages Tested + 17 Workflow Tests + Self-Repair Infrastructure
 
 Login, Feed, Explore (Search), Reels, ProPathHub, Live, Messages, Profile, Challenges, Forums, GetNoticed, TheVault, PerformanceHub, ScoutCard, Coach, LiveCoaching, CreatorHub, Analytics, OrgDashboard, OrgRoster, OrgSessions, OrgMessages, VideoReview, ParentView, Onboarding, CreatePost, SearchPage, Groups, GroupDetail, ForumTopic, Events, Notifications, Advice, Discover, ForYou, TrendingChallenges, SportHub, ProfileSettings, Premium, Leaderboard, CreatorAI, CreatorShop, BecomeCreator, CoachingSessionDetail, TrainingPlans, TrainingPlanDetail, MyTraining, ScoutingHub, UserProfile, SavedContent, AthleteInsights, Admin, AdminUsers, AdminContent, AdminAnalytics, AdminSettings, AdminHealth, ModerationQueue, CreateReel, UploadVideo, ImportVideos, ViewLive, ChallengeDetail, Terms, Guidelines
 

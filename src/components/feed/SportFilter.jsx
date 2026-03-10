@@ -6,6 +6,7 @@ const SPORTS = [
   { name: "Soccer", emoji: "⚽" },
   { name: "Football", emoji: "🏈" },
   { name: "Baseball", emoji: "⚾" },
+  { name: "Softball", emoji: "🥎" },
   { name: "Tennis", emoji: "🎾" },
   { name: "Golf", emoji: "⛳" },
   { name: "Swimming", emoji: "🏊" },

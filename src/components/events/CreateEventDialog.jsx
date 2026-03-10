@@ -10,7 +10,7 @@ import { Switch } from "@/components/ui/switch";
 import { Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
-const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
+const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Softball", "Tennis", "Golf", "Swimming", "Boxing", "MMA", "Track", "Volleyball", "Hockey", "Cycling", "Yoga", "CrossFit", "Other"];
 const EVENT_TYPES = [
   { value: "competition", label: "Competition 🏆" },
   { value: "workshop", label: "Workshop 📚" },

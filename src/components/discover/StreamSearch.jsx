@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Button } from "@/components/ui/button";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 
-const SPORTS = ["All", "Basketball", "Soccer", "Football", "Baseball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
+const SPORTS = ["All", "Basketball", "Soccer", "Football", "Baseball", "Softball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
 const SORT_OPTIONS = [
   { value: "recent", label: "Most Recent" },
   { value: "popular", label: "Most Viewers" },

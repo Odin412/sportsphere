@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
 
-const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Swimming", "Track & Field", "Volleyball", "Wrestling", "Gymnastics", "Hockey", "Other"];
+const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Softball", "Tennis", "Swimming", "Track & Field", "Volleyball", "Wrestling", "Gymnastics", "Hockey", "Other"];
 
 export default function OrgSetupDialog({ user, onClose, onCreated }) {
   const [form, setForm] = useState({ name: "", sport: "", location: "", description: "" });

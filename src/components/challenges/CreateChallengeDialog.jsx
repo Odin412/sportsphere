@@ -11,7 +11,7 @@ import { Switch } from "@/components/ui/switch";
 import { Loader2, Upload } from "lucide-react";
 import { toast } from "sonner";
 
-const SPORTS = ["Basketball", "Soccer", "Football", "Tennis", "Running", "Cycling", "Gym/Fitness", "Yoga", "Swimming", "Boxing", "Other"];
+const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Softball", "Tennis", "Running", "Cycling", "Gym/Fitness", "Yoga", "Swimming", "Boxing", "Other"];
 const DIFFICULTIES = ["beginner", "intermediate", "advanced", "expert"];
 
 export default function CreateChallengeDialog({ user, onClose }) {

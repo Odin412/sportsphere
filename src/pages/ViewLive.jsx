@@ -2,14 +2,18 @@ import React, { useState, useEffect, useRef } from "react";
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion, VideoOff } from "lucide-react";
+import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion, VideoOff, StopCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
+
+const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
 import TipButton from "@/components/monetization/TipButton";
-import ContentSummary from "@/components/content/ContentSummary";
 import StreamChat from "@/components/live/StreamChat";
 import LiveReactions from "@/components/live/LiveReactions";
 import StreamPolls from "@/components/live/StreamPolls";
@@ -34,6 +38,12 @@ export default function ViewLive() {
   const cameraRef = useRef(null);
   const [cameraStream, setCameraStream] = useState(null);
   const [cameraError, setCameraError] = useState(null);
+  const [endingStream, setEndingStream] = useState(false);
+  const [showPostStreamForm, setShowPostStreamForm] = useState(false);
+  const [postStreamTitle, setPostStreamTitle] = useState("");
+  const [postStreamDescription, setPostStreamDescription] = useState("");
+  const [postStreamSport, setPostStreamSport] = useState("");
+  const [savingDetails, setSavingDetails] = useState(false);
 
   useEffect(() => {
     db.auth.me().then(setUser).catch(() => {});
@@ -181,9 +191,50 @@ export default function ViewLive() {
     };
   }, [stream?.id, isHost, isLive]);
 
+  // End stream (host action)
+  const endStream = async () => {
+    if (!stream || !isHost || endingStream) return;
+    setEndingStream(true);
+    // Stop camera tracks
+    cameraStream?.getTracks().forEach(t => t.stop());
+    // Generate AI summary from chat
+    const chatMessages = await db.entities.LiveChat.filter({ stream_id: streamId }, "-created_date", 100);
+    const chatContext = chatMessages.map(m => `${m.sender_name}: ${m.message}`).join("\n");
+    let summary = "";
+    try {
+      summary = await db.integrations.Core.InvokeLLM({
+        prompt: `Summarize this live sports stream in 3-4 sentences. Title: ${stream.title}. Sport: ${stream.sport}. Chat: ${chatContext || "No chat messages"}`,
+      });
+    } catch (e) {}
+    await db.entities.LiveStream.update(streamId, { status: "ended", ended_at: new Date().toISOString(), ai_summary: summary });
+    setEndingStream(false);
+    // Show post-stream details form for the host
+    setPostStreamTitle(stream.title || "");
+    setPostStreamDescription(stream.description || "");
+    setPostStreamSport(stream.sport || "");
+    setShowPostStreamForm(true);
+    queryClient.invalidateQueries({ queryKey: ["stream", streamId] });
+  };
+
+  // Save optional details after stream ends
+  const savePostStreamDetails = async () => {
+    setSavingDetails(true);
+    const updates = {};
+    if (postStreamTitle.trim()) updates.title = postStreamTitle.trim();
+    if (postStreamDescription.trim()) updates.description = postStreamDescription.trim();
+    if (postStreamSport) updates.sport = postStreamSport;
+    if (Object.keys(updates).length > 0) {
+      await db.entities.LiveStream.update(streamId, updates);
+      queryClient.invalidateQueries({ queryKey: ["stream", streamId] });
+    }
+    setSavingDetails(false);
+    setShowPostStreamForm(false);
+    toast.success("Stream details saved!");
+  };
+
   const shareStream = () => {
     navigator.clipboard.writeText(window.location.href);
-    toast.success("Stream link copied! 📋");
+    toast.success("Stream link copied!");
   };
 
   if (isLoading || checkingAccess) {
@@ -276,8 +327,58 @@ export default function ViewLive() {
                       </div>
                     )}
 
-                    {/* Stream End Card */}
-                    {stream && !isLive && (
+                    {/* Stream End Card — Host sees details form, viewers see ended card */}
+                    {stream && !isLive && isHost && showPostStreamForm && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-950/95 backdrop-blur-sm z-30 p-6 rounded-2xl">
+                        <div className="w-full max-w-sm space-y-4">
+                          <div className="text-center mb-2">
+                            <h2 className="text-xl font-black text-white mb-1">Stream Ended</h2>
+                            {stream.started_at && stream.ended_at && (
+                              <p className="text-slate-400 text-xs">Duration: {formatDuration(stream.started_at, stream.ended_at)}</p>
+                            )}
+                            <p className="text-slate-500 text-xs mt-2">Add details to your stream (optional)</p>
+                          </div>
+                          <Input
+                            placeholder="Stream title"
+                            value={postStreamTitle}
+                            onChange={e => setPostStreamTitle(e.target.value)}
+                            className="rounded-xl bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                          />
+                          <Textarea
+                            placeholder="Description (optional)"
+                            value={postStreamDescription}
+                            onChange={e => setPostStreamDescription(e.target.value)}
+                            className="rounded-xl bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 resize-none"
+                            rows={2}
+                          />
+                          <Select value={postStreamSport} onValueChange={setPostStreamSport}>
+                            <SelectTrigger className="rounded-xl bg-slate-800 border-slate-700 text-white">
+                              <SelectValue placeholder="Select sport (optional)" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {SPORTS.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                            </SelectContent>
+                          </Select>
+                          <div className="flex gap-2 pt-1">
+                            <Button
+                              onClick={savePostStreamDetails}
+                              disabled={savingDetails}
+                              className="flex-1 rounded-xl font-bold bg-red-600 hover:bg-red-700"
+                            >
+                              {savingDetails ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save Details"}
+                            </Button>
+                            <Button
+                              onClick={() => setShowPostStreamForm(false)}
+                              variant="outline"
+                              className="rounded-xl border-slate-600 text-slate-300 hover:text-white"
+                            >
+                              Skip
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    {stream && !isLive && !(isHost && showPostStreamForm) && (
                       <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-950/95 backdrop-blur-sm z-30 gap-5 text-center p-8 rounded-2xl">
                         <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center">
                           <VideoOff className="w-8 h-8 text-red-400" />
@@ -391,6 +492,20 @@ export default function ViewLive() {
                       variant="outline"
                       size="sm"
                     />
+                  )}
+                  {isHost && isLive && (
+                    <Button
+                      onClick={endStream}
+                      disabled={endingStream}
+                      className="bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold gap-1.5"
+                      size="sm"
+                    >
+                      {endingStream ? (
+                        <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Ending...</>
+                      ) : (
+                        <><StopCircle className="w-3.5 h-3.5" /> End Stream</>
+                      )}
+                    </Button>
                   )}
                 </div>
               </div>

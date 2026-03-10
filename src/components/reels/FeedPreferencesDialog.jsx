@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const SPORTS = [
   "Football", "Basketball", "Tennis", "Swimming", "Running", "Cycling",
-  "Gym/Fitness", "Yoga", "Boxing", "MMA", "Baseball", "Soccer",
+  "Gym/Fitness", "Yoga", "Boxing", "MMA", "Baseball", "Softball", "Soccer",
   "Volleyball", "Golf", "Skiing", "Surfing", "Rock Climbing", "CrossFit"
 ];
 

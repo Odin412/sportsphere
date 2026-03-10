@@ -13,7 +13,7 @@ import { Calendar, Clock, Plus, Bell, Users, Trash2, Radio, Crown, Loader2 } fro
 import { format } from "date-fns";
 import { toast } from "sonner";
 
-const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
+const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Softball", "Tennis", "Track & Field", "Swimming", "Cycling", "CrossFit", "Weightlifting", "Martial Arts", "Other"];
 
 export default function StreamScheduler({ user }) {
   const qc = useQueryClient();

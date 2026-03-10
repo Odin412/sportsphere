@@ -7,12 +7,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Radio, Eye, VideoOff, Loader2, PlayCircle, Users, Crown, Clock, Sparkles, Search, X, Filter, Upload, Settings2, Zap, Shield, ChevronDown } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Radio, Eye, VideoOff, Loader2, PlayCircle, Crown, Clock, Sparkles, X, Upload } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
-import { Switch } from "@/components/ui/switch";
 import StreamSearch from "@/components/discover/StreamSearch";
 import { formatDistanceToNow } from "date-fns";
 import { motion } from "framer-motion";
@@ -65,19 +63,19 @@ function StreamCard({ stream, isLive }) {
 }
 
 export default function Live() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [showGoLive, setShowGoLive] = useState(false);
-  const [liveData, setLiveData] = useState({ title: "", description: "", sport: "", is_premium: false, price: 0, stream_url: "" });
-  const [streamQuality, setStreamQuality] = useState("1080p");
-  const [maxDuration, setMaxDuration] = useState("unlimited");
+  const [goingLive, setGoingLive] = useState(false);
+  const [showUpload, setShowUpload] = useState(false);
   const [vodFile, setVodFile] = useState(null);
   const [vodUploading, setVodUploading] = useState(false);
   const [vodUrl, setVodUrl] = useState("");
+  const [vodTitle, setVodTitle] = useState("");
+  const [vodDescription, setVodDescription] = useState("");
+  const [vodSport, setVodSport] = useState("");
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailUrl, setThumbnailUrl] = useState("");
-  const [liveMode, setLiveMode] = useState("live"); // "live" | "upload"
-  const [goingLive, setGoingLive] = useState(false);
-  const [createdStream, setCreatedStream] = useState(null);
+  const [vodPublishing, setVodPublishing] = useState(false);
   const [tab, setTab] = useState("live");
   const [filters, setFilters] = useState({ query: "", sport: "all", sort: "recent" });
 
@@ -148,6 +146,47 @@ export default function Live() {
   const filteredLive = applyFilters(liveStreams);
   const filteredPast = applyFilters(pastStreams);
 
+  // One-click Go Live — create stream with defaults and navigate to ViewLive
+  const goLive = async () => {
+    if (!user || goingLive) return;
+    setGoingLive(true);
+    try {
+      const defaultTitle = `${user.full_name || "My"}'s Live Stream`;
+      const stream = await db.entities.LiveStream.create({
+        host_email: user.email,
+        host_name: user.full_name,
+        host_avatar: user.avatar_url,
+        title: defaultTitle,
+        status: "live",
+        viewers: [],
+        started_at: new Date().toISOString(),
+        ai_tags: ["quality:1080p"],
+      });
+
+      // Notify followers in background (don't block navigation)
+      if (myFollowers.length > 0) {
+        Promise.all(
+          myFollowers.map(f =>
+            db.entities.Notification.create({
+              recipient_email: f.follower_email,
+              actor_email: user.email,
+              actor_name: user.full_name,
+              actor_avatar: user.avatar_url,
+              type: "live_stream",
+              stream_id: stream.id,
+              message: `is live now!`,
+            })
+          )
+        ).catch(() => {});
+      }
+
+      navigate(createPageUrl("ViewLive") + `?id=${stream.id}`);
+    } catch (e) {
+      setGoingLive(false);
+    }
+  };
+
+  // VOD upload handlers
   const handleVodUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -166,45 +205,27 @@ export default function Live() {
     setThumbnailUrl(file_url);
   };
 
-  const goLive = async () => {
-    if (!liveData.title.trim()) return;
-    setGoingLive(true);
-    const isVod = liveMode === "upload";
-    const stream = await db.entities.LiveStream.create({
-      host_email: user.email, host_name: user.full_name, host_avatar: user.avatar_url,
-      title: liveData.title, description: liveData.description, sport: liveData.sport,
-      is_premium: liveData.is_premium, price: parseFloat(liveData.price) || 0,
-      stream_url: isVod ? vodUrl : liveData.stream_url,
+  const publishVod = async () => {
+    if (!vodUrl || vodPublishing) return;
+    setVodPublishing(true);
+    await db.entities.LiveStream.create({
+      host_email: user.email,
+      host_name: user.full_name,
+      host_avatar: user.avatar_url,
+      title: vodTitle.trim() || `${user.full_name || "My"}'s Video`,
+      description: vodDescription,
+      sport: vodSport,
+      stream_url: vodUrl,
       thumbnail_url: thumbnailUrl || undefined,
-      status: isVod ? "ended" : "live",
+      status: "ended",
       viewers: [],
       started_at: new Date().toISOString(),
-      ended_at: isVod ? new Date().toISOString() : undefined,
-      ai_tags: streamQuality ? [`quality:${streamQuality}`] : [],
+      ended_at: new Date().toISOString(),
     });
-
-    // Notify followers if going live (not VOD)
-    if (!isVod && myFollowers.length > 0) {
-      await Promise.all(
-        myFollowers.map(f =>
-          db.entities.Notification.create({
-            recipient_email: f.follower_email,
-            actor_email: user.email,
-            actor_name: user.full_name,
-            actor_avatar: user.avatar_url,
-            type: "live_stream",
-            stream_id: stream.id,
-            message: `is live now: "${liveData.title}"`,
-          })
-        )
-      );
-    }
-
-    setGoingLive(false);
-    setShowGoLive(false);
-    setLiveData({ title: "", description: "", sport: "", is_premium: false, price: 0, stream_url: "" });
-    setVodFile(null); setVodUrl(""); setThumbnailFile(null); setThumbnailUrl("");
-    if (!isVod) setCreatedStream(stream);
+    setVodPublishing(false);
+    setShowUpload(false);
+    setVodFile(null); setVodUrl(""); setVodTitle(""); setVodDescription(""); setVodSport("");
+    setThumbnailFile(null); setThumbnailUrl("");
     refetch();
   };
 
@@ -223,12 +244,6 @@ export default function Live() {
     refetch();
   };
 
-  // Copy stream link helper
-  const copyStreamLink = (streamId) => {
-    const url = `${window.location.origin}${createPageUrl("ViewLive")}?id=${streamId}`;
-    navigator.clipboard.writeText(url).catch(() => {});
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 8 }}
@@ -237,41 +252,6 @@ export default function Live() {
       className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50"
     >
       <div className="max-w-6xl mx-auto px-4 py-6 space-y-5">
-
-        {/* You're Live! guidance panel */}
-        {createdStream && (
-          <div className="bg-gradient-to-r from-green-600 to-emerald-500 rounded-2xl p-5 text-white shadow-xl">
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <Radio className="w-5 h-5 animate-pulse" />
-                  <h3 className="font-black text-lg">You're Live! 🎉</h3>
-                </div>
-                <p className="text-green-100 text-sm mb-3">Your stream <strong>"{createdStream.title}"</strong> is live. Share the link so people can watch.</p>
-                <div className="flex flex-wrap gap-2">
-                  <button
-                    onClick={() => copyStreamLink(createdStream.id)}
-                    className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
-                  >
-                    📋 Copy Stream Link
-                  </button>
-                  <Link
-                    to={createPageUrl("ViewLive") + `?id=${createdStream.id}`}
-                    className="flex items-center gap-2 bg-white text-green-700 hover:bg-green-50 rounded-xl px-4 py-2 text-sm font-semibold transition-colors"
-                  >
-                    <Eye className="w-4 h-4" /> View Your Stream
-                  </Link>
-                </div>
-                <p className="text-green-200 text-xs mt-3">
-                  📡 <strong>Broadcasting software?</strong> Paste your RTMP stream URL into the Stream URL field when creating a stream, or use OBS / StreamYard pointed to your stream endpoint.
-                </p>
-              </div>
-              <button onClick={() => setCreatedStream(null)} className="text-white/70 hover:text-white p-1 flex-shrink-0">
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Hero */}
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-red-700 via-red-600 to-orange-500 p-6 md:p-8 text-white">
@@ -290,178 +270,108 @@ export default function Live() {
               <p className="text-white/85 text-sm md:text-base">Watch live training, past streams, and highlights</p>
             </div>
             {user && !myActiveStream?.[0] && (
-              <Button onClick={() => setShowGoLive(!showGoLive)} className="bg-white text-red-700 hover:bg-white/90 rounded-xl gap-2 font-black shadow-xl">
-                <Radio className="w-4 h-4 animate-pulse" /> Go Live
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={goLive}
+                  disabled={goingLive}
+                  className="bg-white text-red-700 hover:bg-white/90 rounded-xl gap-2 font-black shadow-xl"
+                >
+                  {goingLive ? (
+                    <><Loader2 className="w-4 h-4 animate-spin" /> Going Live...</>
+                  ) : (
+                    <><Radio className="w-4 h-4 animate-pulse" /> Go Live</>
+                  )}
+                </Button>
+                <Button
+                  onClick={() => setShowUpload(!showUpload)}
+                  variant="ghost"
+                  className="text-white/80 hover:text-white hover:bg-white/20 rounded-xl gap-1.5 text-sm font-semibold"
+                >
+                  <Upload className="w-4 h-4" /> Upload VOD
+                </Button>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Go Live / Upload Form */}
-        {showGoLive && (
+        {/* Upload VOD Form */}
+        {showUpload && (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-            {/* Mode toggle */}
-            <div className="grid grid-cols-2 bg-slate-50 border-b border-slate-100">
-              <button
-                onClick={() => setLiveMode("live")}
-                className={`flex items-center justify-center gap-2 py-3.5 text-sm font-bold transition-all ${liveMode === "live" ? "bg-white text-red-600 border-b-2 border-red-600" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                <Radio className="w-4 h-4" /> Go Live
-              </button>
-              <button
-                onClick={() => setLiveMode("upload")}
-                className={`flex items-center justify-center gap-2 py-3.5 text-sm font-bold transition-all ${liveMode === "upload" ? "bg-white text-blue-600 border-b-2 border-blue-600" : "text-slate-500 hover:text-slate-700"}`}
-              >
-                <Upload className="w-4 h-4" /> Upload Video
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50">
+              <div className="flex items-center gap-2">
+                <Upload className="w-4 h-4 text-blue-600" />
+                <h3 className="font-bold text-slate-900 text-sm">Upload Video</h3>
+              </div>
+              <button onClick={() => setShowUpload(false)} className="text-slate-400 hover:text-slate-600">
+                <X className="w-4 h-4" />
               </button>
             </div>
-
             <div className="p-6 space-y-4">
-              {/* Basic info */}
+              {/* Video upload */}
+              <div className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all ${vodUrl ? "border-green-400 bg-green-50" : "border-slate-200 hover:border-blue-300 bg-slate-50"}`}>
+                {vodUrl ? (
+                  <div className="space-y-2">
+                    <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                      <PlayCircle className="w-5 h-5 text-green-600" />
+                    </div>
+                    <p className="text-sm font-semibold text-green-700">Video uploaded!</p>
+                    <p className="text-xs text-green-600 truncate max-w-xs mx-auto">{vodFile?.name}</p>
+                    <button onClick={() => { setVodFile(null); setVodUrl(""); }} className="text-xs text-red-500 hover:text-red-700 underline">Remove</button>
+                  </div>
+                ) : vodUploading ? (
+                  <div className="space-y-2">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto" />
+                    <p className="text-sm text-slate-500">Uploading video...</p>
+                  </div>
+                ) : (
+                  <label className="cursor-pointer space-y-2 block">
+                    <Upload className="w-8 h-8 text-slate-300 mx-auto" />
+                    <p className="text-sm font-semibold text-slate-600">Click to upload video</p>
+                    <p className="text-xs text-slate-400">MP4, MOV, AVI up to 2GB</p>
+                    <input type="file" accept="video/*" onChange={handleVodUpload} className="hidden" />
+                  </label>
+                )}
+              </div>
+
+              {/* Optional details */}
               <div className="space-y-3">
-                <Input placeholder="Title *" value={liveData.title} onChange={e => setLiveData({ ...liveData, title: e.target.value })} className="rounded-xl" />
-                <Textarea placeholder="Description (optional)" value={liveData.description} onChange={e => setLiveData({ ...liveData, description: e.target.value })} className="rounded-xl resize-none" rows={2} />
-                <Select value={liveData.sport} onValueChange={sport => setLiveData({ ...liveData, sport })}>
-                  <SelectTrigger className="rounded-xl"><SelectValue placeholder="Select sport" /></SelectTrigger>
+                <Input placeholder="Title (optional)" value={vodTitle} onChange={e => setVodTitle(e.target.value)} className="rounded-xl" />
+                <Textarea placeholder="Description (optional)" value={vodDescription} onChange={e => setVodDescription(e.target.value)} className="rounded-xl resize-none" rows={2} />
+                <Select value={vodSport} onValueChange={setVodSport}>
+                  <SelectTrigger className="rounded-xl"><SelectValue placeholder="Select sport (optional)" /></SelectTrigger>
                   <SelectContent>{SPORTS.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
                 </Select>
               </div>
 
-              {liveMode === "live" ? (
-                /* ── Live mode ── */
-                <div className="space-y-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs font-semibold text-slate-500">Stream URL (YouTube / Twitch embed)</Label>
-                    <Input value={liveData.stream_url} onChange={e => setLiveData({ ...liveData, stream_url: e.target.value })} placeholder="Paste embed URL (optional)" className="rounded-xl" />
-                  </div>
-
-                  {/* Quality & Duration settings */}
-                  <div className="grid grid-cols-2 gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold text-slate-500 flex items-center gap-1"><Settings2 className="w-3 h-3" /> Stream Quality</Label>
-                      <Select value={streamQuality} onValueChange={setStreamQuality}>
-                        <SelectTrigger className="rounded-lg h-9 text-sm bg-white">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="480p">480p — SD</SelectItem>
-                          <SelectItem value="720p">720p — HD</SelectItem>
-                          <SelectItem value="1080p">1080p — Full HD</SelectItem>
-                          <SelectItem value="4K">4K — Ultra HD</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label className="text-xs font-semibold text-slate-500 flex items-center gap-1"><Clock className="w-3 h-3" /> Max Duration</Label>
-                      <Select value={maxDuration} onValueChange={setMaxDuration}>
-                        <SelectTrigger className="rounded-lg h-9 text-sm bg-white">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="30min">30 minutes</SelectItem>
-                          <SelectItem value="1h">1 hour</SelectItem>
-                          <SelectItem value="2h">2 hours</SelectItem>
-                          <SelectItem value="unlimited">Unlimited</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {/* Quality indicator */}
-                  <div className="flex items-center gap-2 text-xs text-slate-500 px-1">
-                    <Zap className="w-3.5 h-3.5 text-amber-500" />
-                    <span>{streamQuality === "4K" ? "Ultra HD requires strong upload bandwidth (25+ Mbps)" : streamQuality === "1080p" ? "Full HD recommended for sports content (10+ Mbps)" : streamQuality === "720p" ? "HD — good balance of quality & stability (5+ Mbps)" : "SD — best for low bandwidth connections (2+ Mbps)"}</span>
-                  </div>
+              {/* Thumbnail upload */}
+              <div className="flex items-center gap-3">
+                <div className={`w-20 h-14 rounded-xl border-2 border-dashed flex items-center justify-center flex-shrink-0 overflow-hidden ${thumbnailUrl ? "border-transparent" : "border-slate-200"}`}>
+                  {thumbnailUrl ? (
+                    <img src={thumbnailUrl} alt="thumb" className="w-full h-full object-cover rounded-xl" />
+                  ) : (
+                    <span className="text-xs text-slate-400 text-center leading-tight px-1">No thumb</span>
+                  )}
                 </div>
-              ) : (
-                /* ── Upload mode ── */
-                <div className="space-y-3">
-                  {/* Video upload */}
-                  <div className={`relative border-2 border-dashed rounded-xl p-6 text-center transition-all ${vodUrl ? "border-green-400 bg-green-50" : "border-slate-200 hover:border-blue-300 bg-slate-50"}`}>
-                    {vodUrl ? (
-                      <div className="space-y-2">
-                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mx-auto">
-                          <PlayCircle className="w-5 h-5 text-green-600" />
-                        </div>
-                        <p className="text-sm font-semibold text-green-700">Video uploaded!</p>
-                        <p className="text-xs text-green-600 truncate max-w-xs mx-auto">{vodFile?.name}</p>
-                        <button onClick={() => { setVodFile(null); setVodUrl(""); }} className="text-xs text-red-500 hover:text-red-700 underline">Remove</button>
-                      </div>
-                    ) : vodUploading ? (
-                      <div className="space-y-2">
-                        <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto" />
-                        <p className="text-sm text-slate-500">Uploading video…</p>
-                      </div>
-                    ) : (
-                      <label className="cursor-pointer space-y-2 block">
-                        <Upload className="w-8 h-8 text-slate-300 mx-auto" />
-                        <p className="text-sm font-semibold text-slate-600">Click to upload video</p>
-                        <p className="text-xs text-slate-400">MP4, MOV, AVI up to 2GB</p>
-                        <input type="file" accept="video/*" onChange={handleVodUpload} className="hidden" />
-                      </label>
-                    )}
+                <label className="flex-1 cursor-pointer">
+                  <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 hover:border-blue-300 bg-slate-50 hover:bg-blue-50 transition-all text-sm text-slate-600 font-medium">
+                    <Upload className="w-4 h-4" /> Upload Thumbnail (optional)
                   </div>
-
-                  {/* Thumbnail upload */}
-                  <div className="flex items-center gap-3">
-                    <div className={`w-20 h-14 rounded-xl border-2 border-dashed flex items-center justify-center flex-shrink-0 overflow-hidden ${thumbnailUrl ? "border-transparent" : "border-slate-200"}`}>
-                      {thumbnailUrl ? (
-                        <img src={thumbnailUrl} alt="thumb" className="w-full h-full object-cover rounded-xl" />
-                      ) : (
-                        <span className="text-xs text-slate-400 text-center leading-tight px-1">No thumb</span>
-                      )}
-                    </div>
-                    <label className="flex-1 cursor-pointer">
-                      <div className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 hover:border-blue-300 bg-slate-50 hover:bg-blue-50 transition-all text-sm text-slate-600 font-medium">
-                        <Upload className="w-4 h-4" /> Upload Thumbnail (optional)
-                      </div>
-                      <input type="file" accept="image/*" onChange={handleThumbnailUpload} className="hidden" />
-                    </label>
-                  </div>
-
-                  {/* Quality tag for VOD */}
-                  <div className="space-y-1.5">
-                    <Label className="text-xs font-semibold text-slate-500 flex items-center gap-1"><Settings2 className="w-3 h-3" /> Video Quality Tag</Label>
-                    <Select value={streamQuality} onValueChange={setStreamQuality}>
-                      <SelectTrigger className="rounded-xl h-9 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="480p">480p — SD</SelectItem>
-                        <SelectItem value="720p">720p — HD</SelectItem>
-                        <SelectItem value="1080p">1080p — Full HD</SelectItem>
-                        <SelectItem value="4K">4K — Ultra HD</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              )}
-
-              {/* Premium toggle */}
-              {user?.subscription_price > 0 && (
-                <div className="flex items-center justify-between p-3 bg-purple-50 border border-purple-200 rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <Crown className="w-4 h-4 text-purple-600" />
-                    <Label className="text-sm font-medium text-purple-900">Premium subscribers only</Label>
-                  </div>
-                  <Switch checked={liveData.is_premium} onCheckedChange={v => setLiveData({ ...liveData, is_premium: v })} />
-                </div>
-              )}
+                  <input type="file" accept="image/*" onChange={handleThumbnailUpload} className="hidden" />
+                </label>
+              </div>
 
               <div className="flex gap-2 pt-1">
                 <Button
-                  onClick={goLive}
-                  disabled={goingLive || (liveMode === "upload" && !vodUrl)}
-                  className={`rounded-xl flex-1 font-bold ${liveMode === "live" ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"}`}
+                  onClick={publishVod}
+                  disabled={!vodUrl || vodPublishing}
+                  className="rounded-xl flex-1 font-bold bg-blue-600 hover:bg-blue-700"
                 >
-                  {goingLive
-                    ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Processing…</>
-                    : liveMode === "live"
-                      ? <><Radio className="w-4 h-4 mr-2 animate-pulse" />Start Live Stream</>
-                      : <><Upload className="w-4 h-4 mr-2" />Publish VOD</>
+                  {vodPublishing
+                    ? <><Loader2 className="w-4 h-4 animate-spin mr-2" />Publishing...</>
+                    : <><Upload className="w-4 h-4 mr-2" />Publish VOD</>
                   }
                 </Button>
-                <Button onClick={() => setShowGoLive(false)} variant="outline" className="rounded-xl px-5">Cancel</Button>
+                <Button onClick={() => setShowUpload(false)} variant="outline" className="rounded-xl px-5">Cancel</Button>
               </div>
             </div>
           </div>

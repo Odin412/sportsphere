@@ -60,6 +60,26 @@ export async function bypassOnboarding(page, appUrl) {
   }
 }
 
+// ── Wait for Auth (sidebar visible) after page.goto() ─────────────
+
+/**
+ * After a full page.goto(), the app needs to recover the auth session
+ * from localStorage. This can take 5-15s. This helper waits up to 20s
+ * for the sidebar to appear (indicating auth + layout rendered).
+ */
+export async function waitForAuth(page) {
+  for (let i = 0; i < 40; i++) {
+    const hasSidebar = await page.locator('[data-tour="nav-feed"]').isVisible().catch(() => false);
+    if (hasSidebar) return true;
+    await page.waitForTimeout(500);
+  }
+  // Fallback: check if any meaningful content appeared
+  const hasContent = await page.evaluate(() => {
+    return (document.body?.innerText?.length || 0) > 100;
+  }).catch(() => false);
+  return hasContent;
+}
+
 // ── Screenshot ─────────────────────────────────────────────────────
 
 export async function takeScreenshot(page, outputDir, name) {

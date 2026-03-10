@@ -78,17 +78,41 @@ export function getOnboardingScenarios(creds, config) {
         ephemeralAccounts.push(acct);
         console.log(`  → Created ephemeral athlete: ${acct.email}`);
 
-        // Login with the fresh account
-        await page.goto(`${APP_URL}/login`, { waitUntil: "networkidle" });
-        await page.waitForTimeout(2000);
+        // Clear existing session completely
+        await page.context().clearCookies();
+        await page.evaluate(() => {
+          localStorage.clear();
+          sessionStorage.clear();
+        }).catch(() => {});
+
+        // Navigate to login with a fresh page load
+        await page.goto(`${APP_URL}/login`, { waitUntil: "networkidle", timeout: 30000 });
+
+        // Wait for the page to settle — auth redirect may happen
+        for (let i = 0; i < 10; i++) {
+          await page.waitForTimeout(1000);
+          const url = page.url();
+          // If we got redirected away from login (stale session), force navigate back
+          if (!url.includes("/login")) {
+            await page.context().clearCookies();
+            await page.evaluate(() => localStorage.clear()).catch(() => {});
+            await page.goto(`${APP_URL}/login`, { waitUntil: "networkidle", timeout: 30000 });
+            continue;
+          }
+          // Check if login form is ready
+          const hasForm = await page.locator("#email").isVisible().catch(() => false);
+          if (hasForm) break;
+        }
+
+        // Wait for login form to be ready
+        await page.waitForSelector("#email", { state: "visible", timeout: 15000 });
+
         await page.fill("#email", acct.email);
         await page.fill("#password", acct.password);
         await page.click('button[type="submit"]');
-        await page.waitForTimeout(5000);
 
-        // Should be redirected to onboarding
-        // Wait for onboarding page to load
-        await page.waitForTimeout(3000);
+        // Wait for redirect to onboarding
+        await page.waitForTimeout(8000);
       },
       settleMs: 2000,
       assertions: [

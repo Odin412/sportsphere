@@ -157,8 +157,8 @@ export function getFeedScenarios(creds, config) {
     {
       name: "News widget has content",
       action: async (page) => {
-        // Navigate back to feed
-        await page.goto(`${APP_URL}/`, { waitUntil: "networkidle" });
+        // Navigate back to feed via sidebar click (avoid full page reload)
+        await page.click('[data-tour="nav-feed"]');
         await page.waitForTimeout(3000);
         // Scroll down to find the news widget (usually in sidebar or below fold)
         await page.evaluate(() => window.scrollBy(0, 800));

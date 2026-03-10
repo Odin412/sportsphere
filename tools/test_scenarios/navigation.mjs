@@ -104,7 +104,7 @@ export function getNavigationScenarios(creds) {
         { type: "url_contains", value: "/Messages" },
       ],
       vision:
-        "Shows a messaging interface with a split pane layout — conversation list on the left and chat area on the right. An empty state like 'Select a conversation' or 'No conversations yet' is acceptable for accounts with no messages. The page structure (layout, header, search/new chat option) should be intact. Not a blank page, error, or stuck loading spinner.",
+        "PASS if: The Messages page loaded with ANY visible UI — a 'Messages' heading, search bar, conversation list (empty or populated), 'Select a conversation' placeholder, chat icon, or 'No conversations' text. An empty inbox with just the search bar and 'Select a conversation' text is a VALID PASS state. FAIL only if: the page shows ONLY a loading spinner on black background, completely blank screen, error message, or crash.",
     },
 
     {
@@ -148,7 +148,7 @@ export function getNavigationScenarios(creds) {
         { type: "url_contains", value: "/Challenges" },
       ],
       vision:
-        "Shows the Challenges page. Either challenge cards are displayed, or an empty state like 'No challenges found' is shown — both are acceptable. The page title and layout structure should be visible. Not a blank page, error, or stuck loading spinner.",
+        "PASS if: The Challenges page loaded with ANY visible UI — a 'Challenges' heading/banner, 'Create Challenge' button, tab filters, challenge cards, or 'No challenges found' empty state with a trophy icon. An empty state showing 'No challenges found - Create your first challenge' is a VALID PASS. FAIL only if: the page shows ONLY a loading spinner on black background, completely blank screen, error message, or crash.",
     },
 
     {

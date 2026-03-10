@@ -8,6 +8,8 @@
  * doesn't own or belong to an org, pages will show create/join prompts.
  */
 
+import { waitForAuth } from "../test_helpers.mjs";
+
 const APP_URL = "https://sportsphere-titan-one.vercel.app";
 
 export function getOrgFeatureScenarios(creds) {
@@ -16,8 +18,9 @@ export function getOrgFeatureScenarios(creds) {
       name: "OrgDashboard page loads",
       action: async (page) => {
         await page.goto(`${APP_URL}/OrgDashboard`, { waitUntil: "networkidle" });
+        await waitForAuth(page);
       },
-      settleMs: 5000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/OrgDashboard" },
       ],
@@ -29,8 +32,9 @@ export function getOrgFeatureScenarios(creds) {
       name: "OrgRoster page loads",
       action: async (page) => {
         await page.goto(`${APP_URL}/OrgRoster`, { waitUntil: "networkidle" });
+        await waitForAuth(page);
       },
-      settleMs: 5000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/OrgRoster" },
       ],
@@ -42,8 +46,9 @@ export function getOrgFeatureScenarios(creds) {
       name: "OrgSessions page loads",
       action: async (page) => {
         await page.goto(`${APP_URL}/OrgSessions`, { waitUntil: "networkidle" });
+        await waitForAuth(page);
       },
-      settleMs: 5000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/OrgSessions" },
       ],
@@ -55,8 +60,9 @@ export function getOrgFeatureScenarios(creds) {
       name: "OrgMessages page loads",
       action: async (page) => {
         await page.goto(`${APP_URL}/OrgMessages`, { waitUntil: "networkidle" });
+        await waitForAuth(page);
       },
-      settleMs: 5000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/OrgMessages" },
       ],
@@ -68,8 +74,9 @@ export function getOrgFeatureScenarios(creds) {
       name: "VideoReview page loads",
       action: async (page) => {
         await page.goto(`${APP_URL}/VideoReview`, { waitUntil: "networkidle" });
+        await waitForAuth(page);
       },
-      settleMs: 5000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/VideoReview" },
       ],
@@ -82,7 +89,7 @@ export function getOrgFeatureScenarios(creds) {
       action: async (page) => {
         await page.click('[data-tour="nav-feed"]');
       },
-      settleMs: 5000,
+      settleMs: 3000,
       assertions: [
         { type: "visible", selector: '[data-tour="nav-feed"]' },
       ],

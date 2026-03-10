@@ -8,6 +8,8 @@
  * linked athlete_emails. Without these, it shows an access denied message.
  */
 
+import { waitForAuth } from "../test_helpers.mjs";
+
 const APP_URL = "https://sportsphere-titan-one.vercel.app";
 
 export function getParentFeatureScenarios(creds) {
@@ -16,8 +18,9 @@ export function getParentFeatureScenarios(creds) {
       name: "ParentView page loads",
       action: async (page) => {
         await page.goto(`${APP_URL}/ParentView`, { waitUntil: "networkidle" });
+        await waitForAuth(page);
       },
-      settleMs: 5000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/ParentView" },
       ],

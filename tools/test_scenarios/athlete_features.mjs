@@ -5,7 +5,7 @@
  * Requires authenticated state with an athlete account.
  */
 
-import { bypassOnboarding } from "../test_helpers.mjs";
+import { bypassOnboarding, waitForAuth } from "../test_helpers.mjs";
 
 const APP_URL = "https://sportsphere-titan-one.vercel.app";
 
@@ -120,12 +120,12 @@ export function getAthleteFeatureScenarios(creds) {
       name: "ScoutCard page loads for athlete",
       action: async (page) => {
         // Navigate to ScoutCard with the test athlete's email
-        const email = encodeURIComponent(page.url().includes("@") ? "" : "");
         await page.goto(`${APP_URL}/ScoutCard?email=${encodeURIComponent("test-athlete@sportsphere.app")}`, {
           waitUntil: "networkidle",
         });
+        await waitForAuth(page);
       },
-      settleMs: 4000,
+      settleMs: 2000,
       assertions: [
         { type: "url_contains", value: "/ScoutCard" },
       ],

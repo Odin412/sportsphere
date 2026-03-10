@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff, ChevronLeft, Dumbbell, UserCheck, Building2, Heart, Check } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import PoweredByTitanAI from "@/components/branding/PoweredByTitanAI";
 
 const features = [
   { icon: Video, text: "Live streaming for athletes & coaches" },
@@ -583,6 +584,8 @@ export default function Login() {
             <Shield className="w-3 h-3" />
             <span>Secure authentication</span>
           </div>
+
+          <PoweredByTitanAI variant="minimal" className="mt-4" />
         </motion.div>
       </div>
     </div>

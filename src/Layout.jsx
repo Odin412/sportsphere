@@ -16,6 +16,7 @@ import RecommendationNotification from "./components/notifications/Recommendatio
 import SupportChatWidget from "./components/messages/SupportChatWidget";
 import PushNotificationBanner from "./components/notifications/PushNotificationBanner";
 import AppTour from "./components/onboarding/AppTour";
+import PoweredByTitanAI from "./components/branding/PoweredByTitanAI";
 
 // Primary nav items shown in sidebar + mobile bottom nav
 const PRIMARY_NAV = [
@@ -230,6 +231,11 @@ export default function Layout({ children, currentPageName }) {
               </button>
             </div>
           )}
+        </div>
+
+        {/* TitanAI branding */}
+        <div className="px-3 pb-3">
+          <PoweredByTitanAI />
         </div>
       </aside>
 

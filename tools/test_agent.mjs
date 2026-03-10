@@ -47,6 +47,7 @@ import { getAdminScenarios } from "./test_scenarios/admin.mjs";
 import { getContentCreationScenarios } from "./test_scenarios/content_creation.mjs";
 import { getRemainingPagesScenarios } from "./test_scenarios/remaining_pages.mjs";
 import { getInteractionScenarios } from "./test_scenarios/interactions.mjs";
+import { getCrossRoleScenarios } from "./test_scenarios/cross_role.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
@@ -66,7 +67,8 @@ const V9_PHASES = ["admin"];
 const V10_PHASES = ["content_creation"];
 const V11_PHASES = ["remaining_pages"];
 const V12_PHASES = ["interactions"];
-const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES, ...V4_PHASES, ...V5_PHASES, ...V6_PHASES, ...V7_PHASES, ...V8_PHASES, ...V9_PHASES, ...V10_PHASES, ...V11_PHASES, ...V12_PHASES];
+const V13_PHASES = ["cross_role"];
+const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES, ...V4_PHASES, ...V5_PHASES, ...V6_PHASES, ...V7_PHASES, ...V8_PHASES, ...V9_PHASES, ...V10_PHASES, ...V11_PHASES, ...V12_PHASES, ...V13_PHASES];
 
 // ── Parse CLI Args ─────────────────────────────────────────────────
 
@@ -101,6 +103,7 @@ function resolvePhases(phaseArg) {
   if (phaseArg === "v10") return V10_PHASES;
   if (phaseArg === "v11") return V11_PHASES;
   if (phaseArg === "v12") return V12_PHASES;
+  if (phaseArg === "v13") return V13_PHASES;
   if (phaseArg === "full") return ALL_PHASES;
   // Single phase
   const phases = [phaseArg];
@@ -548,6 +551,29 @@ async function main() {
       athleteCreds.email, athleteCreds.password, true
     );
     allResults.push(...results);
+  }
+
+  // ── V13: Cross-Role Workflows ──────────────────────────────────
+  if (phases.includes("cross_role")) {
+    console.log("  Logging in as test-athlete@sportsphere.app for cross-role tests...");
+    const loggedIn = await loginAs(desktopPage, athleteCreds.email, athleteCreds.password);
+    if (loggedIn) {
+      console.log(`  ✓ Logged in as ${athleteCreds.email}`);
+      await bypassOnboarding(desktopPage, APP_URL);
+
+      const allCreds = {
+        athlete: athleteCreds,
+        coach: coachCreds,
+        org: orgCreds,
+        parent: parentCreds,
+        loginFn: loginAs,
+      };
+      const scenarios = getCrossRoleScenarios(allCreds);
+      const results = await runScenario(desktopPage, anthropic, scenarios, outputDir, "cross_role", config);
+      const passed = results.filter(r => r.severity === "PASS").length;
+      console.log(`└─ cross_role: ${passed}/${results.length} passed\n`);
+      allResults.push(...results);
+    }
   }
 
   // ── Report ─────────────────────────────────────────────────────

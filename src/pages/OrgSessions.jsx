@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Calendar, Plus, Loader2, MapPin, Video, Clock, Users, CheckCircle, Download } from "lucide-react";
+import { Calendar, Plus, Loader2, MapPin, Video, Clock, Users, CheckCircle, Download, ClipboardList } from "lucide-react";
+import AttendanceDialog from "@/components/org/AttendanceDialog";
+import CalendarSyncPanel from "@/components/events/CalendarSyncPanel";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -22,6 +24,8 @@ export default function OrgSessions() {
   const [showCreate, setShowCreate] = useState(false);
   const [form, setForm] = useState({ title: "", description: "", session_type: "practice", scheduled_date: "", duration_minutes: 60, location: "", is_virtual: false, meeting_link: "", notes: "" });
   const [saving, setSaving] = useState(false);
+  const [attendanceSession, setAttendanceSession] = useState(null);
+  const [showCalSync, setShowCalSync] = useState(false);
   const qc = useQueryClient();
 
   useEffect(() => {
@@ -90,11 +94,28 @@ export default function OrgSessions() {
               {session.attendees?.length > 0 && <span className="flex items-center gap-1"><Users className="w-3 h-3" />{session.attendees.length} athletes</span>}
             </div>
           </div>
-          {(role === "admin" || role === "coach") && session.status === "scheduled" && (
-            <Button size="sm" variant="outline" onClick={() => markComplete(session)} className="rounded-xl text-xs gap-1 text-green-700 border-green-300 hover:bg-green-50">
-              <CheckCircle className="w-3.5 h-3.5" />Done
-            </Button>
-          )}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            {/* Attendance % badge */}
+            {session.attendance?.length > 0 && (() => {
+              const present = session.attendance.filter(a => a.status === "present" || a.status === "late").length;
+              const pct = Math.round((present / session.attendance.length) * 100);
+              return (
+                <Badge className={`text-[10px] border-0 ${pct >= 80 ? "bg-green-100 text-green-700" : pct >= 50 ? "bg-yellow-100 text-yellow-700" : "bg-red-100 text-red-700"}`}>
+                  {pct}%
+                </Badge>
+              );
+            })()}
+            {(role === "admin" || role === "coach") && (
+              <Button size="sm" variant="outline" onClick={() => setAttendanceSession(session)} className="rounded-xl text-xs gap-1 text-blue-700 border-blue-300 hover:bg-blue-50">
+                <ClipboardList className="w-3.5 h-3.5" />Attendance
+              </Button>
+            )}
+            {(role === "admin" || role === "coach") && session.status === "scheduled" && (
+              <Button size="sm" variant="outline" onClick={() => markComplete(session)} className="rounded-xl text-xs gap-1 text-green-700 border-green-300 hover:bg-green-50">
+                <CheckCircle className="w-3.5 h-3.5" />Done
+              </Button>
+            )}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -123,10 +144,10 @@ export default function OrgSessions() {
           {orgId && (
             <Button
               variant="outline"
-              onClick={() => window.open(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-ical?org_id=${orgId}`, '_blank')}
+              onClick={() => setShowCalSync(true)}
               className="rounded-xl gap-2 font-bold"
             >
-              <Download className="w-4 h-4" /> Export iCal
+              <Calendar className="w-4 h-4" /> Subscribe
             </Button>
           )}
           {(role === "admin" || role === "coach") && (
@@ -199,6 +220,26 @@ export default function OrgSessions() {
             </div>
           </DialogContent>
         </Dialog>
+      )}
+
+      {/* Calendar Sync */}
+      {showCalSync && orgId && (
+        <CalendarSyncPanel
+          open={showCalSync}
+          onClose={() => setShowCalSync(false)}
+          webcalUrl={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-ical?org_id=${orgId}`}
+          calendarName="Team Schedule"
+        />
+      )}
+
+      {/* Attendance Dialog */}
+      {attendanceSession && (
+        <AttendanceDialog
+          open={!!attendanceSession}
+          onClose={() => setAttendanceSession(null)}
+          session={attendanceSession}
+          orgId={orgId}
+        />
       )}
     </div>
   );

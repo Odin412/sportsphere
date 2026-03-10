@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import ReelCard from "@/components/reels/ReelCard";
-import { Loader2, Sparkles, Settings, Plus, Play, ArrowLeft } from "lucide-react";
+import { Loader2, Sparkles, Settings, Plus, Play, ArrowLeft, Zap, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import FeedPreferencesDialog from "@/components/reels/FeedPreferencesDialog";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ export default function Reels() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeReelIndex, setActiveReelIndex] = useState(null); // null = grid, number = fullscreen
   const [showPreferences, setShowPreferences] = useState(false);
+  const [reelTab, setReelTab] = useState("all"); // "all" | "hype" | "following"
   const scrollRef = useRef(null);
 
   useEffect(() => {
@@ -130,6 +131,9 @@ export default function Reels() {
         // Media bonus (posts with media are more engaging)
         if (post.media_urls?.length > 0) score += 15;
 
+        // Hype Reel bonus — AI-generated highlights get priority
+        if (post.post_type === "hype_reel") score += 15;
+
         // Don't show user's own posts
         if (post.author_email === user.email) score -= 1000;
 
@@ -142,14 +146,24 @@ export default function Reels() {
     return scoredPosts.sort((a, b) => b.score - a.score);
   }, [allPosts, user, userProfiles, likedPosts, follows, preferences]);
 
-  // Combine posts and live streams
+  // Combine posts and live streams, filtered by tab
   const feedItems = React.useMemo(() => {
-    const items = [...recommendedContent];
-    
-    // Only add live streams if user preference allows
-    if (preferences?.show_live_streams !== false) {
+    let filtered = recommendedContent;
+
+    // Tab filtering
+    if (reelTab === "hype") {
+      filtered = filtered.filter(p => p.post_type === "hype_reel");
+    } else if (reelTab === "following") {
+      const followedEmails = follows.map(f => f.following_email);
+      filtered = filtered.filter(p => followedEmails.includes(p.author_email));
+    }
+
+    const items = [...filtered];
+
+    // Only add live streams if user preference allows (not in hype tab)
+    if (reelTab !== "hype" && preferences?.show_live_streams !== false) {
       liveStreams.forEach((stream, idx) => {
-        const position = idx * 5; // Insert every 5 posts
+        const position = idx * 5;
         if (position < items.length) {
           items.splice(position, 0, { ...stream, type: "stream", recommendationReasons: ["Live now"] });
         } else {
@@ -159,7 +173,7 @@ export default function Reels() {
     }
 
     return items;
-  }, [recommendedContent, liveStreams, preferences]);
+  }, [recommendedContent, liveStreams, preferences, reelTab, follows]);
 
   useEffect(() => {
     if (activeReelIndex === null) return; // only active in fullscreen mode
@@ -215,7 +229,7 @@ export default function Reels() {
           className="max-w-2xl mx-auto px-4 py-4 pb-20 md:pb-4"
         >
           {/* Header */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-3">
               <h1 className="text-xl font-black text-white">Reels</h1>
               {user && (
@@ -235,6 +249,27 @@ export default function Reels() {
                 </Button>
               </Link>
             )}
+          </div>
+
+          {/* Tab bar: All / Hype Reels / Following */}
+          <div className="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+            {[
+              { key: "all", icon: Sparkles, label: "All" },
+              { key: "hype", icon: Zap, label: "Hype Reels" },
+              { key: "following", icon: Users, label: "Following" },
+            ].map(tab => (
+              <button
+                key={tab.key}
+                onClick={() => setReelTab(tab.key)}
+                className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+                  reelTab === tab.key
+                    ? "bg-red-600 text-white"
+                    : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
+                }`}
+              >
+                <tab.icon className="w-3.5 h-3.5" /> {tab.label}
+              </button>
+            ))}
           </div>
 
           {feedItems.length === 0 ? (
@@ -273,14 +308,19 @@ export default function Reels() {
                     )}
                     {/* Gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                    {/* Sport badge */}
-                    {item.sport && (
-                      <div className="absolute top-2 left-2">
-                        <span className="bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm">
+                    {/* Sport badge + Hype Reel badge */}
+                    <div className="absolute top-2 left-2 flex flex-col gap-1">
+                      {item.post_type === "hype_reel" && (
+                        <span className="flex items-center gap-1 bg-yellow-500/90 text-black text-[10px] font-black px-2 py-0.5 rounded-full backdrop-blur-sm">
+                          <Zap className="w-2.5 h-2.5" /> VERIFIED HIGHLIGHT
+                        </span>
+                      )}
+                      {item.sport && (
+                        <span className="bg-black/60 text-white text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-sm w-fit">
                           {item.sport}
                         </span>
-                      </div>
-                    )}
+                      )}
+                    </div>
                     {/* Bottom info */}
                     <div className="absolute bottom-0 left-0 right-0 p-2.5">
                       <p className="text-white text-xs font-semibold truncate">{item.author_name?.split(" ")[0]}</p>

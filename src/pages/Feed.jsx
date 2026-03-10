@@ -10,7 +10,7 @@ import SportNewsWidget from "@/components/feed/SportNewsWidget";
 import SuggestedUsers from "@/components/social/SuggestedUsers";
 import StoriesBar from "@/components/feed/StoriesBar";
 import StoryViewer from "@/components/feed/StoryViewer";
-import { Loader2, Settings2, Sparkles, Users } from "lucide-react";
+import { Loader2, Settings2, Sparkles, Users, Zap, Trophy } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -133,7 +133,7 @@ export default function Feed() {
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.15, ease: "linear" }}
       className="max-w-[1140px] mx-auto px-4 py-4 pb-20 md:pb-4"
     >
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_296px] lg:gap-6 lg:items-start">
@@ -154,15 +154,15 @@ export default function Feed() {
           {/* Quick-post prompt bar */}
           {user && (
             <Link to={createPageUrl("CreatePost")}>
-              <div className="flex items-center gap-3 bg-gray-900 border border-gray-700 rounded-2xl p-3 hover:border-red-600 transition-all cursor-pointer group">
+              <div className="flex items-center gap-3 glass-card rounded-lg p-3 hover:border-monza/50 transition-all cursor-pointer group">
                 <Avatar className="w-9 h-9 flex-shrink-0">
                   <AvatarImage src={user.avatar_url} />
-                  <AvatarFallback className="bg-red-900 text-white text-sm font-bold">{user.full_name?.[0] || "?"}</AvatarFallback>
+                  <AvatarFallback className="bg-monza-700 text-white text-sm font-bold">{user.full_name?.[0] || "?"}</AvatarFallback>
                 </Avatar>
-                <span className="text-gray-500 text-sm group-hover:text-gray-300 transition-colors flex-1">
+                <span className="text-stadium-400 text-sm group-hover:text-gray-300 transition-colors flex-1">
                   What's happening in sports? 🔥
                 </span>
-                <div className="flex items-center gap-3 text-gray-600 text-lg">
+                <div className="flex items-center gap-3 text-stadium-600 text-lg">
                   <span title="Photo">📸</span>
                   <span title="Video">🎬</span>
                   <span title="Status">💬</span>
@@ -175,29 +175,29 @@ export default function Feed() {
           <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 items-center">
             <button
               onClick={() => { setFeedTab("forYou"); resetPage(); }}
-              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${feedTab === "forYou" ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${feedTab === "forYou" ? "bg-monza text-white" : "bg-stadium-800 text-stadium-400 hover:text-white hover:bg-stadium-700"}`}
             >
               <Sparkles className="w-3.5 h-3.5" /> For You
             </button>
             <button
               onClick={() => { setFeedTab("following"); resetPage(); }}
-              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${feedTab === "following" ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${feedTab === "following" ? "bg-monza text-white" : "bg-stadium-800 text-stadium-400 hover:text-white hover:bg-stadium-700"}`}
             >
               <Users className="w-3.5 h-3.5" /> Following
             </button>
             {user && (
               <button
                 onClick={() => setShowPreferences(true)}
-                className="flex-shrink-0 p-1.5 rounded-full bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700 transition-all"
+                className="flex-shrink-0 p-1.5 rounded-lg bg-stadium-800 text-stadium-400 hover:text-white hover:bg-stadium-700 transition-all"
                 title="Feed Preferences"
               >
                 <Settings2 className="w-3.5 h-3.5" />
               </button>
             )}
-            <div className="w-px h-5 bg-gray-700 flex-shrink-0 mx-0.5" />
+            <div className="w-px h-5 bg-stadium-700 flex-shrink-0 mx-0.5" />
             <button
               onClick={() => { setSportFilter(null); resetPage(); }}
-              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${!sportFilter ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${!sportFilter ? "bg-monza text-white" : "bg-stadium-800 text-stadium-400 hover:text-white hover:bg-stadium-700"}`}
             >
               🌟 All
             </button>
@@ -205,7 +205,7 @@ export default function Feed() {
               <button
                 key={s.name}
                 onClick={() => { setSportFilter(s.name === sportFilter ? null : s.name); resetPage(); }}
-                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-semibold transition-all ${sportFilter === s.name ? "bg-red-600 text-white" : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"}`}
+                className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-semibold transition-all ${sportFilter === s.name ? "bg-monza text-white" : "bg-stadium-800 text-stadium-400 hover:text-white hover:bg-stadium-700"}`}
               >
                 {s.emoji} {s.name}
               </button>
@@ -231,25 +231,38 @@ export default function Feed() {
         ) : posts?.length === 0 ? (
           <div className="text-center py-20">
             <p className="text-5xl mb-4">{feedTab === "following" ? "👥" : "🏟️"}</p>
-            <p className="text-gray-400 font-medium">
+            <p className="text-stadium-400 font-medium">
               {feedTab === "following" ? "No posts from people you follow yet" : "No posts yet"}
             </p>
-            <p className="text-gray-600 text-sm mt-1">
+            <p className="text-stadium-600 text-sm mt-1">
               {feedTab === "following" ? "Follow athletes to see their content here!" : "Be the first to share something!"}
             </p>
           </div>
         ) : (
           <div className="space-y-3">
             {posts?.map((post) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                currentUser={user}
-                onUpdate={refetch}
-                initialHighlighted={highlightedPostIds.has(post.id)}
-                initialFollowing={followingEmails.has(post.author_email)}
-                initialHasAccess={!post.is_premium || post.author_email === user?.email || subscribedCreators.has(post.author_email)}
-              />
+              <div key={post.id} className="relative">
+                {/* Hype Reel badge */}
+                {post.post_type === "hype_reel" && (
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 mb-1 text-xs font-bold text-yellow-400 bg-yellow-500/10 border border-yellow-500/20 rounded-t-xl">
+                    <Zap className="w-3 h-3" /> VERIFIED HIGHLIGHT
+                  </div>
+                )}
+                {/* Milestone badge */}
+                {post.post_type === "milestone" && (
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 mb-1 text-xs font-bold text-purple-400 bg-purple-500/10 border border-purple-500/20 rounded-t-xl">
+                    <Trophy className="w-3 h-3" /> MILESTONE
+                  </div>
+                )}
+                <PostCard
+                  post={post}
+                  currentUser={user}
+                  onUpdate={refetch}
+                  initialHighlighted={highlightedPostIds.has(post.id)}
+                  initialFollowing={followingEmails.has(post.author_email)}
+                  initialHasAccess={!post.is_premium || post.author_email === user?.email || subscribedCreators.has(post.author_email)}
+                />
+              </div>
             ))}
           </div>
         )}

@@ -18,6 +18,7 @@ Deno.serve(async (req) => {
   try {
     const {
       type, // 'premium_subscription' | 'creator_subscription' | 'tip' | 'donation' | 'ppv'
+      tier, // 'pro_scout' | 'elite' (for premium subscriptions)
       priceId, // Stripe Price ID (for subscriptions)
       amount, // in cents (for one-time payments)
       currency = 'usd',
@@ -65,15 +66,31 @@ Deno.serve(async (req) => {
     const origin = successUrl ? new URL(successUrl).origin : 'https://sportsphere.app';
 
     if (type === 'premium_subscription' || type === 'creator_subscription') {
+      // Look up price ID from subscription_plans if tier provided and no priceId
+      let resolvedPriceId = priceId;
+      if (!resolvedPriceId && tier) {
+        const { data: plan } = await supabase
+          .from('subscription_plans')
+          .select('stripe_price_id')
+          .eq('slug', tier)
+          .single();
+        resolvedPriceId = plan?.stripe_price_id;
+      }
+
+      const sessionMeta = { type, tier: tier || '', userEmail, recipientEmail, ...metadata };
+
       // Subscription checkout
       const session = await stripe.checkout.sessions.create({
         customer: customerId,
         mode: 'subscription',
         payment_method_types: ['card'],
-        line_items: [{ price: priceId, quantity: 1 }],
+        line_items: [{ price: resolvedPriceId, quantity: 1 }],
         success_url: successUrl || `${origin}/Premium?success=true`,
         cancel_url: cancelUrl || `${origin}/Premium`,
-        metadata: { type, userEmail, recipientEmail, ...metadata },
+        metadata: sessionMeta,
+        // Critical: pass tier in subscription_data.metadata so it's available
+        // in customer.subscription.created webhook before DB update finishes
+        subscription_data: { metadata: sessionMeta },
       });
       return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

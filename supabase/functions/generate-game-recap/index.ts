@@ -154,7 +154,24 @@ Write an engaging, journalistic game recap. Mention key plays, standout performe
       await supabase.from("games").update(updates).eq("id", game_id);
     }
 
-    // 5. Notify org members that recap is ready
+    // 5. Auto-post highlight clips as Hype Reels to the social feed
+    if (clipResults.length > 0) {
+      try {
+        const autoPostUrl = `${supabaseUrl}/functions/v1/auto-post-highlight`;
+        await fetch(autoPostUrl, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${supabaseKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ game_id }),
+        });
+      } catch {
+        // Auto-posting is best-effort — don't fail the recap
+      }
+    }
+
+    // 6. Notify org members that recap is ready
     if (game.organization_id) {
       const { data: members } = await supabase
         .from("org_members")

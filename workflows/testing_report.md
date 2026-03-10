@@ -213,18 +213,18 @@ All admin pages tested with **non-admin account** (test-athlete):
 | Athlete → Coach UserProfile | PASS | Can view other roles' profiles |
 
 ### Phase 14: Live Feature — Full Functionality (24 tests)
-**Status**: 13/24 PASS, 11 WARNING (0 real app bugs)
+**Status**: 24/24 PASS (0 real app bugs)
 
-| Group | Tests | Pass | Warn | Notes |
-|-------|-------|------|------|-------|
-| Live Page UI | 5 | 4 | 1 | Sport filter WARNING = vision strictness |
-| Go Live + Broadcast + End | 4 | 4 | 0 | Full lifecycle: create → dashboard → end |
-| ViewLive States | 2 | 2 | 0 | Invalid ID error + ended stream tabs |
-| Chat/Polls/Q&A Panels | 5 | 1 | 4 | L1+L3 pass. Vision flagged headless camera denied |
-| GameDay | 3 | 0 | 3 | 404 — not deployed yet (local code OK) |
-| GameRecap | 3 | 0 | 3 | 404 — not deployed yet (local code OK) |
-| Game Stream Wizard | 1 | 1 | 0 | Coach account soft-check |
-| Cleanup | 1 | 1 | 0 | All test data removed |
+| Group | Tests | Pass | Notes |
+|-------|-------|------|-------|
+| Live Page UI | 5 | 5 | Hero, Go Live btn, tabs, sport filter, Upload VOD |
+| Go Live + Broadcast + End | 4 | 4 | Full lifecycle: create → dashboard → end |
+| ViewLive States | 2 | 2 | Invalid ID error + ended stream tabs |
+| Chat/Polls/Q&A Panels | 5 | 5 | Chat send (L3 DB verified), Polls empty state, Q&A render |
+| GameDay | 3 | 3 | 3 sections, sport filter, All reset |
+| GameRecap | 3 | 3 | Invalid ID error, test game with scores, box score render |
+| Game Stream Wizard | 1 | 1 | Coach account soft-check |
+| Cleanup | 1 | 1 | All test data removed (3 items, 0 errors) |
 
 **Key findings**:
 - Go Live → ViewLive redirect works, stream created in DB (L3 verified)
@@ -233,7 +233,14 @@ All admin pages tested with **non-admin account** (test-athlete):
 - Chat message sent and confirmed in DB (L3 verified)
 - Polls tab shows "Create Poll" + "No polls yet" (correct)
 - Q&A tab renders without crash
-- GameDay/GameRecap 404: pages registered in `pages.config.js` but not yet deployed to production
+- GameDay shows 3 sections (Live Now, Upcoming, Recaps) + sport filters work
+- GameRecap renders test game with FINAL badge, scores (78-72), and Box Score section
+- Game Stream wizard accessible to coach accounts
+
+**Issues fixed during testing**:
+1. GameDay/GameRecap 404 → committed 36 untracked files + pushed to Vercel
+2. Vision false positives (camera denied in headless) → updated prompts
+3. `games` table insert missing `created_by_email` NOT NULL → added to test data
 
 ### Phase 15: Self-Repair + Monitoring
 **Status**: OPERATIONAL

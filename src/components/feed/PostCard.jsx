@@ -341,7 +341,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
     return parts.map((part, i) =>
       /^#\w+$/.test(part) ? (
         <Link key={i} to={`${createPageUrl("Search")}?q=${encodeURIComponent(part)}`}
-          className="text-cyan-400 hover:text-cyan-300 font-medium"
+          className="text-electric-400 hover:text-electric font-medium"
           onClick={e => e.stopPropagation()}>
           {part}
         </Link>
@@ -350,24 +350,24 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
   };
 
   return (
-    <article className="bg-gray-900 rounded-2xl overflow-hidden shadow-lg border border-gray-800 transition-colors duration-200 hover:border-gray-700">
+    <article className="glass-card rounded-lg overflow-hidden shadow-lg transition-all duration-150 hover:border-white/20">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3">
         <Link to={createPageUrl("UserProfile") + `?email=${post.author_email}`} className="flex items-center gap-3 group">
-          <Avatar className="w-10 h-10 ring-2 ring-gray-700">
+          <Avatar className="w-10 h-10 ring-2 ring-stadium-700">
             <AvatarImage src={post.author_avatar} />
-            <AvatarFallback className="bg-red-600 text-white font-bold">
+            <AvatarFallback className="bg-monza text-white font-bold">
               {post.author_name?.[0]?.toUpperCase() || "?"}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-semibold text-sm text-white group-hover:text-red-400 transition-colors">
+            <p className="font-semibold text-sm text-white group-hover:text-monza transition-colors">
               {post.author_name || "Anonymous"}
             </p>
             <div className="flex items-center gap-2">
-              <p className="text-xs text-gray-500">{post.created_date ? formatDistanceToNow(new Date(post.created_date), { addSuffix: true }) : 'recently'}</p>
+              <p className="text-xs text-stadium-600">{post.created_date ? formatDistanceToNow(new Date(post.created_date), { addSuffix: true }) : 'recently'}</p>
               {post.sport && (
-                <span className="text-xs bg-red-600/20 text-red-400 border border-red-500/30 px-2 py-0.5 rounded-full font-medium">
+                <span className="text-[10px] bg-monza/15 text-monza border border-monza/25 px-2 py-0.5 rounded-md font-display uppercase tracking-wider">
                   {post.sport}
                 </span>
               )}
@@ -381,10 +381,10 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
           {currentUser && post.author_email !== currentUser.email && (
             <button
               onClick={handleFollow}
-              className={`flex items-center gap-1 text-xs font-semibold px-3 py-2 rounded-full transition-all ${
+              className={`flex items-center gap-1 text-xs font-semibold px-3 py-2 rounded-lg transition-all ${
                 following
-                  ? "text-gray-400 bg-gray-800 hover:text-red-400"
-                  : "text-red-500 border border-red-500/50 hover:bg-red-600 hover:text-white hover:border-red-600"
+                  ? "text-stadium-400 bg-stadium-800 hover:text-monza"
+                  : "text-monza border border-monza/50 hover:bg-monza hover:text-white hover:border-monza"
               }`}
             >
               {following ? <UserCheck className="w-3.5 h-3.5" /> : <UserPlus className="w-3.5 h-3.5" />}
@@ -396,11 +396,11 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
           {currentUser && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="p-2.5 hover:bg-gray-800 rounded-lg transition-colors">
-                  <MoreHorizontal className="w-5 h-5 text-gray-500 hover:text-white" />
+                <button className="p-2.5 hover:bg-white/5 rounded-lg transition-colors">
+                  <MoreHorizontal className="w-5 h-5 text-stadium-600 hover:text-white" />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-gray-900 border-gray-700">
+              <DropdownMenuContent align="end" className="bg-stadium-850 border-stadium-700">
                 {currentUser.email === post.author_email && (
                   <>
                     <DropdownMenuItem
@@ -476,7 +476,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
       {/* Premium badge */}
       {post.is_premium && !hasAccess && (
         <div className="px-4 pb-3">
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-center gap-2">
+          <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex items-center gap-2">
             <Crown className="w-4 h-4 text-amber-400" />
             <span className="text-sm font-medium text-amber-400">Premium Content — Subscribe to view</span>
           </div>
@@ -489,12 +489,12 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
         const gradient = STATUS_GRADIENTS[post.sport] || STATUS_GRADIENTS.default;
         if (isStatusCard) {
           return (
-            <div className={`bg-gradient-to-br ${gradient} mx-4 mb-3 rounded-2xl p-6 flex items-center justify-center min-h-[120px]`}>
+            <div className={`bg-gradient-to-br ${gradient} mx-4 mb-3 rounded-lg p-6 flex items-center justify-center min-h-[120px]`}>
               <p className="text-white text-lg font-semibold text-center leading-relaxed">
                 {post.content.split(/(#\w+|@\w+(?:\s+\w+)*)/g).map((part, i) =>
                   /^#\w+$/.test(part) ? (
                     <Link key={i} to={`${createPageUrl("Search")}?q=${encodeURIComponent(part)}`}
-                      className="text-cyan-300 hover:text-cyan-200 font-medium underline underline-offset-2"
+                      className="text-electric-400 hover:text-electric font-medium underline underline-offset-2"
                       onClick={e => e.stopPropagation()}>
                       {part}
                     </Link>
@@ -509,20 +509,20 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
         return (
           <div className={post.is_premium && !hasAccess ? "relative" : ""}>
             {post.is_premium && !hasAccess && (
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-stadium-850 z-10" />
             )}
-            <p className={`px-4 pb-3 text-sm text-gray-200 leading-relaxed whitespace-pre-wrap ${
+            <p className={`px-4 pb-3 text-sm text-white/85 leading-relaxed whitespace-pre-wrap ${
               post.is_premium && !hasAccess ? "line-clamp-2 blur-sm" : ""
             }`}>
               {post.content.split(/(#\w+|@\w+(?:\s+\w+)*)/g).map((part, i) =>
                 /^#\w+$/.test(part) ? (
                   <Link key={i} to={`${createPageUrl("Search")}?q=${encodeURIComponent(part)}`}
-                    className="text-cyan-400 hover:text-cyan-300 font-medium"
+                    className="text-electric-400 hover:text-electric font-medium"
                     onClick={e => e.stopPropagation()}>
                     {part}
                   </Link>
                 ) : part.startsWith('@') ? (
-                  <span key={i} className="text-red-400 font-medium">{part}</span>
+                  <span key={i} className="text-monza font-medium">{part}</span>
                 ) : part
               )}
             </p>
@@ -577,7 +577,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                   key={i}
                   onClick={() => { setCurrentMediaIndex(i); setViewerStartIndex(i); setViewerOpen(true); }}
                   className={`flex-1 h-12 rounded overflow-hidden border-2 transition-all ${
-                    i === currentMediaIndex ? "border-red-500" : "border-transparent opacity-50 hover:opacity-100"
+                    i === currentMediaIndex ? "border-monza" : "border-transparent opacity-50 hover:opacity-100"
                   }`}
                 >
                   {isVideo(url) ? (
@@ -597,7 +597,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
       )}
 
       {/* Action bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-800">
+      <div className="flex items-center justify-between px-4 py-3 border-t border-white/10">
         <div className="flex items-center gap-5">
           {/* Emoji Reaction */}
           <div
@@ -612,16 +612,16 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
               <span className={`text-lg transition-all ${liked ? "scale-110" : "grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100"}`}>
                 {myReaction || "❤️"}
               </span>
-              <span className={`text-sm font-medium ${liked ? "text-red-400" : "text-gray-500"}`}>{likeCount}</span>
+              <span className={`text-sm font-medium ${liked ? "text-monza" : "text-stadium-600"}`}>{likeCount}</span>
             </button>
             {showReactionPicker && currentUser && (
-              <div className="absolute bottom-8 left-0 bg-gray-800 border border-gray-700 rounded-2xl px-2 py-1.5 flex gap-1 z-20 shadow-xl">
+              <div className="absolute bottom-8 left-0 bg-stadium-800 border border-white/10 rounded-lg px-2 py-1.5 flex gap-1 z-20 shadow-xl">
                 {POST_REACTIONS.map(r => (
                   <button
                     key={r.emoji}
                     onClick={() => handleReaction(r.emoji)}
                     title={r.label}
-                    className={`text-xl hover:scale-125 transition-transform p-1 rounded-xl ${myReaction === r.emoji ? "bg-gray-700 ring-1 ring-gray-500" : "hover:bg-gray-700"}`}
+                    className={`text-xl hover:scale-125 transition-transform p-1 rounded-lg ${myReaction === r.emoji ? "bg-white/10 ring-1 ring-white/20" : "hover:bg-white/10"}`}
                   >
                     {r.emoji}
                   </button>
@@ -636,45 +636,45 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
             className={`flex items-center gap-1.5 group ${commentsDisabled ? "opacity-40 cursor-not-allowed" : ""}`}
             title={commentsDisabled ? "Comments are turned off" : ""}
           >
-            <MessageCircle className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
-            <span className="text-sm font-medium text-gray-500">{post.comments_count || 0}</span>
+            <MessageCircle className="w-5 h-5 text-stadium-600 group-hover:text-white transition-colors" />
+            <span className="text-sm font-medium text-stadium-600">{post.comments_count || 0}</span>
           </button>
 
           {/* Share */}
           {currentUser && (
             <button onClick={() => setShowShareDialog(true)} className="flex items-center gap-1.5 group">
-              <Share2 className="w-5 h-5 text-gray-500 group-hover:text-white transition-colors" />
-              <span className="text-sm font-medium text-gray-500">{post.shares || 0}</span>
+              <Share2 className="w-5 h-5 text-stadium-600 group-hover:text-white transition-colors" />
+              <span className="text-sm font-medium text-stadium-600">{post.shares || 0}</span>
             </button>
           )}
 
           {/* Views */}
           <div className="flex items-center gap-1.5">
-            <Eye className="w-4 h-4 text-gray-600" />
-            <span className="text-xs text-gray-600">{post.views || 0}</span>
+            <Eye className="w-4 h-4 text-stadium-600" />
+            <span className="text-xs text-stadium-600">{post.views || 0}</span>
           </div>
         </div>
 
         {/* Bookmark */}
         <button onClick={toggleHighlight} className="group">
-          <Bookmark className={`w-5 h-5 transition-colors ${isHighlighted ? "fill-red-500 text-red-500" : "text-gray-500 group-hover:text-white"}`} />
+          <Bookmark className={`w-5 h-5 transition-colors ${isHighlighted ? "fill-monza text-monza" : "text-stadium-600 group-hover:text-white"}`} />
         </button>
       </div>
 
       {/* Comments section */}
       {showComments && (
-        <div className="border-t border-gray-800 p-4 space-y-3 bg-gray-900">
+        <div className="border-t border-white/10 p-4 space-y-3 bg-stadium-850/50">
           <div className="flex gap-2">
             <MentionInput
               value={newComment}
               onChange={setNewComment}
               placeholder="Add a comment... (type @ to mention)"
-              className="flex-1 text-sm bg-gray-800 text-white placeholder:text-gray-500 rounded-xl px-4 py-2.5 border border-gray-700 focus:ring-2 focus:ring-red-500/40 resize-none min-h-[42px] max-h-[120px]"
+              className="flex-1 text-sm bg-stadium-800 text-white placeholder:text-gray-500 rounded-lg px-4 py-2.5 border border-white/10 focus:ring-2 focus:ring-monza/40 resize-none min-h-[42px] max-h-[120px]"
             />
             <Button
               onClick={addComment}
               size="sm"
-              className="rounded-xl bg-red-600 hover:bg-red-700 text-white shadow-none"
+              className="rounded-lg bg-monza hover:bg-monza-600 text-white shadow-none"
             >
               Post
             </Button>
@@ -697,17 +697,17 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                   return (
                     <div key={c.id}>
                       <div className="flex gap-2.5 group/comment">
-                        <Avatar className="w-7 h-7 ring-1 ring-gray-700">
+                        <Avatar className="w-7 h-7 ring-1 ring-stadium-700">
                           <AvatarImage src={c.author_avatar} />
-                          <AvatarFallback className="text-xs bg-gray-800 text-gray-300">{c.author_name?.[0]}</AvatarFallback>
+                          <AvatarFallback className="text-xs bg-stadium-800 text-gray-300">{c.author_name?.[0]}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">
-                          <div className="bg-gray-800 rounded-xl px-3 py-2 border border-gray-700">
+                          <div className="bg-stadium-800 rounded-lg px-3 py-2 border border-white/10">
                             <p className="text-xs font-semibold text-white">{c.author_name}</p>
                             <p className="text-sm text-gray-300 mt-0.5">
                               {c.content.split(/(@\w+(?:\s+\w+)*)/g).map((part, i) =>
                                 part.startsWith('@') ? (
-                                  <span key={i} className="text-red-400 font-medium">{part}</span>
+                                  <span key={i} className="text-monza font-medium">{part}</span>
                                 ) : part
                               )}
                             </p>
@@ -716,7 +716,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                             {currentUser && (
                               <button
                                 onClick={() => { setReplyingTo(replyingTo === c.id ? null : c.id); setReplyText(""); }}
-                                className="text-xs text-gray-500 hover:text-red-400 font-medium transition-colors"
+                                className="text-xs text-stadium-600 hover:text-monza font-medium transition-colors"
                               >
                                 Reply
                               </button>
@@ -724,7 +724,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                             {replies.length > 0 && (
                               <button
                                 onClick={() => setExpandedReplies(prev => ({ ...prev, [c.id]: !prev[c.id] }))}
-                                className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
+                                className="text-xs text-monza hover:text-monza-50 font-medium transition-colors"
                               >
                                 {isExpanded ? `▴ Hide replies` : `▾ ${replies.length} ${replies.length === 1 ? "reply" : "replies"}`}
                               </button>
@@ -732,7 +732,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                             {c.author_email === currentUser?.email && (
                               <button
                                 onClick={() => deleteComment(c.id)}
-                                className="text-xs text-gray-600 hover:text-red-400 transition-colors ml-auto"
+                                className="text-xs text-stadium-600 hover:text-monza transition-colors ml-auto"
                               >
                                 <Trash2 className="w-3 h-3" />
                               </button>
@@ -748,11 +748,11 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                                 onChange={e => setReplyText(e.target.value)}
                                 onKeyDown={e => e.key === "Enter" && !e.shiftKey && addReply(c.id)}
                                 placeholder={`Reply to ${c.author_name}...`}
-                                className="flex-1 text-xs bg-gray-800 text-white placeholder:text-gray-500 rounded-xl px-3 py-2 border border-gray-700 focus:ring-1 focus:ring-red-500/40 outline-none"
+                                className="flex-1 text-xs bg-stadium-800 text-white placeholder:text-gray-500 rounded-lg px-3 py-2 border border-white/10 focus:ring-1 focus:ring-monza/40 outline-none"
                               />
                               <button
                                 onClick={() => addReply(c.id)}
-                                className="text-xs bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-xl font-semibold transition-colors"
+                                className="text-xs bg-monza hover:bg-monza-600 text-white px-3 py-1.5 rounded-lg font-semibold transition-colors"
                               >
                                 Post
                               </button>
@@ -761,13 +761,13 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
 
                           {/* Nested replies */}
                           {isExpanded && replies.map(reply => (
-                            <div key={reply.id} className="flex gap-2 mt-2 ml-3 pl-3 border-l-2 border-gray-700 group/reply">
-                              <Avatar className="w-6 h-6 ring-1 ring-gray-700 flex-shrink-0">
+                            <div key={reply.id} className="flex gap-2 mt-2 ml-3 pl-3 border-l-2 border-stadium-700 group/reply">
+                              <Avatar className="w-6 h-6 ring-1 ring-stadium-700 flex-shrink-0">
                                 <AvatarImage src={reply.author_avatar} />
-                                <AvatarFallback className="text-xs bg-gray-800 text-gray-400">{reply.author_name?.[0]}</AvatarFallback>
+                                <AvatarFallback className="text-xs bg-stadium-800 text-stadium-400">{reply.author_name?.[0]}</AvatarFallback>
                               </Avatar>
                               <div className="flex-1 min-w-0">
-                                <div className="bg-gray-800/70 rounded-xl px-3 py-1.5 border border-gray-700/50">
+                                <div className="bg-stadium-800/70 rounded-lg px-3 py-1.5 border border-white/5">
                                   <p className="text-xs font-semibold text-white">{reply.author_name}</p>
                                   <p className="text-xs text-gray-300 mt-0.5">{reply.content}</p>
                                 </div>
@@ -775,7 +775,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                               {reply.author_email === currentUser?.email && (
                                 <button
                                   onClick={() => deleteComment(reply.id)}
-                                  className="opacity-0 group-hover/reply:opacity-100 text-gray-600 hover:text-red-400 transition-all flex-shrink-0 self-center"
+                                  className="opacity-0 group-hover/reply:opacity-100 text-stadium-600 hover:text-monza transition-all flex-shrink-0 self-center"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
@@ -799,7 +799,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
 
       {/* Report Dialog */}
       <Dialog open={showReportDialog} onOpenChange={setShowReportDialog}>
-        <DialogContent className="sm:max-w-md rounded-2xl bg-gray-900 border-gray-700">
+        <DialogContent className="sm:max-w-md rounded-lg bg-stadium-850 border-stadium-700">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-white">
               <AlertTriangle className="w-5 h-5 text-orange-500" />
@@ -811,10 +811,10 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
             <div className="space-y-2">
               <label className="text-xs font-medium text-gray-400">Reason</label>
               <Select value={reportReason} onValueChange={setReportReason}>
-                <SelectTrigger className="rounded-xl bg-gray-800 border-gray-700 text-white">
+                <SelectTrigger className="rounded-lg bg-stadium-800 border-white/10 text-white">
                   <SelectValue placeholder="Select reason" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-900 border-gray-700">
+                <SelectContent className="bg-stadium-850 border-stadium-700">
                   {["Politics", "Profanity / Offensive Language", "Cyberbullying", "Harassment", "Spam", "Inappropriate Content", "Other"].map(r => (
                     <SelectItem key={r} value={r.toLowerCase()} className="text-gray-300">{r}</SelectItem>
                   ))}
@@ -827,14 +827,14 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                 value={reportDetails}
                 onChange={e => setReportDetails(e.target.value)}
                 placeholder="Provide more context..."
-                className="rounded-xl resize-none bg-gray-800 border-gray-700 text-white placeholder:text-gray-500"
+                className="rounded-lg resize-none bg-stadium-800 border-white/10 text-white placeholder:text-gray-500"
                 rows={3}
               />
             </div>
             <Button
               onClick={submitReport}
               disabled={!reportReason || submittingReport}
-              className="w-full rounded-xl bg-red-600 hover:bg-red-700 text-white"
+              className="w-full rounded-lg bg-monza hover:bg-monza-600 text-white"
             >
               {submittingReport ? "Submitting..." : "Submit Report"}
             </Button>

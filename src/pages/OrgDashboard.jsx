@@ -5,15 +5,21 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import {
   Users, Dumbbell, Video, Calendar, TrendingUp, MessageCircle,
-  ChevronRight, Plus, Shield, Sparkles, Crosshair,
+  ChevronRight, Plus, Shield, Sparkles, Crosshair, BarChart2, FileText, Award,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import OrgSetupDialog from "@/components/org/OrgSetupDialog";
+import TrainerAnalytics from "@/components/org/TrainerAnalytics";
+import ProgressReportGenerator from "@/components/org/ProgressReportGenerator";
+import AthleteProgressCard from "@/components/org/AthleteProgressCard";
+import CreateMilestoneDialog from "@/components/org/CreateMilestoneDialog";
 
 export default function OrgDashboard() {
   const [user, setUser] = useState(null);
   const [showSetup, setShowSetup] = useState(false);
+  const [dashTab, setDashTab] = useState("overview"); // "overview" | "analytics" | "reports"
+  const [showMilestone, setShowMilestone] = useState(false);
 
   useEffect(() => {
     db.auth.me().then(setUser).catch(() => {});
@@ -149,7 +155,68 @@ export default function OrgDashboard() {
         })}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      {/* Dashboard Tabs */}
+      {(role === "admin" || role === "coach") && (
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
+          {[
+            { key: "overview", label: "Overview", icon: Users },
+            { key: "analytics", label: "Analytics", icon: BarChart2 },
+            { key: "reports", label: "Reports", icon: FileText },
+          ].map(tab => (
+            <button
+              key={tab.key}
+              onClick={() => setDashTab(tab.key)}
+              className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-all ${
+                dashTab === tab.key
+                  ? "bg-red-600 text-white"
+                  : "bg-gray-800 text-gray-400 hover:text-white hover:bg-gray-700"
+              }`}
+            >
+              <tab.icon className="w-3.5 h-3.5" /> {tab.label}
+            </button>
+          ))}
+          <button
+            onClick={() => setShowMilestone(true)}
+            className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 hover:bg-yellow-500/30 transition-all"
+          >
+            <Award className="w-3.5 h-3.5" /> Add Milestone
+          </button>
+        </div>
+      )}
+
+      {/* Analytics Tab */}
+      {dashTab === "analytics" && orgId && (role === "admin" || role === "coach") && (
+        <TrainerAnalytics orgId={orgId} />
+      )}
+
+      {/* Reports Tab */}
+      {dashTab === "reports" && orgId && (role === "admin" || role === "coach") && (
+        <ProgressReportGenerator orgId={orgId} coachEmail={user?.email} />
+      )}
+
+      {/* Athlete Progress Cards (analytics tab) */}
+      {dashTab === "analytics" && orgId && athletes.length > 0 && (
+        <div className="space-y-3">
+          <h3 className="text-gray-400 text-xs font-bold uppercase tracking-wider">Athlete Progress</h3>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {athletes.slice(0, 8).map(a => (
+              <AthleteProgressCard key={a.id} athleteEmail={a.user_email} orgId={orgId} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Milestone Dialog */}
+      {showMilestone && orgId && (
+        <CreateMilestoneDialog
+          open={showMilestone}
+          onClose={() => setShowMilestone(false)}
+          orgId={orgId}
+          trainerEmail={user?.email}
+        />
+      )}
+
+      {dashTab === "overview" && <div className="grid md:grid-cols-2 gap-6">
 
         {/* Upcoming Sessions */}
         <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
@@ -262,7 +329,7 @@ export default function OrgDashboard() {
             )}
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

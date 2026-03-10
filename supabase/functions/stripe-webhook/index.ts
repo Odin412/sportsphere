@@ -33,7 +33,7 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
-        const { type, userEmail, recipientEmail } = session.metadata || {};
+        const { type, tier, userEmail, recipientEmail } = session.metadata || {};
 
         if (type === 'premium_subscription') {
           const expiresAt = new Date();
@@ -41,6 +41,8 @@ Deno.serve(async (req) => {
           await supabase.from('profiles').update({
             is_premium: true,
             premium_expires: expiresAt.toISOString(),
+            subscription_tier: tier || 'pro_scout',
+            subscription_expires_at: expiresAt.toISOString(),
           }).eq('email', userEmail);
 
         } else if (type === 'creator_subscription') {
@@ -58,13 +60,15 @@ Deno.serve(async (req) => {
       case 'invoice.payment_succeeded': {
         const invoice = event.data.object as Stripe.Invoice;
         const sub = await stripe.subscriptions.retrieve(invoice.subscription as string);
-        const { type, userEmail, recipientEmail } = sub.metadata || {};
+        const { type, tier, userEmail, recipientEmail } = sub.metadata || {};
 
         if (type === 'premium_subscription') {
           const expiresAt = new Date(sub.current_period_end * 1000);
           await supabase.from('profiles').update({
             is_premium: true,
             premium_expires: expiresAt.toISOString(),
+            subscription_tier: tier || 'pro_scout',
+            subscription_expires_at: expiresAt.toISOString(),
           }).eq('email', userEmail);
         }
 
@@ -88,6 +92,8 @@ Deno.serve(async (req) => {
           await supabase.from('profiles').update({
             is_premium: false,
             premium_expires: null,
+            subscription_tier: 'free',
+            subscription_expires_at: null,
           }).eq('email', userEmail);
         } else if (type === 'creator_subscription') {
           await supabase.from('creator_subscriptions').update({

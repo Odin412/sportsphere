@@ -63,17 +63,17 @@ export default function StoriesBar({ user, onStoryClick }) {
   if (!user) return null;
 
   return (
-    <div className="bg-gray-900 rounded-2xl p-3 border border-gray-800">
+    <div className="glass-card rounded-lg p-3">
       <div className="flex gap-3 overflow-x-auto no-scrollbar">
         {/* Add Story shortcut */}
         <Link
           to={createPageUrl("CreatePost")}
           className="flex-shrink-0 flex flex-col items-center gap-1 w-14"
         >
-          <div className="w-14 h-14 rounded-full border-2 border-dashed border-gray-600 flex items-center justify-center bg-gray-800 hover:border-red-500 transition-colors">
-            <Plus className="w-5 h-5 text-gray-500" />
+          <div className="w-14 h-14 rounded-full border-2 border-dashed border-stadium-700 flex items-center justify-center bg-stadium-800 hover:border-monza transition-colors">
+            <Plus className="w-5 h-5 text-stadium-600" />
           </div>
-          <span className="text-[10px] text-gray-500 font-medium truncate w-full text-center">
+          <span className="text-[10px] text-stadium-600 font-medium truncate w-full text-center">
             Add Story
           </span>
         </Link>
@@ -90,20 +90,20 @@ export default function StoriesBar({ user, onStoryClick }) {
               <div
                 className={`p-0.5 rounded-full ${
                   hasUnseen
-                    ? "bg-gradient-to-tr from-red-500 to-orange-400"
-                    : "bg-gray-700"
+                    ? "bg-gradient-to-tr from-monza to-orange-500"
+                    : "bg-stadium-700"
                 }`}
               >
-                <div className="bg-gray-900 p-0.5 rounded-full">
+                <div className="bg-stadium-850 p-0.5 rounded-full">
                   <Avatar className="w-12 h-12">
                     <AvatarImage src={group.author_avatar} />
-                    <AvatarFallback className="bg-gray-700 text-white text-xs font-bold">
+                    <AvatarFallback className="bg-stadium-700 text-white text-xs font-bold">
                       {group.author_name?.[0]?.toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                 </div>
               </div>
-              <span className="text-[10px] text-gray-400 font-medium truncate w-full text-center">
+              <span className="text-[10px] text-stadium-400 font-medium truncate w-full text-center">
                 {group.author_name?.split(" ")[0]}
               </span>
             </button>
@@ -113,7 +113,7 @@ export default function StoriesBar({ user, onStoryClick }) {
         {/* Placeholder when no stories yet */}
         {grouped.length === 0 && (
           <div className="flex items-center gap-2 px-2">
-            <p className="text-[11px] text-gray-600">
+            <p className="text-[11px] text-stadium-600">
               Stories from the last 24h will appear here
             </p>
           </div>

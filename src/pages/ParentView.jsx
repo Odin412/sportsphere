@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
-import { TrendingUp, Video, Calendar, Dumbbell, Loader2, Star, Radio } from "lucide-react";
+import { TrendingUp, Video, Calendar, Dumbbell, Loader2, Star, Radio, FileText, Award, CheckCircle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import LiveNowWidget from "@/components/gameday/LiveNowWidget";
 import GameScheduleCard from "@/components/gameday/GameScheduleCard";
+import StatsChart from "@/components/stats/StatsChart";
 
 export default function ParentView() {
   const [user, setUser] = useState(null);
   const [membership, setMembership] = useState(null);
+  const [parentTab, setParentTab] = useState("overview"); // "overview" | "progress"
 
   useEffect(() => {
     db.auth.me().then(async u => {
@@ -85,6 +87,58 @@ export default function ParentView() {
     refetchInterval: 30000,
   });
 
+  // Progress tab queries
+  const { data: progressReports = [] } = useQuery({
+    queryKey: ["parent-progress-reports", orgId, athleteEmails.join(",")],
+    queryFn: async () => {
+      const all = await db.entities.ProgressReport.filter({ organization_id: orgId });
+      return all.filter(r => athleteEmails.includes(r.athlete_email)).sort((a, b) =>
+        new Date(b.created_at || b.period_end) - new Date(a.created_at || a.period_end)
+      );
+    },
+    enabled: !!orgId && athleteEmails.length > 0,
+  });
+
+  const { data: athleteStats = [] } = useQuery({
+    queryKey: ["parent-athlete-stats", athleteEmails.join(",")],
+    queryFn: async () => {
+      const profiles = await db.entities.SportProfile.list(null, 500);
+      const myProfiles = profiles.filter(p => athleteEmails.includes(p.user_email));
+      if (!myProfiles.length) return [];
+      const entries = [];
+      for (const p of myProfiles) {
+        const stats = await db.entities.StatEntry.filter({ sport_profile_id: p.id }, "-date", 20);
+        entries.push(...stats.map(s => ({ ...s, sport: p.sport })));
+      }
+      return entries;
+    },
+    enabled: athleteEmails.length > 0,
+  });
+
+  const { data: athleteMilestones = [] } = useQuery({
+    queryKey: ["parent-milestones", orgId, athleteEmails.join(",")],
+    queryFn: async () => {
+      const all = await db.entities.Milestone.filter({ organization_id: orgId });
+      return all.filter(m => athleteEmails.includes(m.athlete_email));
+    },
+    enabled: !!orgId && athleteEmails.length > 0,
+  });
+
+  // Attendance rate from sessions
+  const attendanceRate = React.useMemo(() => {
+    if (!sessions?.length) return null;
+    let present = 0, total = 0;
+    sessions.forEach(s => {
+      (s.attendance || []).forEach(a => {
+        if (athleteEmails.includes(a.email)) {
+          total++;
+          if (a.status === "present" || a.status === "late") present++;
+        }
+      });
+    });
+    return total > 0 ? Math.round((present / total) * 100) : null;
+  }, [sessions, athleteEmails]);
+
   if (!user) return null;
 
   if (!membership || membership.role !== "parent") {
@@ -114,6 +168,116 @@ export default function ParentView() {
       <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2">
         <TrendingUp className="w-6 h-6 text-red-900" /> My Child's Progress
       </h1>
+
+      {/* Tab bar */}
+      <div className="flex gap-2 overflow-x-auto no-scrollbar">
+        {[
+          { key: "overview", label: "Overview", icon: Calendar },
+          { key: "progress", label: "Progress", icon: TrendingUp },
+        ].map(tab => (
+          <button
+            key={tab.key}
+            onClick={() => setParentTab(tab.key)}
+            className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-semibold transition-all ${
+              parentTab === tab.key
+                ? "bg-red-900 text-white"
+                : "bg-gray-100 text-gray-500 hover:text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            <tab.icon className="w-3.5 h-3.5" /> {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* ── PROGRESS TAB ────────────────────────────────────────── */}
+      {parentTab === "progress" && (
+        <div className="space-y-6">
+          {/* Summary cards */}
+          <div className="grid grid-cols-3 gap-3">
+            {attendanceRate !== null && (
+              <Card className="border-0 shadow-md text-center">
+                <CardContent className="p-4">
+                  <CheckCircle className={`w-5 h-5 mx-auto mb-1 ${attendanceRate >= 80 ? "text-green-500" : "text-yellow-500"}`} />
+                  <p className="text-2xl font-black text-gray-900">{attendanceRate}%</p>
+                  <p className="text-[10px] text-gray-500">Attendance</p>
+                </CardContent>
+              </Card>
+            )}
+            <Card className="border-0 shadow-md text-center">
+              <CardContent className="p-4">
+                <TrendingUp className="w-5 h-5 mx-auto mb-1 text-blue-500" />
+                <p className="text-2xl font-black text-gray-900">{athleteStats.length}</p>
+                <p className="text-[10px] text-gray-500">Stats Logged</p>
+              </CardContent>
+            </Card>
+            <Card className="border-0 shadow-md text-center">
+              <CardContent className="p-4">
+                <Award className="w-5 h-5 mx-auto mb-1 text-yellow-500" />
+                <p className="text-2xl font-black text-gray-900">{athleteMilestones.length}</p>
+                <p className="text-[10px] text-gray-500">Milestones</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Latest progress report */}
+          {progressReports.length > 0 && (
+            <Card className="border-0 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-red-900" /> Latest Progress Report
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <p className="text-xs text-gray-500 mb-2">
+                  {new Date(progressReports[0].period_start).toLocaleDateString()} — {new Date(progressReports[0].period_end).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {progressReports[0].ai_summary}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Stat trends chart */}
+          {athleteStats.length > 1 && (
+            <Card className="border-0 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-red-900" /> Performance Trends
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <StatsChart stats={athleteStats} sport={athleteStats[0]?.sport} />
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Milestones */}
+          {athleteMilestones.length > 0 && (
+            <Card className="border-0 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                  <Award className="w-4 h-4 text-yellow-500" /> Recent Milestones
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 pt-0">
+                {athleteMilestones.slice(0, 5).map(m => (
+                  <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl bg-yellow-50">
+                    <Award className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+                    <div>
+                      <p className="font-semibold text-sm text-gray-900">{m.title}</p>
+                      <p className="text-xs text-gray-500">{m.milestone_type} · {new Date(m.created_at).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
+
+      {/* ── OVERVIEW TAB ────────────────────────────────────────── */}
+      {parentTab === "overview" && <>
 
       {/* Live Games */}
       {liveGames?.length > 0 && (
@@ -220,6 +384,8 @@ export default function ParentView() {
           </CardContent>
         </Card>
       )}
+
+      </>}
     </div>
   );
 }

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Trophy, Play, Clock, MapPin, Loader2 } from "lucide-react";
+import { ArrowLeft, Trophy, Play, Clock, MapPin, Loader2, Share2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import MuxPlayer from "@/components/live/MuxPlayer";
 import BoxScoreBaseball from "@/components/gameday/BoxScoreBaseball";
 import BoxScoreBasketball from "@/components/gameday/BoxScoreBasketball";
@@ -140,9 +141,31 @@ export default function GameRecap() {
                           <Play className="w-8 h-8 text-slate-400" />
                         </div>
                       )}
-                      <div className="p-2">
-                        <p className="text-xs font-bold text-slate-900">{clip.description || `Highlight ${i + 1}`}</p>
-                        {clip.time && <p className="text-[10px] text-slate-500">{clip.time}</p>}
+                      <div className="p-2 flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-bold text-slate-900">{clip.description || `Highlight ${i + 1}`}</p>
+                          {clip.time && <p className="text-[10px] text-slate-500">{clip.time}</p>}
+                        </div>
+                        {clip.playback_id && (
+                          <button
+                            onClick={async () => {
+                              try {
+                                await db.functions.invoke("auto-post-highlight", {
+                                  clip_playback_id: clip.playback_id,
+                                  stream_title: `${game.home_team_name} vs ${game.away_team_name}`,
+                                  sport: game.sport || "",
+                                  game_id: gameId,
+                                });
+                                toast.success("Highlight shared as Hype Reel!");
+                              } catch {
+                                toast.error("Failed to share highlight");
+                              }
+                            }}
+                            className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold text-red-600 bg-red-50 hover:bg-red-100 transition-colors"
+                          >
+                            <Share2 className="w-3 h-3" /> Share as Reel
+                          </button>
+                        )}
                       </div>
                     </div>
                   ))}

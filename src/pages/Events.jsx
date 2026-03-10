@@ -15,6 +15,7 @@ import { format, isBefore, isAfter, isSameDay, isSameMonth, startOfWeek, endOfWe
 import { toast } from "sonner";
 import CreateEventDialog from "@/components/events/CreateEventDialog";
 import AIEventRecommendations from "@/components/events/AIEventRecommendations";
+import CalendarSyncPanel from "@/components/events/CalendarSyncPanel";
 import { motion } from "framer-motion";
 import { SkeletonEventCard } from "@/components/ui/SkeletonCard";
 
@@ -213,6 +214,7 @@ export default function Events() {
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [showCalendarSync, setShowCalendarSync] = useState(false);
   const [tab, setTab] = useState("discover");
 
   useEffect(() => {
@@ -293,11 +295,18 @@ export default function Events() {
               <span>🌐 {allEvents.filter(e => e.is_virtual).length} virtual</span>
             </div>
           </div>
-          {user && (
-            <Button onClick={() => setShowCreate(true)} className="bg-white text-red-900 hover:bg-gray-100 font-bold rounded-xl shadow-lg">
-              <Plus className="w-5 h-5 mr-2" /> Create Event
-            </Button>
-          )}
+          <div className="flex gap-2">
+            {user && (
+              <Button onClick={() => setShowCalendarSync(true)} variant="outline" className="bg-white/20 text-white border-white/30 hover:bg-white/30 font-bold rounded-xl gap-2">
+                <Calendar className="w-4 h-4" /> Calendar Sync
+              </Button>
+            )}
+            {user && (
+              <Button onClick={() => setShowCreate(true)} className="bg-white text-red-900 hover:bg-gray-100 font-bold rounded-xl shadow-lg">
+                <Plus className="w-5 h-5 mr-2" /> Create Event
+              </Button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -500,6 +509,15 @@ export default function Events() {
       </Tabs>
 
       <CreateEventDialog open={showCreate} onOpenChange={setShowCreate} currentUser={user} onSuccess={refetch} />
+
+      {showCalendarSync && user && (
+        <CalendarSyncPanel
+          open={showCalendarSync}
+          onClose={() => setShowCalendarSync(false)}
+          webcalUrl={`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/export-ical?u=${user.id}&s=`}
+          calendarName="My Sportsphere Events"
+        />
+      )}
     </motion.div>
   );
 }

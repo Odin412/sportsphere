@@ -17,24 +17,24 @@ export default function ScoreOverlaySoccer({ game, recentEvent }) {
     : period === "H1" ? "1st Half" : period === "H2" ? "2nd Half" : period;
 
   return (
-    <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
-      <div className="bg-black/85 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
+    <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+      <div className="broadcast-bar overflow-hidden">
         {/* Main scoreline */}
-        <div className="px-4 py-2 flex items-center gap-4">
+        <div className="px-4 py-2 flex items-center justify-center gap-4">
           <div className="text-right">
-            <p className="text-white text-xs font-bold truncate max-w-[80px]">{game.home_team_name}</p>
+            <p className="text-white text-xs font-display uppercase tracking-wider font-bold truncate max-w-[80px]">{game.home_team_name}</p>
             <div className="flex items-center gap-1 justify-end mt-0.5">
               {homeYellow > 0 && <span className="text-[10px] text-yellow-400">🟨{homeYellow}</span>}
               {homeRed > 0 && <span className="text-[10px] text-red-400">🟥{homeRed}</span>}
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-white text-2xl font-black tabular-nums">{game.home_score}</span>
-            <span className="text-slate-400 text-sm">-</span>
-            <span className="text-white text-2xl font-black tabular-nums">{game.away_score}</span>
+            <span className="text-white text-2xl font-display font-black tabular-nums">{game.home_score}</span>
+            <span className="text-stadium-600 text-sm">-</span>
+            <span className="text-white text-2xl font-display font-black tabular-nums">{game.away_score}</span>
           </div>
           <div className="text-left">
-            <p className="text-white text-xs font-bold truncate max-w-[80px]">{game.away_team_name}</p>
+            <p className="text-white text-xs font-display uppercase tracking-wider font-bold truncate max-w-[80px]">{game.away_team_name}</p>
             <div className="flex items-center gap-1 mt-0.5">
               {awayYellow > 0 && <span className="text-[10px] text-yellow-400">🟨{awayYellow}</span>}
               {awayRed > 0 && <span className="text-[10px] text-red-400">🟥{awayRed}</span>}
@@ -42,14 +42,14 @@ export default function ScoreOverlaySoccer({ game, recentEvent }) {
           </div>
         </div>
         {/* Period + Clock */}
-        <div className="bg-white/10 px-3 py-1 flex items-center justify-center gap-2">
-          <span className="text-yellow-400 text-[10px] font-bold">{periodLabel}</span>
+        <div className="bg-monza/20 px-3 py-1 flex items-center justify-center gap-2">
+          <span className="text-monza text-[10px] font-display font-bold">{periodLabel}</span>
           {clock && <span className="text-white text-xs font-mono font-bold">{clock}'</span>}
         </div>
       </div>
 
       {recentEvent && (
-        <div className="mt-2 bg-yellow-500/90 rounded-lg px-3 py-1.5 text-xs font-bold text-black text-center animate-pulse">
+        <div className="bg-monza px-3 py-1.5 text-xs font-bold font-display uppercase tracking-wide text-white text-center animate-score-flash">
           {recentEvent.player_name && `${recentEvent.player_name}: `}
           {recentEvent.description || recentEvent.event_type}
         </div>

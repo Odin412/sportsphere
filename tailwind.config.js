@@ -4,6 +4,10 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+  		fontFamily: {
+  			display: ['"Chakra Petch"', 'sans-serif'],
+  			body: ['Inter', 'sans-serif'],
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -59,29 +63,59 @@ module.exports = {
   				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
   				border: 'hsl(var(--sidebar-border))',
   				ring: 'hsl(var(--sidebar-ring))'
-  			}
+  			},
+  			monza: {
+  				DEFAULT: '#DA020E',
+  				50: '#FFF0F0',
+  				100: '#FFD6D8',
+  				500: '#DA020E',
+  				600: '#B80210',
+  				700: '#960211',
+  			},
+  			electric: {
+  				DEFAULT: '#0066CC',
+  				400: '#3399FF',
+  				500: '#0066CC',
+  				600: '#0052A3',
+  			},
+  			stadium: {
+  				950: '#0a0f1a',
+  				900: '#111827',
+  				850: '#18202f',
+  				800: '#1e293b',
+  				700: '#334155',
+  				600: '#475569',
+  				400: '#94a3b8',
+  			},
   		},
   		keyframes: {
   			'accordion-down': {
-  				from: {
-  					height: '0'
-  				},
-  				to: {
-  					height: 'var(--radix-accordion-content-height)'
-  				}
+  				from: { height: '0' },
+  				to: { height: 'var(--radix-accordion-content-height)' }
   			},
   			'accordion-up': {
-  				from: {
-  					height: 'var(--radix-accordion-content-height)'
-  				},
-  				to: {
-  					height: '0'
-  				}
-  			}
+  				from: { height: 'var(--radix-accordion-content-height)' },
+  				to: { height: '0' }
+  			},
+  			'ticker-slide': {
+  				'0%':   { transform: 'translateX(100%)' },
+  				'100%': { transform: 'translateX(-100%)' },
+  			},
+  			'score-flash': {
+  				'0%, 100%': { opacity: '1' },
+  				'50%':      { opacity: '0.6' },
+  			},
+  			'card-shimmer': {
+  				'0%':   { backgroundPosition: '-200% 0' },
+  				'100%': { backgroundPosition: '200% 0' },
+  			},
   		},
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
-  			'accordion-up': 'accordion-up 0.2s ease-out'
+  			'accordion-up': 'accordion-up 0.2s ease-out',
+  			'ticker-slide': 'ticker-slide 12s linear infinite',
+  			'score-flash': 'score-flash 0.6s ease-out',
+  			'card-shimmer': 'card-shimmer 3s linear infinite',
   		}
   	}
   },

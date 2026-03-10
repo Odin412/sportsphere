@@ -117,6 +117,11 @@ export default function PerformanceHub() {
       }
     } catch {}
 
+    // Recompute cached stat_summary for recruiting discovery
+    try {
+      await db.functions.invoke("compute-stat-summary", { sport_profile_id: selectedProfile.id });
+    } catch {}
+
     setShowLogDialog(false);
     queryClient.invalidateQueries({ queryKey: ["stat-entries-hub"] });
   };

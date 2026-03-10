@@ -12,8 +12,10 @@ import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
 import html2canvas from "html2canvas";
 import ScoutCardDisplay from "@/components/propath/ScoutCardDisplay";
+import useSubscriptionTier from "@/hooks/useSubscriptionTier";
 
 export default function ScoutCard() {
+  const { canAccess } = useSubscriptionTier();
   const urlParams = new URLSearchParams(window.location.search);
   const targetEmail = urlParams.get("email");
 
@@ -232,7 +234,7 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
           statCount={statEntries.length}
           onContact={() => setShowContact(true)}
           onShare={handleShare}
-          onDownload={handleDownload}
+          onDownload={canAccess('scout_card_pdf') ? handleDownload : null}
           compact={false}
           customization={activeCustomization}
         />

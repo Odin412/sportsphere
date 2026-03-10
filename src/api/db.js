@@ -383,6 +383,10 @@ const entities = {
   Transaction: makeEntity('transactions'),
   Tip: makeEntity('tips'),
 
+  // Trainer Portal
+  ProgressReport: makeEntity('progress_reports'),
+  Milestone: makeEntity('milestones'),
+
   // Other
   FeedPreferences: makeEntity('feed_preferences'),
   Recommendation: makeEntity('recommendations'),

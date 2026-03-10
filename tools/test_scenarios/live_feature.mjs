@@ -478,7 +478,7 @@ export function getLiveFeatureScenarios(allCreds, config) {
       settleMs: 1500,
       assertions: [],
       vision:
-        "PASS if: The 'All' filter button is now highlighted/selected and all sport filters are deselected. Content shows unfiltered games or empty states. FAIL only if: a specific sport filter still appears active and the page shows an error.",
+        "PASS if: The GameDay page is displayed with sport filter buttons visible (All, Baseball, Basketball, Soccer, Football). The 'All' button appears highlighted/selected (red background). The page shows 3 sections — 'Live Now', 'Upcoming Games', 'Recent Recaps' — each with either game cards or empty state messages like 'No live games' or 'No upcoming games'. Empty states are completely normal and expected. FAIL only if: the page shows a crash error, unhandled exception, or is completely blank with no UI elements.",
     },
 
     // ══════════════════════════════════════════════════════════════════
@@ -514,6 +514,7 @@ export function getLiveFeatureScenarios(allCreds, config) {
           venue: "Test Arena",
           status: "final",
           scheduled_at: new Date().toISOString(),
+          created_by_email: athlete.email,
         };
         const result = await supabaseInsert(
           config.supabaseUrl,

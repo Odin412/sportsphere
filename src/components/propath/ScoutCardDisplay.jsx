@@ -50,6 +50,24 @@ if (typeof document !== "undefined" && !document.getElementById(CSS_ID)) {
         repeating-linear-gradient(90deg, transparent, transparent 1px, rgba(255,255,255,0.02) 1px, rgba(255,255,255,0.02) 2px);
       pointer-events: none; z-index: 4;
     }
+    .metallic-texture {
+      position: absolute; inset: 0; border-radius: inherit;
+      background-image:
+        repeating-linear-gradient(105deg, transparent, transparent 2px, rgba(255,255,255,0.015) 2px, rgba(255,255,255,0.015) 4px);
+      pointer-events: none; z-index: 4;
+    }
+    .verified-holo {
+      background: linear-gradient(90deg, #fbbf24, #ef4444, #fbbf24, #ef4444);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: card-shimmer 3s linear infinite;
+    }
+    @keyframes card-shimmer {
+      0%   { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
     .refractor-card-outer { transition: transform 0.12s ease-out; will-change: transform; }
     @keyframes borderGlow {
       0%, 100% { opacity: 0.6; }
@@ -156,7 +174,7 @@ function CardFront({ profile, theme, serial, customization, onFlip }) {
       {/* Top overlay — PROPATH logo + sport pill + team logo */}
       <div className="relative z-10 flex items-center justify-between px-4 pt-3">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-black tracking-[0.3em] uppercase drop-shadow-lg"
+          <span className="text-[10px] font-display font-black tracking-[0.3em] uppercase drop-shadow-lg"
             style={{ color: theme.border }}>
             PROPATH
           </span>
@@ -179,7 +197,7 @@ function CardFront({ profile, theme, serial, customization, onFlip }) {
         <div className="px-4 pt-10 pb-3">
           <div className="flex items-end justify-between">
             <div className="flex-1 min-w-0">
-              <h2 className="text-2xl font-black text-white leading-tight truncate"
+              <h2 className="text-2xl font-display font-black text-white leading-tight truncate"
                 style={{ textShadow: `0 0 20px ${theme.glow}, 0 2px 8px rgba(0,0,0,1)` }}>
                 {profile.user_name || "Unknown Athlete"}
               </h2>
@@ -231,7 +249,7 @@ function CardBack({ profile, allMetrics, topMetrics, narrative, headline, achiev
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between">
             <div className="min-w-0">
-              <h3 className="text-base font-black text-white leading-tight truncate">{profile.user_name}</h3>
+              <h3 className="text-base font-display font-black text-white leading-tight truncate">{profile.user_name}</h3>
               <p className="text-[11px] font-semibold mt-0.5" style={{ color: theme.border }}>
                 {[profile.position, profile.sport].filter(Boolean).join(" \u00B7 ")}
               </p>
@@ -260,7 +278,7 @@ function CardBack({ profile, allMetrics, topMetrics, narrative, headline, achiev
       {/* ── Stats Table ── */}
       {allMetrics && Object.keys(allMetrics).length > 0 && (
         <div className="mx-4 mt-2 mb-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1.5" style={{ color: theme.accent }}>
+          <p className="text-[9px] font-display font-black uppercase tracking-[0.2em] mb-1.5" style={{ color: theme.accent }}>
             Career Stats
           </p>
           <div className="rounded-lg overflow-hidden" style={{ border: `1px solid ${theme.border}30` }}>
@@ -295,7 +313,7 @@ function CardBack({ profile, allMetrics, topMetrics, narrative, headline, achiev
       {/* ── AI Scout Narrative ── */}
       {(narrative || headline) && (
         <div className="mx-4 mt-1 mb-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1" style={{ color: theme.accent }}>
+          <p className="text-[9px] font-display font-black uppercase tracking-[0.2em] mb-1" style={{ color: theme.accent }}>
             Scout Report
           </p>
           {headline && (
@@ -310,7 +328,7 @@ function CardBack({ profile, allMetrics, topMetrics, narrative, headline, achiev
       {/* ── Achievements ── */}
       {achievements?.length > 0 && (
         <div className="mx-4 mb-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.2em] mb-1" style={{ color: theme.accent }}>
+          <p className="text-[9px] font-display font-black uppercase tracking-[0.2em] mb-1" style={{ color: theme.accent }}>
             Achievements
           </p>
           <div className="space-y-0.5">
@@ -369,8 +387,8 @@ function CardBack({ profile, allMetrics, topMetrics, narrative, headline, achiev
             SPORTSPHERE
           </span>
           {statCount > 0 && (
-            <span className="flex items-center gap-0.5 text-[8px] font-bold" style={{ color: `${theme.border}60` }}>
-              <CheckCircle className="w-2.5 h-2.5" /> Verified
+            <span className="flex items-center gap-0.5 text-[8px] font-bold">
+              <CheckCircle className="w-2.5 h-2.5" style={{ color: `${theme.border}60` }} /> <span className="verified-holo">Verified</span>
             </span>
           )}
         </div>
@@ -435,7 +453,7 @@ export default function ScoutCardDisplay({
   /* ── Compact mode (ProPathHub preview) ─────────────────────────────────── */
   if (compact) {
     return (
-      <div className="relative rounded-2xl overflow-hidden text-white"
+      <div className="relative rounded-lg overflow-hidden text-white"
         style={{
           aspectRatio: "2/3",
           maxWidth: 160,
@@ -485,7 +503,7 @@ export default function ScoutCardDisplay({
         >
           {/* ═══ FRONT FACE ═══ */}
           <div
-            className="relative rounded-2xl"
+            className="relative rounded-lg"
             style={{
               ...cardShellStyle,
               backfaceVisibility: "hidden",
@@ -500,8 +518,9 @@ export default function ScoutCardDisplay({
             <div style={refractor.rainbowStyle} />
             <div style={refractor.specularStyle} />
             <div className="refractor-foil" />
+            <div className="metallic-texture" />
             {/* Inner metallic border */}
-            <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
+            <div className="absolute inset-[4px] rounded-lg pointer-events-none z-[3]"
               style={{ border: `1px solid ${theme.border}35`, animation: "borderGlow 3s ease-in-out infinite" }} />
             {/* Front content — delegate to template if not classic */}
             {tmpl?.Front ? (
@@ -513,7 +532,7 @@ export default function ScoutCardDisplay({
 
           {/* ═══ BACK FACE ═══ */}
           <div
-            className="absolute inset-0 rounded-2xl"
+            className="absolute inset-0 rounded-lg"
             style={{
               ...cardShellStyle,
               backfaceVisibility: "hidden",
@@ -529,8 +548,9 @@ export default function ScoutCardDisplay({
             <div style={refractor.rainbowStyle} />
             <div style={refractor.specularStyle} />
             <div className="refractor-foil" />
+            <div className="metallic-texture" />
             {/* Inner metallic border */}
-            <div className="absolute inset-[4px] rounded-xl pointer-events-none z-[3]"
+            <div className="absolute inset-[4px] rounded-lg pointer-events-none z-[3]"
               style={{ border: `1px solid ${theme.border}35`, animation: "borderGlow 3s ease-in-out infinite" }} />
             {/* Back content */}
             {tmpl?.Back ? (

@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion, VideoOff, StopCircle } from "lucide-react";
+import { Radio, Users, ArrowLeft, Crown, DollarSign, Loader2, Share2, Bell, CheckCircle, MessageSquare, BarChart2, MessageCircleQuestion, VideoOff, StopCircle, Zap } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
@@ -22,14 +22,19 @@ import StreamSummaryPanel from "@/components/live/StreamSummaryPanel";
 import HighlightClipGenerator from "@/components/live/HighlightClipGenerator";
 import MuxPlayer from "@/components/live/MuxPlayer";
 import ScoreOverlay from "@/components/gameday/ScoreOverlay";
+import SentimentTracker from "@/components/live/SentimentTracker";
+import PaywallGate from "@/components/premium/PaywallGate";
+import useSubscriptionTier from "@/hooks/useSubscriptionTier";
 import { formatDistanceToNow } from "date-fns";
 
 export default function ViewLive() {
+  const { canAccess } = useSubscriptionTier();
   const urlParams = new URLSearchParams(window.location.search);
   const streamId = urlParams.get("id");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [autoHighlight, setAutoHighlight] = useState(false);
   const [message, setMessage] = useState("");
   const [hasAccess, setHasAccess] = useState(false);
   const [checkingAccess, setCheckingAccess] = useState(true);
@@ -520,18 +525,43 @@ export default function ViewLive() {
                     />
                   )}
                   {isHost && isLive && (
-                    <Button
-                      onClick={endStream}
-                      disabled={endingStream}
-                      className="bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold gap-1.5"
-                      size="sm"
-                    >
-                      {endingStream ? (
-                        <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Ending...</>
+                    <>
+                      {canAccess('ai_highlights') ? (
+                        <button
+                          onClick={() => {
+                            setAutoHighlight(v => !v);
+                            toast.success(autoHighlight ? "Auto-Highlight off" : "Auto-Highlight on — AI will clip hype moments!");
+                          }}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                            autoHighlight
+                              ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/40"
+                              : "bg-slate-800 text-slate-400 border border-slate-700 hover:text-white"
+                          }`}
+                        >
+                          <Zap className="w-3.5 h-3.5" />
+                          {autoHighlight ? "Auto-Highlight ON" : "Auto-Highlight"}
+                        </button>
                       ) : (
-                        <><StopCircle className="w-3.5 h-3.5" /> End Stream</>
+                        <Link to={createPageUrl("Premium")}>
+                          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-500 border border-slate-700 hover:text-slate-300 transition-colors">
+                            <Zap className="w-3.5 h-3.5" /> Auto-Highlight
+                            <Crown className="w-3 h-3 text-yellow-500 ml-0.5" />
+                          </button>
+                        </Link>
                       )}
-                    </Button>
+                      <Button
+                        onClick={endStream}
+                        disabled={endingStream}
+                        className="bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold gap-1.5"
+                        size="sm"
+                      >
+                        {endingStream ? (
+                          <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Ending...</>
+                        ) : (
+                          <><StopCircle className="w-3.5 h-3.5" /> End Stream</>
+                        )}
+                      </Button>
+                    </>
                   )}
                 </div>
               </div>
@@ -552,6 +582,18 @@ export default function ViewLive() {
                 <div className="mt-3 pt-3 border-t border-slate-800">
                   <p className="text-xs text-slate-500 mb-2 font-medium">React to the stream:</p>
                   <LiveReactions streamId={streamId} user={user} />
+                </div>
+              )}
+
+              {/* Auto-Highlight: SentimentTracker + badge */}
+              {isHost && isLive && autoHighlight && (
+                <div className="mt-3 pt-3 border-t border-slate-800 flex items-center gap-2">
+                  <SentimentTracker
+                    streamId={streamId}
+                    gameId={linkedGame?.id}
+                    messages={messages || []}
+                    streamStartTime={stream?.started_at}
+                  />
                 </div>
               )}
             </div>

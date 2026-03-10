@@ -65,23 +65,23 @@ export default function ScoreOverlay({ game: initialGame }) {
 
   // Generic fallback overlay
   return (
-    <div className="absolute top-3 right-3 z-20 pointer-events-none">
-      <div className="bg-black/80 backdrop-blur-sm rounded-xl px-4 py-2 text-white shadow-lg">
-        <div className="flex items-center gap-3 text-sm font-bold">
-          <span className="truncate max-w-[100px]">{game.home_team_name}</span>
-          <span className="text-xl tabular-nums">{game.home_score}</span>
-          <span className="text-slate-400 text-xs">-</span>
-          <span className="text-xl tabular-nums">{game.away_score}</span>
-          <span className="truncate max-w-[100px]">{game.away_team_name}</span>
+    <div className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none">
+      <div className="broadcast-bar px-4 py-2 text-white">
+        <div className="flex items-center justify-center gap-3 text-sm font-bold">
+          <span className="font-display uppercase text-xs tracking-wider truncate max-w-[100px]">{game.home_team_name}</span>
+          <span className="text-xl font-black tabular-nums">{game.home_score}</span>
+          <span className="text-stadium-600 text-xs">-</span>
+          <span className="text-xl font-black tabular-nums">{game.away_score}</span>
+          <span className="font-display uppercase text-xs tracking-wider truncate max-w-[100px]">{game.away_team_name}</span>
         </div>
         {game.current_period && (
-          <p className="text-center text-xs text-slate-300 mt-1">
+          <p className="text-center text-[10px] text-monza font-display font-bold mt-0.5">
             {formatPeriodLabel(game.current_period, game.sport)}
           </p>
         )}
       </div>
       {recentEvent && (
-        <div className="mt-2 bg-yellow-500/90 rounded-lg px-3 py-1.5 text-xs font-bold text-black text-center animate-pulse">
+        <div className="bg-monza px-3 py-1.5 text-xs font-bold font-display uppercase tracking-wide text-white text-center animate-score-flash">
           {recentEvent.description || `${recentEvent.event_type} — ${recentEvent.team === "home" ? game.home_team_name : game.away_team_name}`}
         </div>
       )}

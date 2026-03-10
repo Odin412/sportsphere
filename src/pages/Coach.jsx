@@ -8,10 +8,12 @@ import { Send, Sparkles, Loader2, Plus, MessageSquare, Video, X, Zap } from "luc
 import ReactMarkdown from "react-markdown";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import PremiumGate from "@/components/premium/PremiumGate";
+import PaywallGate from "@/components/premium/PaywallGate";
+import useSubscriptionTier from "@/hooks/useSubscriptionTier";
 import VideoFormAnalysis from "@/components/coaching/VideoFormAnalysis";
 
 export default function CoachPage() {
+  const { canAccess } = useSubscriptionTier();
   const [user, setUser] = useState(null);
   const [conversations, setConversations] = useState([]);
   const [currentConversation, setCurrentConversation] = useState(null);
@@ -131,8 +133,8 @@ export default function CoachPage() {
 
   if (!user) return null;
 
-  const isPremium = user.is_premium && user.premium_expires && new Date(user.premium_expires) > new Date();
-  if (!isPremium) return <PremiumGate feature="AI Coach" />;
+  // Tier-aware gate: AI Coach requires pro_scout or higher
+  if (!canAccess('ai_coach')) return <PaywallGate requiredTier="pro_scout" feature="AI Coach" />;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-orange-50 to-amber-50">

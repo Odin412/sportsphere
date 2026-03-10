@@ -414,13 +414,12 @@ async function main() {
 
   // ── V3: Community & Social ────────────────────────────────────
   if (phases.includes("community")) {
-    const isOnApp = desktopPage.url().includes(APP_URL.replace("https://", ""));
-    const needsLogin = !isOnApp || desktopPage.url().includes("/login");
+    // Always re-login: onboarding phase may have logged out the desktop session
     const results = await runPhaseWithLogin(
       desktopPage, anthropic, "community",
       () => getCommunityScenarios(athleteCreds),
       outputDir, config,
-      athleteCreds.email, athleteCreds.password, needsLogin
+      athleteCreds.email, athleteCreds.password, true
     );
     allResults.push(...results);
   }

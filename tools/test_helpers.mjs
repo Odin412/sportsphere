@@ -218,6 +218,48 @@ export async function verifyData(supabaseUrl, anonKey, tableName, query) {
   }
 }
 
+// ── L3: Data Mutation Helpers (service role key bypasses RLS) ──────
+
+export async function supabaseInsert(supabaseUrl, serviceRoleKey, tableName, data) {
+  const url = `${supabaseUrl}/rest/v1/${tableName}`;
+  try {
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(data),
+    });
+    if (!resp.ok) return { pass: false, error: `HTTP ${resp.status}: ${await resp.text()}` };
+    const rows = await resp.json();
+    return { pass: true, data: rows[0] || rows };
+  } catch (err) {
+    return { pass: false, error: err.message };
+  }
+}
+
+export async function supabaseDelete(supabaseUrl, serviceRoleKey, tableName, query) {
+  const params = new URLSearchParams(query);
+  const url = `${supabaseUrl}/rest/v1/${tableName}?${params.toString()}`;
+  try {
+    const resp = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": "application/json",
+      },
+    });
+    if (!resp.ok) return { pass: false, error: `HTTP ${resp.status}: ${await resp.text()}` };
+    return { pass: true };
+  } catch (err) {
+    return { pass: false, error: err.message };
+  }
+}
+
 // ── Scenario Runner ────────────────────────────────────────────────
 
 export async function runScenario(page, anthropic, steps, outputDir, phaseName, config) {

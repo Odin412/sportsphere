@@ -46,6 +46,7 @@ import { getAthleteDevScenarios } from "./test_scenarios/athlete_dev.mjs";
 import { getAdminScenarios } from "./test_scenarios/admin.mjs";
 import { getContentCreationScenarios } from "./test_scenarios/content_creation.mjs";
 import { getRemainingPagesScenarios } from "./test_scenarios/remaining_pages.mjs";
+import { getInteractionScenarios } from "./test_scenarios/interactions.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
@@ -64,7 +65,8 @@ const V8_PHASES = ["athlete_dev"];
 const V9_PHASES = ["admin"];
 const V10_PHASES = ["content_creation"];
 const V11_PHASES = ["remaining_pages"];
-const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES, ...V4_PHASES, ...V5_PHASES, ...V6_PHASES, ...V7_PHASES, ...V8_PHASES, ...V9_PHASES, ...V10_PHASES, ...V11_PHASES];
+const V12_PHASES = ["interactions"];
+const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES, ...V4_PHASES, ...V5_PHASES, ...V6_PHASES, ...V7_PHASES, ...V8_PHASES, ...V9_PHASES, ...V10_PHASES, ...V11_PHASES, ...V12_PHASES];
 
 // ── Parse CLI Args ─────────────────────────────────────────────────
 
@@ -98,6 +100,7 @@ function resolvePhases(phaseArg) {
   if (phaseArg === "v9") return V9_PHASES;
   if (phaseArg === "v10") return V10_PHASES;
   if (phaseArg === "v11") return V11_PHASES;
+  if (phaseArg === "v12") return V12_PHASES;
   if (phaseArg === "full") return ALL_PHASES;
   // Single phase
   const phases = [phaseArg];
@@ -530,6 +533,17 @@ async function main() {
     const results = await runPhaseWithLogin(
       desktopPage, anthropic, "remaining_pages",
       () => getRemainingPagesScenarios(athleteCreds),
+      outputDir, config,
+      athleteCreds.email, athleteCreds.password, true
+    );
+    allResults.push(...results);
+  }
+
+  // ── V12: Interaction Tests (L3 Data Mutations) ─────────────────
+  if (phases.includes("interactions")) {
+    const results = await runPhaseWithLogin(
+      desktopPage, anthropic, "interactions",
+      () => getInteractionScenarios(athleteCreds),
       outputDir, config,
       athleteCreds.email, athleteCreds.password, true
     );

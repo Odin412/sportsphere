@@ -29,7 +29,7 @@ const RSS_FEEDS = [
 
 async function fetchFeed(feed) {
   const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
-  const res = await fetch(proxy, { signal: AbortSignal.timeout(10000) });
+  const res = await fetch(proxy, { signal: AbortSignal.timeout(5000) });
   const { contents } = await res.json();
   if (!contents) return [];
 

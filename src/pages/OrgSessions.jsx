@@ -100,6 +100,18 @@ export default function OrgSessions() {
     </Card>
   );
 
+  if (user && !orgId) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-900 to-red-700 flex items-center justify-center mx-auto">
+          <Calendar className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-xl font-black text-white">No Organization Yet</h2>
+        <p className="text-gray-500">Create or join an organization to schedule and manage sessions.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 py-6 space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-3">

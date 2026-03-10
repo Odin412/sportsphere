@@ -61,8 +61,12 @@ export default function ParentView() {
 
   if (!membership || membership.role !== "parent") {
     return (
-      <div className="max-w-xl mx-auto px-4 py-20 text-center text-gray-400">
-        <p className="text-lg font-semibold">This view is only for parents.</p>
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-pink-900 to-pink-700 flex items-center justify-center mx-auto">
+          <TrendingUp className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-xl font-black text-white">Parent View</h2>
+        <p className="text-gray-500">This view is for parents linked to an organization. Join an organization as a parent to track your child's progress.</p>
       </div>
     );
   }

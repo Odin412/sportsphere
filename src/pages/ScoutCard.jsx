@@ -41,7 +41,7 @@ export default function ScoutCard() {
     }
   }, [currentUser, targetEmail]);
 
-  const { data: profiles = [] } = useQuery({
+  const { data: profiles = [], isLoading: profileLoading } = useQuery({
     queryKey: ["scout-card-profile", targetEmail],
     queryFn: () => db.entities.SportProfile.filter({ user_email: targetEmail }),
     enabled: !!targetEmail,
@@ -81,7 +81,8 @@ export default function ScoutCard() {
     if (!topMetrics.length && !profile.achievements?.length) return;
 
     setLoadingNarrative(true);
-    db.ai.invoke({
+    const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error("AI timeout")), 10000));
+    Promise.race([db.ai.invoke({
       prompt: `Write a 2-sentence recruiting scout narrative for this athlete.
 Name: ${profile.user_name || "Athlete"}
 Sport: ${profile.sport || "Unknown"}
@@ -101,7 +102,7 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
           narrative: { type: "string" },
         },
       },
-    })
+    }), timeout])
       .then((res) => setNarrative(res))
       .catch(() => {})
       .finally(() => setLoadingNarrative(false));
@@ -179,10 +180,23 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
     );
   }
 
-  if (!profile) {
+  if (profileLoading) {
     return (
       <div className="flex justify-center py-20">
         <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="max-w-lg mx-auto px-4 py-20 text-center space-y-4">
+        <p className="text-5xl">&#127183;</p>
+        <h2 className="text-white font-bold text-xl">No Sport Profile Found</h2>
+        <p className="text-gray-400 text-sm">This athlete hasn't set up their ProPath sport profile yet.</p>
+        <Link to={createPageUrl("GetNoticed")}>
+          <Button className="mt-4 bg-red-600 hover:bg-red-700 text-white rounded-xl">Browse Athletes</Button>
+        </Link>
       </div>
     );
   }

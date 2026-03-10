@@ -47,6 +47,18 @@ export default function OrgMessages() {
 
   const ROLE_COLORS = { admin: "text-red-600", coach: "text-purple-600", athlete: "text-blue-600", parent: "text-pink-600" };
 
+  if (user && !orgId) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-900 to-red-700 flex items-center justify-center mx-auto">
+          <MessageCircle className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-xl font-black text-white">No Organization Yet</h2>
+        <p className="text-gray-500">Create or join an organization to access team messaging.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       <h1 className="text-2xl font-black text-gray-900 flex items-center gap-2 mb-6">

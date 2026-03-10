@@ -105,6 +105,18 @@ Keep it encouraging and practical. 3-4 sentences max.`,
     </Card>
   );
 
+  if (user && !orgId) {
+    return (
+      <div className="max-w-xl mx-auto px-4 py-20 text-center space-y-4">
+        <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-900 to-red-700 flex items-center justify-center mx-auto">
+          <Video className="w-8 h-8 text-white" />
+        </div>
+        <h2 className="text-xl font-black text-white">No Organization Yet</h2>
+        <p className="text-gray-500">Create or join an organization to review training videos.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
       <div>

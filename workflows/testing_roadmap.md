@@ -4,7 +4,7 @@
 
 The testing agent (Phases 1-2) is fully operational with **60/60 tests passing** across 8 test suites. However, only **27 of 65 pages** are currently tested (42% coverage). This plan lays out **14 phases** to achieve full platform coverage, with each phase building on the previous.
 
-**Current state**: 60 tests, 27 pages covered, 38 pages untested
+**Current state**: 113 tests, 65 pages covered, 0 pages untested (100% page coverage!)
 
 **Entry**: `node tools/test_agent.mjs --phase [phase|v1|v2|full] [--headed]`
 
@@ -16,10 +16,19 @@ The testing agent (Phases 1-2) is fully operational with **60/60 tests passing**
 |-------|-------|-------|--------|
 | **1** | Infrastructure + Auth + Navigation + Feed | 26 | DONE (60/60) |
 | **2** | Role-specific + Onboarding + Mobile | 34 | DONE (60/60) |
+| **3** | Community & Social | 10 | DONE (10/10) |
+| **4** | Discovery & Recommendations | 9 | DONE (9/9) |
+| **5** | Account & Settings | 7 | DONE (7/7) |
+| **6** | Creator Tools | 5 | DONE (5/5) |
+| **7** | Coaching & Training | 5 | DONE (5/5) |
+| **8** | Athlete Development | 5 | DONE (5/5) |
+| **9** | Admin & Moderation | 8 | DONE (8/8) |
+| **10** | Content Creation & Media | 4 | DONE (4/4) |
+| **11** | Live, Detail & Static Pages | 5 | DONE (5/5) |
 
-### Pages Already Tested (27)
+### All 65 Pages Tested
 
-Login, Feed, Explore (Search), Reels, ProPathHub, Live, Messages, Profile, Challenges, Forums, GetNoticed, TheVault, PerformanceHub, ScoutCard, Coach, LiveCoaching, CreatorHub, Analytics, OrgDashboard, OrgRoster, OrgSessions, OrgMessages, VideoReview, ParentView, Onboarding, CreatePost, SearchPage
+Login, Feed, Explore (Search), Reels, ProPathHub, Live, Messages, Profile, Challenges, Forums, GetNoticed, TheVault, PerformanceHub, ScoutCard, Coach, LiveCoaching, CreatorHub, Analytics, OrgDashboard, OrgRoster, OrgSessions, OrgMessages, VideoReview, ParentView, Onboarding, CreatePost, SearchPage, Groups, GroupDetail, ForumTopic, Events, Notifications, Advice, Discover, ForYou, TrendingChallenges, SportHub, ProfileSettings, Premium, Leaderboard, CreatorAI, CreatorShop, BecomeCreator, CoachingSessionDetail, TrainingPlans, TrainingPlanDetail, MyTraining, ScoutingHub, UserProfile, SavedContent, AthleteInsights, Admin, AdminUsers, AdminContent, AdminAnalytics, AdminSettings, AdminHealth, ModerationQueue, CreateReel, UploadVideo, ImportVideos, ViewLive, ChallengeDetail, Terms, Guidelines
 
 ---
 
@@ -284,46 +293,46 @@ All 65 pages from `src/pages.config.js` mapped to phases:
 | Onboarding | `src/pages/Onboarding.jsx` | 2 | TESTED |
 | CreatePost | `src/pages/CreatePost.jsx` | 2 | TESTED |
 | SearchPage | `src/pages/Search.jsx` | 1 | TESTED |
-| Groups | `src/pages/Groups.jsx` | **3** | TODO |
-| GroupDetail | `src/pages/GroupDetail.jsx` | **3** | TODO |
-| ForumTopic | `src/pages/ForumTopic.jsx` | **3** | TODO |
-| Events | `src/pages/Events.jsx` | **3** | TODO |
-| Notifications | `src/pages/Notifications.jsx` | **3** | TODO |
-| Advice | `src/pages/Advice.jsx` | **3** | TODO |
-| Discover | `src/pages/Discover.jsx` | **4** | TODO |
-| ForYou | `src/pages/ForYou.jsx` | **4** | TODO |
-| TrendingChallenges | `src/pages/TrendingChallenges.jsx` | **4** | TODO |
-| SportHub | `src/pages/SportHub.jsx` | **4** | TODO |
-| ProfileSettings | `src/pages/ProfileSettings.jsx` | **5** | TODO |
-| Premium | `src/pages/Premium.jsx` | **5** | TODO |
-| Leaderboard | `src/pages/Leaderboard.jsx` | **5** | TODO |
-| CreatorAI | `src/pages/CreatorAI.jsx` | **6** | TODO |
-| CreatorShop | `src/pages/CreatorShop.jsx` | **6** | TODO |
-| BecomeCreator | `src/pages/BecomeCreator.jsx` | **6** | TODO |
-| CoachingSessionDetail | `src/pages/CoachingSessionDetail.jsx` | **7** | TODO |
-| TrainingPlans | `src/pages/TrainingPlans.jsx` | **7** | TODO |
-| TrainingPlanDetail | `src/pages/TrainingPlanDetail.jsx` | **7** | TODO |
-| MyTraining | `src/pages/MyTraining.jsx` | **7** | TODO |
-| ScoutingHub | `src/pages/ScoutingHub.jsx` | **8** | TODO |
-| UserProfile | `src/pages/UserProfile.jsx` | **8** | TODO |
-| SavedContent | `src/pages/SavedContent.jsx` | **8** | TODO |
-| AthleteInsights | `src/pages/AthleteInsights.jsx` | **8** | TODO |
-| Admin | `src/pages/Admin.jsx` | **9** | TODO |
-| AdminUsers | `src/pages/AdminUsers.jsx` | **9** | TODO |
-| AdminContent | `src/pages/AdminContent.jsx` | **9** | TODO |
-| AdminAnalytics | `src/pages/AdminAnalytics.jsx` | **9** | TODO |
-| AdminSettings | `src/pages/AdminSettings.jsx` | **9** | TODO |
-| AdminHealth | `src/pages/AdminHealth.jsx` | **9** | TODO |
-| ModerationQueue | `src/pages/ModerationQueue.jsx` | **9** | TODO |
-| CreateReel | `src/pages/CreateReel.jsx` | **10** | TODO |
-| UploadVideo | `src/pages/UploadVideo.jsx` | **10** | TODO |
-| ImportVideos | `src/pages/ImportVideos.jsx` | **10** | TODO |
-| ViewLive | `src/pages/ViewLive.jsx` | **11** | TODO |
-| ChallengeDetail | `src/pages/ChallengeDetail.jsx` | **11** | TODO |
-| Terms | `src/pages/Terms.jsx` | **11** | TODO |
-| Guidelines | `src/pages/Guidelines.jsx` | **11** | TODO |
+| Groups | `src/pages/Groups.jsx` | 3 | TESTED |
+| GroupDetail | `src/pages/GroupDetail.jsx` | 3 | TESTED |
+| ForumTopic | `src/pages/ForumTopic.jsx` | 3 | TESTED |
+| Events | `src/pages/Events.jsx` | 3 | TESTED |
+| Notifications | `src/pages/Notifications.jsx` | 3 | TESTED |
+| Advice | `src/pages/Advice.jsx` | 3 | TESTED |
+| Discover | `src/pages/Discover.jsx` | 4 | TESTED |
+| ForYou | `src/pages/ForYou.jsx` | 4 | TESTED |
+| TrendingChallenges | `src/pages/TrendingChallenges.jsx` | 4 | TESTED |
+| SportHub | `src/pages/SportHub.jsx` | 4 | TESTED |
+| ProfileSettings | `src/pages/ProfileSettings.jsx` | 5 | TESTED |
+| Premium | `src/pages/Premium.jsx` | 5 | TESTED |
+| Leaderboard | `src/pages/Leaderboard.jsx` | 5 | TESTED |
+| CreatorAI | `src/pages/CreatorAI.jsx` | 6 | TESTED |
+| CreatorShop | `src/pages/CreatorShop.jsx` | 6 | TESTED |
+| BecomeCreator | `src/pages/BecomeCreator.jsx` | 6 | TESTED |
+| CoachingSessionDetail | `src/pages/CoachingSessionDetail.jsx` | 7 | TESTED |
+| TrainingPlans | `src/pages/TrainingPlans.jsx` | 7 | TESTED |
+| TrainingPlanDetail | `src/pages/TrainingPlanDetail.jsx` | 7 | TESTED |
+| MyTraining | `src/pages/MyTraining.jsx` | 7 | TESTED |
+| ScoutingHub | `src/pages/ScoutingHub.jsx` | 8 | TESTED |
+| UserProfile | `src/pages/UserProfile.jsx` | 8 | TESTED |
+| SavedContent | `src/pages/SavedContent.jsx` | 8 | TESTED |
+| AthleteInsights | `src/pages/AthleteInsights.jsx` | 8 | TESTED |
+| Admin | `src/pages/Admin.jsx` | 9 | TESTED |
+| AdminUsers | `src/pages/AdminUsers.jsx` | 9 | TESTED |
+| AdminContent | `src/pages/AdminContent.jsx` | 9 | TESTED |
+| AdminAnalytics | `src/pages/AdminAnalytics.jsx` | 9 | TESTED |
+| AdminSettings | `src/pages/AdminSettings.jsx` | 9 | TESTED |
+| AdminHealth | `src/pages/AdminHealth.jsx` | 9 | TESTED |
+| ModerationQueue | `src/pages/ModerationQueue.jsx` | 9 | TESTED |
+| CreateReel | `src/pages/CreateReel.jsx` | 10 | TESTED |
+| UploadVideo | `src/pages/UploadVideo.jsx` | 10 | TESTED |
+| ImportVideos | `src/pages/ImportVideos.jsx` | 10 | TESTED |
+| ViewLive | `src/pages/ViewLive.jsx` | 11 | TESTED |
+| ChallengeDetail | `src/pages/ChallengeDetail.jsx` | 11 | TESTED |
+| Terms | `src/pages/Terms.jsx` | 11 | TESTED |
+| Guidelines | `src/pages/Guidelines.jsx` | 11 | TESTED |
 
-**Coverage**: 65/65 pages assigned (27 tested + 38 planned)
+**Coverage**: 65/65 pages tested (100% coverage across 11 phases)
 
 ---
 

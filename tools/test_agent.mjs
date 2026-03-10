@@ -37,6 +37,7 @@ import { getOrgFeatureScenarios } from "./test_scenarios/org_features.mjs";
 import { getParentFeatureScenarios } from "./test_scenarios/parent_features.mjs";
 import { getOnboardingScenarios } from "./test_scenarios/onboarding.mjs";
 import { getMobileScenarios } from "./test_scenarios/mobile.mjs";
+import { getCommunityScenarios } from "./test_scenarios/community.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = path.resolve(__dirname, "..");
@@ -46,7 +47,8 @@ const APP_URL = "https://sportsphere-titan-one.vercel.app";
 // Phase groups
 const V1_PHASES = ["auth", "navigation", "feed"];
 const V2_PHASES = ["athlete", "coach", "org", "parent", "onboarding", "mobile"];
-const ALL_PHASES = [...V1_PHASES, ...V2_PHASES];
+const V3_PHASES = ["community"];
+const ALL_PHASES = [...V1_PHASES, ...V2_PHASES, ...V3_PHASES];
 
 // ── Parse CLI Args ─────────────────────────────────────────────────
 
@@ -71,6 +73,7 @@ function resolvePhases(phaseArg) {
   if (phaseArg === "all") return V1_PHASES;
   if (phaseArg === "v1") return V1_PHASES;
   if (phaseArg === "v2") return V2_PHASES;
+  if (phaseArg === "v3") return V3_PHASES;
   if (phaseArg === "full") return ALL_PHASES;
   // Single phase
   const phases = [phaseArg];
@@ -407,6 +410,19 @@ async function main() {
     }
 
     await mobileContext.close();
+  }
+
+  // ── V3: Community & Social ────────────────────────────────────
+  if (phases.includes("community")) {
+    const isOnApp = desktopPage.url().includes(APP_URL.replace("https://", ""));
+    const needsLogin = !isOnApp || desktopPage.url().includes("/login");
+    const results = await runPhaseWithLogin(
+      desktopPage, anthropic, "community",
+      () => getCommunityScenarios(athleteCreds),
+      outputDir, config,
+      athleteCreds.email, athleteCreds.password, needsLogin
+    );
+    allResults.push(...results);
   }
 
   // ── Report ─────────────────────────────────────────────────────

@@ -36,19 +36,32 @@ export default function GroupDetail() {
 
   const { data: group, isLoading } = useQuery({
     queryKey: ["group", groupId],
-    queryFn: () => db.entities.Group.filter({ id: groupId }).then(g => g[0]),
+    queryFn: async () => {
+      try {
+        const g = await db.entities.Group.filter({ id: groupId });
+        return g[0];
+      } catch { return null; }
+    },
     enabled: !!groupId,
   });
 
   const { data: posts, refetch: refetchPosts } = useQuery({
     queryKey: ["group-posts", groupId],
-    queryFn: () => db.entities.GroupPost.filter({ group_id: groupId }, "-created_date", 50),
+    queryFn: async () => {
+      try {
+        return await db.entities.GroupPost.filter({ group_id: groupId }, "-created_date", 50);
+      } catch { return []; }
+    },
     enabled: !!groupId,
   });
 
   const { data: events, refetch: refetchEvents } = useQuery({
     queryKey: ["group-events", groupId],
-    queryFn: () => db.entities.Event.filter({ group_id: groupId }, "date", 50),
+    queryFn: async () => {
+      try {
+        return await db.entities.Event.filter({ group_id: groupId }, "date", 50);
+      } catch { return []; }
+    },
     enabled: !!groupId,
   });
 

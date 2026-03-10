@@ -31,7 +31,13 @@ export default function Groups() {
 
   const { data: allGroups, isLoading, refetch } = useQuery({
     queryKey: ["groups"],
-    queryFn: () => db.entities.Group.list("-created_date", 100),
+    queryFn: async () => {
+      try {
+        return await db.entities.Group.list("-created_date", 100);
+      } catch {
+        return [];
+      }
+    },
   });
 
   const groups = allGroups?.filter(group => {

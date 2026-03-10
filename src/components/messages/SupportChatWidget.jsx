@@ -66,7 +66,7 @@ export default function SupportChatWidget({ user }) {
           className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-50 w-14 h-14 bg-gradient-to-br from-red-900 to-red-700 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform"
           title="SportHub Support"
         >
-          <img src={titanBadge} alt="TitanAI" className="w-6 h-6 object-contain" />
+          <img src={titanBadge} alt="TitanAI" className="w-9 h-9 object-contain mix-blend-lighten" />
         </button>
       )}
 
@@ -75,9 +75,7 @@ export default function SupportChatWidget({ user }) {
         <div className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-50 w-80 sm:w-96 flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden" style={{ maxHeight: "520px" }}>
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-red-900 to-red-800 text-white">
-            <div className="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center">
-              <img src={titanBadge} alt="TitanAI" className="w-5 h-5 object-contain" />
-            </div>
+            <img src={titanBadge} alt="TitanAI" className="w-9 h-9 object-contain mix-blend-lighten" />
             <div className="flex-1">
               <p className="font-bold text-sm">SportHub Support</p>
               <p className="text-xs text-red-200">AI-powered · always here</p>
@@ -91,7 +89,7 @@ export default function SupportChatWidget({ user }) {
           <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50" style={{ minHeight: "320px", maxHeight: "380px" }}>
             {visibleMessages.length === 0 && (
               <div className="text-center text-gray-400 text-sm pt-8">
-                <img src={titanBadge} alt="TitanAI" className="w-10 h-10 mx-auto mb-2 object-contain" />
+                <img src={titanBadge} alt="TitanAI" className="w-14 h-14 mx-auto mb-2 object-contain mix-blend-multiply opacity-80" />
                 <p className="font-medium text-gray-600">Hi! I'm your SportHub assistant.</p>
                 <p className="text-xs mt-1">Ask me anything about features, troubleshooting, or how to use the app!</p>
               </div>
@@ -101,9 +99,7 @@ export default function SupportChatWidget({ user }) {
               return (
                 <div key={i} className={`flex gap-2 ${isUser ? "justify-end" : "justify-start"}`}>
                   {!isUser && (
-                    <div className="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <img src={titanBadge} alt="TitanAI" className="w-4 h-4 object-contain" />
-                    </div>
+                    <img src={titanBadge} alt="TitanAI" className="w-7 h-7 object-contain mix-blend-multiply flex-shrink-0 mt-0.5" />
                   )}
                   <div className={`max-w-[80%] rounded-2xl px-3 py-2 text-sm ${
                     isUser
@@ -123,9 +119,7 @@ export default function SupportChatWidget({ user }) {
             })}
             {sending && (
               <div className="flex gap-2 justify-start">
-                <div className="w-7 h-7 rounded-lg bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <img src={titanBadge} alt="TitanAI" className="w-4 h-4 object-contain" />
-                </div>
+                <img src={titanBadge} alt="TitanAI" className="w-7 h-7 object-contain mix-blend-multiply flex-shrink-0" />
                 <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-sm px-3 py-2 shadow-sm">
                   <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
                 </div>

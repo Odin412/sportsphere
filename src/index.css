@@ -47,7 +47,13 @@
   }
 
   body {
-    @apply bg-stadium-950 text-white font-body;
+    @apply text-white font-body;
+    background-color: #0a0f1a;
+    background-image:
+      radial-gradient(ellipse 70% 55% at 12% 30%, rgba(218, 2, 14, 0.09) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 45% at 88% 15%, rgba(0, 102, 204, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 80%, rgba(218, 2, 14, 0.04) 0%, transparent 55%);
+    background-attachment: fixed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

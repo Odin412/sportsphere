@@ -10,7 +10,18 @@ import SportNewsWidget from "@/components/feed/SportNewsWidget";
 import SuggestedUsers from "@/components/social/SuggestedUsers";
 import StoriesBar from "@/components/feed/StoriesBar";
 import StoryViewer from "@/components/feed/StoryViewer";
-import { Loader2, Settings2, Sparkles, Users, Zap, Trophy } from "lucide-react";
+import { Loader2, Settings2, Sparkles, Users, Zap, Trophy, Radio } from "lucide-react";
+
+const TICKER_ITEMS = [
+  "🏀 NBA Playoffs race tightens — 6 teams within 2 games",
+  "⚽ Champions League draw announced — fixtures confirmed",
+  "🏈 NFL Draft — top 10 prospects ranked by scouts",
+  "🎾 Djokovic wins in straights, advances to semis",
+  "🥊 Main event card announced for this Saturday",
+  "🏃 World marathon record attempt at Berlin this weekend",
+  "🏒 Stanley Cup Playoffs bracket officially set",
+  "🤸 Olympic qualifiers underway — watch live on Sportsphere",
+];
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -140,6 +151,31 @@ export default function Feed() {
 
         {/* ── LEFT COLUMN — main feed ───────────────────────────────── */}
         <div className="space-y-3">
+
+          {/* ── BROADCAST STRIP — ESPN-style scrolling ticker ───── */}
+          <div className="broadcast-bar rounded-lg overflow-hidden flex items-stretch">
+            {/* LIVE badge */}
+            <div className="bg-monza flex items-center gap-1.5 px-3 flex-shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+              <span className="text-white text-[11px] font-display font-bold uppercase tracking-widest">Live</span>
+            </div>
+            {/* Scrolling ticker */}
+            <div className="flex-1 overflow-hidden py-2">
+              <div className="flex items-center animate-ticker-slide whitespace-nowrap" style={{ animationDuration: "28s" }}>
+                {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
+                  <span key={i} className="text-[11px] text-stadium-300 font-medium px-5 border-r border-white/10 last:border-0 flex-shrink-0">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </div>
+            {/* Date stamp */}
+            <div className="flex-shrink-0 px-3 flex items-center">
+              <span className="text-[10px] text-stadium-600 font-display uppercase tracking-wider hidden sm:block">
+                {new Date().toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+              </span>
+            </div>
+          </div>
 
           {/* Stories bar — 24h posts with media (Instagram/FB Stories style) */}
           {user && (

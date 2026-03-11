@@ -33,7 +33,38 @@ const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY;
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const PEXELS_API_KEY = process.env.PEXELS_API_KEY || "mGO6Aa1rkzHppsuNpv3R2MP6Xf1AG5NJ09EM7N8eETyIUCkg6D1V9yPr";
 const BOT_PASSWORD = "SimBot2026!Secure";
+
+const SPORT_AVATAR_QUERIES = {
+  Basketball: "basketball player portrait athletic young",
+  Soccer: "soccer player portrait athletic",
+  Football: "american football player athlete portrait",
+  Baseball: "baseball player athlete portrait",
+  Tennis: "tennis player portrait athletic",
+  Swimming: "swimmer athlete portrait",
+  "Track & Field": "runner sprinter athlete portrait",
+  MMA: "martial arts fighter athlete portrait",
+  Boxing: "boxer athlete gym portrait",
+  Volleyball: "volleyball player athlete portrait",
+};
+
+async function fetchPexelsAvatar(sport, personaType = "athlete") {
+  try {
+    const baseQuery = SPORT_AVATAR_QUERIES[sport] || "athlete portrait sport";
+    const query = personaType === "scout" ? "sports coach professional portrait" : baseQuery;
+    const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=10&orientation=portrait`;
+    const res = await fetch(url, { headers: { Authorization: PEXELS_API_KEY } });
+    if (!res.ok) throw new Error(`Pexels ${res.status}`);
+    const json = await res.json();
+    const photos = json.photos || [];
+    if (!photos.length) return null;
+    const photo = photos[Math.floor(Math.random() * Math.min(photos.length, 10))];
+    return photo.src?.medium || photo.src?.small || null;
+  } catch (e) {
+    return null;
+  }
+}
 
 const SPORTS = [
   "Basketball", "Soccer", "Football", "Baseball", "Tennis",
@@ -182,7 +213,7 @@ async function callOpenRouter(systemPrompt, userPrompt, maxRetries = 2) {
           "X-Title": "Sportsphere SimBot",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.0-flash-exp:free",
+          model: "google/gemini-2.0-flash-001",
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user", content: userPrompt },
@@ -352,7 +383,9 @@ class PersonaBot {
     const result = await createAuthUser(this.email, this.password, this.name, "athlete");
 
     // Set avatar + mark onboarding complete via profile update
-    const avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${this.name.replace(/\s/g, "")}`;
+    const pexelsAvatar = await fetchPexelsAvatar(this.sport, this.personaType);
+    const avatarUrl = pexelsAvatar || "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80";
+    this.avatarUrl = avatarUrl;
     const profileData = {
       avatar_url: avatarUrl,
       full_name: this.name,
@@ -692,7 +725,7 @@ class PersonaBot {
       const post = await supabaseRequest("POST", "posts", "", {
         author_email: this.email,
         author_name: this.name,
-        author_avatar: `https://api.dicebear.com/9.x/avataaars/svg?seed=${this.name.replace(/\s/g, "")}`,
+        author_avatar: this.avatarUrl || await fetchPexelsAvatar(this.sport, this.personaType),
         content: caption,
         created_date: new Date().toISOString(),
         media_urls: [`https://stream.mux.com/${mockMuxId}.m3u8`],

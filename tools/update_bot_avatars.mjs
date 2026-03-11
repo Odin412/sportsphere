@@ -194,6 +194,13 @@ async function main() {
         // Sport profiles may not have this bot — that's fine
       }
 
+      // 4. Update profiles.avatar_url (the main profile table used by the app)
+      try {
+        await patchTable("profiles", "email", bot.email, { avatar_url: avatarUrl });
+      } catch (_) {
+        // Profile may not exist for channel bots — that's fine
+      }
+
       console.log(`✓ Updated → ${avatarUrl.slice(0, 80)}...`);
       successCount++;
     } catch (err) {

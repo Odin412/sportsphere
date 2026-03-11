@@ -9,7 +9,8 @@
     "lint": "eslint . --quiet",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "vercel --prod 2>&1 | tee /tmp/deploy.log && DEPLOY_URL=$(grep -oE 'sportsphere-main-[a-z0-9]+-kcapers108-gmailcoms-projects\\.vercel\\.app' /tmp/deploy.log | head -1) && echo \"Aliasing $DEPLOY_URL\" && vercel alias set \"$DEPLOY_URL\" sportsphere-titan-one.vercel.app"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",

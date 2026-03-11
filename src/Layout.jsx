@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { db } from "@/api/db";
@@ -17,6 +17,8 @@ import SupportChatWidget from "./components/messages/SupportChatWidget";
 import PushNotificationBanner from "./components/notifications/PushNotificationBanner";
 import AppTour from "./components/onboarding/AppTour";
 import PoweredByTitanAI from "./components/branding/PoweredByTitanAI";
+
+const DiagnosticPanel = lazy(() => import("./components/diagnostics/DiagnosticPanel"));
 
 // Primary nav items shown in sidebar + mobile bottom nav
 const PRIMARY_NAV = [
@@ -93,7 +95,20 @@ export default function Layout({ children, currentPageName }) {
     return () => unsub?.unsubscribe?.();
   }, [user?.email]);
 
-  const STANDALONE_PAGES = ["Login", "Admin", "AdminUsers", "AdminContent", "AdminAnalytics", "AdminSettings"];
+  // Diagnostic panel toggle (Ctrl+Shift+D) — admin only
+  const [showDiag, setShowDiag] = useState(false);
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        if (user?.role === 'admin') setShowDiag(v => !v);
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [user?.role]);
+
+  const STANDALONE_PAGES = ["Login", "Admin", "AdminUsers", "AdminContent", "AdminAnalytics", "AdminSettings", "CommandCenter"];
   if (STANDALONE_PAGES.includes(currentPageName)) return <>{children}</>;
 
   const isActive = (page) => currentPageName === page;
@@ -243,6 +258,13 @@ export default function Layout({ children, currentPageName }) {
       <main className="pt-14 pb-20 lg:pl-64 lg:pb-8 min-h-screen">
         {children}
       </main>
+
+      {/* ── DIAGNOSTIC PANEL (Ctrl+Shift+D, admin only) ────────────── */}
+      {showDiag && (
+        <Suspense fallback={null}>
+          <DiagnosticPanel onClose={() => setShowDiag(false)} />
+        </Suspense>
+      )}
 
       {/* ── APP TOUR ──────────────────────────────────────────────────── */}
       <AppTour userRole={user?.role || localStorage.getItem("user_role") || "athlete"} />

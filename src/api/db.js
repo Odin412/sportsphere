@@ -390,6 +390,13 @@ const entities = {
   // Other
   FeedPreferences: makeEntity('feed_preferences'),
   Recommendation: makeEntity('recommendations'),
+
+  // Bot Squad & Diagnostics
+  BotActivityLog: makeEntity('bot_activity_log'),
+  BotMaintenanceLog: makeEntity('bot_maintenance_log'),
+  BotScheduledTask: makeEntity('bot_scheduled_tasks'),
+  DiagnosticEvent: makeEntity('diagnostic_events'),
+  SystemHealthSnapshot: makeEntity('system_health_snapshots'),
 };
 
 // ---------------------------------------------------------------------------

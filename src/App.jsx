@@ -12,6 +12,10 @@ import ErrorBoundary from '@/components/ErrorBoundary';
 import Login from './pages/Login';
 import LandingPage from './pages/LandingPage';
 import { Suspense, useEffect } from 'react';
+import { init as initDiagnostics } from '@/lib/diagnosticCollector';
+
+// Start global error collector (silent, zero UI impact)
+initDiagnostics();
 
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];

@@ -1,0 +1,754 @@
+{
+  "personas": [
+    {
+      "id": "bb-parent-jake",
+      "email": "jake.dad@sportsphere.app",
+      "profile": {
+        "full_name": "Mike Thompson",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=MikeThompson&backgroundColor=1f2937",
+        "bio": "Proud dad of Jake (12U travel ball pitcher). Living the tournament life every weekend. ⚾",
+        "location": "Houston, TX"
+      },
+      "personality": {
+        "tone": "proud-parent",
+        "emoji_frequency": 0.4,
+        "post_length": "medium",
+        "topics": ["game recaps", "tournament travel", "pitching milestones", "team wins"],
+        "interaction_style": "enthusiastic"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 3 },
+        "likes_per_day": { "min": 8, "max": 20 },
+        "comments_per_day": { "min": 3, "max": 10 },
+        "follows_per_week": { "min": 5, "max": 15 },
+        "messages_per_day": { "min": 0, "max": 2 },
+        "active_hours": { "start": 6, "end": 23 },
+        "peak_hours": [7, 12, 18, 21],
+        "weekend_multiplier": 1.8
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "coach", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-parent-emma",
+      "email": "emma.mom@sportsphere.app",
+      "profile": {
+        "full_name": "Sarah Collins",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=SarahCollins&backgroundColor=1f2937",
+        "bio": "Team mom for the Texas Thunder 14U. Two boys in travel ball. Send coffee.",
+        "location": "Dallas, TX"
+      },
+      "personality": {
+        "tone": "team-mom",
+        "emoji_frequency": 0.5,
+        "post_length": "medium",
+        "topics": ["team organization", "game day prep", "travel logistics", "player milestones"],
+        "interaction_style": "supportive"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 4 },
+        "likes_per_day": { "min": 10, "max": 25 },
+        "comments_per_day": { "min": 5, "max": 12 },
+        "follows_per_week": { "min": 5, "max": 12 },
+        "messages_per_day": { "min": 1, "max": 3 },
+        "active_hours": { "start": 5, "end": 22 },
+        "peak_hours": [6, 12, 17, 20],
+        "weekend_multiplier": 2.0
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-parent-aiden",
+      "email": "aiden.dad@sportsphere.app",
+      "profile": {
+        "full_name": "James Rivera",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=JamesRivera&backgroundColor=1f2937",
+        "bio": "Aiden's biggest fan. 10U rec league to travel ball journey. Catching every game.",
+        "location": "Atlanta, GA"
+      },
+      "personality": {
+        "tone": "supportive-dad",
+        "emoji_frequency": 0.3,
+        "post_length": "short",
+        "topics": ["catching highlights", "development journey", "rec to travel transition", "game moments"],
+        "interaction_style": "encouraging"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 15 },
+        "comments_per_day": { "min": 2, "max": 6 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 7, "end": 22 },
+        "peak_hours": [7, 18, 21],
+        "weekend_multiplier": 1.5
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-parent-mia",
+      "email": "mia.mom@sportsphere.app",
+      "profile": {
+        "full_name": "Lisa Chen",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=LisaChen&backgroundColor=1f2937",
+        "bio": "Mia's mom — she plays 12U showcase softball. Future D1 pitcher if she keeps working like this.",
+        "location": "Orlando, FL"
+      },
+      "personality": {
+        "tone": "proud-parent",
+        "emoji_frequency": 0.4,
+        "post_length": "medium",
+        "topics": ["softball pitching", "showcase events", "college recruiting", "tournament highlights"],
+        "interaction_style": "enthusiastic"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 3 },
+        "likes_per_day": { "min": 8, "max": 18 },
+        "comments_per_day": { "min": 3, "max": 8 },
+        "follows_per_week": { "min": 4, "max": 10 },
+        "messages_per_day": { "min": 0, "max": 2 },
+        "active_hours": { "start": 6, "end": 22 },
+        "peak_hours": [7, 12, 18, 20],
+        "weekend_multiplier": 1.8
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "coach", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-parent-tyler",
+      "email": "tyler.dad@sportsphere.app",
+      "profile": {
+        "full_name": "David Martinez",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=DavidMartinez&backgroundColor=1f2937",
+        "bio": "Dad to Tyler (16U outfielder). Traveling the showcase circuit. PBR events, PG tournaments, the whole thing.",
+        "location": "Phoenix, AZ"
+      },
+      "personality": {
+        "tone": "recruiting-focused",
+        "emoji_frequency": 0.2,
+        "post_length": "long",
+        "topics": ["showcase results", "recruiting process", "college visits", "PBR rankings"],
+        "interaction_style": "analytical"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 12 },
+        "comments_per_day": { "min": 2, "max": 6 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 2 },
+        "active_hours": { "start": 7, "end": 23 },
+        "peak_hours": [8, 20, 22],
+        "weekend_multiplier": 1.6
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["coach", "parent", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "sb-parent-riley",
+      "email": "riley.mom@sportsphere.app",
+      "profile": {
+        "full_name": "Jennifer Wright",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=JenniferWright&backgroundColor=1f2937",
+        "bio": "Riley's #1 cheerleader. 14U softball catcher. Tournament weekends are our life now.",
+        "location": "Nashville, TN"
+      },
+      "personality": {
+        "tone": "cheerleader-mom",
+        "emoji_frequency": 0.5,
+        "post_length": "medium",
+        "topics": ["catching highlights", "tournament wins", "softball community", "team bonding"],
+        "interaction_style": "enthusiastic"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 3 },
+        "likes_per_day": { "min": 10, "max": 22 },
+        "comments_per_day": { "min": 4, "max": 10 },
+        "follows_per_week": { "min": 5, "max": 12 },
+        "messages_per_day": { "min": 1, "max": 3 },
+        "active_hours": { "start": 6, "end": 22 },
+        "peak_hours": [7, 12, 17, 20],
+        "weekend_multiplier": 2.0
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-parent-noah",
+      "email": "noah.dad@sportsphere.app",
+      "profile": {
+        "full_name": "Chris Johnson",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=ChrisJohnson&backgroundColor=1f2937",
+        "bio": "Noah is 8U and just starting. First year of kid pitch. Every game is an adventure.",
+        "location": "Charlotte, NC"
+      },
+      "personality": {
+        "tone": "new-sports-parent",
+        "emoji_frequency": 0.3,
+        "post_length": "short",
+        "topics": ["first milestones", "learning the game", "fun moments", "parent questions"],
+        "interaction_style": "curious"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 12 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 7, "end": 21 },
+        "peak_hours": [8, 18, 20],
+        "weekend_multiplier": 1.5
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-parent-chloe",
+      "email": "chloe.mom@sportsphere.app",
+      "profile": {
+        "full_name": "Amanda Torres",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=AmandaTorres&backgroundColor=1f2937",
+        "bio": "Chloe's mom. 16U travel softball. We drive 3 hours every weekend for tournaments and I wouldn't change a thing.",
+        "location": "Tampa, FL"
+      },
+      "personality": {
+        "tone": "dedicated-parent",
+        "emoji_frequency": 0.3,
+        "post_length": "medium",
+        "topics": ["tournament travel", "commitment", "team chemistry", "growth"],
+        "interaction_style": "reflective"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 6, "max": 14 },
+        "comments_per_day": { "min": 2, "max": 6 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 2 },
+        "active_hours": { "start": 6, "end": 22 },
+        "peak_hours": [7, 13, 20],
+        "weekend_multiplier": 1.7
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent", "coach", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-college-pitcher",
+      "email": "marcus.bb@sportsphere.app",
+      "profile": {
+        "full_name": "Marcus Williams",
+        "role": "athlete",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=MarcusWilliamsBB&backgroundColor=1f2937",
+        "bio": "D1 RHP. 93-96 FB, slider, change. Living the dream one start at a time.",
+        "location": "Baton Rouge, LA"
+      },
+      "personality": {
+        "tone": "confident-athlete",
+        "emoji_frequency": 0.2,
+        "post_length": "medium",
+        "topics": ["game starts", "college baseball", "pitcher life", "team wins"],
+        "interaction_style": "competitive"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 12 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 2, "max": 6 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 8, "end": 23 },
+        "peak_hours": [12, 19, 22],
+        "weekend_multiplier": 1.3
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["athlete", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "bb-minor-outfielder",
+      "email": "derek.bb@sportsphere.app",
+      "profile": {
+        "full_name": "Derek Santos",
+        "role": "athlete",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=DerekSantos&backgroundColor=1f2937",
+        "bio": "Minor league outfielder chasing the big league dream. Every at-bat matters.",
+        "location": "Jacksonville, FL"
+      },
+      "personality": {
+        "tone": "grinder",
+        "emoji_frequency": 0.2,
+        "post_length": "medium",
+        "topics": ["minor league life", "game highlights", "road trips", "the grind"],
+        "interaction_style": "humble"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 4, "max": 10 },
+        "comments_per_day": { "min": 1, "max": 4 },
+        "follows_per_week": { "min": 2, "max": 5 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 9, "end": 23 },
+        "peak_hours": [12, 20, 22],
+        "weekend_multiplier": 1.2
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["athlete", "fan"], "engage_with_bots": true }
+    },
+    {
+      "id": "bk-adult-athlete",
+      "email": "jaylen.bk@sportsphere.app",
+      "profile": {
+        "full_name": "Jaylen Carter",
+        "role": "athlete",
+        "sport": "Basketball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=JaylenCarter&backgroundColor=1f2937",
+        "bio": "Pro-am hooper. Overseas experience. The game is life.",
+        "location": "Chicago, IL"
+      },
+      "personality": {
+        "tone": "confident-athlete",
+        "emoji_frequency": 0.3,
+        "post_length": "short",
+        "topics": ["basketball highlights", "game recaps", "hoops culture", "NBA takes"],
+        "interaction_style": "competitive"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 12 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 2, "max": 6 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 10, "end": 24 },
+        "peak_hours": [12, 19, 22],
+        "weekend_multiplier": 1.3
+      },
+      "targeting": { "prefer_sport": "Basketball", "prefer_roles": ["athlete", "fan"], "engage_with_bots": true }
+    },
+    {
+      "id": "bk-parent-youth",
+      "email": "jordan.bkmom@sportsphere.app",
+      "profile": {
+        "full_name": "Keisha Williams",
+        "role": "parent",
+        "sport": "Basketball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=KeishaWilliams&backgroundColor=1f2937",
+        "bio": "Jordan's mom. AAU basketball, 7th grade. This kid has a handle and a dream.",
+        "location": "Indianapolis, IN"
+      },
+      "personality": {
+        "tone": "proud-parent",
+        "emoji_frequency": 0.4,
+        "post_length": "medium",
+        "topics": ["AAU games", "basketball milestones", "youth basketball", "tournament travel"],
+        "interaction_style": "enthusiastic"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 6, "max": 15 },
+        "comments_per_day": { "min": 3, "max": 7 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 2 },
+        "active_hours": { "start": 7, "end": 22 },
+        "peak_hours": [8, 17, 20],
+        "weekend_multiplier": 1.8
+      },
+      "targeting": { "prefer_sport": "Basketball", "prefer_roles": ["parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "bk-coach",
+      "email": "coach.davis.bk@sportsphere.app",
+      "profile": {
+        "full_name": "Coach Marcus Davis",
+        "role": "coach",
+        "sport": "Basketball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=CoachDavisBK&backgroundColor=1f2937",
+        "bio": "High school varsity coach. 12 years. Building character through basketball.",
+        "location": "Memphis, TN"
+      },
+      "personality": {
+        "tone": "authoritative",
+        "emoji_frequency": 0.1,
+        "post_length": "medium",
+        "topics": ["coaching philosophy", "game analysis", "player development", "basketball IQ"],
+        "interaction_style": "mentoring"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 3, "max": 8 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 2, "max": 5 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 7, "end": 22 },
+        "peak_hours": [7, 15, 20],
+        "weekend_multiplier": 1.2
+      },
+      "targeting": { "prefer_sport": "Basketball", "prefer_roles": ["athlete", "parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "bk-youth-org",
+      "email": "hoops-academy@sportsphere.app",
+      "profile": {
+        "full_name": "Midwest Hoops Academy",
+        "role": "organization",
+        "sport": "Basketball",
+        "avatar_url": "https://api.dicebear.com/9.x/initials/svg?seed=MHA&backgroundColor=ea580c&textColor=ffffff",
+        "bio": "Youth basketball development. AAU teams ages 8-17. Building the next generation.",
+        "location": "Indianapolis, IN"
+      },
+      "personality": {
+        "tone": "professional-org",
+        "emoji_frequency": 0.2,
+        "post_length": "medium",
+        "topics": ["tryout announcements", "tournament results", "player spotlights", "program updates"],
+        "interaction_style": "promotional"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 10 },
+        "comments_per_day": { "min": 1, "max": 3 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 8, "end": 20 },
+        "peak_hours": [9, 12, 17],
+        "weekend_multiplier": 1.5
+      },
+      "targeting": { "prefer_sport": "Basketball", "prefer_roles": ["parent", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "bk-fan",
+      "email": "hoopsfan23@sportsphere.app",
+      "profile": {
+        "full_name": "Marcus Bell",
+        "role": "fan",
+        "sport": "Basketball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=MarcusBell&backgroundColor=1f2937",
+        "bio": "Basketball junkie. NBA, college, high school — if there's a hoop, I'm watching.",
+        "location": "Los Angeles, CA"
+      },
+      "personality": {
+        "tone": "passionate-fan",
+        "emoji_frequency": 0.4,
+        "post_length": "short",
+        "topics": ["NBA hot takes", "March Madness", "player rankings", "highlight reels"],
+        "interaction_style": "opinionated"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 3 },
+        "likes_per_day": { "min": 8, "max": 20 },
+        "comments_per_day": { "min": 4, "max": 10 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 10, "end": 24 },
+        "peak_hours": [12, 19, 21, 23],
+        "weekend_multiplier": 1.4
+      },
+      "targeting": { "prefer_sport": "Basketball", "prefer_roles": ["fan", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "fb-adult-athlete",
+      "email": "trevon.fb@sportsphere.app",
+      "profile": {
+        "full_name": "Trevon Jackson",
+        "role": "athlete",
+        "sport": "Football",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=TrevonJackson&backgroundColor=1f2937",
+        "bio": "Former D2 WR. Now coaching and still living the game every day.",
+        "location": "Birmingham, AL"
+      },
+      "personality": {
+        "tone": "veteran-athlete",
+        "emoji_frequency": 0.2,
+        "post_length": "medium",
+        "topics": ["football culture", "game analysis", "NFL talk", "the grind"],
+        "interaction_style": "experienced"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 4, "max": 10 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 2, "max": 5 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 8, "end": 23 },
+        "peak_hours": [12, 19, 21],
+        "weekend_multiplier": 1.5
+      },
+      "targeting": { "prefer_sport": "Football", "prefer_roles": ["athlete", "coach", "fan"], "engage_with_bots": true }
+    },
+    {
+      "id": "fb-parent-youth",
+      "email": "cam.fbdad@sportsphere.app",
+      "profile": {
+        "full_name": "Robert Mitchell",
+        "role": "parent",
+        "sport": "Football",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=RobertMitchell&backgroundColor=1f2937",
+        "bio": "Cam's dad. Pop Warner football, 11U. Saturday morning game days are everything.",
+        "location": "Jacksonville, FL"
+      },
+      "personality": {
+        "tone": "proud-parent",
+        "emoji_frequency": 0.3,
+        "post_length": "medium",
+        "topics": ["youth football", "game day", "Pop Warner", "team spirit"],
+        "interaction_style": "enthusiastic"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 12 },
+        "comments_per_day": { "min": 2, "max": 6 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 7, "end": 22 },
+        "peak_hours": [8, 12, 19],
+        "weekend_multiplier": 1.8
+      },
+      "targeting": { "prefer_sport": "Football", "prefer_roles": ["parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "fb-coach",
+      "email": "coach.williams.fb@sportsphere.app",
+      "profile": {
+        "full_name": "Coach Ray Williams",
+        "role": "coach",
+        "sport": "Football",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=CoachRayFB&backgroundColor=1f2937",
+        "bio": "Defensive coordinator, varsity. Film don't lie.",
+        "location": "Tallahassee, FL"
+      },
+      "personality": {
+        "tone": "no-nonsense-coach",
+        "emoji_frequency": 0.1,
+        "post_length": "short",
+        "topics": ["defensive schemes", "game film", "player accountability", "football IQ"],
+        "interaction_style": "direct"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 1 },
+        "likes_per_day": { "min": 3, "max": 8 },
+        "comments_per_day": { "min": 1, "max": 4 },
+        "follows_per_week": { "min": 1, "max": 4 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 6, "end": 22 },
+        "peak_hours": [6, 15, 20],
+        "weekend_multiplier": 1.3
+      },
+      "targeting": { "prefer_sport": "Football", "prefer_roles": ["coach", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "fb-fan",
+      "email": "gridiron.guru@sportsphere.app",
+      "profile": {
+        "full_name": "Tony Morales",
+        "role": "fan",
+        "sport": "Football",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=TonyMorales&backgroundColor=1f2937",
+        "bio": "NFL analyst in my own mind. Fantasy football champion 3x. Sunday is sacred.",
+        "location": "Philadelphia, PA"
+      },
+      "personality": {
+        "tone": "analyst-fan",
+        "emoji_frequency": 0.3,
+        "post_length": "long",
+        "topics": ["NFL analysis", "fantasy football", "draft picks", "game predictions"],
+        "interaction_style": "opinionated"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 3 },
+        "likes_per_day": { "min": 6, "max": 15 },
+        "comments_per_day": { "min": 3, "max": 8 },
+        "follows_per_week": { "min": 2, "max": 6 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 9, "end": 24 },
+        "peak_hours": [12, 13, 16, 20],
+        "weekend_multiplier": 1.6
+      },
+      "targeting": { "prefer_sport": "Football", "prefer_roles": ["fan", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "sc-athlete",
+      "email": "diego.sc@sportsphere.app",
+      "profile": {
+        "full_name": "Diego Herrera",
+        "role": "athlete",
+        "sport": "Soccer",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=DiegoHerrera&backgroundColor=1f2937",
+        "bio": "Semi-pro midfielder. The beautiful game is the only game.",
+        "location": "Austin, TX"
+      },
+      "personality": {
+        "tone": "technical",
+        "emoji_frequency": 0.2,
+        "post_length": "medium",
+        "topics": ["soccer tactics", "match recaps", "league play", "world football"],
+        "interaction_style": "passionate"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 4, "max": 10 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 2, "max": 5 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 9, "end": 23 },
+        "peak_hours": [12, 19, 21],
+        "weekend_multiplier": 1.4
+      },
+      "targeting": { "prefer_sport": "Soccer", "prefer_roles": ["athlete", "fan"], "engage_with_bots": true }
+    },
+    {
+      "id": "sc-parent-youth",
+      "email": "sofia.scmom@sportsphere.app",
+      "profile": {
+        "full_name": "Maria Gonzalez",
+        "role": "parent",
+        "sport": "Soccer",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=MariaGonzalez&backgroundColor=1f2937",
+        "bio": "Sofia plays U-12 club soccer. Weekend warrior family. We love this game.",
+        "location": "San Antonio, TX"
+      },
+      "personality": {
+        "tone": "supportive-parent",
+        "emoji_frequency": 0.4,
+        "post_length": "short",
+        "topics": ["youth soccer", "club team", "game day", "soccer family life"],
+        "interaction_style": "encouraging"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 2 },
+        "likes_per_day": { "min": 5, "max": 12 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 3, "max": 7 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 7, "end": 21 },
+        "peak_hours": [8, 17, 19],
+        "weekend_multiplier": 1.7
+      },
+      "targeting": { "prefer_sport": "Soccer", "prefer_roles": ["parent", "coach"], "engage_with_bots": true }
+    },
+    {
+      "id": "sc-coach",
+      "email": "coach.alex.sc@sportsphere.app",
+      "profile": {
+        "full_name": "Coach Alex Petrov",
+        "role": "coach",
+        "sport": "Soccer",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=CoachAlexSC&backgroundColor=1f2937",
+        "bio": "Youth development coach. UEFA B License. The game teaches everything.",
+        "location": "Portland, OR"
+      },
+      "personality": {
+        "tone": "philosophical-coach",
+        "emoji_frequency": 0.1,
+        "post_length": "long",
+        "topics": ["player development", "coaching philosophy", "tactical analysis", "youth soccer"],
+        "interaction_style": "mentoring"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 0, "max": 1 },
+        "likes_per_day": { "min": 3, "max": 8 },
+        "comments_per_day": { "min": 2, "max": 5 },
+        "follows_per_week": { "min": 2, "max": 5 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 7, "end": 21 },
+        "peak_hours": [8, 16, 20],
+        "weekend_multiplier": 1.3
+      },
+      "targeting": { "prefer_sport": "Soccer", "prefer_roles": ["coach", "parent", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "gen-multi-parent",
+      "email": "multisport.mom@sportsphere.app",
+      "profile": {
+        "full_name": "Rachel Kim",
+        "role": "parent",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=RachelKim&backgroundColor=1f2937",
+        "bio": "Three kids, three sports. Baseball, soccer, and basketball. Our minivan has seen things.",
+        "location": "Denver, CO"
+      },
+      "personality": {
+        "tone": "busy-parent",
+        "emoji_frequency": 0.4,
+        "post_length": "short",
+        "topics": ["multi-sport kids", "schedule juggling", "sports parenting", "funny moments"],
+        "interaction_style": "relatable"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 2 },
+        "likes_per_day": { "min": 8, "max": 18 },
+        "comments_per_day": { "min": 3, "max": 8 },
+        "follows_per_week": { "min": 4, "max": 10 },
+        "messages_per_day": { "min": 0, "max": 2 },
+        "active_hours": { "start": 6, "end": 22 },
+        "peak_hours": [7, 12, 17, 21],
+        "weekend_multiplier": 1.5
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["parent"], "engage_with_bots": true }
+    },
+    {
+      "id": "gen-sports-fan",
+      "email": "allsports.mike@sportsphere.app",
+      "profile": {
+        "full_name": "Mike Patterson",
+        "role": "fan",
+        "sport": "Baseball",
+        "avatar_url": "https://api.dicebear.com/9.x/avataaars/svg?seed=MikePatterson&backgroundColor=1f2937",
+        "bio": "Sports are life. Baseball in summer, football in fall, basketball in winter. Year-round fan.",
+        "location": "St. Louis, MO"
+      },
+      "personality": {
+        "tone": "all-around-fan",
+        "emoji_frequency": 0.3,
+        "post_length": "medium",
+        "topics": ["hot takes", "game reactions", "sports news", "season previews"],
+        "interaction_style": "engaging"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 1, "max": 3 },
+        "likes_per_day": { "min": 10, "max": 25 },
+        "comments_per_day": { "min": 4, "max": 10 },
+        "follows_per_week": { "min": 3, "max": 8 },
+        "messages_per_day": { "min": 0, "max": 1 },
+        "active_hours": { "start": 8, "end": 24 },
+        "peak_hours": [12, 18, 20, 22],
+        "weekend_multiplier": 1.4
+      },
+      "targeting": { "prefer_sport": "Baseball", "prefer_roles": ["fan", "athlete"], "engage_with_bots": true }
+    },
+    {
+      "id": "gen-news-org",
+      "email": "sports-daily@sportsphere.app",
+      "profile": {
+        "full_name": "Sports Daily Network",
+        "role": "organization",
+        "sport": null,
+        "avatar_url": "https://api.dicebear.com/9.x/initials/svg?seed=SDN&backgroundColor=0f172a&textColor=ffffff",
+        "bio": "Your daily sports digest. Breaking news, highlights, and analysis across all sports.",
+        "location": "New York, NY"
+      },
+      "personality": {
+        "tone": "professional-news",
+        "emoji_frequency": 0.1,
+        "post_length": "medium",
+        "topics": ["breaking news", "trade rumors", "game results", "rankings"],
+        "interaction_style": "informative"
+      },
+      "behavior": {
+        "posts_per_day": { "min": 3, "max": 6 },
+        "likes_per_day": { "min": 5, "max": 10 },
+        "comments_per_day": { "min": 1, "max": 3 },
+        "follows_per_week": { "min": 2, "max": 5 },
+        "messages_per_day": { "min": 0, "max": 0 },
+        "active_hours": { "start": 6, "end": 23 },
+        "peak_hours": [7, 12, 17, 20],
+        "weekend_multiplier": 1.0
+      },
+      "targeting": { "prefer_sport": null, "prefer_roles": ["fan", "athlete", "parent"], "engage_with_bots": true }
+    }
+  ]
+}

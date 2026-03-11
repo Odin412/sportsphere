@@ -1,0 +1,116 @@
+{
+  "sports": {
+    "baseball": {
+      "label": "Baseball/Softball",
+      "baseWeight": 0.40,
+      "seasons": {
+        "spring_training": { "start": "02-15", "end": "03-25", "phase": "preseason" },
+        "regular_season": { "start": "03-26", "end": "09-28", "phase": "in_season" },
+        "postseason":     { "start": "09-29", "end": "11-05", "phase": "playoffs" },
+        "offseason":      { "start": "11-06", "end": "02-14", "phase": "offseason" }
+      },
+      "events": [
+        { "name": "MLB Opening Day",           "date": "03-27", "boost": 0.15, "duration_days": 3 },
+        { "name": "Little League World Series", "date": "08-14", "boost": 0.20, "duration_days": 12 },
+        { "name": "College World Series",       "date": "06-14", "boost": 0.15, "duration_days": 14 },
+        { "name": "MLB All-Star Game",          "date": "07-15", "boost": 0.10, "duration_days": 3 },
+        { "name": "World Series",               "date": "10-21", "boost": 0.25, "duration_days": 14 },
+        { "name": "MLB Draft",                  "date": "07-14", "boost": 0.10, "duration_days": 3 },
+        { "name": "Travel Ball Season Starts",  "date": "03-01", "boost": 0.10, "duration_days": 7 },
+        { "name": "Fall Ball Season",           "date": "09-01", "boost": 0.08, "duration_days": 30 },
+        { "name": "Softball World Series",      "date": "06-01", "boost": 0.12, "duration_days": 10 }
+      ],
+      "gameDays": [1, 2, 3, 4, 5, 6, 0],
+      "youthFocus": true,
+      "offseasonTopics": ["free agency", "trades", "hot stove", "prospect rankings", "offseason workouts", "combine", "draft talk"]
+    },
+    "basketball": {
+      "label": "Basketball",
+      "baseWeight": 0.20,
+      "seasons": {
+        "preseason":       { "start": "10-01", "end": "10-20", "phase": "preseason" },
+        "regular_season":  { "start": "10-21", "end": "04-13", "phase": "in_season" },
+        "playoffs":        { "start": "04-14", "end": "06-20", "phase": "playoffs" },
+        "offseason":       { "start": "06-21", "end": "09-30", "phase": "offseason" }
+      },
+      "events": [
+        { "name": "NBA Opening Night",    "date": "10-22", "boost": 0.10, "duration_days": 2 },
+        { "name": "NBA All-Star Weekend", "date": "02-14", "boost": 0.10, "duration_days": 3 },
+        { "name": "March Madness",        "date": "03-18", "boost": 0.25, "duration_days": 21 },
+        { "name": "NBA Playoffs",         "date": "04-15", "boost": 0.15, "duration_days": 60 },
+        { "name": "NBA Finals",           "date": "06-05", "boost": 0.20, "duration_days": 18 },
+        { "name": "NBA Draft",            "date": "06-25", "boost": 0.10, "duration_days": 2 }
+      ],
+      "gameDays": [0, 1, 2, 3, 4, 5, 6],
+      "offseasonTopics": ["free agency", "summer league", "draft analysis", "trades", "roster moves"]
+    },
+    "football": {
+      "label": "Football",
+      "baseWeight": 0.20,
+      "seasons": {
+        "preseason":       { "start": "08-01", "end": "09-04", "phase": "preseason" },
+        "regular_season":  { "start": "09-05", "end": "01-05", "phase": "in_season" },
+        "playoffs":        { "start": "01-06", "end": "02-15", "phase": "playoffs" },
+        "offseason":       { "start": "02-16", "end": "07-31", "phase": "offseason" }
+      },
+      "events": [
+        { "name": "NFL Kickoff",            "date": "09-05",  "boost": 0.15, "duration_days": 3 },
+        { "name": "NFL Draft",              "date": "04-24",  "boost": 0.15, "duration_days": 3 },
+        { "name": "Super Bowl",             "date": "02-09",  "boost": 0.30, "duration_days": 7 },
+        { "name": "NFL Combine",            "date": "02-27",  "boost": 0.08, "duration_days": 5 },
+        { "name": "College Football Playoff","date": "12-20", "boost": 0.15, "duration_days": 25 },
+        { "name": "NFL Free Agency",        "date": "03-12",  "boost": 0.10, "duration_days": 14 }
+      ],
+      "gameDays": [0, 1, 4],
+      "offseasonTopics": ["draft prospects", "free agency", "OTAs", "training camp", "combine results"]
+    },
+    "soccer": {
+      "label": "Soccer",
+      "baseWeight": 0.10,
+      "seasons": {
+        "mls_season":      { "start": "02-22", "end": "10-19", "phase": "in_season" },
+        "mls_playoffs":    { "start": "10-20", "end": "12-07", "phase": "playoffs" },
+        "offseason":       { "start": "12-08", "end": "02-21", "phase": "offseason" }
+      },
+      "events": [
+        { "name": "Champions League Final",  "date": "05-31", "boost": 0.15, "duration_days": 3 },
+        { "name": "World Cup",               "date": "06-11", "boost": 0.30, "duration_days": 30, "years": [2026, 2030] },
+        { "name": "MLS Cup",                 "date": "12-07", "boost": 0.10, "duration_days": 3 },
+        { "name": "Premier League Start",    "date": "08-16", "boost": 0.08, "duration_days": 3 }
+      ],
+      "gameDays": [0, 2, 3, 6],
+      "offseasonTopics": ["transfer window", "league standings", "international matches"]
+    },
+    "other": {
+      "label": "Other Sports",
+      "baseWeight": 0.10,
+      "events": [
+        { "name": "Summer Olympics",  "date": "07-26", "boost": 0.25, "duration_days": 17, "years": [2028, 2032] },
+        { "name": "Winter Olympics",  "date": "02-06", "boost": 0.15, "duration_days": 17, "years": [2026, 2030] },
+        { "name": "US Open Tennis",   "date": "08-25", "boost": 0.08, "duration_days": 14 },
+        { "name": "UFC PPV",          "date": "01-18", "boost": 0.05, "duration_days": 1, "recurring": "monthly" },
+        { "name": "Wimbledon",        "date": "06-30", "boost": 0.08, "duration_days": 14 }
+      ]
+    }
+  },
+  "primetime": {
+    "weekday": { "start": 19, "end": 23 },
+    "weekend": { "start": 12, "end": 23 }
+  },
+  "youthSports": {
+    "travelBall": {
+      "peakMonths": [3, 4, 5, 6, 7],
+      "tournamentWeekends": true,
+      "note": "Travel ball tournaments primarily Friday-Sunday, March through July"
+    },
+    "recLeague": {
+      "springStart": "03-01",
+      "fallStart": "09-01",
+      "note": "Rec leagues run spring and fall seasons"
+    },
+    "showcaseEvents": {
+      "peakMonths": [6, 7, 8],
+      "note": "Summer showcase season for college-bound athletes"
+    }
+  }
+}

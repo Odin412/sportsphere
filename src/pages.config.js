@@ -77,6 +77,7 @@ const UploadVideo = lazy(() => import('./pages/UploadVideo'));
 const UserProfile = lazy(() => import('./pages/UserProfile'));
 const VideoReview = lazy(() => import('./pages/VideoReview'));
 const ViewLive = lazy(() => import('./pages/ViewLive'));
+const CommandCenter = lazy(() => import('./pages/CommandCenter'));
 
 export const PAGES = {
     "Login": Login,
@@ -146,6 +147,7 @@ export const PAGES = {
     "UserProfile": UserProfile,
     "VideoReview": VideoReview,
     "ViewLive": ViewLive,
+    "CommandCenter": CommandCenter,
 }
 
 export const pagesConfig = {

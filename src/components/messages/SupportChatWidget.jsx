@@ -66,7 +66,7 @@ export default function SupportChatWidget({ user }) {
           className="fixed bottom-24 right-5 md:bottom-8 md:right-8 z-50 w-14 h-14 bg-gradient-to-br from-red-900 to-red-700 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-transform"
           title="SportHub Support"
         >
-          <img src={titanHelmet} alt="TitanAI" className="w-9 h-9 object-contain mix-blend-lighten" />
+          <img src={titanHelmet} alt="TitanAI" className="w-9 h-9 object-contain mix-blend-multiply drop-shadow-[0_0_6px_rgba(255,200,50,0.6)]" />
         </button>
       )}
 
@@ -75,7 +75,7 @@ export default function SupportChatWidget({ user }) {
         <div className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-50 w-80 sm:w-96 flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden" style={{ maxHeight: "520px" }}>
           {/* Header */}
           <div className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-red-900 to-red-800 text-white">
-            <img src={titanHelmet} alt="TitanAI" className="w-9 h-9 object-contain mix-blend-lighten" />
+            <img src={titanHelmet} alt="TitanAI" className="w-9 h-9 object-contain mix-blend-multiply" />
             <div className="flex-1">
               <p className="font-bold text-sm">SportHub Support</p>
               <p className="text-xs text-red-200">AI-powered · always here</p>

@@ -366,11 +366,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
             </p>
             <div className="flex items-center gap-2">
               <p className="text-xs text-stadium-600">{post.created_date ? formatDistanceToNow(new Date(post.created_date), { addSuffix: true }) : 'recently'}</p>
-              {post.sport && (
-                <span className="text-[10px] bg-monza/15 text-monza border border-monza/25 px-2 py-0.5 rounded-md font-display uppercase tracking-wider">
-                  {post.sport}
-                </span>
-              )}
+
               {post.category && <span className="text-sm">{categoryIcons[post.category]}</span>}
             </div>
           </div>

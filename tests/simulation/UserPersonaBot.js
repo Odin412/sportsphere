@@ -49,10 +49,13 @@ const SPORT_AVATAR_QUERIES = {
   Volleyball: "volleyball player athlete portrait",
 };
 
-async function fetchPexelsAvatar(sport, personaType = "athlete") {
+async function fetchPexelsAvatar(sport, personaType = "athlete", gender = "male") {
   try {
+    const genderWord = gender === "female" ? "woman" : "man";
     const baseQuery = SPORT_AVATAR_QUERIES[sport] || "athlete portrait sport";
-    const query = personaType === "scout" ? "sports coach professional portrait" : baseQuery;
+    const query = personaType === "scout"
+      ? `${genderWord} sports coach professional portrait`
+      : `${genderWord} ${baseQuery}`;
     const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(query)}&per_page=10&orientation=portrait`;
     const res = await fetch(url, { headers: { Authorization: PEXELS_API_KEY } });
     if (!res.ok) throw new Error(`Pexels ${res.status}`);
@@ -185,16 +188,48 @@ function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
+const BOT_NAMES = {
+  hype: [
+    { name: "Darius King", gender: "male" },
+    { name: "Aaliyah Foster", gender: "female" },
+    { name: "Terrence Webb", gender: "male" },
+    { name: "Keisha Monroe", gender: "female" },
+    { name: "Brandon Cruz", gender: "male" },
+    { name: "Jasmine Okafor", gender: "female" },
+    { name: "Devon Reyes", gender: "male" },
+    { name: "Tiana Bell", gender: "female" },
+    { name: "Elijah Stone", gender: "male" },
+    { name: "Naomi Patel", gender: "female" },
+  ],
+  scout: [
+    { name: "Ray Holloway", gender: "male" },
+    { name: "Lisa Nguyen", gender: "female" },
+    { name: "Frank Castellano", gender: "male" },
+    { name: "Sandra Osei", gender: "female" },
+    { name: "Greg Tanaka", gender: "male" },
+    { name: "Maria Santos", gender: "female" },
+    { name: "Calvin Price", gender: "male" },
+    { name: "Diane Kowalski", gender: "female" },
+    { name: "Victor Mensah", gender: "male" },
+    { name: "Helen Burke", gender: "female" },
+  ],
+  athlete: [
+    { name: "Zion Blake", gender: "male" },
+    { name: "Simone Ortega", gender: "female" },
+    { name: "Isaiah Grant", gender: "male" },
+    { name: "Priya Sharma", gender: "female" },
+    { name: "Carlos Rivera", gender: "male" },
+    { name: "Amara Diallo", gender: "female" },
+    { name: "Luca Ferretti", gender: "male" },
+    { name: "Yuki Tanaka", gender: "female" },
+    { name: "Marcus Obi", gender: "male" },
+    { name: "Serena Volkov", gender: "female" },
+  ],
+};
+
 function generateBotName(personaType, index) {
-  const firstNames = {
-    hype: ["Jaylen", "Marcus", "DeShawn", "Tyler", "Cameron", "Xavier", "Bryce", "Malik"],
-    scout: ["Mike", "Coach_Ray", "ScoutPro", "TalentEye", "FilmGuru", "ProspectHQ", "NextLevel", "D1Watch"],
-    athlete: ["Jordan", "Kai", "Reese", "Morgan", "Riley", "Avery", "Dakota", "Quinn"],
-  };
-  const lastNames = ["Williams", "Davis", "Carter", "Mitchell", "Brooks", "Jackson", "Harris", "Thompson"];
-  const first = firstNames[personaType]?.[index % firstNames[personaType].length] || `Bot${index}`;
-  const last = lastNames[index % lastNames.length];
-  return `${first} ${last}`;
+  const pool = BOT_NAMES[personaType] || BOT_NAMES.athlete;
+  return pool[index % pool.length]; // returns { name, gender }
 }
 
 // ── AI Content Generation ────────────────────────────────────────────────────
@@ -322,6 +357,7 @@ class PersonaBot {
     email,
     password,
     name,
+    gender,
     sport,
     index,
     headed = false,
@@ -331,6 +367,7 @@ class PersonaBot {
     this.email = email;
     this.password = password;
     this.name = name;
+    this.gender = gender || "male";
     this.sport = sport;
     this.index = index;
     this.headed = headed;
@@ -383,7 +420,7 @@ class PersonaBot {
     const result = await createAuthUser(this.email, this.password, this.name, "athlete");
 
     // Set avatar + mark onboarding complete via profile update
-    const pexelsAvatar = await fetchPexelsAvatar(this.sport, this.personaType);
+    const pexelsAvatar = await fetchPexelsAvatar(this.sport, this.personaType, this.gender);
     const avatarUrl = pexelsAvatar || "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&q=80";
     this.avatarUrl = avatarUrl;
     const profileData = {
@@ -725,7 +762,7 @@ class PersonaBot {
       const post = await supabaseRequest("POST", "posts", "", {
         author_email: this.email,
         author_name: this.name,
-        author_avatar: this.avatarUrl || await fetchPexelsAvatar(this.sport, this.personaType),
+        author_avatar: this.avatarUrl || await fetchPexelsAvatar(this.sport, this.personaType, this.gender),
         content: caption,
         created_date: new Date().toISOString(),
         media_urls: [`https://stream.mux.com/${mockMuxId}.m3u8`],
@@ -892,7 +929,7 @@ async function orchestrate({ personaType, count, headed, skipSignup, iterations 
   const uniqueRun = Date.now().toString(36);
 
   for (let i = 0; i < count; i++) {
-    const name = generateBotName(personaType, i);
+    const { name, gender } = generateBotName(personaType, i);
     const sport = PERSONAS[personaType].sports
       ? pick(PERSONAS[personaType].sports)
       : pick(SPORTS);
@@ -904,6 +941,7 @@ async function orchestrate({ personaType, count, headed, skipSignup, iterations 
         email,
         password: BOT_PASSWORD,
         name,
+        gender,
         sport,
         index: i,
         headed,

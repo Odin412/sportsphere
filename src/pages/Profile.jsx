@@ -261,7 +261,8 @@ export default function Profile() {
       setShowPersonalInfoDialog(false);
       toast.success("Profile updated!");
     } catch (error) {
-      toast.error("Failed to save changes. Please try again.");
+      console.error("Profile save error:", error);
+      toast.error(`Failed to save: ${error?.message || "unknown error"}`);
     }
   };
 

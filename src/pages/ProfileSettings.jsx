@@ -201,7 +201,8 @@ export default function ProfileSettings() {
       setTimeout(() => setSaved(false), 2000);
       toast.success("Profile saved!");
     } catch (error) {
-      toast.error("Failed to save profile. Please try again.");
+      console.error("Profile save error:", error);
+      toast.error(`Failed to save profile: ${error?.message || "unknown error"}`);
     } finally {
       setSaving(false);
     }

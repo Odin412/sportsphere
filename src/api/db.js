@@ -382,6 +382,7 @@ const entities = {
   SubscriptionPlan: makeEntity('subscription_plans'),
   Transaction: makeEntity('transactions'),
   Tip: makeEntity('tips'),
+  Product: makeEntity('products'),
 
   // Trainer Portal
   ProgressReport: makeEntity('progress_reports'),

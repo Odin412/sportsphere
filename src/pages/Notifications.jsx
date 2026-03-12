@@ -143,7 +143,7 @@ export default function Notifications() {
       case "challenge_completed": return <Trophy className="w-5 h-5 text-yellow-400" />;
       case "live_stream": return <Radio className="w-5 h-5 text-red-500" />;
       case "subscription": return <Zap className="w-5 h-5 text-purple-500" />;
-      default: return <Bell className="w-5 h-5 text-slate-400" />;
+      default: return <Bell className="w-5 h-5 text-stadium-400" />;
     }
   };
 
@@ -198,12 +198,12 @@ export default function Notifications() {
     return (
       <div className="max-w-3xl mx-auto px-4 py-6 space-y-3">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="bg-slate-900/90 rounded-2xl border-2 border-slate-700 p-4 animate-pulse">
+          <div key={i} className="glass-card rounded-lg p-4 animate-pulse">
             <div className="flex gap-4">
-              <div className="w-12 h-12 rounded-full bg-slate-700 flex-shrink-0" />
+              <div className="w-12 h-12 rounded-full bg-stadium-700 flex-shrink-0" />
               <div className="flex-1 space-y-2">
-                <div className="h-3 bg-slate-700 rounded w-3/4" />
-                <div className="h-2 bg-slate-700 rounded w-1/4" />
+                <div className="h-3 bg-stadium-700 rounded w-3/4" />
+                <div className="h-2 bg-stadium-700 rounded w-1/4" />
               </div>
             </div>
           </div>
@@ -220,14 +220,14 @@ export default function Notifications() {
       className="max-w-3xl mx-auto px-4 py-6 space-y-6"
     >
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-800 to-slate-900 rounded-3xl p-6 text-white shadow-xl">
+      <div className="glass-card rounded-lg p-6 text-white">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-black flex items-center gap-3">
-              <Bell className="w-8 h-8" />
+            <h1 className="text-3xl font-display font-bold uppercase tracking-wider flex items-center gap-3">
+              <Bell className="w-8 h-8 text-monza" />
               Notifications
             </h1>
-            <p className="text-slate-300 mt-2">
+            <p className="text-stadium-400 mt-2">
               {allNotifications?.filter(n => !n.is_read).length || 0} unread notifications
             </p>
           </div>
@@ -246,7 +246,7 @@ export default function Notifications() {
 
       {/* Tabs */}
       <Tabs defaultValue="notifications" className="w-full">
-        <TabsList className="w-full bg-slate-800 mb-4">
+        <TabsList className="w-full bg-stadium-800 mb-4">
           <TabsTrigger value="notifications" className="flex-1">Notifications</TabsTrigger>
           <TabsTrigger value="activity" className="flex-1">Activity</TabsTrigger>
         </TabsList>
@@ -271,13 +271,13 @@ export default function Notifications() {
                   onClick={() => setFilter(option.value)}
                   className={`px-4 py-2 rounded-2xl font-semibold text-sm transition-all flex items-center gap-2 ${
                     filter === option.value
-                      ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow-lg"
-                      : "bg-slate-800/80 text-slate-300 hover:bg-slate-800"
+                      ? "bg-monza text-white shadow-lg shadow-monza/20"
+                      : "bg-stadium-800/80 text-stadium-400 hover:bg-stadium-700"
                   }`}
                 >
                   <Icon className="w-4 h-4" />
                   {option.label}
-                  <Badge className="bg-slate-700 text-slate-200">{count || 0}</Badge>
+                  <Badge className="bg-stadium-700 text-stadium-400">{count || 0}</Badge>
                 </button>
               );
             })}
@@ -294,8 +294,8 @@ export default function Notifications() {
               {groupNotifications(notifications || []).map(group => (
                 <div
                   key={group.id}
-                  className={`bg-slate-900/90 rounded-2xl border-2 overflow-hidden transition-all hover:scale-[1.01] ${
-                    !group.is_read ? "border-cyan-400/40 shadow-lg shadow-cyan-400/10" : "border-slate-700"
+                  className={`glass-card rounded-lg overflow-hidden transition-all hover:scale-[1.01] ${
+                    !group.is_read ? "border-monza/40 shadow-lg shadow-monza/10" : "border-stadium-700"
                   }`}
                 >
                   <Link
@@ -314,7 +314,7 @@ export default function Notifications() {
                             <img
                               key={i}
                               src={m.actor_avatar || ""}
-                              className="w-8 h-8 rounded-full border-2 border-slate-900 object-cover bg-slate-700"
+                              className="w-8 h-8 rounded-full border-2 border-stadium-900 object-cover bg-stadium-700"
                               onError={e => e.target.style.display = "none"}
                             />
                           ))}
@@ -331,23 +331,23 @@ export default function Notifications() {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1">
-                            <p className="text-sm text-slate-200">
+                            <p className="text-sm text-white">
                               {group.members.length > 1 ? (
                                 getGroupLabel(group)
                               ) : (
                                 <>
-                                  <span className="font-bold text-cyan-400">{group.actor_name}</span>{" "}
+                                  <span className="font-bold text-monza">{group.actor_name}</span>{" "}
                                   {group.message}
                                 </>
                               )}
                             </p>
                             <div className="flex items-center gap-2 mt-2 flex-wrap">
-                              <p className="text-xs text-slate-500">{formatDistanceToNow(new Date(group.created_date), { addSuffix: true })}</p>
+                              <p className="text-xs text-stadium-600">{formatDistanceToNow(new Date(group.created_date), { addSuffix: true })}</p>
                               {!group.is_read && (
-                                <Badge className="bg-cyan-500 text-white text-xs">New</Badge>
+                                <Badge className="bg-monza text-white text-xs">New</Badge>
                               )}
                               {group.members.length > 1 && (
-                                <Badge className="bg-slate-700 text-slate-300 text-xs">{group.members.length} notifications</Badge>
+                                <Badge className="bg-stadium-700 text-stadium-400 text-xs">{group.members.length} notifications</Badge>
                               )}
                             </div>
                             {group.type === "follow_request" && !group.follow_resolved && (
@@ -370,7 +370,7 @@ export default function Notifications() {
                               </div>
                             )}
                             {group.type === "follow_request" && group.follow_resolved && (
-                              <p className="text-xs text-slate-500 mt-1 italic">Request resolved</p>
+                              <p className="text-xs text-stadium-600 mt-1 italic">Request resolved</p>
                             )}
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
@@ -381,9 +381,9 @@ export default function Notifications() {
                                 e.stopPropagation();
                                 group.members.forEach(m => deleteNotification(m.id));
                               }}
-                              className="p-1 hover:bg-slate-800 rounded-lg transition-colors"
+                              className="p-1 hover:bg-stadium-800 rounded-lg transition-colors"
                             >
-                              <span className="text-slate-500 text-xs">✕</span>
+                              <span className="text-stadium-600 text-xs">✕</span>
                             </button>
                           </div>
                         </div>
@@ -400,26 +400,26 @@ export default function Notifications() {
         <TabsContent value="activity">
           {recentActivity.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-slate-400 font-medium">No recent activity from people you follow.</p>
-              <p className="text-slate-500 text-sm mt-1">Follow more athletes to see their posts here.</p>
+              <p className="text-stadium-400 font-medium">No recent activity from people you follow.</p>
+              <p className="text-stadium-600 text-sm mt-1">Follow more athletes to see their posts here.</p>
             </div>
           ) : (
             <div className="space-y-3">
               {recentActivity.map(post => (
-                <div key={post.id} className="flex items-start gap-3 p-3 rounded-xl bg-slate-800/50 hover:bg-slate-800 transition-colors">
+                <div key={post.id} className="flex items-start gap-3 p-3 rounded-lg bg-stadium-800/50 hover:bg-stadium-800 transition-colors">
                   <img
                     src={post.author_avatar || ""}
-                    className="w-9 h-9 rounded-full object-cover bg-slate-700 flex-shrink-0"
+                    className="w-9 h-9 rounded-full object-cover bg-stadium-700 flex-shrink-0"
                     onError={e => e.target.style.display = "none"}
                   />
                   <div className="min-w-0 flex-1">
                     <p className="text-sm text-white">
                       <span className="font-bold">{post.author_name || post.author_email}</span>
-                      <span className="text-slate-400"> posted</span>
-                      {post.sport && <span className="text-cyan-400"> • {post.sport}</span>}
+                      <span className="text-stadium-400"> posted</span>
+                      {post.sport && <span className="text-monza"> • {post.sport}</span>}
                     </p>
-                    {post.content && <p className="text-xs text-slate-400 truncate mt-0.5">{post.content}</p>}
-                    <p className="text-[11px] text-slate-500 mt-1">{timeAgo(post.created_date)}</p>
+                    {post.content && <p className="text-xs text-stadium-400 truncate mt-0.5">{post.content}</p>}
+                    <p className="text-[11px] text-stadium-600 mt-1">{timeAgo(post.created_date)}</p>
                   </div>
                   {post.media_urls?.[0] && (
                     <img src={post.media_urls[0]} className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />

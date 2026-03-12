@@ -6,16 +6,16 @@ import titanStamp from "./powered by TitanAI.png";
  * mix-blend-multiply eliminates any white/light background from the PNG
  * so the badge looks stamped directly onto whatever surface it sits on.
  */
-export default function PoweredByTitanAI({ variant = "inline", className = "" }) {
+export default function PoweredByTitanAI({ variant = "inline", light = false, className = "" }) {
   if (variant === "minimal") {
     return (
       <div className={`flex items-center justify-center gap-1.5 opacity-50 hover:opacity-80 transition-opacity pointer-events-none ${className}`}>
         <img
           src={titanStamp}
           alt="TitanAI"
-          className="h-5 object-contain mix-blend-multiply"
+          className={`h-5 object-contain ${light ? "" : "brightness-0 invert"}`}
         />
-        <span className="text-[10px] text-white/50 font-medium tracking-wide uppercase">
+        <span className={`text-[10px] font-medium tracking-wide uppercase ${light ? "text-gray-400" : "text-white/50"}`}>
           Powered by TitanAI
         </span>
       </div>
@@ -28,7 +28,7 @@ export default function PoweredByTitanAI({ variant = "inline", className = "" })
       <img
         src={titanStamp}
         alt="Powered by TitanAI"
-        className="h-10 w-full object-contain mix-blend-multiply"
+        className="h-10 w-full object-contain"
       />
     </div>
   );

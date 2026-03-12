@@ -222,8 +222,11 @@ export default function Login() {
   const handleSignUp = async (e) => {
     e.preventDefault();
     const isParent = selectedRoleCard?.id === "parent";
-    if (!email || !password || !fullName || !selectedRole) return;
-    if (isParent && !childName) return;
+    if (!fullName) { toast.error("Please enter your full name."); return; }
+    if (isParent && !childName) { toast.error("Please enter your child's name."); return; }
+    if (!email) { toast.error("Please enter your email address."); return; }
+    if (!password) { toast.error("Please enter a password."); return; }
+    if (!selectedRole) { toast.error("Please go back and select your role."); return; }
     if (password.length < 6) {
       toast.error("Password must be at least 6 characters.");
       return;
@@ -353,7 +356,7 @@ export default function Login() {
               </div>
               <Button
                 type="submit"
-                disabled={loading || !email || !password}
+                disabled={loading}
                 className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
               >
                 {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Sign In"}
@@ -430,7 +433,8 @@ export default function Login() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setSignupStep("role-select")}
-                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                      className="p-2 -ml-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                      aria-label="Go back"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -487,7 +491,8 @@ export default function Login() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => setSignupStep(selectedRoleCard?.hasSub ? "role-sub" : "role-select")}
-                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                      className="p-2 -ml-2 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors"
+                      aria-label="Go back"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </button>
@@ -569,7 +574,7 @@ export default function Login() {
                     </div>
                     <Button
                       type="submit"
-                      disabled={loading || !email || !password || !fullName || (selectedRoleCard?.id === "parent" && !childName)}
+                      disabled={loading}
                       className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
                     >
                       {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
@@ -585,7 +590,7 @@ export default function Login() {
             <span>Secure authentication</span>
           </div>
 
-          <PoweredByTitanAI variant="minimal" className="mt-4" />
+          <PoweredByTitanAI variant="minimal" light className="mt-4" />
         </motion.div>
       </div>
     </div>

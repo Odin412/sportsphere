@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,14 +13,14 @@ import ProductDialog from "@/components/shop/ProductDialog";
 import ProductPurchaseDialog from "@/components/shop/ProductPurchaseDialog";
 
 export default function CreatorShop() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const urlParams = new URLSearchParams(window.location.search);
   const creatorEmail = urlParams.get("creator") || null;
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: products = [], isLoading } = useQuery({

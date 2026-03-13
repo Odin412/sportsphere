@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -33,7 +34,7 @@ export default function ViewLive() {
   const streamId = urlParams.get("id");
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [autoHighlight, setAutoHighlight] = useState(false);
   const [message, setMessage] = useState("");
   const [hasAccess, setHasAccess] = useState(false);
@@ -53,7 +54,7 @@ export default function ViewLive() {
   const [savingDetails, setSavingDetails] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: stream, isLoading } = useQuery({

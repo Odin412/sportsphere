@@ -1,0 +1,135 @@
+{
+  "timestamp": "2026-03-10T03:46:40.030Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "discovery"
+  ],
+  "duration_ms": 111994,
+  "summary": {
+    "total": 9,
+    "critical": 0,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 8,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "discovery",
+      "name": "Discover page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Discover page is properly loaded with all key elements present: 'Discover' heading with sparkle icon, 'Personalized recommendations just for you' subtitle, Advanced Filters section with search bar and dropdown filters (All Sports, All Types, Relevance), Your Weekly Digest section with Generate Digest button, and Refresh Recommendations button at the bottom. The layout is complete and functional.",
+      "screenshot": "discovery_01_discover_page_loads.png",
+      "duration_ms": 20543
+    },
+    {
+      "phase": "discovery",
+      "name": "Discover — filters section visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Discover page shows a functional 'Advanced Filters' card with all required filter controls: search input field ('Search content...'), sport dropdown ('All Sports'), content type dropdown ('All Types'), and sort dropdown ('Relevance'). The page is in a valid state showing the filter interface as expected.",
+      "screenshot": "discovery_02_discover___filters_section_visible.png",
+      "duration_ms": 8480
+    },
+    {
+      "phase": "discovery",
+      "name": "ForYou page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The For You page displays correctly with all required elements: 'For You' heading with sparkle icon and gradient banner, personalized subtitle, tabs (Recommended, Trending, Discover), Smart Algorithm Feed section with AI Rank button, and a post from Sofia Rodriguez with swimming content. The 'Unable to load recommendations' message is from the AI stream sub-component which is acceptable per requirements.",
+      "screenshot": "discovery_03_foryou_page_loads.png",
+      "duration_ms": 12232
+    },
+    {
+      "phase": "discovery",
+      "name": "ForYou — tabs visible (Recommended, Trending, Discover)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The For You page displays all three required tab buttons (Recommended, Trending, Discover) with the Recommended tab properly active (highlighted in purple). While there is an 'Unable to load recommendations' message, this is acceptable as noted in the criteria since it's a non-critical sub-component and the core tab functionality is working correctly.",
+      "screenshot": "discovery_04_foryou___tabs_visible__recommended__trending__discover_.png",
+      "duration_ms": 5071
+    },
+    {
+      "phase": "discovery",
+      "name": "TrendingChallenges page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows the 'Trending Challenges' heading with flame icon and orange-red gradient banner, the 'Most popular challenges happening right now' subtitle, and the filter tabs ('All Trending', 'By Sport'). The content area below the tabs appears empty, which is a valid data-empty state indicating no active challenges exist in the database. All required UI elements are present and functional.",
+      "screenshot": "discovery_05_trendingchallenges_page_loads.png",
+      "duration_ms": 16679
+    },
+    {
+      "phase": "discovery",
+      "name": "TrendingChallenges — tabs visible (All Trending, By Sport)",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows the Trending Challenges header and tab buttons ('All Trending' and 'By Sport') but the content area below the tabs is completely empty/black with no challenge cards, empty state message, or loading indicator visible. This appears to be a broken state rather than a proper empty state.",
+      "screenshot": "discovery_06_trendingchallenges___tabs_visible__all_trending__by_sport_.png",
+      "duration_ms": 4164
+    },
+    {
+      "phase": "discovery",
+      "name": "SportHub page loads with sport param",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Basketball sport hub page is properly loaded with correct 'Basketball' heading and 'Complete hub for all Basketball content' subtitle. The 'Highlight Reels' section shows 6 real basketball posts from users Jordan Williams and NBA Daily with engagement metrics (likes, comments, shares, views). All posts contain basketball-related content with proper timestamps and interaction counts, indicating the feature is working correctly with real data.",
+      "screenshot": "discovery_07_sporthub_page_loads_with_sport_param.png",
+      "duration_ms": 17177
+    },
+    {
+      "phase": "discovery",
+      "name": "SportHub — empty sport param shows fallback",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page is displaying the expected 'Sport not specified' message in the center, indicating proper handling of missing sport query parameter. The navigation sidebar and UI elements are properly loaded and functional. This is the correct behavior for this state.",
+      "screenshot": "discovery_08_sporthub___empty_sport_param_shows_fallback.png",
+      "duration_ms": 13812
+    },
+    {
+      "phase": "discovery",
+      "name": "Return to Feed from discovery features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functioning properly with real content - stories section shows multiple user avatars (Marcus, Zara, Sofia, Diego, Jack), post composer is present, sports category filters are active (For You, All, Basketball, Soccer, Football), and there's a visible post from Marcus Silva with timestamp, soccer tag, follow button, and image content. The navigation round-trip from discovery back to feed completed successfully with all expected feed functionality intact.",
+      "screenshot": "discovery_09_return_to_feed_from_discovery_features.png",
+      "duration_ms": 8052
+    }
+  ]
+}

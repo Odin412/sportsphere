@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Upload, Video, Loader2, CheckCircle, Tag, X, Sliders } from "lucide-react";
@@ -18,7 +19,7 @@ const VISIBILITY_OPTIONS = [
 ];
 
 export default function UploadVideo() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [orgId, setOrgId] = useState(null);
   const [form, setForm] = useState({ title: "", description: "", visibility: "coaches_only", tag: "" });
   const [tags, setTags] = useState([]);
@@ -29,14 +30,14 @@ export default function UploadVideo() {
   const [videoMeta, setVideoMeta] = useState({ thumbnailFile: null, thumbnailPreview: null, chapters: [], trimStart: undefined, trimEnd: undefined });
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user) return;
+    (async () => {
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       if (orgs[0]) { setOrgId(orgs[0].id); return; }
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       if (memberships[0]) setOrgId(memberships[0].organization_id);
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const { data: membership } = useQuery({
     queryKey: ["my-membership", user?.email],

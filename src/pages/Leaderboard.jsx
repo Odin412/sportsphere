@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -12,12 +13,12 @@ import { motion } from "framer-motion";
 const SPORTS_CHIPS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Hockey", "MMA", "Golf"];
 
 export default function Leaderboard() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [period, setPeriod] = useState("all"); // "all" | "week" | "month"
   const [sportFilter, setSportFilter] = useState(null);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: topUsers = [] } = useQuery({

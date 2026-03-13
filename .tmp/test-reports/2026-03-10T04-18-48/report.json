@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-03-10T04:19:49.791Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "content_creation"
+  ],
+  "duration_ms": 61058,
+  "summary": {
+    "total": 4,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 4,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "content_creation",
+      "name": "CreateReel page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Create Reel page is functioning correctly with all expected elements: video upload area with 'Tap to upload video(s)' prompt, optional thumbnail section, caption textarea with placeholder text, sport selector dropdown, category selector dropdown, and back arrow navigation. The interface is properly loaded and ready for user interaction.",
+      "screenshot": "content_creation_01_createreel_page_loads.png",
+      "duration_ms": 16387
+    },
+    {
+      "phase": "content_creation",
+      "name": "UploadVideo page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Upload Training Video page is working correctly with all required elements present: drag-and-drop upload area with 'Click to select video' prompt, title field with placeholder text, description field, visibility selector set to 'Coaches Only', skill tags input field, and 'Upload Video' button at bottom. All form elements are functional and the page layout is properly rendered.",
+      "screenshot": "content_creation_02_uploadvideo_page_loads.png",
+      "duration_ms": 16591
+    },
+    {
+      "phase": "content_creation",
+      "name": "ImportVideos page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Import Video Highlights page is functioning properly with a complete YouTube search interface including sport selector dropdowns, search bar with placeholder text, search button, and appropriate empty state message 'Search to find highlight videos' with YouTube play icon",
+      "screenshot": "content_creation_03_importvideos_page_loads.png",
+      "duration_ms": 16226
+    },
+    {
+      "phase": "content_creation",
+      "name": "Return to Feed from content creation",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page successfully displays real content including user stories, post creation prompt, sport category filters, and an actual post from Marcus Silva with image, text, timestamp, and interaction options. All UI elements are properly rendered and functional.",
+      "screenshot": "content_creation_04_return_to_feed_from_content_creation.png",
+      "duration_ms": 5981
+    }
+  ]
+}

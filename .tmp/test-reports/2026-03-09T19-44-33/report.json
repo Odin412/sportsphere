@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-03-09T19:45:23.645Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "auth"
+  ],
+  "duration_ms": 47831,
+  "summary": {
+    "total": 7,
+    "critical": 1,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 1,
+    "skipped": 4
+  },
+  "results": [
+    {
+      "phase": "auth",
+      "name": "Login page renders",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Login page displays correctly with split-screen design - dark left panel shows Sportsphere branding, community tagline, feature list, and stats; right panel has functional sign in form with email/password fields, Sign In button, and Create Account option. Layout is complete and working as expected.",
+      "screenshot": "auth_01_login_page_renders.png",
+      "duration_ms": 9456
+    },
+    {
+      "phase": "auth",
+      "name": "Invalid credentials rejected",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: No error message or red toast notification is visible after attempting to sign in with invalid credentials (fake-nonexistent-user@example.com). The user appears to still be on the login page, but there should be a clear error indication for failed authentication attempts.",
+      "screenshot": "auth_02_invalid_credentials_rejected.png",
+      "duration_ms": 8300
+    },
+    {
+      "phase": "auth",
+      "name": "Valid login redirects to Feed",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.waitForURL: Timeout 20000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"**/Feed**\" until \"load\"\n============================================================",
+      "screenshot": "auth_03_valid_login_redirects_to_feed.png",
+      "duration_ms": 30074
+    },
+    {
+      "phase": "auth",
+      "name": "Session persists on refresh",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "auth",
+      "name": "Sign-up form has role selection",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "auth",
+      "name": "Logout actually logs out",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "auth",
+      "name": "Auth guard blocks Feed when logged out",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    }
+  ]
+}

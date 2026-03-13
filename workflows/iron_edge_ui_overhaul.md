@@ -7,7 +7,10 @@
 **Last Updated**: 2026-03-11
 **Owner**: Engineering / Product
 **Classification**: Internal — Traceable Audit Record
-**Completion**: 5/5 phases implemented — build verified — ready to deploy
+**Completion**: 5/5 phases implemented — build verified — DEPLOYED
+**Git Commit**: `ffa7f8b` — pushed to origin/master 2026-03-11
+**Git Tag**: `iron-edge-v1.0` — rollback checkpoint (see Section 6)
+**Vercel**: Auto-deploy triggered via GitHub push → https://sportsphere-titan-one.vercel.app
 
 ---
 

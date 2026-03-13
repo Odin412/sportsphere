@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-03-10T04:06:48.802Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "creator_tools"
+  ],
+  "duration_ms": 68206,
+  "summary": {
+    "total": 5,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 5,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "creator_tools",
+      "name": "CreatorAI page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Premium gate is displayed correctly with crown icon, 'Premium Feature' title, AI Content Creator description, detailed benefits list with checkmarks, and prominent upgrade CTA button showing $9.99/month pricing. This is the expected behavior for non-premium users accessing CreatorAI features.",
+      "screenshot": "creator_tools_01_creatorai_page_loads.png",
+      "duration_ms": 17455
+    },
+    {
+      "phase": "creator_tools",
+      "name": "CreatorShop page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Creator Shop page displays correctly with the shopping cart icon, title, description, and an appropriate empty state message 'No Products Yet' with 'Check back later for new products'. The dark gradient background is present and the layout is properly formatted.",
+      "screenshot": "creator_tools_02_creatorshop_page_loads.png",
+      "duration_ms": 15987
+    },
+    {
+      "phase": "creator_tools",
+      "name": "BecomeCreator page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows the complete 'Become a Creator' feature with all required elements: hero section with crown icon and gradient banner, 'Get Started — It's Free' CTA button, 'Everything you need to succeed' section, and multiple benefit cards including 'Go Live & Stream', 'Monetize Your Content', 'Grow Your Community', 'Creator Analytics', 'Sell Products & Courses', and 'Host Premium Challenges' with proper descriptions and icons.",
+      "screenshot": "creator_tools_03_becomecreator_page_loads.png",
+      "duration_ms": 16728
+    },
+    {
+      "phase": "creator_tools",
+      "name": "BecomeCreator — benefits and steps visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Become a Creator page displays properly with a clear call-to-action section, 'Get Started' button, and multiple benefit cards showing creator features (Go Live & Stream, Monetize Your Content, Grow Your Community, Creator Analytics, and partially visible Sell Products & Courses and Host Premium Challenges cards). Each card has appropriate icons and descriptive text explaining the benefits.",
+      "screenshot": "creator_tools_04_becomecreator___benefits_and_steps_visible.png",
+      "duration_ms": 4643
+    },
+    {
+      "phase": "creator_tools",
+      "name": "Return to Feed from creator tools",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page displays properly with real content - user stories at top with profile pictures, post creation prompt, sport filter tabs (For You, Following, All, Basketball, Soccer, Football), and actual post from Marcus Silva with image, timestamp, and engagement options. All navigation elements and features are functional and showing real data.",
+      "screenshot": "creator_tools_05_return_to_feed_from_creator_tools.png",
+      "duration_ms": 7493
+    }
+  ]
+}

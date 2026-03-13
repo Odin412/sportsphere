@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingUp, Eye, Heart, MessageCircle, Users, DollarSign, Radio, Activity, Calendar } from "lucide-react";
@@ -10,14 +11,12 @@ import StreamMetrics from "@/components/analytics/StreamMetrics";
 import AudienceDemographics from "@/components/analytics/AudienceDemographics";
 
 export default function Analytics() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [timeRange, setTimeRange] = useState("30"); // days
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {
-      window.location.href = createPageUrl("Login");
-    });
-  }, []);
+    if (!user) window.location.href = createPageUrl("Login");
+  }, [user]);
 
   // Fetch user's posts
   const { data: posts = [] } = useQuery({

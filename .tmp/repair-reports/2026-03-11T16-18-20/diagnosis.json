@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-03-11T16:18:53.441Z",
+  "testReport": "2026-03-11T16:18:02.933Z",
+  "totalTests": 159,
+  "totalFailures": 3,
+  "criticalCount": 0,
+  "warningCount": 3,
+  "dataIssueCount": 0,
+  "diagnoses": [
+    {
+      "page": "Profile",
+      "source": "src/pages/Profile.jsx",
+      "rootCause": "The followers modal is opening and staying open when it should either close automatically or not open at all during the \"Follow a user from their profile\" test flow. The modal is displaying an empty state (\"No followers yet.\") and creating an overlay that blocks access to the underlying profile content, preventing the test from completing the follow action.",
+      "severity": "**Medium** - This blocks a core social feature (following users) and prevents users from completing the follow workflow when the followers modal gets stuck open. Users would need to manually close the modal or refresh the page to continue using the profile.",
+      "fix": "The issue is likely in the modal's open/close state management. Looking at the Dialog component usage, there are several potential fixes:",
+      "category": "unknown",
+      "fullDiagnosis": "## Root Cause\nThe followers modal is opening and staying open when it should either close automatically or not open at all during the \"Follow a user from their profile\" test flow. The modal is displaying an empty state (\"No followers yet.\") and creating an overlay that blocks access to the underlying profile content, preventing the test from completing the follow action.\n\n## Severity\n**Medium** - This blocks a core social feature (following users) and prevents users from completing the follow workflow when the followers modal gets stuck open. Users would need to manually close the modal or refresh the page to continue using the profile.\n\n## Fix Suggestion\nThe issue is likely in the modal's open/close state management. Looking at the Dialog component usage, there are several potential fixes:\n\n1. **Add explicit close handler**: Ensure the followers modal closes after opening or when clicking outside\n2. **Check modal trigger logic**: The followers count button might be incorrectly triggering the modal during the follow action\n3. **Add conditional rendering**: Only show the modal when explicitly requested by user interaction\n\nSpecific code change needed - add proper state management for the followers modal:\n\n```jsx\n// Add state for followers modal\nconst [showFollowersModal, setShowFollowersModal] = useState(false);\n\n// In the followers display section, wrap with controlled Dialog:\n<Dialog open={showFollowersModal} onOpenChange={setShowFollowersModal}>\n  <DialogTrigger asChild>\n    <Button variant=\"ghost\" className=\"text-center\" onClick={() => setShowFollowersModal(true)}>\n      <div className=\"text-2xl font-bold\">{myFollowers.length}</div>\n      <div className=\"text-sm text-muted-foreground\">Followers</div>\n    </Button>\n  </DialogTrigger>\n  <DialogContent>\n    {/* Followers modal content */}\n  </DialogContent>\n</Dialog>\n```\n\n## Category\n**ui_bug** - This is a UI state management issue where a modal component is not properly controlling its open/closed state, causing it to interfere with other user interactions on the page.",
+      "failures": [
+        {
+          "name": "Follow a user from their profile",
+          "severity": "WARNING",
+          "reasoning": "L2 FAIL: The followers modal is open showing 'No followers yet.' which indicates an empty state, and this empty state is blocking the view of the actual profile content that should be visible behind it"
+        }
+      ]
+    },
+    {
+      "page": "ScoutCard",
+      "source": "src/pages/ScoutCard.jsx",
+      "rootCause": "This is **not actually a bug** - it's a **test data issue**. The test is trying to verify that a coach can view an athlete's Scout Card, but the target athlete in the test scenario doesn't have a `SportProfile` record in the database. The code is working correctly by showing the \"No Sport Profile Found\" message when `profiles` array is empty (line where `const profile = profiles[0];` results in `undefined`).",
+      "severity": "**Low** - This is a test environment data setup issue, not a user-facing bug. The application is functioning as designed by gracefully handling the missing data scenario.",
+      "fix": "**Fix the test data setup**, not the code:\n\n```javascript\n// In test setup, ensure the athlete has a sport profile:\nawait db.entities.SportProfile.create({\n  user_email: \"test-athlete@example.com\",\n  user_name: \"Test Athlete\",\n  sport: \"Basketball\", \n  position: \"Guard\",\n  level: \"High School\",\n  location: \"Test City, ST\",\n  bio: \"Test bio for athlete\",\n  // ... other required fields\n});\n```\n\nAlternatively, if testing the empty state is the goal, update the test expectation to verify the empty state message appears correctly rather than expecting a Scout Card.\n\n### 4. Category\n**test_issue** - The test setup doesn't match the test expectation. The test needs proper data fixtures to verify the intended Scout Card functionality.",
+      "category": "unknown",
+      "fullDiagnosis": "## Diagnosis\n\n### 1. Root Cause\nThis is **not actually a bug** - it's a **test data issue**. The test is trying to verify that a coach can view an athlete's Scout Card, but the target athlete in the test scenario doesn't have a `SportProfile` record in the database. The code is working correctly by showing the \"No Sport Profile Found\" message when `profiles` array is empty (line where `const profile = profiles[0];` results in `undefined`).\n\nThe ScoutCard page requires:\n- A valid `targetEmail` parameter \n- An existing `SportProfile` record for that email\n- The test athlete apparently lacks the latter\n\n### 2. Severity\n**Low** - This is a test environment data setup issue, not a user-facing bug. The application is functioning as designed by gracefully handling the missing data scenario.\n\n### 3. Fix Suggestion\n**Fix the test data setup**, not the code:\n\n```javascript\n// In test setup, ensure the athlete has a sport profile:\nawait db.entities.SportProfile.create({\n  user_email: \"test-athlete@example.com\",\n  user_name: \"Test Athlete\",\n  sport: \"Basketball\", \n  position: \"Guard\",\n  level: \"High School\",\n  location: \"Test City, ST\",\n  bio: \"Test bio for athlete\",\n  // ... other required fields\n});\n```\n\nAlternatively, if testing the empty state is the goal, update the test expectation to verify the empty state message appears correctly rather than expecting a Scout Card.\n\n### 4. Category\n**test_issue** - The test setup doesn't match the test expectation. The test needs proper data fixtures to verify the intended Scout Card functionality.",
+      "failures": [
+        {
+          "name": "Coach views athlete ScoutCard",
+          "severity": "WARNING",
+          "reasoning": "L2 FAIL: This shows an empty state message 'No Sport Profile Found' which indicates the athlete hasn't set up their ProPath sport profile yet, rather than showing a Scout Card page. The page is functioning as intended for this scenario, but it's not displaying the Scout Card feature that was being tested."
+        }
+      ]
+    },
+    {
+      "page": "unknown",
+      "source": null,
+      "rootCause": "The sport filter dropdown is not displaying proper sport category labels (Basketball, Football, etc.) and instead shows empty or unlabeled options. This suggests either:\n- The API endpoint returning sport categories is failing or returning malformed data\n- The dropdown component is not properly mapping the sport data to display labels\n- There's a data binding issue where the dropdown options array is populated but the label field is null/undefined",
+      "severity": "**High** - This is blocking users from effectively filtering live streams by sport, which is likely a core feature for discovering relevant content. Users cannot properly navigate or filter the content they want to watch.",
+      "fix": "Without seeing the source code, the most likely fixes are:\n\n**If it's an API issue:**\n```javascript\n// Ensure the sports API returns proper structure\n{\n  \"sports\": [\n    { \"id\": \"basketball\", \"name\": \"Basketball\", \"displayName\": \"Basketball\" },\n    { \"id\": \"football\", \"name\": \"Football\", \"displayName\": \"Football\" }\n  ]\n}\n```\n\n**If it's a component mapping issue:**\n```javascript\n// Ensure proper label mapping in dropdown component\nconst sportOptions = sports.map(sport => ({\n  value: sport.id,\n  label: sport.displayName || sport.name || sport.id\n}));\n```\n\n**Add error handling:**\n```javascript\n// Fallback for missing sport names\nconst getSportLabel = (sport) => sport.displayName || sport.name || `Sport ${sport.id}` || 'Unknown Sport';\n```\n\n### 4. Category\n**api_error** - The issue appears to be related to the sport categories API not returning proper data structure or the API call failing, resulting in dropdown options without labels.",
+      "category": "labels",
+      "fullDiagnosis": "## Diagnosis\n\n### 1. Root Cause\nThe sport filter dropdown is not displaying proper sport category labels (Basketball, Football, etc.) and instead shows empty or unlabeled options. This suggests either:\n- The API endpoint returning sport categories is failing or returning malformed data\n- The dropdown component is not properly mapping the sport data to display labels\n- There's a data binding issue where the dropdown options array is populated but the label field is null/undefined\n\n### 2. Severity\n**High** - This is blocking users from effectively filtering live streams by sport, which is likely a core feature for discovering relevant content. Users cannot properly navigate or filter the content they want to watch.\n\n### 3. Fix Suggestion\nWithout seeing the source code, the most likely fixes are:\n\n**If it's an API issue:**\n```javascript\n// Ensure the sports API returns proper structure\n{\n  \"sports\": [\n    { \"id\": \"basketball\", \"name\": \"Basketball\", \"displayName\": \"Basketball\" },\n    { \"id\": \"football\", \"name\": \"Football\", \"displayName\": \"Football\" }\n  ]\n}\n```\n\n**If it's a component mapping issue:**\n```javascript\n// Ensure proper label mapping in dropdown component\nconst sportOptions = sports.map(sport => ({\n  value: sport.id,\n  label: sport.displayName || sport.name || sport.id\n}));\n```\n\n**Add error handling:**\n```javascript\n// Fallback for missing sport names\nconst getSportLabel = (sport) => sport.displayName || sport.name || `Sport ${sport.id}` || 'Unknown Sport';\n```\n\n### 4. Category\n**api_error** - The issue appears to be related to the sport categories API not returning proper data structure or the API call failing, resulting in dropdown options without labels.",
+      "failures": [
+        {
+          "name": "Stream sport filter dropdown works",
+          "severity": "WARNING",
+          "reasoning": "L2 FAIL: The Live page shows an empty state with 'No streams match your filters' message, but the filter dropdown appears to be broken - it shows empty/unlabeled filter options instead of proper sport categories like 'Basketball', 'Football', etc. This indicates the filtering system is not working correctly."
+        }
+      ]
+    }
+  ]
+}

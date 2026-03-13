@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Sparkles, TrendingUp, Loader2, RefreshCw, Brain, Users, Heart, MessageCircle, UserCheck } from "lucide-react";
@@ -121,14 +122,14 @@ function InteractionInsights({ likedPosts, userSports }) {
 }
 
 export default function ForYou() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [refreshKey, setRefreshKey] = useState(0);
   const [aiRanked, setAiRanked] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [useAI, setUseAI] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: preferences } = useQuery({

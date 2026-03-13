@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingUp, Video, Calendar, Dumbbell, Loader2, Star, Radio, FileText, Award, CheckCircle } from "lucide-react";
@@ -10,17 +11,17 @@ import GameScheduleCard from "@/components/gameday/GameScheduleCard";
 import StatsChart from "@/components/stats/StatsChart";
 
 export default function ParentView() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [membership, setMembership] = useState(null);
   const [parentTab, setParentTab] = useState("overview"); // "overview" | "progress"
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+    if (!user) return;
+    (async () => {
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       setMembership(memberships[0] || null);
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const athleteEmails = membership?.athlete_emails || [];
   const orgId = membership?.organization_id;

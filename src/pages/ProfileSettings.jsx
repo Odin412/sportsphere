@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -68,7 +69,7 @@ const DEFAULT_NOTIF_PREFS = NOTIF_SETTINGS.flatMap(g => g.items).reduce((acc, s)
 // ─── Main Page ───────────────────────────────────────────────────────────────
 export default function ProfileSettings() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
@@ -100,24 +101,22 @@ export default function ProfileSettings() {
   const [savingNotifs, setSavingNotifs] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(u => {
-      setUser(u);
-      setForm({
-        full_name: u.full_name || "",
-        username: u.username || "",
-        bio: u.bio || "",
-        cover_url: u.cover_url || "",
-        location: u.location || "",
-        preferred_sports: u.preferred_sports || [],
-        skill_level: u.skill_level || "",
-        social_links: u.social_links || {},
-        contact_email: u.contact_email || "",
-        contact_phone: u.contact_phone || "",
-        contact_preferences: u.contact_preferences || { allow_messages: true, allow_email_contact: false, allow_phone_contact: false },
-        comments_disabled: u.comments_disabled || false,
-      });
-    }).catch(() => db.auth.redirectToLogin());
-  }, []);
+    if (!user) return;
+    setForm({
+      full_name: user.full_name || "",
+      username: user.username || "",
+      bio: user.bio || "",
+      cover_url: user.cover_url || "",
+      location: user.location || "",
+      preferred_sports: user.preferred_sports || [],
+      skill_level: user.skill_level || "",
+      social_links: user.social_links || {},
+      contact_email: user.contact_email || "",
+      contact_phone: user.contact_phone || "",
+      contact_preferences: user.contact_preferences || { allow_messages: true, allow_email_contact: false, allow_phone_contact: false },
+      comments_disabled: user.comments_disabled || false,
+    });
+  }, [user]);
 
   // Fetch notification preferences
   const { data: existingNotifPrefs } = useQuery({

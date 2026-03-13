@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import ReelCard from "@/components/reels/ReelCard";
@@ -11,7 +12,7 @@ import { motion } from "framer-motion";
 import { SkeletonReelGrid } from "@/components/ui/SkeletonCard";
 
 export default function Reels() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [activeReelIndex, setActiveReelIndex] = useState(null); // null = grid, number = fullscreen
   const [showPreferences, setShowPreferences] = useState(false);
@@ -19,7 +20,7 @@ export default function Reels() {
   const scrollRef = useRef(null);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   // Fetch user preferences

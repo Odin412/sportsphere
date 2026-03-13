@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Video, Sparkles, Loader2, CheckCircle, Star, Upload } from "lucide-react";
@@ -11,7 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function VideoReview() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [orgId, setOrgId] = useState(null);
   const [role, setRole] = useState(null);
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -22,14 +23,14 @@ export default function VideoReview() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user) return;
+    (async () => {
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setRole("admin"); return; }
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       if (memberships[0]) { setOrgId(memberships[0].organization_id); setRole(memberships[0].role); }
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const { data: videos, isLoading } = useQuery({
     queryKey: ["org-videos", orgId, role, user?.email],

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -19,7 +20,7 @@ export default function ScoutCard() {
   const urlParams = new URLSearchParams(window.location.search);
   const targetEmail = urlParams.get("email");
 
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user: currentUser } = useAuth();
   const [narrative, setNarrative] = useState(null);
   const [loadingNarrative, setLoadingNarrative] = useState(false);
   const [showContact, setShowContact] = useState(false);
@@ -28,7 +29,7 @@ export default function ScoutCard() {
   const cardWrapperRef = useRef(null);
 
   useEffect(() => {
-    db.auth.me().then(setCurrentUser).catch(() => {});
+
   }, []);
 
   // Track profile view for logged-in visitors
@@ -39,7 +40,7 @@ export default function ScoutCard() {
         viewer_email: currentUser.email,
         viewer_role: "fan",
         created_date: new Date().toISOString(),
-      }).catch(() => {});
+      });
     }
   }, [currentUser, targetEmail]);
 
@@ -113,7 +114,7 @@ Be specific. Use active voice. Highlight what makes this athlete stand out. Retu
   const handleShare = useCallback(() => {
     const url = window.location.href;
     if (navigator.share) {
-      navigator.share({ title: `${profile?.user_name} Scout Card`, url }).catch(() => {});
+      navigator.share({ title: `${profile?.user_name} Scout Card`, url });
     } else {
       navigator.clipboard.writeText(url).then(() => toast.success("Scout Card link copied!"));
     }

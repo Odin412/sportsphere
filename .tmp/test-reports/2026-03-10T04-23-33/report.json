@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-03-10T04:24:50.646Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "remaining_pages"
+  ],
+  "duration_ms": 76442,
+  "summary": {
+    "total": 5,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 5,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "remaining_pages",
+      "name": "ViewLive page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows appropriate 'Stream not found' error message with 'Back to Live' navigation link, which is graceful handling of a non-existent stream ID",
+      "screenshot": "remaining_pages_01_viewlive_page_loads.png",
+      "duration_ms": 16882
+    },
+    {
+      "phase": "remaining_pages",
+      "name": "ChallengeDetail page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "App shell loaded correctly with sidebar navigation visible, and there's a loading spinner in the center of the page which is the expected behavior when using a fake challenge ID that doesn't exist - React Query is properly retrying the request",
+      "screenshot": "remaining_pages_02_challengedetail_page_loads.png",
+      "duration_ms": 15645
+    },
+    {
+      "phase": "remaining_pages",
+      "name": "Terms page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Terms of Service page is displaying correctly with all required elements: shield icon in red gradient header, 'User Agreement and Legal Waiver' subtitle, 'Last Updated: February 14, 2026' date, yellow legal notice card, and terms content sections including 'Acceptance of Terms' and 'Assumption of Risk' with proper text content",
+      "screenshot": "remaining_pages_03_terms_page_loads.png",
+      "duration_ms": 15158
+    },
+    {
+      "phase": "remaining_pages",
+      "name": "Guidelines page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Community Guidelines page displays correctly with red gradient header banner containing book icon and title, subtitle 'Building a positive and safe sports community', last updated date, 'Our Mission' section with mission statement, and 'What SportHub Is For' section with detailed bullet points listing sports-related content categories. All elements are properly formatted and visible.",
+      "screenshot": "remaining_pages_04_guidelines_page_loads.png",
+      "duration_ms": 15750
+    },
+    {
+      "phase": "remaining_pages",
+      "name": "Return to Feed from remaining pages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functioning properly with real content visible - user stories at top, post creation interface, category filters (For You, Following, All, Basketball, Soccer, Football), and actual post from Marcus Silva with image, text content, timestamp, and interaction options. All UI elements are properly rendered and the page shows active social media functionality.",
+      "screenshot": "remaining_pages_05_return_to_feed_from_remaining_pages.png",
+      "duration_ms": 7398
+    }
+  ]
+}

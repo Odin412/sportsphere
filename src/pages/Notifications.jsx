@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Bell, Heart, MessageCircle, UserPlus, AtSign, Loader2, Settings, Trophy, Radio, DollarSign, Filter, Check, X, Zap } from "lucide-react";
@@ -61,13 +62,13 @@ const timeAgo = (dateStr) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function Notifications() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [filter, setFilter] = useState("all");
   const [showSettings, setShowSettings] = useState(false);
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   // Real-time subscription for new notifications

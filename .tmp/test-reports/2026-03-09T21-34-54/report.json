@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-03-09T21:35:43.479Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "org"
+  ],
+  "duration_ms": 48219,
+  "summary": {
+    "total": 6,
+    "critical": 0,
+    "warning": 5,
+    "data_issue": 0,
+    "passed": 1,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "org",
+      "name": "OrgDashboard page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The screen shows only a loading spinner on a black background with no dashboard content, stat cards, quick action buttons, role badge, or create organization prompt visible. The loading state appears to be stuck or taking too long to resolve.",
+      "screenshot": "org_01_orgdashboard_page_loads.png",
+      "duration_ms": 6613
+    },
+    {
+      "phase": "org",
+      "name": "OrgRoster page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows only a loading spinner on a black background with no content, indicating the Organization Roster page has not loaded properly or is stuck in a loading state. There is no member list, search functionality, invite button, or organization creation prompt visible.",
+      "screenshot": "org_02_orgroster_page_loads.png",
+      "duration_ms": 6690
+    },
+    {
+      "phase": "org",
+      "name": "OrgSessions page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows only a loading spinner on a black background with no content, navigation, or UI elements visible. This indicates the Organization Sessions page is stuck in a loading state and not displaying the expected session list, empty state, or any functional interface.",
+      "screenshot": "org_03_orgsessions_page_loads.png",
+      "duration_ms": 6775
+    },
+    {
+      "phase": "org",
+      "name": "OrgMessages page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: Page shows only a loading spinner on black background with no content. The Organization Messages page should display either a channel-based messaging interface with channels like #general, #coaches, #athletes and message input, or an org creation/join prompt. Currently stuck in loading state without any functional content.",
+      "screenshot": "org_04_orgmessages_page_loads.png",
+      "duration_ms": 6568
+    },
+    {
+      "phase": "org",
+      "name": "VideoReview page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: Page shows only a loading spinner on a black background with no video review interface, tabs, or content visible. The feature is not working - it's stuck in a loading state without displaying the expected video review interface or any meaningful content.",
+      "screenshot": "org_05_videoreview_page_loads.png",
+      "duration_ms": 6550
+    },
+    {
+      "phase": "org",
+      "name": "Return to Feed from org features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functioning properly with real data - shows active story bar with multiple users, working post creation input, category filters, and a complete post from Marcus Silva with image, text content, timestamp, and interaction options. The navigation round-trip was successful and the page displays genuine social media content.",
+      "screenshot": "org_06_return_to_feed_from_org_features.png",
+      "duration_ms": 9299
+    }
+  ]
+}

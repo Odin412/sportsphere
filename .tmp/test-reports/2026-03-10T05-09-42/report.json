@@ -1,0 +1,135 @@
+{
+  "timestamp": "2026-03-10T05:13:03.177Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "interactions"
+  ],
+  "duration_ms": 200214,
+  "summary": {
+    "total": 9,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 2,
+    "passed": 7,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "interactions",
+      "name": "Create a post with text content",
+      "severity": "DATA_ISSUE",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "fail"
+      },
+      "reasoning": "L3 FAIL: Post not found in DB",
+      "screenshot": "interactions_01_create_a_post_with_text_content.png",
+      "duration_ms": 28195
+    },
+    {
+      "phase": "interactions",
+      "name": "Like a post on Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is properly loaded and functional with real content - shows user stories at top (Marcus, Zara, Sofia), working post composition area, category filters (For You, Following, All, Basketball, Soccer, Football), and a complete post from Marcus Silva with soccer content including image, text, timestamp, and follow button. Sports news section shows appropriate empty state message. All UI elements are rendered correctly in dark theme.",
+      "screenshot": "interactions_02_like_a_post_on_feed.png",
+      "duration_ms": 19587
+    },
+    {
+      "phase": "interactions",
+      "name": "Comment on a post",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is loaded with a post showing an expanded comments section. There's a visible comment input area with placeholder text 'Add a comment... (type @ to mention)' and a 'Post' button. An existing comment from 'Test Athlete' is displayed below the input. The comments functionality appears to be working correctly with real data.",
+      "screenshot": "interactions_03_comment_on_a_post.png",
+      "duration_ms": 12816
+    },
+    {
+      "phase": "interactions",
+      "name": "Follow a user from their profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "User profile page for Marcus Silva is properly loaded and functional. Shows profile picture, stats (0 following, 0 followers, 20 posts), action buttons (Follow, Message, Advice, Shop), professional level description, location info, and achievements section. A followers modal is open showing 'No followers yet.' which is valid state data. All elements are displaying correctly in the dark theme.",
+      "screenshot": "interactions_04_follow_a_user_from_their_profile.png",
+      "duration_ms": 21747
+    },
+    {
+      "phase": "interactions",
+      "name": "Bookmark a post on Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is displaying properly with real posts. Shows two posts with actual content: first post has a soccer/football image with engagement metrics (10 likes, 4 comments, 2 shares, 2147 views), second post from Zara Mitchell shows fitness content with text 'Intensity is relative. Push your relative.' Both posts have proper user info, timestamps, and interaction buttons. Dark theme is consistent throughout.",
+      "screenshot": "interactions_05_bookmark_a_post_on_feed.png",
+      "duration_ms": 21501
+    },
+    {
+      "phase": "interactions",
+      "name": "Update profile bio in ProfileSettings",
+      "severity": "DATA_ISSUE",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "fail"
+      },
+      "reasoning": "L3 FAIL: Bio in DB is: \"\" — expected to contain 1773119388712",
+      "screenshot": "interactions_06_update_profile_bio_in_profilesettings.png",
+      "duration_ms": 26842
+    },
+    {
+      "phase": "interactions",
+      "name": "Create a group via Groups page",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Shows the Groups page with 'You haven't joined any groups yet' empty state, which is an acceptable state according to the criteria. The page loaded properly with navigation, search functionality, category filters, and the Create Group button visible.",
+      "screenshot": "interactions_07_create_a_group_via_groups_page.png",
+      "duration_ms": 26202
+    },
+    {
+      "phase": "interactions",
+      "name": "Send a message in Messages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Messages page is properly loaded and functional. Shows the Messages interface with search bar, a support chat system (SportHub Support) that's active and working with real conversation content, plus quick action buttons for common help topics. The chat interface is displaying actual content and appears fully functional, not just an empty state.",
+      "screenshot": "interactions_08_send_a_message_in_messages.png",
+      "duration_ms": 20555
+    },
+    {
+      "phase": "interactions",
+      "name": "Cleanup: remove all test data",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is fully functional with real content - shows user stories at top, working post composer with placeholder text, active filter tabs (For You, Following, All, Basketball, Soccer, Football), and displays actual user post from Marcus Silva with profile image, timestamp, soccer category tag, follow button, and embedded image content. Sports News sidebar is present. All elements are properly styled in dark theme and no loading states or errors visible.",
+      "screenshot": "interactions_09_cleanup__remove_all_test_data.png",
+      "duration_ms": 17017
+    }
+  ]
+}

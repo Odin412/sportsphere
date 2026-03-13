@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -22,7 +23,7 @@ export default function GroupDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const groupId = urlParams.get("id");
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [showCreateEvent, setShowCreateEvent] = useState(false);
   const [showEditGroup, setShowEditGroup] = useState(false);
@@ -31,7 +32,7 @@ export default function GroupDetail() {
   const [joining, setJoining] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: group, isLoading } = useQuery({

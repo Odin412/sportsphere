@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -32,7 +33,7 @@ const LEVELS = ["beginner", "intermediate", "advanced", "professional", "elite"]
 
 export default function Profile() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [showProfileForm, setShowProfileForm] = useState(false);
   const [editingProfile, setEditingProfile] = useState(null);
   const [formData, setFormData] = useState({});
@@ -49,23 +50,21 @@ export default function Profile() {
   const [gridPost, setGridPost] = useState(null);
 
   useEffect(() => {
-    db.auth.me().then(u => {
-      setUser(u);
-      setPersonalInfo({
-        full_name: u.full_name || "",
-        bio: u.bio || "",
-        avatar_url: u.avatar_url || "",
-        weight: u.weight || "",
-        height: u.height || "",
-        age: u.age || "",
-        gender: u.gender || "",
-        highschool: u.highschool || "",
-        highschool_grad_year: u.highschool_grad_year || "",
-        college: u.college || "",
-        professional_team: u.professional_team || "",
-      });
-    }).catch(() => db.auth.redirectToLogin());
-  }, []);
+    if (!user) return;
+    setPersonalInfo({
+      full_name: user.full_name || "",
+      bio: user.bio || "",
+      avatar_url: user.avatar_url || "",
+      weight: user.weight || "",
+      height: user.height || "",
+      age: user.age || "",
+      gender: user.gender || "",
+      highschool: user.highschool || "",
+      highschool_grad_year: user.highschool_grad_year || "",
+      college: user.college || "",
+      professional_team: user.professional_team || "",
+    });
+  }, [user]);
 
   const { data: sportProfiles, isLoading: profilesLoading } = useQuery({
     queryKey: ["my-sport-profiles", user?.email],

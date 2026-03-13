@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -14,7 +15,7 @@ import VideoFormAnalysis from "@/components/coaching/VideoFormAnalysis";
 
 export default function CoachPage() {
   const { canAccess } = useSubscriptionTier();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [currentConversation, setCurrentConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -29,7 +30,7 @@ export default function CoachPage() {
   const videoInputRef = useRef(null);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   useEffect(() => {

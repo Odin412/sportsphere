@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Dumbbell, Calendar, CheckCircle, Target, Loader2, ChevronDown, ChevronUp, Share2 } from "lucide-react";
@@ -8,12 +9,12 @@ import { Button } from "@/components/ui/button";
 import SocialShareDialog from "@/components/sharing/SocialShareDialog";
 
 export default function MyTraining() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [expandedWeek, setExpandedWeek] = useState(0);
   const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: plans, isLoading } = useQuery({

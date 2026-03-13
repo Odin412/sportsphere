@@ -35,7 +35,6 @@ const OTHER_SLOTS = 1;    // max articles per other sport
 
 const CORS_PROXIES = [
   (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
-  (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
   (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
 ];
 
@@ -88,7 +87,7 @@ async function fetchFeed(feed) {
   for (const buildProxy of CORS_PROXIES) {
     try {
       const proxyUrl = buildProxy(feed.url);
-      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(6000) });
+      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(3000) });
       if (!res.ok) continue;
 
       const contentType = res.headers.get("content-type") || "";

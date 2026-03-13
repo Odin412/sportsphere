@@ -1,0 +1,135 @@
+{
+  "timestamp": "2026-03-10T05:21:46.644Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "interactions"
+  ],
+  "duration_ms": 216248,
+  "summary": {
+    "total": 9,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 2,
+    "passed": 7,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "interactions",
+      "name": "Create a post with text content",
+      "severity": "DATA_ISSUE",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "fail"
+      },
+      "reasoning": "L3 FAIL: Post not found in DB",
+      "screenshot": "interactions_01_create_a_post_with_text_content.png",
+      "duration_ms": 47907
+    },
+    {
+      "phase": "interactions",
+      "name": "Like a post on Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is properly loaded and functional with real content. Shows Marcus Silva's soccer post with image, user stories section, category filters (For You, Following, All, Basketball, Soccer, Football), and post interaction elements. The Sports News sidebar shows appropriate empty state message. All UI elements appear to be working correctly in the dark theme.",
+      "screenshot": "interactions_02_like_a_post_on_feed.png",
+      "duration_ms": 18594
+    },
+    {
+      "phase": "interactions",
+      "name": "Comment on a post",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The Feed page is properly loaded with a comments section expanded on a soccer post. The comment input area is visible with placeholder text 'Add a comment... (type @ to mention)' and a 'Post' button. There's also a posted comment from 'Test Athlete' showing 'test_comment_1773119896027' with a Reply option. The comments functionality appears to be working correctly.",
+      "screenshot": "interactions_03_comment_on_a_post.png",
+      "duration_ms": 13223
+    },
+    {
+      "phase": "interactions",
+      "name": "Follow a user from their profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "User profile page for Marcus Silva is properly loaded with complete profile information visible including profile picture, stats (0 following, 0 followers, 20 posts), action buttons (Follow, Message, Advice, Shop), professional level description, location, club affiliation, and achievements list. A followers modal is open showing 'No followers yet' which is a valid empty state, not an error.",
+      "screenshot": "interactions_04_follow_a_user_from_their_profile.png",
+      "duration_ms": 21466
+    },
+    {
+      "phase": "interactions",
+      "name": "Bookmark a post on Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is properly loaded with real content - shows multiple posts with actual sports content (soccer player image, fitness/gym image), user profiles (Zara Mitchell), engagement metrics (10 likes, 4 comments, 2147 views), timestamps (23 hours ago), and proper dark theme styling. Navigation sidebar is present and functional. No errors, loading states, or empty content visible.",
+      "screenshot": "interactions_05_bookmark_a_post_on_feed.png",
+      "duration_ms": 20902
+    },
+    {
+      "phase": "interactions",
+      "name": "Update profile bio in ProfileSettings",
+      "severity": "DATA_ISSUE",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "fail"
+      },
+      "reasoning": "L3 FAIL: Bio in DB is: \"\" — expected to contain 1773119896027",
+      "screenshot": "interactions_06_update_profile_bio_in_profilesettings.png",
+      "duration_ms": 24949
+    },
+    {
+      "phase": "interactions",
+      "name": "Create a group via Groups page",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The page shows the Groups & Clubs section with an empty state message 'You haven't joined any groups yet' and 'Find your sport community in Groups', which is an acceptable state according to the criteria. The page has loaded properly with all UI elements visible including navigation, search bar, category filters, and the discover groups section.",
+      "screenshot": "interactions_07_create_a_group_via_groups_page.png",
+      "duration_ms": 26787
+    },
+    {
+      "phase": "interactions",
+      "name": "Send a message in Messages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Messages page is displaying properly with a support chat interface. Shows SportHub Support chat window with assistant message, quick action buttons for common help topics, and a text input field. This is a valid state for the messages feature.",
+      "screenshot": "interactions_08_send_a_message_in_messages.png",
+      "duration_ms": 19562
+    },
+    {
+      "phase": "interactions",
+      "name": "Cleanup: remove all test data",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is working correctly with real content - shows user stories at top (Marcus, Zara), functional post composer with attachment options, sport category filters (For You, Following, All, Basketball, Soccer, Football), and a real post from Marcus Silva with image, text content, timestamp, and follow button. All UI elements are properly rendered in the dark theme.",
+      "screenshot": "interactions_09_cleanup__remove_all_test_data.png",
+      "duration_ms": 17224
+    }
+  ]
+}

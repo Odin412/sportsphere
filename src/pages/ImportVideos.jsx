@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Search, Loader2, Youtube, Heart, Bookmark, Download } from "lucide-react";
@@ -14,7 +15,7 @@ const SPORTS = [
 ];
 
 export default function ImportVideos() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [sport, setSport] = useState("Basketball");
   const [searchQuery, setSearchQuery] = useState("");
   const [videos, setVideos] = useState([]);
@@ -25,7 +26,7 @@ export default function ImportVideos() {
   const [category, setCategory] = useState("highlight");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const handleSearch = async (pageToken = null) => {

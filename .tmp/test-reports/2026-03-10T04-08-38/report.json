@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-03-10T04:09:55.060Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "coaching_training"
+  ],
+  "duration_ms": 76683,
+  "summary": {
+    "total": 5,
+    "critical": 0,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 4,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "coaching_training",
+      "name": "CoachingSessionDetail page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The main content area shows only a loading spinner in the center with no other content, session details, or meaningful interface elements visible. This appears to be a loading state that has been stuck for too long without resolving to actual content.",
+      "screenshot": "coaching_training_01_coachingsessiondetail_page_loads.png",
+      "duration_ms": 15739
+    },
+    {
+      "phase": "coaching_training",
+      "name": "TrainingPlans page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows proper Training Plans page with dumbbell icon, '0 plans' counter, and empty state message 'No training plans yet' - this is the expected behavior for accounts without training plans",
+      "screenshot": "coaching_training_02_trainingplans_page_loads.png",
+      "duration_ms": 15453
+    },
+    {
+      "phase": "coaching_training",
+      "name": "TrainingPlanDetail page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page shows a proper error state with 'Plan not found.' message and 'Back to Plans' button, which is appropriate handling for when a plan doesn't exist or can't be loaded",
+      "screenshot": "coaching_training_03_trainingplandetail_page_loads.png",
+      "duration_ms": 16296
+    },
+    {
+      "phase": "coaching_training",
+      "name": "MyTraining page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The My Training page is working correctly, showing the dumbbell icon, 'Your personalized training plan from your coach' subtitle, and an appropriate empty state message 'No training plan assigned yet' with 'Your coach will create one for you soon'. This is expected behavior for test accounts without assigned training plans.",
+      "screenshot": "coaching_training_04_mytraining_page_loads.png",
+      "duration_ms": 16088
+    },
+    {
+      "phase": "coaching_training",
+      "name": "Return to Feed from coaching features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functioning correctly with real content - shows user stories at top, post creation interface, sports category filters (For You, Following, All, Basketball, Soccer, Football), and actual posts with user content including Marcus Silva's soccer post with image and engagement options. All elements are properly loaded and interactive.",
+      "screenshot": "coaching_training_05_return_to_feed_from_coaching_features.png",
+      "duration_ms": 7274
+    }
+  ]
+}

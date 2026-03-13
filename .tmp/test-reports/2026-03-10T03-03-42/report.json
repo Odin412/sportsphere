@@ -1,0 +1,148 @@
+{
+  "timestamp": "2026-03-10T03:05:32.531Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "community"
+  ],
+  "duration_ms": 108806,
+  "summary": {
+    "total": 10,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 10,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "community",
+      "name": "Groups page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Groups page is properly loaded with all expected elements: 'Groups & Clubs' heading, search bar with placeholder text, category filter buttons (All Groups, Sport-Specific, Training Goals, etc.), Create Group button, and an appropriate empty state message 'You haven't joined any groups yet' with guidance to find communities. The page layout and functionality appear to be working correctly.",
+      "screenshot": "community_01_groups_page_loads.png",
+      "duration_ms": 8070
+    },
+    {
+      "phase": "community",
+      "name": "Groups — search bar and category filters visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Groups page displays both required elements: a search input field with placeholder text 'Search groups by name, sport, or interest...' and category filter buttons including 'All Groups', 'Sport-Specific', 'Training Goals', 'Local Community', 'Competition', and 'Social'. The page layout is functional with proper dark theme styling.",
+      "screenshot": "community_02_groups___search_bar_and_category_filters_visible.png",
+      "duration_ms": 3904
+    },
+    {
+      "phase": "community",
+      "name": "GroupDetail page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page displays a clear 'Group not found' error message in the main content area, which is an appropriate and functional error state. The navigation sidebar is properly loaded with all menu items visible, and the overall layout appears intact with no crashes or loading issues.",
+      "screenshot": "community_03_groupdetail_page_loads.png",
+      "duration_ms": 17125
+    },
+    {
+      "phase": "community",
+      "name": "Events page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Event Discovery page is functioning properly with all expected elements present: 'Event Discovery' heading, search bar, filter controls, event type pill buttons (All Types, Competition, Tournament, Workshop, Training, Meetup, Other), tabs (Discover, For You, My Events), 'Create Event' button, and shows '0 events found' with appropriate 'No events found' empty state message",
+      "screenshot": "community_04_events_page_loads.png",
+      "duration_ms": 10128
+    },
+    {
+      "phase": "community",
+      "name": "Events — filters and type pills visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Events page displays proper filter controls including event type pill buttons (All Types, Competition, Tournament, Workshop, Training, Meetup, Other) and a search bar for filtering events. The 'No events found' message with suggestion to adjust filters confirms the filtering system is working correctly.",
+      "screenshot": "community_05_events___filters_and_type_pills_visible.png",
+      "duration_ms": 3780
+    },
+    {
+      "phase": "community",
+      "name": "Notifications page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Notifications page is working correctly - shows 'Notifications' heading with bell icon, '0 unread notifications' count, filter buttons (All, Unread, Likes, Comments, Follows, Requests, Mentions, Streams, Challenges) with counts, tabs (Notifications, Activity), settings gear icon, and appropriate empty state message 'You're all caught up' with encouragement text",
+      "screenshot": "community_06_notifications_page_loads.png",
+      "duration_ms": 8348
+    },
+    {
+      "phase": "community",
+      "name": "Notifications — filter pills visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Notifications page displays all required filter pill buttons (All, Unread, Likes, Comments, Follows, Requests, Mentions, Streams, Challenges) with proper counts, and shows an appropriate empty state message 'You're all caught up' indicating the feature is working correctly with no notifications to display.",
+      "screenshot": "community_07_notifications___filter_pills_visible.png",
+      "duration_ms": 4419
+    },
+    {
+      "phase": "community",
+      "name": "ForumTopic page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows a valid Forums empty state with 'Community Forums' heading, category filter icons, search functionality, 'New Topic' button, and proper empty state message 'No topics found. Be the first to start a discussion!' - this is a working Forums feature in its empty state",
+      "screenshot": "community_08_forumtopic_page_loads.png",
+      "duration_ms": 21907
+    },
+    {
+      "phase": "community",
+      "name": "Advice page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows a Premium gate/upgrade prompt for Expert Advice feature, which is the expected behavior for non-premium accounts. The page displays clear premium benefits, pricing ($9.99/month), and upgrade CTA button, indicating the Advice feature is properly gated behind premium subscription.",
+      "screenshot": "community_09_advice_page_loads.png",
+      "duration_ms": 16120
+    },
+    {
+      "phase": "community",
+      "name": "Return to Feed from community features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is fully functional with real content - shows user stories at top, active post from Marcus Silva with soccer content and engagement options, sports category filters (For You, Following, All, Basketball, Soccer, Football), live sports news sidebar with recent headlines and timestamps, and complete navigation sidebar. All features display real data and proper functionality.",
+      "screenshot": "community_10_return_to_feed_from_community_features.png",
+      "duration_ms": 7854
+    }
+  ]
+}

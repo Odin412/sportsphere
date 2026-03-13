@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-03-09T19:49:11.470Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "auth"
+  ],
+  "duration_ms": 124537,
+  "summary": {
+    "total": 7,
+    "critical": 3,
+    "warning": 2,
+    "data_issue": 0,
+    "passed": 2,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "auth",
+      "name": "Login page renders",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The login page displays correctly with the expected split-screen design. Left panel shows 'Sportsphere' branding, compelling tagline 'The Sports Community Built for Athletes', feature list with icons, and live stats (12K+ active athletes, 340 live streams, 890+ coaches). Right panel has functional sign-in form with email/password fields, 'Sign In' button, tab navigation, and 'Create Account' option. A live stream preview box is visible showing real data. All elements are properly rendered in the dark theme.",
+      "screenshot": "auth_01_login_page_renders.png",
+      "duration_ms": 8492
+    },
+    {
+      "phase": "auth",
+      "name": "Invalid credentials rejected",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: No error message or red toast notification is visible after attempting to sign in with invalid credentials (fake-nonexistent-user@example.com). The user appears to still be on the login page, but there should be a clear error indication for failed authentication.",
+      "screenshot": "auth_02_invalid_credentials_rejected.png",
+      "duration_ms": 7867
+    },
+    {
+      "phase": "auth",
+      "name": "Valid login redirects to Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The authenticated app is properly loaded with all expected elements: left sidebar navigation (Feed, Explore, Reels, etc.), main feed content showing a real post from Marcus Silva with image and text, story circles at top with user avatars, sports category filters, and Sports News section on right. The dark theme is correctly applied and the interface shows real data rather than loading states or errors.",
+      "screenshot": "auth_03_valid_login_redirects_to_feed.png",
+      "duration_ms": 11394
+    },
+    {
+      "phase": "auth",
+      "name": "Session persists on refresh",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: locator.waitFor: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]').first() to be visible\u001b[22m\n | L2 FAIL: This appears to be an athlete onboarding form (Step 1 of 3) for selecting sports and skill level, not an authenticated feed page with sidebar navigation. The page shows a sport selection interface rather than the expected feed content after refresh.",
+      "screenshot": "auth_04_session_persists_on_refresh.png",
+      "duration_ms": 24939
+    },
+    {
+      "phase": "auth",
+      "name": "Sign-up form has role selection",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Create Account\"), button:has-text(\"Sign Up\")').first()\u001b[22m\n",
+      "screenshot": "auth_05_sign-up_form_has_role_selection_error.png",
+      "duration_ms": 27266
+    },
+    {
+      "phase": "auth",
+      "name": "Logout actually logs out",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#email')\u001b[22m\n",
+      "screenshot": "auth_06_logout_actually_logs_out_error.png",
+      "duration_ms": 30914
+    },
+    {
+      "phase": "auth",
+      "name": "Auth guard blocks Feed when logged out",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: This appears to be a light-themed onboarding form, not a dark-themed sports social media app as specified. The interface shows an athlete onboarding step with sport selection, which contradicts the expected dark theme and social media feed functionality.",
+      "screenshot": "auth_07_auth_guard_blocks_feed_when_logged_out.png",
+      "duration_ms": 13662
+    }
+  ]
+}

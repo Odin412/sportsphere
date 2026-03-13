@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { createPageUrl } from "@/utils";
@@ -13,11 +14,11 @@ import { Flame, Clock, Sparkles, FileText, ArrowLeft, Users, Heart } from "lucid
 export default function SportHub() {
   const urlParams = new URLSearchParams(window.location.search);
   const sport = urlParams.get("sport");
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("live");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: liveStreams = [] } = useQuery({

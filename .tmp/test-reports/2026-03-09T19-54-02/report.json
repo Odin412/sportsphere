@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-03-09T19:55:37.165Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "auth"
+  ],
+  "duration_ms": 93961,
+  "summary": {
+    "total": 7,
+    "critical": 0,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 6,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "auth",
+      "name": "Login page renders",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The login page displays correctly with the expected split-screen design. Left panel shows dark branding with 'Sportsphere' logo, headline 'The Sports Community Built for Athletes', feature list, and statistics. Right panel contains proper login form with email/password fields, Sign In button, and Create Account option. All elements are functional and properly styled for the dark theme.",
+      "screenshot": "auth_01_login_page_renders.png",
+      "duration_ms": 7642
+    },
+    {
+      "phase": "auth",
+      "name": "Invalid credentials rejected",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: No error message or red toast notification is visible after attempting to sign in with invalid credentials (fake-nonexistent-user@example.com). The user appears to still be on the login page, but there should be a clear error indication for failed authentication with non-existent credentials.",
+      "screenshot": "auth_02_invalid_credentials_rejected.png",
+      "duration_ms": 7949
+    },
+    {
+      "phase": "auth",
+      "name": "Valid login redirects to Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The authenticated app is working correctly - showing left sidebar navigation with Feed, Explore, Reels, etc., main content area with user stories, post creation prompt, category filters (For You, Following, All, Basketball, Soccer, Football), and a real post from Marcus Silva with image content. The Sports News panel is visible on the right. All expected authenticated features are present and functional.",
+      "screenshot": "auth_03_valid_login_redirects_to_feed.png",
+      "duration_ms": 14102
+    },
+    {
+      "phase": "auth",
+      "name": "Session persists on refresh",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows a fully functional authenticated feed with real user content - Marcus Silva's soccer post with image and engagement options, populated story carousel with multiple users, working navigation sidebar, sports category filters, and proper dark theme styling. User remains logged in after refresh with no redirect to login/onboarding.",
+      "screenshot": "auth_04_session_persists_on_refresh.png",
+      "duration_ms": 16092
+    },
+    {
+      "phase": "auth",
+      "name": "Sign-up form has role selection",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The sign-up form is properly displayed with the 'Create Account' tab active. All 4 role selection cards are visible (Athlete, Coach, Organization, Parent) with appropriate icons and descriptions. The form shows real functionality with role selection options, 'Sign in' link for existing users, and security authentication notice. The layout is complete and functional, not an empty state.",
+      "screenshot": "auth_05_sign-up_form_has_role_selection.png",
+      "duration_ms": 9943
+    },
+    {
+      "phase": "auth",
+      "name": "Logout actually logs out",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with proper dark theme, shows Sportsphere branding, clear value proposition text, functional Get Started and Sign In buttons, and copyright footer. No authenticated content is visible, confirming user is properly logged out.",
+      "screenshot": "auth_06_logout_actually_logs_out.png",
+      "duration_ms": 24664
+    },
+    {
+      "phase": "auth",
+      "name": "Auth guard blocks Feed when logged out",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with proper dark theme, Sportsphere branding, clear value proposition text, functional Get Started and Sign In buttons, and copyright footer. This is the expected behavior for unauthenticated users being redirected from protected pages to the landing page.",
+      "screenshot": "auth_07_auth_guard_blocks_feed_when_logged_out.png",
+      "duration_ms": 13566
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -16,13 +17,13 @@ import AthleteProgressCard from "@/components/org/AthleteProgressCard";
 import CreateMilestoneDialog from "@/components/org/CreateMilestoneDialog";
 
 export default function OrgDashboard() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [showSetup, setShowSetup] = useState(false);
   const [dashTab, setDashTab] = useState("overview"); // "overview" | "analytics" | "reports"
   const [showMilestone, setShowMilestone] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: org, refetch: refetchOrg } = useQuery({

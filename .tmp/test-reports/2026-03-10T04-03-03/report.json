@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-03-10T04:04:11.630Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "settings"
+  ],
+  "duration_ms": 68293,
+  "summary": {
+    "total": 7,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 7,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "settings",
+      "name": "ProfileSettings page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows a functional Account Settings interface with proper navigation (back arrow), settings tabs (Language, Activity, Alerts), user profile section with avatar and name fields, and form fields for Display Name & Username with proper validation text. All expected elements are present and working correctly.",
+      "screenshot": "settings_01_profilesettings_page_loads.png",
+      "duration_ms": 9488
+    },
+    {
+      "phase": "settings",
+      "name": "ProfileSettings — identity tab with form fields",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProfileSettings Identity section shows proper form fields: display name input field (currently empty), username input field with '@yourhandle' placeholder, avatar upload area with camera icon on profile picture, and cover photo upload area with 'Add cover photo' text. All expected form elements are visible and functional.",
+      "screenshot": "settings_02_profilesettings___identity_tab_with_form_fields.png",
+      "duration_ms": 5174
+    },
+    {
+      "phase": "settings",
+      "name": "ProfileSettings — alerts tab loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The notification settings page is working correctly, showing organized notification categories (SOCIAL, FOLLOWERS, MESSAGES & ADVICE) with specific notification types (likes, comments, mentions, new followers, follow requests, direct messages, advice requests) and functional toggle switches for both IN-APP and EMAIL preferences for each setting.",
+      "screenshot": "settings_03_profilesettings___alerts_tab_loads.png",
+      "duration_ms": 6673
+    },
+    {
+      "phase": "settings",
+      "name": "Premium page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Premium page displays correctly with 'SportHub Premium' heading, crown icon, 'Unlock AI-powered features' subtitle, $9.99/month pricing, Subscribe Now button, and feature descriptions for AI Coach and Creator AI. Dark theme is properly applied.",
+      "screenshot": "settings_04_premium_page_loads.png",
+      "duration_ms": 16231
+    },
+    {
+      "phase": "settings",
+      "name": "Leaderboard page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The leaderboard page shows all required elements: trophy icon with 'Leaderboard' heading in red gradient banner, 'Top athletes in the Sportsphere community' subtitle, period tabs (All Time selected, This Week, This Month), sport filter chips (All Sports selected, Basketball, Soccer, Football, Baseball, Tennis, Hockey, MMA, Golf), and an appropriate empty state message 'Rankings update weekly. Stay active to climb — consistency wins.' The page is functioning correctly with proper UI components visible.",
+      "screenshot": "settings_05_leaderboard_page_loads.png",
+      "duration_ms": 11686
+    },
+    {
+      "phase": "settings",
+      "name": "Leaderboard — period tabs and sport filters visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Leaderboard page shows all required elements: period selector tabs (All Time, This Week, This Month) with 'All Time' selected, and sport filter chips (All Sports, Basketball, Soccer, Football, Baseball, Tennis, Hockey, MMA, Golf) with 'All Sports' selected. The empty leaderboard area with message 'Rankings update weekly. Stay active to climb — consistency wins.' is acceptable as noted in the criteria.",
+      "screenshot": "settings_06_leaderboard___period_tabs_and_sport_filters_visible.png",
+      "duration_ms": 5182
+    },
+    {
+      "phase": "settings",
+      "name": "Return to Feed from settings features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working correctly with real content - stories from multiple users (Marcus, Zara, Sofia, Diego, Jack), a post from Marcus Silva with engagement options, active filter tabs (For You, Following, All, Basketball, Soccer, Football), and live sports news sidebar showing recent ESPN updates. All UI elements are properly rendered and functional.",
+      "screenshot": "settings_07_return_to_feed_from_settings_features.png",
+      "duration_ms": 7634
+    }
+  ]
+}

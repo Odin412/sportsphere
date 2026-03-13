@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-03-09T21:34:09.911Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "athlete"
+  ],
+  "duration_ms": 64167,
+  "summary": {
+    "total": 8,
+    "critical": 0,
+    "warning": 2,
+    "data_issue": 0,
+    "passed": 6,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "athlete",
+      "name": "ProPathHub page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProPath page is functioning correctly, displaying the setup prompt for users who haven't created a sport profile yet. The page shows clear messaging about ProPath's purpose ('Build your recruiting presence. Get discovered.'), includes a trophy icon, explains the benefits of creating a sport profile ('unlock Scout Cards, performance tracking, and recruiter visibility'), and provides a functional 'Create Sport Profile' button. This is the expected state (a) for users without an existing profile.",
+      "screenshot": "athlete_01_propathhub_page_loads.png",
+      "duration_ms": 7577
+    },
+    {
+      "phase": "athlete",
+      "name": "GetNoticed page loads with Browse tab",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page displays correctly with 'Get Noticed' hero section, Browse Athletes button active, functional search bar, sport filter chips (Basketball, Soccer, Football, etc.), level filter buttons (All, Beginner, Intermediate, etc.), and shows 11 athletes found with 3 visible athlete cards containing real profile data including names, sports, skill levels, locations, and teams.",
+      "screenshot": "athlete_02_getnoticed_page_loads_with_browse_tab.png",
+      "duration_ms": 8365
+    },
+    {
+      "phase": "athlete",
+      "name": "GetNoticed sport filter works",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Basketball filter is properly highlighted/selected (showing active state), search returned 1 basketball athlete (Jordan Williams with basketball icon and Professional level), and the interface is functioning correctly with real data displayed",
+      "screenshot": "athlete_03_getnoticed_sport_filter_works.png",
+      "duration_ms": 5813
+    },
+    {
+      "phase": "athlete",
+      "name": "GetNoticed My Showcase tab",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The My Showcase tab is correctly displaying the empty state with 'Put Yourself on the Map' heading, descriptive text about creating a sport profile, three benefit cards (Your Stats, Your Highlights, Get Messages), and the 'Set Up My Showcase' CTA button. This is the expected behavior when a user hasn't created their sport profile yet.",
+      "screenshot": "athlete_04_getnoticed_my_showcase_tab.png",
+      "duration_ms": 7290
+    },
+    {
+      "phase": "athlete",
+      "name": "TheVault page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Vault page is working correctly - shows proper title with lock icon, 'Private' badge, 'Add Video' button, privacy explanation section, and displays the expected empty state with 'Your Vault is Empty' message and 'Upload First Video' CTA button. All required elements are present and functional.",
+      "screenshot": "athlete_05_thevault_page_loads.png",
+      "duration_ms": 6072
+    },
+    {
+      "phase": "athlete",
+      "name": "PerformanceHub page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Performance Hub page is showing an empty state with a setup prompt instead of the expected Performance Hub content. The page displays 'Set Up Your Sport Profile First' with a button to go to Profile Settings, but it should show either a sport profile card with Personal Bests section and session log, or have a 'Log Session' button. The current state indicates the feature is not properly set up or functioning as expected.",
+      "screenshot": "athlete_06_performancehub_page_loads.png",
+      "duration_ms": 6866
+    },
+    {
+      "phase": "athlete",
+      "name": "ScoutCard page loads for athlete",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows only a loading spinner on a black background with no content. This indicates either a stuck loading state or the feature has failed to load the Scout Card data. No athlete information, stats, action buttons, or 'ProPath Scout Card' header are visible.",
+      "screenshot": "athlete_07_scoutcard_page_loads_for_athlete.png",
+      "duration_ms": 7742
+    },
+    {
+      "phase": "athlete",
+      "name": "Return to Feed from athlete features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page displays correctly with real content - story carousel with user avatars, post creation field, category filter tabs (For You, Following, All, Basketball, Soccer, Football), and actual post from Marcus Silva with soccer content, image, and engagement options. All navigation elements and features are functional with proper dark theme styling.",
+      "screenshot": "athlete_08_return_to_feed_from_athlete_features.png",
+      "duration_ms": 8710
+    }
+  ]
+}

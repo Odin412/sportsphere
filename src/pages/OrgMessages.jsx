@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { MessageCircle, Loader2 } from "lucide-react";
@@ -14,7 +15,7 @@ const CHANNELS = [
 ];
 
 export default function OrgMessages() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [membership, setMembership] = useState(null);
   const [orgId, setOrgId] = useState(null);
   const [channel, setChannel] = useState("general");
@@ -23,14 +24,14 @@ export default function OrgMessages() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user) return;
+    (async () => {
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setMembership({ role: "admin" }); return; }
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       if (memberships[0]) { setOrgId(memberships[0].organization_id); setMembership(memberships[0]); }
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const { data: messages, isLoading } = useQuery({
     queryKey: ["org-messages", orgId, channel],

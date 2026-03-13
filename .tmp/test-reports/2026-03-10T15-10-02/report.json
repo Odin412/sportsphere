@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-03-10T15:11:48.315Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "navigation"
+  ],
+  "duration_ms": 102435,
+  "summary": {
+    "total": 11,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 11,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "navigation",
+      "name": "Sidebar renders all primary nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Left sidebar shows all 7 required navigation items (Feed, Explore, Reels, ProPath, Live, Messages, Profile) with proper icons and labels. Feed is correctly highlighted in red as the active item, indicating proper navigation state.",
+      "screenshot": "navigation_01_sidebar_renders_all_primary_nav.png",
+      "duration_ms": 12885
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Explore",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Explore page is functioning correctly with real content displayed. It shows sport category filter pills (All, Baseball, Basketball, Football, Soccer, Tennis, Softball), a functional search bar, and two content sections: 'TRAINING & DRILLS' with 5 training videos showing proper titles, durations, tags, and engagement metrics, and 'POPULAR POSTS' section beginning to load. The page has proper navigation, dark theme styling, and no error states or loading spinners stuck.",
+      "screenshot": "navigation_02_navigate_to_explore.png",
+      "duration_ms": 8043
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Reels",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Reels page is functioning properly with a grid layout displaying sports content. Shows real data including a swimming video by Sofia with engagement metrics (15 likes, 37 views), sport category tags (Swimming, Soccer, Tennis, CrossFit), and user profiles (Sofia, Marcus). The page structure is intact with proper navigation, create button, and content tiles - not an empty state or error.",
+      "screenshot": "navigation_03_navigate_to_reels.png",
+      "duration_ms": 9726
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to ProPath",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProPath page has loaded successfully and displays a valid setup prompt with 'Set Up Your ProPath Profile' heading, descriptive text about creating a sport profile to unlock Scout Cards and performance tracking, and a functional 'Create Sport Profile' CTA button. This is a proper onboarding state for users without an existing sport profile.",
+      "screenshot": "navigation_04_navigate_to_propath.png",
+      "duration_ms": 6804
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Live",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Live streaming page loaded successfully with proper UI elements - shows 'Live Streams & VODs' banner, 'Go Live' button, 'Live Now'/'Past Streams' tabs, search bar with filter options, and valid empty state message 'No one's live right now. Be the first to go live in your sport.' All core functionality is present and working.",
+      "screenshot": "navigation_05_navigate_to_live.png",
+      "duration_ms": 7235
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Messages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Messages page loaded successfully with proper UI elements - shows 'Messages' heading, search bar with 'Search conversations...' placeholder, plus button for new messages, and 'Select a conversation' placeholder text in the main area. This is a valid empty state for the messages feature.",
+      "screenshot": "navigation_06_navigate_to_messages.png",
+      "duration_ms": 6784
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page displays correctly with user avatar, name 'Test Athlete', stats section showing 0 followers/following/posts (acceptable for test account), functional buttons (Settings, Edit, Monetization, Logout), and proper empty states for Featured Highlight and Sport Profiles sections with appropriate messaging and call-to-action buttons",
+      "screenshot": "navigation_07_navigate_to_profile.png",
+      "duration_ms": 7554
+    },
+    {
+      "phase": "navigation",
+      "name": "More menu expands",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The More menu is properly expanded showing all secondary navigation items (For You, Get Noticed, The Vault, Challenges, Performance, Scouting Hub, Events, Forums). The main feed content is still visible with real user posts including Sofia Rodriguez's swimming training reel post with actual content and engagement options. All UI elements are functioning correctly with proper dark theme styling.",
+      "screenshot": "navigation_08_more_menu_expands.png",
+      "duration_ms": 10275
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Challenges (secondary)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Challenges page has loaded successfully with all expected UI elements: orange banner with 'Challenges' heading and trophy icon, 'Create Challenge' button, filter tabs (All Challenges, Active Now, My Joined, Created by Me), and a proper empty state showing 'No challenges found' with trophy icon and 'Create your first challenge to get started!' message. This is a valid empty state, not a loading or error condition.",
+      "screenshot": "navigation_09_navigate_to_challenges__secondary_.png",
+      "duration_ms": 7484
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Forums (secondary)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Forums page loaded successfully with the 'Community Forums' heading, topic category icons, search functionality, and displays a valid empty state message 'No topics found. Be the first to start a discussion!' with a creation prompt button, which is acceptable for a functioning forums feature",
+      "screenshot": "navigation_10_navigate_to_forums__secondary_.png",
+      "duration_ms": 6432
+    },
+    {
+      "phase": "navigation",
+      "name": "Return to Feed (round-trip)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working correctly with real content - showing user stories at top, sports category filters (For You, Following, All, Basketball, Soccer, Football), and actual post from Sofia Rodriguez about swimming training with image content. Navigation and core feed functionality are operational.",
+      "screenshot": "navigation_11_return_to_feed__round-trip_.png",
+      "duration_ms": 7999
+    }
+  ]
+}

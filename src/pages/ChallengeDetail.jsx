@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -18,13 +19,13 @@ export default function ChallengeDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const challengeId = urlParams.get("id");
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [activeTab, setActiveTab] = useState("updates"); // "updates" | "leaderboard"
   const [joining, setJoining] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: challenge, isLoading } = useQuery({

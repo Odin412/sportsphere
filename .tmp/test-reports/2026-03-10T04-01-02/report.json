@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-03-10T04:02:09.171Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "settings"
+  ],
+  "duration_ms": 66273,
+  "summary": {
+    "total": 7,
+    "critical": 0,
+    "warning": 2,
+    "data_issue": 0,
+    "passed": 5,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "settings",
+      "name": "ProfileSettings page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows a functional Account Settings interface with a back arrow, profile management section with cover photo upload, profile picture with camera icon, display name and username form fields, and navigation tabs (Language, Activity, Alerts). All core profile settings functionality is visible and working.",
+      "screenshot": "settings_01_profilesettings_page_loads.png",
+      "duration_ms": 9503
+    },
+    {
+      "phase": "settings",
+      "name": "ProfileSettings — identity tab with form fields",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProfileSettings Identity tab is displaying properly with multiple form fields including: display name input field (with 'Name shown to others' label), username input field (with '@yourhandle' placeholder), avatar upload area (orange 'T' avatar with camera icon), and cover photo upload area ('Add cover photo' section). All required form elements are visible and functional.",
+      "screenshot": "settings_02_profilesettings___identity_tab_with_form_fields.png",
+      "duration_ms": 5576
+    },
+    {
+      "phase": "settings",
+      "name": "ProfileSettings — notifications tab loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows Account Settings profile management interface with display name/username fields, but no notification settings with toggle switches are visible. The current view appears to be on the Language/Activity/Alerts tabs section, not the notification settings that should show organized toggle groups for Social, Followers, Messages, etc.",
+      "screenshot": "settings_03_profilesettings___notifications_tab_loads.png",
+      "duration_ms": 5412
+    },
+    {
+      "phase": "settings",
+      "name": "Premium page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Premium page displays correctly with 'SportHub Premium' heading, crown icon, 'Unlock AI-powered features' subtitle, $9.99/month pricing, 'Subscribe Now' button, and AI Coach/Creator AI feature cards on dark background",
+      "screenshot": "settings_04_premium_page_loads.png",
+      "duration_ms": 15889
+    },
+    {
+      "phase": "settings",
+      "name": "Leaderboard page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The leaderboard page shows proper header, subtitle, period tabs, and sport filters, but displays an empty state with only 'Rankings update weekly. Stay active to climb — consistency wins.' message instead of actual leaderboard data or ranked user cards",
+      "screenshot": "settings_05_leaderboard_page_loads.png",
+      "duration_ms": 11102
+    },
+    {
+      "phase": "settings",
+      "name": "Leaderboard — period tabs and sport filters visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Leaderboard page displays all required elements: period selector tabs (All Time, This Week, This Month) with 'All Time' selected, and sport filter chips (All Sports, Basketball, Soccer, Football, Baseball, Tennis, Hockey, MMA, Golf) with 'All Sports' selected. The main content area shows an empty state with explanatory text about rankings updating weekly, which is acceptable behavior for sparse data.",
+      "screenshot": "settings_06_leaderboard___period_tabs_and_sport_filters_visible.png",
+      "duration_ms": 4325
+    },
+    {
+      "phase": "settings",
+      "name": "Return to Feed from settings features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working properly with real content - shows user stories at top, active post creation prompt, sport category filters (For You, Following, All, Basketball, Soccer, Football), and actual user post from Marcus Silva with image content. Navigation round-trip from settings back to feed completed successfully. All UI elements are functional and displaying real data, not empty states.",
+      "screenshot": "settings_07_return_to_feed_from_settings_features.png",
+      "duration_ms": 8605
+    }
+  ]
+}

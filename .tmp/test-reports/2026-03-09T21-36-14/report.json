@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-03-09T21:37:19.227Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "mobile"
+  ],
+  "duration_ms": 64652,
+  "summary": {
+    "total": 8,
+    "critical": 0,
+    "warning": 2,
+    "data_issue": 0,
+    "passed": 6,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "mobile",
+      "name": "Mobile Feed loads with bottom nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Mobile feed view displays correctly at 375px width with all required elements: top header with Sportsphere logo and notification bell, feed posts (stories section and Marcus Silva post with real content), and bottom navigation bar with 5 items including the red center Create button. No desktop sidebar visible, no content overflow, and real data is showing throughout.",
+      "screenshot": "mobile_01_mobile_feed_loads_with_bottom_nav.png",
+      "duration_ms": 12533
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile bottom nav — Explore",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: All training video thumbnails show placeholder content (gray boxes with three dots) instead of actual video previews. While the layout is responsive and properly formatted, the core feature is not working - users cannot see what the training content actually contains, making the explore functionality essentially broken.",
+      "screenshot": "mobile_02_mobile_bottom_nav___explore.png",
+      "duration_ms": 6607
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile bottom nav — Reels",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: Three of the four reels (Soccer, CrossFit, and Baseball) appear to be empty placeholder states with no actual video content, showing only dark blank areas. Only the Swimming reel shows actual content with a proper video thumbnail. This indicates the feature is not working properly as most reels are failing to load or display content.",
+      "screenshot": "mobile_03_mobile_bottom_nav___reels.png",
+      "duration_ms": 6543
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile bottom nav — Profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Mobile profile page displays correctly with single-column layout showing user avatar, name 'Test Athlete', email, follower stats (0/0/0), action buttons (Settings, Edit, Monetization, Logout), and featured highlight section with appropriate empty state message. Layout is properly adapted for mobile with no desktop sidebar visible and content fits within 375px width without overflow.",
+      "screenshot": "mobile_04_mobile_bottom_nav___profile.png",
+      "duration_ms": 7389
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile Create Post button",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Create Post page is properly functional with all required elements: text input area with placeholder text for sharing content, Photo and Video upload options, and a prominent 'Publish Post' button. The form is well-sized for mobile with no overflowing elements, proper spacing, and a clean layout on the dark theme. The interface is ready for content creation.",
+      "screenshot": "mobile_05_mobile_create_post_button.png",
+      "duration_ms": 6071
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile Feed — posts are readable",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The mobile feed displays properly at 375px width with full-width cards, visible author information (Marcus Silva with avatar), readable text content, properly scaled media image, and clear interaction elements including Follow button and menu options. Navigation tabs are well-spaced at the bottom, and the story creation prompt at top is appropriately sized.",
+      "screenshot": "mobile_06_mobile_feed___posts_are_readable.png",
+      "duration_ms": 8561
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile — no horizontal scroll",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The mobile app displays properly within the viewport bounds. All UI elements including the header with Sportsphere logo, story circles, feed tabs (For You, Following, All), user post with profile info and soccer content, and bottom navigation are contained within the mobile width. No horizontal scrollbar is present and the layout appears responsive and functional with real user data displayed.",
+      "screenshot": "mobile_07_mobile___no_horizontal_scroll.png",
+      "duration_ms": 5800
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile — return to Feed from mobile nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed displays real user content with Marcus Silva's soccer post showing actual image, engagement metrics, and functional UI elements. All navigation items are accessible, story carousel shows real user profiles, and the feed filtering tabs (For You, Following, All) are properly displayed. No empty states, loading spinners, or broken layouts detected.",
+      "screenshot": "mobile_08_mobile___return_to_feed_from_mobile_nav.png",
+      "duration_ms": 5408
+    }
+  ]
+}

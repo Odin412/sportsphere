@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";

@@ -1,0 +1,358 @@
+{
+  "timestamp": "2026-03-09T20:04:04.482Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "auth",
+    "navigation",
+    "feed"
+  ],
+  "duration_ms": 499224,
+  "summary": {
+    "total": 26,
+    "critical": 12,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 6,
+    "skipped": 7
+  },
+  "results": [
+    {
+      "phase": "auth",
+      "name": "Login page renders",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The login page displays correctly with the expected split-screen design. Left panel shows dark-themed branding with 'Sportsphere' logo, headline 'The Sports Community Built for Athletes', feature list, and stats (12K+ active athletes, 340 live streams, 890+ coaches). Right panel contains functional sign-in form with email/password fields, Sign In button, and Create Account option. A live stream card is also visible showing real engagement data (2.4K watching NBA Pre-season Training Analysis). All elements are properly rendered with no errors or loading states.",
+      "screenshot": "auth_01_login_page_renders.png",
+      "duration_ms": 8968
+    },
+    {
+      "phase": "auth",
+      "name": "Invalid credentials rejected",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: No error message or red toast notification is visible after attempting to sign in with invalid credentials. The user appears to still be on the login page with the same form fields visible, but there's no visual feedback indicating the login attempt failed or that the credentials were invalid.",
+      "screenshot": "auth_02_invalid_credentials_rejected.png",
+      "duration_ms": 7799
+    },
+    {
+      "phase": "auth",
+      "name": "Valid login redirects to Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The authenticated app is displaying correctly with a dark theme. The left sidebar shows all expected navigation items (Feed, Explore, Reels, ProPath, Live, Messages, Profile, Create Post, More). The main content area shows real user data including story circles with profile pictures and names, a post creation area, filter tabs (For You, Following, All, Basketball, Soccer, Football), and an actual post from Marcus Silva with real content including a soccer image. The right sidebar shows Sports News section. All elements are properly loaded with real data, not empty states or loading spinners.",
+      "screenshot": "auth_03_valid_login_redirects_to_feed.png",
+      "duration_ms": 15293
+    },
+    {
+      "phase": "auth",
+      "name": "Session persists on refresh",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page shows authenticated feed state after refresh with proper navigation sidebar, user stories at top, active post content from Marcus Silva with soccer post and image, category filters working (For You selected), and Sports News section visible - user remains logged in",
+      "screenshot": "auth_04_session_persists_on_refresh.png",
+      "duration_ms": 14834
+    },
+    {
+      "phase": "auth",
+      "name": "Sign-up form has role selection",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The signup form is working correctly with Create Account tab active, showing all 4 role selection cards (Athlete, Coach, Organization, Parent) with proper descriptions and icons, plus sign-in option at bottom",
+      "screenshot": "auth_05_sign-up_form_has_role_selection.png",
+      "duration_ms": 8687
+    },
+    {
+      "phase": "auth",
+      "name": "Logout actually logs out",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with proper dark theme, Sportsphere branding, descriptive tagline, and clear CTA buttons (Get Started/Sign In). Shows no authenticated content as expected for logged out state.",
+      "screenshot": "auth_06_logout_actually_logs_out.png",
+      "duration_ms": 24581
+    },
+    {
+      "phase": "auth",
+      "name": "Auth guard blocks Feed when logged out",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with dark theme, shows Sportsphere logo, main heading 'Your Sports Life, All in One Place', descriptive text about features, functional Get Started and Sign In buttons, and proper copyright footer. This is the expected behavior for unauthenticated users being redirected from protected pages.",
+      "screenshot": "auth_07_auth_guard_blocks_feed_when_logged_out.png",
+      "duration_ms": 14512
+    },
+    {
+      "phase": "navigation",
+      "name": "Sidebar renders all primary nav",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-explore\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-reels\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-propathhub\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-live\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-messages\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-profile\"]').first() to be visible\u001b[22m\n | L2 FAIL: This appears to be an athlete onboarding form, not the main app interface with the left sidebar navigation. The image shows a sport selection onboarding screen (Step 1 of 3) with sport categories, position/event input, and skill level options. There is no visible left sidebar with Feed, Explore, Reels, ProPath, Live, Messages, and Profile navigation items as described in the requirements.",
+      "screenshot": "navigation_01_sidebar_renders_all_primary_nav.png",
+      "duration_ms": 65383
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Explore",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-explore\"]')\u001b[22m\n",
+      "screenshot": "navigation_02_navigate_to_explore_error.png",
+      "duration_ms": 30189
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Reels",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-reels\"]')\u001b[22m\n",
+      "screenshot": "navigation_03_navigate_to_reels_error.png",
+      "duration_ms": 30162
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to ProPath",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-propathhub\"]')\u001b[22m\n",
+      "screenshot": "navigation_04_navigate_to_propath_error.png",
+      "duration_ms": 30182
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Live",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-live\"]')\u001b[22m\n",
+      "screenshot": "navigation_05_navigate_to_live_error.png",
+      "duration_ms": 30173
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Messages",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-messages\"]')\u001b[22m\n",
+      "screenshot": "navigation_06_navigate_to_messages_error.png",
+      "duration_ms": 30177
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Profile",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-profile\"]')\u001b[22m\n",
+      "screenshot": "navigation_07_navigate_to_profile_error.png",
+      "duration_ms": 30172
+    },
+    {
+      "phase": "navigation",
+      "name": "More menu expands",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]')\u001b[22m\n",
+      "screenshot": "navigation_08_more_menu_expands_error.png",
+      "duration_ms": 30181
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Challenges (secondary)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-challenges\"]')\u001b[22m\n",
+      "screenshot": "navigation_09_navigate_to_challenges__secondary__error.png",
+      "duration_ms": 30182
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Forums (secondary)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-forums\"]')\u001b[22m\n",
+      "screenshot": "navigation_10_navigate_to_forums__secondary__error.png",
+      "duration_ms": 30184
+    },
+    {
+      "phase": "navigation",
+      "name": "Return to Feed (round-trip)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]')\u001b[22m\n",
+      "screenshot": "navigation_11_return_to_feed__round-trip__error.png",
+      "duration_ms": 30142
+    },
+    {
+      "phase": "feed",
+      "name": "Feed loads with real posts",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]').first() to be visible\u001b[22m\n; count_gte [class*=\"post\"], [class*=\"Post\"], article, [data-testid*=\"post\"] | L2 FAIL: This is not a feed showing post cards. This is an athlete onboarding form (Step 1 of 3) where users select their sport, position, and skill level. The page shows sport selection buttons, input fields for position/event, skill level options, and a continue button - no social media posts or feed content visible.",
+      "screenshot": "feed_01_feed_loads_with_real_posts.png",
+      "duration_ms": 27240
+    },
+    {
+      "phase": "feed",
+      "name": "Sport filter pills exist",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "feed",
+      "name": "Sport filter actually filters",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "feed",
+      "name": "Clear filter restores all posts",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "feed",
+      "name": "Like button works",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "feed",
+      "name": "Unlike restores state",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "feed",
+      "name": "Post author links to profile",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    },
+    {
+      "phase": "feed",
+      "name": "News widget has content",
+      "severity": "SKIPPED",
+      "layers": {
+        "L1": "skipped",
+        "L2": "skipped",
+        "L3": "skipped"
+      },
+      "reasoning": "Skipped due to earlier critical failure",
+      "screenshot": null,
+      "duration_ms": 0
+    }
+  ]
+}

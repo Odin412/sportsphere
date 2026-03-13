@@ -1,0 +1,806 @@
+{
+  "timestamp": "2026-03-10T01:47:49.947Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "auth",
+    "navigation",
+    "feed",
+    "athlete",
+    "coach",
+    "org",
+    "parent",
+    "onboarding",
+    "mobile"
+  ],
+  "duration_ms": 615931,
+  "summary": {
+    "total": 60,
+    "critical": 0,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 59,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "auth",
+      "name": "Login page renders",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The login page displays correctly with the expected split-screen design. Left panel shows dark theme branding with 'Sportsphere' logo, tagline 'The Sports Community Built for Athletes', feature list, and statistics (12K+ athletes, 340 live streams, 890+ coaches). Right panel contains functional sign-in form with email field (placeholder text visible), password field with masked input, 'Sign In' button, and 'Create Account' option. The live stream indicator shows real data (NBA Pre-season Training Analysis with 2.4K watching). All elements are properly rendered and functional.",
+      "screenshot": "auth_01_login_page_renders.png",
+      "duration_ms": 8646
+    },
+    {
+      "phase": "auth",
+      "name": "Invalid credentials rejected",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Error handling is working correctly. The login attempt with fake credentials shows multiple error indicators: 'Incorrect email or password' error message at the top, red error toast below the Sign In button, and user remains on login page instead of being redirected to the app.",
+      "screenshot": "auth_02_invalid_credentials_rejected.png",
+      "duration_ms": 7946
+    },
+    {
+      "phase": "auth",
+      "name": "Valid login redirects to Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "App is fully functional and authenticated. Left sidebar shows all navigation items (Feed, Explore, Reels, etc.), main feed displays real posts with user content (Marcus Silva post with soccer image and text), stories section shows multiple user profiles, sports news sidebar shows live updates with timestamps, and all UI elements are properly rendered in dark theme.",
+      "screenshot": "auth_03_valid_login_redirects_to_feed.png",
+      "duration_ms": 13969
+    },
+    {
+      "phase": "auth",
+      "name": "Session persists on refresh",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page shows authenticated feed state with working features: user stories at top, post creation prompt, sport category filters, real post from Marcus Silva with content and image, sidebar navigation intact, and Sports News section visible. No login redirect or empty states detected.",
+      "screenshot": "auth_04_session_persists_on_refresh.png",
+      "duration_ms": 14300
+    },
+    {
+      "phase": "auth",
+      "name": "Sign-up form has role selection",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The sign-up form is working correctly with the 'Create Account' tab active and all 4 role selection cards visible (Athlete, Coach, Organization, Parent). Each card shows appropriate icons, titles, and descriptive text. The form includes proper authentication notice and sign-in link for existing users.",
+      "screenshot": "auth_05_sign-up_form_has_role_selection.png",
+      "duration_ms": 9439
+    },
+    {
+      "phase": "auth",
+      "name": "Logout actually logs out",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The landing page displays correctly with proper dark theme, showing the Sportsphere logo, tagline 'Your Sports Life, All in One Place', descriptive text about features, and functional 'Get Started' and 'Sign In' buttons. No authenticated content is visible, confirming the user is properly logged out.",
+      "screenshot": "auth_06_logout_actually_logs_out.png",
+      "duration_ms": 24585
+    },
+    {
+      "phase": "auth",
+      "name": "Auth guard blocks Feed when logged out",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with proper dark theme, Sportsphere branding, clear value proposition, functional CTA buttons (Get Started/Sign In), and appropriate copyright footer. Auth guard is working as expected by showing login/landing page for unauthenticated users instead of protected content.",
+      "screenshot": "auth_07_auth_guard_blocks_feed_when_logged_out.png",
+      "duration_ms": 13957
+    },
+    {
+      "phase": "navigation",
+      "name": "Sidebar renders all primary nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Left sidebar displays all 7 required navigation items with proper icons and labels (Feed, Explore, Reels, ProPath, Live, Messages, Profile). Feed is correctly highlighted in red as the active item, indicating proper navigation state functionality.",
+      "screenshot": "navigation_01_sidebar_renders_all_primary_nav.png",
+      "duration_ms": 11428
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Explore",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Explore page is functioning correctly with real content displayed. Shows active sport category filter pills (All, Baseball, Basketball, Football, Soccer, Tennis, Softball), a functional search bar, and two content sections: 'TRAINING & DRILLS' with 6 training videos showing actual titles, durations, tags, and engagement metrics, and 'POPULAR POSTS' section beginning to load. All elements appear properly rendered with real data, not empty states or loading placeholders.",
+      "screenshot": "navigation_02_navigate_to_explore.png",
+      "duration_ms": 7612
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Reels",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Reels page displays properly with a grid layout showing video thumbnails organized by sport categories (Soccer, Crossfit, Swimming, Baseball). Real user content is visible with usernames (Marcus, Zara) and engagement metrics (likes/comments). The UI structure is intact with proper navigation, create button, and no loading/error states.",
+      "screenshot": "navigation_03_navigate_to_reels.png",
+      "duration_ms": 6533
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to ProPath",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProPath page is displaying correctly with proper branding, clear call-to-action messaging, and functional UI elements. The page shows an appropriate onboarding state for new users with 'Set Up Your ProPath Profile' content, trophy icon, descriptive text about creating a sport profile, and a prominent 'Create Sport Profile' button. The layout is clean and the feature is working as intended for the initial user experience.",
+      "screenshot": "navigation_04_navigate_to_propath.png",
+      "duration_ms": 7065
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Live",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Live Streams page is showing an empty state with 'No one's live right now' message, which indicates no actual live streaming functionality is working or available. While the page layout appears correct, there's no real streaming content or active streams to verify the feature works properly.",
+      "screenshot": "navigation_05_navigate_to_live.png",
+      "duration_ms": 6554
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Messages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Messages page loaded successfully with proper UI elements: 'Messages' heading, search bar with 'Search conversations...' placeholder, create conversation button (+), and 'Select a conversation' placeholder text in the main area. This is a valid empty state for the Messages feature.",
+      "screenshot": "navigation_06_navigate_to_messages.png",
+      "duration_ms": 5662
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page loads correctly with proper layout - shows Test Athlete profile with avatar, stats (0 followers/following/posts which is acceptable for test account), functional buttons (Settings, Edit, Monetization, Logout), and proper empty states for Featured Highlights and Sport Profiles sections with appropriate messaging",
+      "screenshot": "navigation_07_navigate_to_profile.png",
+      "duration_ms": 6225
+    },
+    {
+      "phase": "navigation",
+      "name": "More menu expands",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The More menu is properly expanded showing all secondary navigation items (For You, Get Noticed, The Vault, Challenges, Performance, Scouting Hub, Events, Forums) with clear labels and icons. The main feed content is still visible and functional in the background, showing real posts with user data, timestamps, and engagement. The UI maintains proper dark theme styling and layout structure.",
+      "screenshot": "navigation_08_more_menu_expands.png",
+      "duration_ms": 8679
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Challenges (secondary)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Challenges page loaded successfully with all expected UI elements: orange banner with trophy icon and 'Challenges' heading, 'Create Challenge' button, tab filters (All Challenges, Active Now, My Joined, Created by Me), and a proper empty state showing trophy icon with 'No challenges found' message and call-to-action text. This is a valid functional state.",
+      "screenshot": "navigation_09_navigate_to_challenges__secondary_.png",
+      "duration_ms": 6785
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Forums (secondary)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Forums page is functioning correctly - shows proper header 'Community Forums', topic categories with icons, search functionality, 'New Topic' button, and appropriate empty state message 'No topics found. Be the first to start a discussion!' indicating the feature works but has no content yet",
+      "screenshot": "navigation_10_navigate_to_forums__secondary_.png",
+      "duration_ms": 6912
+    },
+    {
+      "phase": "navigation",
+      "name": "Return to Feed (round-trip)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functioning properly with real content displayed - user stories are visible at top, post from Marcus Silva with soccer content and engagement options, sports news sidebar showing live updates with timestamps, and all navigation elements are working. The dark theme is consistent and no loading states or errors are present.",
+      "screenshot": "navigation_11_return_to_feed__round-trip_.png",
+      "duration_ms": 7347
+    },
+    {
+      "phase": "feed",
+      "name": "Feed loads with real posts",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed displays functional content with a real post from Marcus Silva about soccer posted 19 hours ago, including proper interaction elements (Follow button, engagement options). The right sidebar shows live sports news with multiple real articles from ESPN sources with timestamps. Stories section at top shows user avatars. All elements appear to be working with real data, not placeholder content.",
+      "screenshot": "feed_01_feed_loads_with_real_posts.png",
+      "duration_ms": 20946
+    },
+    {
+      "phase": "feed",
+      "name": "Sport filter pills exist",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The sport filter pills are clearly visible and functional - showing 'For You', 'Following', 'All', 'Basketball', 'Soccer', and 'Football' options with proper styling and active states. The pills appear to be horizontally scrollable as expected for a sports filter interface.",
+      "screenshot": "feed_02_sport_filter_pills_exist.png",
+      "duration_ms": 9967
+    },
+    {
+      "phase": "feed",
+      "name": "Sport filter actually filters",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Basketball filter is working correctly - the Basketball pill is highlighted in red/orange while other pills (Following, All, Soccer, Football) remain unselected with gray backgrounds. The visible post from Jordan Williams is properly tagged with 'Basketball' and shows basketball-related content (gym/training image). No posts from other sports are visible in the feed.",
+      "screenshot": "feed_03_sport_filter_actually_filters.png",
+      "duration_ms": 8273
+    },
+    {
+      "phase": "feed",
+      "name": "Clear filter restores all posts",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The feed shows posts from multiple sports with various sport icons (football, basketball, soccer) and the 'All' filter is currently selected/highlighted, indicating the filter has been successfully cleared and posts from different sports are now visible in the feed",
+      "screenshot": "feed_04_clear_filter_restores_all_posts.png",
+      "duration_ms": 7953
+    },
+    {
+      "phase": "feed",
+      "name": "Like button works",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The feed is displaying properly with real content - Marcus Silva's soccer post is visible with timestamp, sport category tag, follow button, and post content. The story carousel at top shows multiple user profiles. Sports news section on right shows actual NBA articles with timestamps. Support chat is functional with input field. All UI elements appear to be working normally without errors or broken layouts.",
+      "screenshot": "feed_05_like_button_works.png",
+      "duration_ms": 8868
+    },
+    {
+      "phase": "feed",
+      "name": "Unlike restores state",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The feed is functioning properly with real content displayed. Marcus Silva's soccer post is showing with proper metadata (19 hours ago, Soccer category), complete with image content, interaction buttons, and a follow button. The sports news sidebar shows live NBA and WR content with timestamps. The support chat widget is functional with predefined help options. All UI elements appear intact and working without empty states or errors.",
+      "screenshot": "feed_06_unlike_restores_state.png",
+      "duration_ms": 8060
+    },
+    {
+      "phase": "feed",
+      "name": "Post author links to profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page displays correctly for Marcus Silva (different from test account), showing real user data including profile image, follower/following counts (0/0), 20 posts, favorite sport (Soccer - Professional), detailed athlete information, and achievements. All profile elements are properly loaded and functional.",
+      "screenshot": "feed_07_post_author_links_to_profile.png",
+      "duration_ms": 8168
+    },
+    {
+      "phase": "feed",
+      "name": "News widget has content",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functional with real posts visible. Shows Zara Mitchell's CrossFit post with workout image, engagement metrics (10 likes, 2 comments, 1 share, 3433 views), and proper interaction elements. Navigation sidebar is complete and functional. SportHub Support chat widget is open and working. No empty states, error messages, or broken layouts detected.",
+      "screenshot": "feed_08_news_widget_has_content.png",
+      "duration_ms": 10773
+    },
+    {
+      "phase": "athlete",
+      "name": "ProPathHub page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProPath page is working correctly and showing the expected setup state. It displays a proper setup prompt with trophy icon, 'Set Up Your ProPath Profile' heading, descriptive text about creating a sport profile to unlock Scout Cards tracking and recruiter visibility, and a functional 'Create Sport Profile' button. This is the correct state (a) for users who haven't created their sport profile yet. The page is not blank or errored, and the support chat assistant is also properly functioning on the right side.",
+      "screenshot": "athlete_01_propathhub_page_loads.png",
+      "duration_ms": 8106
+    },
+    {
+      "phase": "athlete",
+      "name": "GetNoticed page loads with Browse tab",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Get Noticed page is functioning correctly with all required elements present: hero section with 'Get Noticed' title and description, red 'Browse Athletes' button, search bar, sport filter chips (All, Basketball, Soccer, Football, Baseball, Tennis), level filter buttons (All, Beginner, Intermediate, Advanced, Professional, Elite), and showing '11 athletes found' with actual athlete profile cards displayed (Kori Capers and Marcus Silva visible). The page shows real data, not empty states or errors.",
+      "screenshot": "athlete_02_getnoticed_page_loads_with_browse_tab.png",
+      "duration_ms": 9072
+    },
+    {
+      "phase": "athlete",
+      "name": "GetNoticed sport filter works",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Basketball filter is properly highlighted/selected (orange background), showing it's active. The search results show 1 basketball athlete (Jordan Williams) with correct sport badge and professional level indicator. The filter functionality is working correctly with real data displayed.",
+      "screenshot": "athlete_03_getnoticed_sport_filter_works.png",
+      "duration_ms": 5666
+    },
+    {
+      "phase": "athlete",
+      "name": "GetNoticed My Showcase tab",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The My Showcase tab is correctly displaying the empty state with 'Put Yourself on the Map' heading, descriptive text about creating a sport profile to appear in athlete showcases, benefit cards for 'Your Stats' and 'Your Highlights', and the 'Set Up My Showcase' CTA button. This is the appropriate state for users who haven't created their sport profile yet.",
+      "screenshot": "athlete_04_getnoticed_my_showcase_tab.png",
+      "duration_ms": 8496
+    },
+    {
+      "phase": "athlete",
+      "name": "TheVault page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Vault page is displaying correctly with all expected elements: 'The Vault' title with lock icon, 'Private' badge, 'Add Video' button in top right, and proper empty state showing 'Your Vault is Empty' message with explanation text and 'Upload First Video' button. The privacy notice explaining vault videos are only visible to user and coaches is also present. This is the correct empty state, not an error.",
+      "screenshot": "athlete_05_thevault_page_loads.png",
+      "duration_ms": 7274
+    },
+    {
+      "phase": "athlete",
+      "name": "PerformanceHub page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Performance Hub page is displaying the correct empty state for a new user account. Shows 'Set Up Your Sport Profile First' message with explanation text and 'Go to Profile Settings' button, which is the expected behavior when no sport profile has been configured yet. The page structure, navigation, and chat support widget are all functioning properly.",
+      "screenshot": "athlete_06_performancehub_page_loads.png",
+      "duration_ms": 6449
+    },
+    {
+      "phase": "athlete",
+      "name": "ScoutCard page loads for athlete",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Scout Card page is displaying the correct empty state message 'No Sport Profile Found' with explanation text 'This athlete hasn't set up their ProPath sport profile yet.' and a 'Browse Athletes' action button. This is the expected behavior when an athlete hasn't configured their profile, not an error state.",
+      "screenshot": "athlete_07_scoutcard_page_loads_for_athlete.png",
+      "duration_ms": 14576
+    },
+    {
+      "phase": "athlete",
+      "name": "Return to Feed from athlete features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working correctly with real content - shows user stories at top, post creation prompt, sport filter tabs (For You, Following, All, Basketball, Soccer, Football), and actual posts with real data including Marcus Silva's soccer post with image, timestamp, and engagement options. All navigation elements and features appear functional.",
+      "screenshot": "athlete_08_return_to_feed_from_athlete_features.png",
+      "duration_ms": 7236
+    },
+    {
+      "phase": "coach",
+      "name": "AI Coach page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The AI Coach page is displaying correctly with a premium gate/upgrade prompt as designed. The page shows proper dark theme styling, a crown icon, clear 'Premium Feature' heading, detailed benefits list with checkmarks, and functional upgrade/back buttons. The sidebar navigation is visible and the 'AI Coach' item is highlighted in red, indicating proper page state. This is an expected premium gating implementation, not an error.",
+      "screenshot": "coach_01_ai_coach_page_loads.png",
+      "duration_ms": 8972
+    },
+    {
+      "phase": "coach",
+      "name": "LiveCoaching page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Live Coaching page is working correctly. It shows the proper page title 'Live Coaching' with descriptive text, navigation tabs (Upcoming, Live Now, My Sessions), a Create Session button, and displays an appropriate empty state message 'No sessions found' with a video camera icon. This is the expected behavior for an account with no coaching sessions.",
+      "screenshot": "coach_02_livecoaching_page_loads.png",
+      "duration_ms": 6498
+    },
+    {
+      "phase": "coach",
+      "name": "Creator Hub page loads for coach",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Creator Hub page is properly loaded and functional with monetization dashboard showing real data (all zeros for new creator), proper navigation tabs, analytics chart with follower growth tracking, and monetization settings button. Layout is complete with no errors or broken elements.",
+      "screenshot": "coach_03_creator_hub_page_loads_for_coach.png",
+      "duration_ms": 6541
+    },
+    {
+      "phase": "coach",
+      "name": "Analytics page loads for coach",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Creator Analytics page is functioning correctly with proper layout and data display. All metric cards show zero values which is expected for a new/test account with no activity. The page structure is intact with time period filters (7 Days, 30 Days, 90 Days, All Time), metric cards for views/likes/followers/revenue/comments/stream viewers/engagement rate, and chart sections for 'Engagement Over Time' and 'Stream Performance'. The dark theme is properly applied and no loading spinners, errors, or broken layouts are visible.",
+      "screenshot": "coach_04_analytics_page_loads_for_coach.png",
+      "duration_ms": 7813
+    },
+    {
+      "phase": "coach",
+      "name": "Return to Feed from coach features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is functioning properly with real content - shows active user stories, post creation area, content filters (For You, Following, All, Basketball, Soccer, Football), a real post from Marcus Silva with image and engagement options, and live sports news sidebar with multiple recent articles. All elements are loaded and displaying actual data rather than placeholders or loading states.",
+      "screenshot": "coach_05_return_to_feed_from_coach_features.png",
+      "duration_ms": 8272
+    },
+    {
+      "phase": "org",
+      "name": "OrgDashboard page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page shows the expected 'Welcome to SportHub Teams' state with proper welcome message, descriptive text, shield icon, and functional 'Create Organization' CTA button. This is one of the two acceptable states for the Organization Dashboard.",
+      "screenshot": "org_01_orgdashboard_page_loads.png",
+      "duration_ms": 13672
+    },
+    {
+      "phase": "org",
+      "name": "OrgRoster page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page correctly displays the 'No Organization Yet' empty state with appropriate messaging and icon, explaining that the user needs to create or join an organization to manage their team roster. This is one of the two acceptable states for the Organization Roster page.",
+      "screenshot": "org_02_orgroster_page_loads.png",
+      "duration_ms": 13604
+    },
+    {
+      "phase": "org",
+      "name": "OrgSessions page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Organization Sessions page is displaying the expected 'No Organization Yet' empty state with a calendar icon and descriptive message 'Create or join an organization to schedule and manage sessions.' This is one of the acceptable states mentioned in the requirements, indicating the feature is working correctly when no organization exists.",
+      "screenshot": "org_03_orgsessions_page_loads.png",
+      "duration_ms": 14447
+    },
+    {
+      "phase": "org",
+      "name": "OrgMessages page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Messages page is displaying the correct 'No Organization Yet' empty state with a chat bubble icon and instructional text 'Create or join an organization to access team messaging.' This is one of the two acceptable states for this feature - it's working as intended for users who haven't joined an organization yet.",
+      "screenshot": "org_04_orgmessages_page_loads.png",
+      "duration_ms": 14283
+    },
+    {
+      "phase": "org",
+      "name": "VideoReview page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page correctly displays the 'No Organization Yet' empty state with a video camera icon and explanatory text 'Create or join an organization to review training videos.' This is an acceptable state for the Video Review feature when no organization exists.",
+      "screenshot": "org_05_videoreview_page_loads.png",
+      "duration_ms": 14010
+    },
+    {
+      "phase": "org",
+      "name": "Return to Feed from org features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page successfully loaded after navigation round-trip with all key features functioning: user stories display at top, post creation prompt, sport filter tabs (For You, Following, All, Basketball, Soccer, Football), and real content showing Marcus Silva's soccer post with image, engagement options, and proper timestamps. All navigation elements and content are properly rendered.",
+      "screenshot": "org_06_return_to_feed_from_org_features.png",
+      "duration_ms": 7348
+    },
+    {
+      "phase": "parent",
+      "name": "ParentView page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Parent View page loaded correctly with proper UI elements - shows the expected 'Parent View' message explaining this is for parents linked to an organization to track their child's progress, which is one of the acceptable states described",
+      "screenshot": "parent_01_parentview_page_loads.png",
+      "duration_ms": 13602
+    },
+    {
+      "phase": "parent",
+      "name": "Parent can view Profile page",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page loads correctly with proper layout showing user info (Test Parent with red T avatar), complete stats section (0 followers/following/posts which is acceptable for test account), functional buttons (Settings, Edit, Monetization, Logout), and appropriate empty states for Featured Highlights and My Sport Profiles sections with helpful messaging and Add Sport button.",
+      "screenshot": "parent_02_parent_can_view_profile_page.png",
+      "duration_ms": 7173
+    },
+    {
+      "phase": "parent",
+      "name": "Return to Feed from parent features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Successfully navigated back to Feed page completing the round-trip. Page shows proper dark theme, functional navigation sidebar, story section with user profiles, feed content with Marcus Silva's soccer post containing real image and text, sports category filters working, and Sports News section visible. All features appear to be working correctly with real data.",
+      "screenshot": "parent_03_return_to_feed_from_parent_features.png",
+      "duration_ms": 7673
+    },
+    {
+      "phase": "onboarding",
+      "name": "Athlete onboarding — Step 1 (sport + level)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "This is a valid athlete onboarding page showing step 1 of 3 with sport selection buttons (Basketball, Soccer, Football, etc.), a Position/Event input field, skill level options (Beginner, Intermediate, Advanced, Elite/Competitive), and a Continue button. All required onboarding elements are present and functional.",
+      "screenshot": "onboarding_01_athlete_onboarding___step_1__sport___level_.png",
+      "duration_ms": 15992
+    },
+    {
+      "phase": "onboarding",
+      "name": "Athlete onboarding — Walk through steps",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The athlete onboarding page is functional and showing Step 1 of 3. All form elements are present and working - sport selection buttons are displayed, position/event input field is available, skill level options are shown, and the Continue button is visible. The layout is clean and all interactive elements appear to be working properly.",
+      "screenshot": "onboarding_02_athlete_onboarding___walk_through_steps.png",
+      "duration_ms": 14939
+    },
+    {
+      "phase": "onboarding",
+      "name": "Athlete onboarding — Reaches app after completion",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "App successfully shows authenticated state with functional feed. User is properly logged in with sidebar navigation, story carousel with real user profiles, active feed filters (For You, Following, All, Basketball, Soccer, Football), and a real post from Marcus Silva with image content and engagement options. The Sports News sidebar is visible and the overall layout is working correctly.",
+      "screenshot": "onboarding_03_athlete_onboarding___reaches_app_after_completion.png",
+      "duration_ms": 17216
+    },
+    {
+      "phase": "onboarding",
+      "name": "Cleanup ephemeral accounts",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with proper dark theme, Sportsphere branding, clear tagline, functional CTA buttons (Get Started/Sign In), and appropriate footer. All elements are properly rendered and the page appears to be working as expected for user onboarding.",
+      "screenshot": "onboarding_04_cleanup_ephemeral_accounts.png",
+      "duration_ms": 14628
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile Feed loads with bottom nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Mobile layout is properly structured with all required elements: top header with Sportsphere logo and profile icon, stories section with user avatars (Marcus, Zara, Sofia, Diego), feed navigation tabs (For You, Following, All), main feed content area, and bottom navigation bar with all 5 required items (Home, Explore, Create, Reels, Profile). The dark theme is consistent throughout and no sidebar is visible as expected for mobile view.",
+      "screenshot": "mobile_01_mobile_feed_loads_with_bottom_nav.png",
+      "duration_ms": 12815
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile bottom nav — Explore",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The mobile Explore page displays correctly with proper responsive design. Content is stacked vertically as expected, showing training and drills sections with real data including view counts, like counts, and proper categorization tags. The search bar, category filters (All, Baseball, Basketball), and bottom navigation are all visible and properly positioned. While some content cards show placeholder video thumbnails (three dots), this is acceptable for mobile viewport as noted in the requirements. The page shows real engagement data and proper content organization, not empty states or errors.",
+      "screenshot": "mobile_02_mobile_bottom_nav___explore.png",
+      "duration_ms": 7776
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile bottom nav — Reels",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Reels page displays a proper mobile grid layout with 4 sport category tiles (Soccer, CrossFit, Swimming, Baseball). Each tile shows real user data including names, heart counts, and comment counts. The Swimming tile has actual video content visible. The bottom navigation is present and functional. The page is not blank, has no error states, and shows working social engagement metrics.",
+      "screenshot": "mobile_03_mobile_bottom_nav___reels.png",
+      "duration_ms": 6656
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile bottom nav — Profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page displays correctly with proper mobile layout - shows avatar area with 'T' initial, 'Test Athlete' name, email, follower stats (0/0/0 acceptable for test account), action buttons (Settings, Edit, Monetization, Logout), and 'Featured Highlight' section with appropriate empty state message. Single-column mobile layout without desktop sidebar elements.",
+      "screenshot": "mobile_04_mobile_bottom_nav___profile.png",
+      "duration_ms": 7062
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile Create Post button",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Create Post page is properly displayed with functioning text input area showing placeholder text, Photo/Video upload options, and Publish Post button. All elements are properly sized for mobile width with no overflow issues. The form appears ready for content creation.",
+      "screenshot": "mobile_05_mobile_create_post_button.png",
+      "duration_ms": 5327
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile Feed — posts are readable",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The mobile feed displays correctly at 375px width with full-width post cards, visible author names (Marcus Silva), proper dark theme styling, functional navigation tabs (For You, Following, All), story circles at top, and bottom navigation bar. The post shows real content with author info, timestamp, and image content as expected for a sports social media app.",
+      "screenshot": "mobile_06_mobile_feed___posts_are_readable.png",
+      "duration_ms": 8522
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile — no horizontal scroll",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The mobile interface displays correctly within the 375px viewport width. All elements including the header with Sportsphere logo and profile icon, story circles, navigation tabs (For You, Following, All), user post from Marcus Silva with profile info and follow button, and the black and white soccer image are properly contained within the viewport bounds. No horizontal scrolling is present and the layout appears responsive and functional with real user data displayed.",
+      "screenshot": "mobile_07_mobile___no_horizontal_scroll.png",
+      "duration_ms": 5878
+    },
+    {
+      "phase": "mobile",
+      "name": "Mobile — return to Feed from mobile nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Mobile feed displays properly with real content - Marcus Silva's soccer post with image, engagement options, story circles at top, functioning bottom navigation, and appropriate dark theme styling. All core feed features are working correctly.",
+      "screenshot": "mobile_08_mobile___return_to_feed_from_mobile_nav.png",
+      "duration_ms": 5277
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-03-09T20:36:47.634Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "navigation"
+  ],
+  "duration_ms": 113514,
+  "summary": {
+    "total": 11,
+    "critical": 1,
+    "warning": 3,
+    "data_issue": 0,
+    "passed": 7,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "navigation",
+      "name": "Sidebar renders all primary nav",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Left sidebar displays all 7 required navigation items with proper icons and labels (Feed, Explore, Reels, ProPath, Live, Messages, Profile). Feed is correctly highlighted in red as the active/selected item, indicating proper navigation state functionality.",
+      "screenshot": "navigation_01_sidebar_renders_all_primary_nav.png",
+      "duration_ms": 12060
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Explore",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Explore page is properly loaded with functional content including a search bar, sport category filter pills (All, Baseball, Basketball, Football, Soccer, Tennis, Softball), and two content sections: 'TRAINING & DRILLS' showing 6 training videos with thumbnails, durations, titles, tags, and engagement metrics, plus a 'POPULAR POSTS' section beginning to load below. All UI elements appear functional with real data rather than placeholder content.",
+      "screenshot": "navigation_02_navigate_to_explore.png",
+      "duration_ms": 7738
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Reels",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Reels page shows empty video containers with only sport category labels (Soccer, Crossfit, Swimming, Baseball) but no actual video content or thumbnails. While user names and engagement counts are visible at the bottom, the main video areas are completely blank, indicating the feature is not properly loading or displaying video content.",
+      "screenshot": "navigation_03_navigate_to_reels.png",
+      "duration_ms": 7494
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to ProPath",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ProPath page is displaying correctly with proper functionality - it shows the setup prompt for users who haven't created their athletic profile yet, with clear messaging about unlocking Scout Cards and performance tracking, plus a functional 'Create Sport Profile' button. This is the expected initial state for new users, not an empty or error state.",
+      "screenshot": "navigation_04_navigate_to_propath.png",
+      "duration_ms": 6665
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Live",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Live streaming page is working correctly with proper empty state handling. Shows 'No one's live right now. Be the first to go live in your sport.' message when no active streams are available, includes functional search/filter interface, and displays the 'Go Live' button for users to start streaming. The page layout is intact with proper navigation and consistent dark theme styling.",
+      "screenshot": "navigation_05_navigate_to_live.png",
+      "duration_ms": 7241
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Messages",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The messages interface shows an empty state with no conversations displayed and only shows 'Select a conversation' placeholder text. The left sidebar appears to have no conversation list, indicating either no data loaded or an empty state that doesn't demonstrate the feature working with real data.",
+      "screenshot": "navigation_06_navigate_to_messages.png",
+      "duration_ms": 6333
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page loads correctly with proper layout - user info displays (Test Athlete with avatar, handle, stats showing 0 followers/following/posts), functional buttons (Settings, Edit, Monetization, Logout), and appropriate empty states for Featured Highlights and Sport Profiles sections with clear call-to-action messages. Dark theme is properly applied and navigation sidebar is visible.",
+      "screenshot": "navigation_07_navigate_to_profile.png",
+      "duration_ms": 7083
+    },
+    {
+      "phase": "navigation",
+      "name": "More menu expands",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The More menu is properly expanded showing all secondary navigation items (For You, Get Noticed, The Vault, Challenges, Performance, Scouting Hub, Events, Forums) with clear labels and icons. The main feed content is still visible and functional in the background, showing real user posts with proper timestamps, engagement buttons, and media content. The expansion doesn't break the layout or hide critical functionality.",
+      "screenshot": "navigation_08_more_menu_expands.png",
+      "duration_ms": 8351
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Challenges (secondary)",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Challenges page shows an empty state with 'No challenges found' message. While the page loaded correctly with proper UI elements and navigation, this is an empty state scenario which indicates the feature is not showing real data or functional challenges that users can interact with.",
+      "screenshot": "navigation_09_navigate_to_challenges__secondary_.png",
+      "duration_ms": 5935
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Forums (secondary)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-forums\"]')\u001b[22m\n",
+      "screenshot": "navigation_10_navigate_to_forums__secondary__error.png",
+      "duration_ms": 31253
+    },
+    {
+      "phase": "navigation",
+      "name": "Return to Feed (round-trip)",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working properly with real content - shows user stories at top, functional post creation prompt, sport category filters, and a complete post from Marcus Silva with image, text content, timestamp, and follow button. Sports news widget shows loading state which is appropriate. Navigation and layout are intact after round-trip testing.",
+      "screenshot": "navigation_11_return_to_feed__round-trip_.png",
+      "duration_ms": 7725
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,7 @@ export default function CoachingSessionDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const sessionId = urlParams.get("id");
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [message, setMessage] = useState("");
   const [isQuestion, setIsQuestion] = useState(false);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
@@ -31,7 +32,7 @@ export default function CoachingSessionDetail() {
   const [isRegistering, setIsRegistering] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: session, isLoading } = useQuery({

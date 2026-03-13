@@ -1,0 +1,161 @@
+{
+  "timestamp": "2026-03-09T20:21:36.953Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "navigation"
+  ],
+  "duration_ms": 376172,
+  "summary": {
+    "total": 11,
+    "critical": 11,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 0,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "navigation",
+      "name": "Sidebar renders all primary nav",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-explore\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-reels\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-propathhub\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-live\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-messages\"]').first() to be visible\u001b[22m\n; locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-profile\"]').first() to be visible\u001b[22m\n | L2 FAIL: The interface shows an athlete onboarding form, not the expected left sidebar with navigation items (Feed, Explore, Reels, ProPath, Live, Messages, Profile). The current screen is a sport selection form which doesn't match the expected navigation layout.",
+      "screenshot": "navigation_01_sidebar_renders_all_primary_nav.png",
+      "duration_ms": 64222
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Explore",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-explore\"]')\u001b[22m\n",
+      "screenshot": "navigation_02_navigate_to_explore_error.png",
+      "duration_ms": 30127
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Reels",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-reels\"]')\u001b[22m\n",
+      "screenshot": "navigation_03_navigate_to_reels_error.png",
+      "duration_ms": 30141
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to ProPath",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-propathhub\"]')\u001b[22m\n",
+      "screenshot": "navigation_04_navigate_to_propath_error.png",
+      "duration_ms": 30112
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Live",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-live\"]')\u001b[22m\n",
+      "screenshot": "navigation_05_navigate_to_live_error.png",
+      "duration_ms": 30114
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Messages",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-messages\"]')\u001b[22m\n",
+      "screenshot": "navigation_06_navigate_to_messages_error.png",
+      "duration_ms": 30119
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Profile",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-profile\"]')\u001b[22m\n",
+      "screenshot": "navigation_07_navigate_to_profile_error.png",
+      "duration_ms": 30143
+    },
+    {
+      "phase": "navigation",
+      "name": "More menu expands",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]')\u001b[22m\n",
+      "screenshot": "navigation_08_more_menu_expands_error.png",
+      "duration_ms": 30119
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Challenges (secondary)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-challenges\"]')\u001b[22m\n",
+      "screenshot": "navigation_09_navigate_to_challenges__secondary__error.png",
+      "duration_ms": 30118
+    },
+    {
+      "phase": "navigation",
+      "name": "Navigate to Forums (secondary)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-forums\"]')\u001b[22m\n",
+      "screenshot": "navigation_10_navigate_to_forums__secondary__error.png",
+      "duration_ms": 30131
+    },
+    {
+      "phase": "navigation",
+      "name": "Return to Feed (round-trip)",
+      "severity": "CRITICAL",
+      "layers": {
+        "L1": "fail",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "L1 FAIL: page.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-tour=\"nav-feed\"]')\u001b[22m\n",
+      "screenshot": "navigation_11_return_to_feed__round-trip__error.png",
+      "duration_ms": 30120
+    }
+  ]
+}

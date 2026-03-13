@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,7 +18,7 @@ const SPORTS = [
 ];
 
 export default function CreatorAI() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [sport, setSport] = useState("");
   const [topic, setTopic] = useState("");
@@ -28,7 +29,7 @@ export default function CreatorAI() {
   const [captionInput, setCaptionInput] = useState("");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const generatePostIdeas = async () => {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -20,13 +21,13 @@ const statusColors = {
 
 export default function Advice() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [replyDialog, setReplyDialog] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [replying, setReplying] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
+
   }, []);
 
   const { data: received, isLoading: receivedLoading } = useQuery({

@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-03-09T22:24:18.624Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "onboarding"
+  ],
+  "duration_ms": 66428,
+  "summary": {
+    "total": 4,
+    "critical": 0,
+    "warning": 2,
+    "data_issue": 0,
+    "passed": 2,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "onboarding",
+      "name": "Athlete onboarding — Step 1 (sport + level)",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: This appears to be a light-themed interface, not the required dark-themed sports social media app. The background is white/light gray instead of dark, which contradicts the specification for a dark-themed app.",
+      "screenshot": "onboarding_01_athlete_onboarding___step_1__sport___level_.png",
+      "duration_ms": 20775
+    },
+    {
+      "phase": "onboarding",
+      "name": "Athlete onboarding — Walk through steps",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The onboarding is still showing 'Step 1 of 3' and displaying the initial sport selection form, which indicates the onboarding process has not completed successfully. A properly functioning completion should either show a welcome/congratulations screen or redirect to the main feed, not remain on the first step.",
+      "screenshot": "onboarding_02_athlete_onboarding___walk_through_steps.png",
+      "duration_ms": 14755
+    },
+    {
+      "phase": "onboarding",
+      "name": "Athlete onboarding — Reaches app after completion",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "App is fully functional with authenticated user experience - sidebar navigation is present, feed shows real content with Marcus Silva's soccer post including image and engagement options, story carousel displays multiple user profiles, and sports news section is visible. User has successfully completed onboarding and is actively using the main app features.",
+      "screenshot": "onboarding_03_athlete_onboarding___reaches_app_after_completion.png",
+      "duration_ms": 16282
+    },
+    {
+      "phase": "onboarding",
+      "name": "Cleanup ephemeral accounts",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Landing page displays correctly with proper dark theme, Sportsphere branding, clear value proposition text, functional Get Started and Sign In buttons, and appropriate copyright footer. Layout is well-structured and complete.",
+      "screenshot": "onboarding_04_cleanup_ephemeral_accounts.png",
+      "duration_ms": 14616
+    }
+  ]
+}

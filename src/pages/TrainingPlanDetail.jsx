@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -16,7 +17,7 @@ export default function TrainingPlanDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const planId = urlParams.get("id");
 
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [role, setRole] = useState(null);
   const [expandedWeek, setExpandedWeek] = useState(0);
   const [editingNotes, setEditingNotes] = useState(false);
@@ -26,14 +27,14 @@ export default function TrainingPlanDetail() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user) return;
+    (async () => {
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       if (orgs[0]) { setRole("admin"); return; }
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       if (memberships[0]) setRole(memberships[0].role);
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const { data: plan, isLoading } = useQuery({
     queryKey: ["training-plan", planId],

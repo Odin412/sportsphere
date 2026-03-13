@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-03-10T04:26:51.620Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "admin"
+  ],
+  "duration_ms": 200254,
+  "summary": {
+    "total": 8,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 8,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "admin",
+      "name": "Admin page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows a dark/black screen which is valid according to the criteria - this indicates the page is returning null during redirect, which is correct behavior for the admin role guard",
+      "screenshot": "admin_01_admin_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 31779
+    },
+    {
+      "phase": "admin",
+      "name": "AdminUsers page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows a dark/black screen which is valid according to the criteria - this appears to be a null state during redirect, which is explicitly listed as an acceptable condition",
+      "screenshot": "admin_02_adminusers_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 31921
+    },
+    {
+      "phase": "admin",
+      "name": "AdminContent page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows 'Access denied.' message which is one of the acceptable states for content management access",
+      "screenshot": "admin_03_admincontent_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 27660
+    },
+    {
+      "phase": "admin",
+      "name": "AdminAnalytics page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows clear 'Access denied.' message indicating proper authorization handling - user is not permitted to access this analytics feature, which is expected behavior for restricted content",
+      "screenshot": "admin_04_adminanalytics_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 27786
+    },
+    {
+      "phase": "admin",
+      "name": "AdminSettings page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows 'Access denied.' message on dark background, which is one of the acceptable states listed in the pass criteria",
+      "screenshot": "admin_05_adminsettings_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 27672
+    },
+    {
+      "phase": "admin",
+      "name": "AdminHealth page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page displays 'Access denied.' message in the center, which is one of the acceptable states according to the criteria. This indicates proper error handling for unauthorized access rather than a crash or blank screen.",
+      "screenshot": "admin_06_adminhealth_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 15572
+    },
+    {
+      "phase": "admin",
+      "name": "ModerationQueue page loads or blocks non-admin",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows proper access control with 'Admin access required' message and shield icon, indicating the moderation feature is working correctly by denying unauthorized access",
+      "screenshot": "admin_07_moderationqueue_page_loads_or_blocks_non-admin.png",
+      "duration_ms": 15383
+    },
+    {
+      "phase": "admin",
+      "name": "Return to Feed from admin pages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working properly with real content - shows user stories at top, functional post creation prompt, sport filter tabs (For You, Following, All, Basketball, Soccer, Football), and a complete post from Marcus Silva with image, text, timestamp, and interaction options. Navigation sidebar and sports news section are also properly displayed.",
+      "screenshot": "admin_08_return_to_feed_from_admin_pages.png",
+      "duration_ms": 16651
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { DollarSign, TrendingUp, Users, ShoppingBag, Trophy, Loader2, Plus, Crown, Calendar, Scissors, BarChart2, CreditCard } from "lucide-react";
@@ -16,12 +17,12 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 
 export default function CreatorHub() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [showMonetizationSetup, setShowMonetizationSetup] = useState(false);
   const [showProductDialog, setShowProductDialog] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   // Fetch creator stats

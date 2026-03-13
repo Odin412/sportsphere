@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,7 +22,7 @@ export default function UserProfile() {
   const urlParams = new URLSearchParams(window.location.search);
   const profileEmail = urlParams.get("email");
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user: currentUser } = useAuth();
   const [showAdviceDialog, setShowAdviceDialog] = useState(false);
   const [adviceTopic, setAdviceTopic] = useState("");
   const [adviceMessage, setAdviceMessage] = useState("");
@@ -31,7 +32,7 @@ export default function UserProfile() {
   const [showFollowerList, setShowFollowerList] = useState(null); // null | "followers" | "following"
 
   useEffect(() => {
-    db.auth.me().then(setCurrentUser).catch(() => {});
+
   }, []);
 
   useEffect(() => {

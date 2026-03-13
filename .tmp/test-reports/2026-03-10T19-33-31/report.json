@@ -1,0 +1,330 @@
+{
+  "timestamp": "2026-03-10T19:39:40.108Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "live_feature"
+  ],
+  "duration_ms": 367751,
+  "summary": {
+    "total": 24,
+    "critical": 0,
+    "warning": 11,
+    "data_issue": 0,
+    "passed": 13,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "live_feature",
+      "name": "Live page loads with hero and tabs",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Live page is properly rendered with the red/orange hero banner displaying 'Live Streams & VODs' heading, correct tabs for 'Live Now' and 'Past Streams', and a visible search/filter area. The empty state message 'No one's live right now' is appropriate for the Live Now tab when no streams are active.",
+      "screenshot": "live_feature_01_live_page_loads_with_hero_and_tabs.png",
+      "duration_ms": 18854
+    },
+    {
+      "phase": "live_feature",
+      "name": "Go Live button is visible",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The 'Go Live' button is clearly visible in the hero area as a prominent white button with red accent styling, positioned in the top right of the Live Streams & VODs section. An 'Upload VOD' button is also visible next to it.",
+      "screenshot": "live_feature_02_go_live_button_is_visible.png",
+      "duration_ms": 4659
+    },
+    {
+      "phase": "live_feature",
+      "name": "Past Streams tab switches content",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The 'Past Streams' tab is now active/selected (dark background) and displays the appropriate empty state message 'No past streams yet' with a placeholder icon, indicating the feature is working correctly but there's no content to display",
+      "screenshot": "live_feature_03_past_streams_tab_switches_content.png",
+      "duration_ms": 7328
+    },
+    {
+      "phase": "live_feature",
+      "name": "Stream sport filter dropdown works",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Live page is showing an empty state message 'No streams match your filters' with no actual live stream content visible. While the page structure and navigation are working, the core functionality of displaying live streams is not working - there are no stream cards or actual live content being shown.",
+      "screenshot": "live_feature_04_stream_sport_filter_dropdown_works.png",
+      "duration_ms": 7465
+    },
+    {
+      "phase": "live_feature",
+      "name": "Upload VOD form toggles open and close",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Upload Video form is fully functional with all required components: video upload area showing 'Click to upload video' with file format specs (MP4, MOV, AVI up to 2GB), Title input field, Description textarea, Sport dropdown selector, thumbnail upload option, and Publish VOD button. All form elements are properly displayed and interactive.",
+      "screenshot": "live_feature_05_upload_vod_form_toggles_open_and_close.png",
+      "duration_ms": 18624
+    },
+    {
+      "phase": "live_feature",
+      "name": "Go Live creates stream and redirects to ViewLive",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The ViewLive page has loaded successfully showing a dark-themed video player area with camera access denied message (expected), live stream info for 'Test Athlete's Live Stream' with timestamp and End Stream button, emoji reactions, chat panel on the right with 'No messages yet' state, and proper navigation. All core elements are present and functional.",
+      "screenshot": "live_feature_06_go_live_creates_stream_and_redirects_to_viewlive.png",
+      "duration_ms": 23731
+    },
+    {
+      "phase": "live_feature",
+      "name": "Active broadcast dashboard on Live page",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The broadcast dashboard is functioning correctly, showing 'You're Broadcasting' status with Test Athlete's Live Stream, 1 viewer count, 'less than a minute' duration, and a visible 'End Stream' button. All required elements are present and displaying real data.",
+      "screenshot": "live_feature_07_active_broadcast_dashboard_on_live_page.png",
+      "duration_ms": 20165
+    },
+    {
+      "phase": "live_feature",
+      "name": "End Stream ends the broadcast",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The Live page is displaying correctly with no active broadcast dashboard visible. Shows empty state with 'No one's live right now' message and 'Go Live' button is present in the header, indicating the stream has been properly ended and user can start a new broadcast.",
+      "screenshot": "live_feature_08_end_stream_ends_the_broadcast.png",
+      "duration_ms": 16871
+    },
+    {
+      "phase": "live_feature",
+      "name": "Ended stream shows Stream Ended state",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page correctly shows 'Stream Ended' state with duration (0m), has a 'Back to Streams' button, and displays AI Stream Summary functionality in the side panel. The stream has properly transitioned from live to ended state as expected.",
+      "screenshot": "live_feature_09_ended_stream_shows_stream_ended_state.png",
+      "duration_ms": 19016
+    },
+    {
+      "phase": "live_feature",
+      "name": "ViewLive with invalid stream ID shows error",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page correctly displays 'Stream not found' error message with a 'Back to Live' navigation link, which is the expected behavior for a non-existent or unavailable stream",
+      "screenshot": "live_feature_10_viewlive_with_invalid_stream_id_shows_error.png",
+      "duration_ms": 18816
+    },
+    {
+      "phase": "live_feature",
+      "name": "Ended stream has Summary and Highlights tabs",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The ViewLive page correctly shows an ended stream state with 'Stream Ended' overlay, duration displayed, and the right-side panel contains the expected 'Summary' and 'Highlights' tabs. The AI Stream Summary section is visible with appropriate error handling for the failed generation. Stream info shows 'Test Athlete's Live Stream' with host details.",
+      "screenshot": "live_feature_11_ended_stream_has_summary_and_highlights_tabs.png",
+      "duration_ms": 19145
+    },
+    {
+      "phase": "live_feature",
+      "name": "Create test live stream for panel tests",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: Camera access is denied with 'Not supported' error message, and the chat shows 'No messages yet' empty state. While the live stream interface is loaded with proper tabs and controls, the core functionality is broken due to camera access issues.",
+      "screenshot": "live_feature_12_create_test_live_stream_for_panel_tests.png",
+      "duration_ms": 21003
+    },
+    {
+      "phase": "live_feature",
+      "name": "Chat tab shows message input and send button",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Chat panel is visible and functional with message input field showing 'Say something...' placeholder text and send button (arrow icon). The chat area properly displays 'No messages yet. Start the chat!' which is the expected empty state, not an error condition.",
+      "screenshot": "live_feature_13_chat_tab_shows_message_input_and_send_button.png",
+      "duration_ms": 6567
+    },
+    {
+      "phase": "live_feature",
+      "name": "Send a chat message",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": "pass"
+      },
+      "reasoning": "L2 FAIL: The chat panel shows 'No messages yet. Start the chat!' indicating an empty state with no messages sent or received, and the input field still contains placeholder text, suggesting no successful message transmission has occurred.",
+      "screenshot": "live_feature_14_send_a_chat_message.png",
+      "duration_ms": 10596
+    },
+    {
+      "phase": "live_feature",
+      "name": "Polls tab shows polls or empty state",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Live tab is currently selected/active (highlighted in red), not the Polls tab. The main content area shows a live stream interface with camera access denied error, stream details, and emoji reactions - this is live streaming functionality, not polls content.",
+      "screenshot": "live_feature_15_polls_tab_shows_polls_or_empty_state.png",
+      "duration_ms": 7506
+    },
+    {
+      "phase": "live_feature",
+      "name": "Q&A tab renders without crash",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Live feature has a critical camera access error ('Camera access denied: Not supported') which prevents the core live streaming functionality from working. While the stream interface shows some elements like chat reactions and stream controls, the main camera feed is broken, making this a non-functional live streaming experience.",
+      "screenshot": "live_feature_16_q_a_tab_renders_without_crash.png",
+      "duration_ms": 8000
+    },
+    {
+      "phase": "live_feature",
+      "name": "GameDay page loads with 3 sections",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows a 404 error with 'Page Not Found' message, indicating the GameDay page could not be found in the application. This is a complete failure as none of the expected GameDay features (hero banner, sport filters, Live Now/Upcoming Games/Recent Recaps sections) are present.",
+      "screenshot": "live_feature_17_gameday_page_loads_with_3_sections.png",
+      "duration_ms": 31153
+    },
+    {
+      "phase": "live_feature",
+      "name": "GameDay sport filter buttons work",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: This is a 404 error page showing 'Page Not Found' for 'GameDay' page, which indicates the feature is completely broken and not working at all",
+      "screenshot": "live_feature_18_gameday_sport_filter_buttons_work.png",
+      "duration_ms": 5150
+    },
+    {
+      "phase": "live_feature",
+      "name": "GameDay All filter resets",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: This is a 404 error page indicating the 'GameDay' page could not be found, which means the feature being tested (sport filter functionality) is not accessible or working at all",
+      "screenshot": "live_feature_19_gameday_all_filter_resets.png",
+      "duration_ms": 5103
+    },
+    {
+      "phase": "live_feature",
+      "name": "GameRecap with invalid ID shows error",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: This is a 404 error page stating 'Page Not Found' for 'GameRecap', not the expected 'Game not found' message with a link back to GameDay. The error indicates the GameRecap feature/page doesn't exist in the application rather than showing a proper game-not-found state.",
+      "screenshot": "live_feature_20_gamerecap_with_invalid_id_shows_error.png",
+      "duration_ms": 31912
+    },
+    {
+      "phase": "live_feature",
+      "name": "GameRecap renders with test game data",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The page shows a 404 error with 'Page Not Found' message stating that 'GameRecap' could not be found in the application. This indicates the GameRecap feature is not functioning - the page/route doesn't exist rather than showing the expected game recap with team scores and box score section.",
+      "screenshot": "live_feature_21_gamerecap_renders_with_test_game_data.png",
+      "duration_ms": 6938
+    },
+    {
+      "phase": "live_feature",
+      "name": "Box score section renders for Basketball game",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: This is a 404 error page showing 'Page Not Found' for 'GameRecap', not the actual GameRecap page with box score data. The feature cannot be tested as the page itself is not found.",
+      "screenshot": "live_feature_22_box_score_section_renders_for_basketball_game.png",
+      "duration_ms": 5523
+    },
+    {
+      "phase": "live_feature",
+      "name": "Game Stream wizard opens for coach account",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Live page is displaying correctly with real data - shows a live stream from 'Test Athlete' with proper video player, viewer count (1), Basketball category tag, and functional UI elements. The 'Live Now' tab shows 1 active stream, and all interface components are working properly.",
+      "screenshot": "live_feature_23_game_stream_wizard_opens_for_coach_account.png",
+      "duration_ms": 25530
+    },
+    {
+      "phase": "live_feature",
+      "name": "Cleanup all test data",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The Feed page is displaying normally with a functional dark-themed interface. The page shows user stories at the top, a post creation area, sports category filters (For You, Following, All, Basketball, Soccer, Football), a live video section, user posts with real content (Sofia Rodriguez's swimming training post), and a sports news sidebar with multiple recent articles. All elements are properly rendered and showing real data without any error states, empty states, or broken layouts.",
+      "screenshot": "live_feature_24_cleanup_all_test_data.png",
+      "duration_ms": 22188
+    }
+  ]
+}

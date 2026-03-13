@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-03-09T21:34:53.976Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "coach"
+  ],
+  "duration_ms": 42904,
+  "summary": {
+    "total": 5,
+    "critical": 0,
+    "warning": 3,
+    "data_issue": 0,
+    "passed": 2,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "coach",
+      "name": "AI Coach page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The AI Coach page is showing a premium paywall instead of the expected chat interface. There's no message area, input field for asking questions, or 'New Session' button - just an upgrade prompt blocking access to the feature. This indicates the AI Coach functionality is not accessible and the feature is not working as expected.",
+      "screenshot": "coach_01_ai_coach_page_loads.png",
+      "duration_ms": 9513
+    },
+    {
+      "phase": "coach",
+      "name": "LiveCoaching page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The Live Coaching page shows an empty state with 'No sessions found' message, which indicates the feature is not working properly - there should be actual coaching sessions displayed or at minimum some sample/placeholder content to demonstrate functionality",
+      "screenshot": "coach_02_livecoaching_page_loads.png",
+      "duration_ms": 6493
+    },
+    {
+      "phase": "coach",
+      "name": "Creator Hub page loads for coach",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Creator Hub page loads successfully with proper functionality. Shows monetization dashboard with clear revenue metrics ($0.00 total/monthly revenue, 0 tips, 0 products), analytics tabs, follower growth chart with data points over 30 days, and appropriate empty state for a new creator account. All components render correctly in dark theme with functional navigation and monetization settings button.",
+      "screenshot": "coach_03_creator_hub_page_loads_for_coach.png",
+      "duration_ms": 7009
+    },
+    {
+      "phase": "coach",
+      "name": "Analytics page loads for coach",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: The analytics page shows all metrics as 0 or 0% with no actual data visualization. The 'Engagement Over Time' and 'Stream Performance' sections at the bottom appear to be empty chart containers with no graphs or data displayed. This appears to be an empty state rather than functioning analytics with real performance data.",
+      "screenshot": "coach_04_analytics_page_loads_for_coach.png",
+      "duration_ms": 6993
+    },
+    {
+      "phase": "coach",
+      "name": "Return to Feed from coach features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is fully functional with real content - shows user stories at top, active filter tabs (For You, Following, All, Basketball, Soccer, Football), a real post from Marcus Silva with image and engagement options, and live sports news sidebar with multiple recent articles. All UI elements are properly rendered and functional.",
+      "screenshot": "coach_05_return_to_feed_from_coach_features.png",
+      "duration_ms": 7091
+    }
+  ]
+}

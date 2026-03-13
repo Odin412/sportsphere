@@ -1,0 +1,43 @@
+{
+  "timestamp": "2026-03-10T12:50:54.444Z",
+  "testReport": "2026-03-10T04:54:00.004Z",
+  "totalTests": 118,
+  "totalFailures": 2,
+  "criticalCount": 0,
+  "warningCount": 2,
+  "dataIssueCount": 0,
+  "diagnoses": [
+    {
+      "page": "unknown",
+      "source": null,
+      "rootCause": "The SportHub Support chat overlay is appearing during the \"Unlike restores state\" test and blocking significant portions of the main feed interface. The large white support dialog is covering the feed content area where the test needs to verify that the unlike functionality properly restores the UI state. This prevents the automated test from accessing and validating the feed elements it needs to check.",
+      "severity": "**High** - This is blocking users from completing core functionality testing. While the support chat itself may work fine, it's preventing verification of critical feed interactions (liking/unliking posts), which are fundamental user actions in a social sports app.",
+      "fix": "The support chat overlay should either:\n- **Option 1**: Implement a test mode flag that disables the support chat during automated testing\n- **Option 2**: Add proper z-index management and ensure the support chat can be easily dismissed without interfering with feed interactions\n- **Option 3**: Modify the support chat to appear as a smaller, less intrusive widget (like a bottom-right corner chat bubble) rather than a full overlay\n\nImmediate fix: Add a close/dismiss button to the support overlay and ensure it doesn't auto-open during critical user flows.\n\n### 4. Category\n**ui_bug** - This is a user interface issue where an overlay component is improperly blocking other UI elements and interfering with normal app functionality.",
+      "category": "unknown",
+      "fullDiagnosis": "## Test Failure Diagnosis\n\n### 1. Root Cause\nThe SportHub Support chat overlay is appearing during the \"Unlike restores state\" test and blocking significant portions of the main feed interface. The large white support dialog is covering the feed content area where the test needs to verify that the unlike functionality properly restores the UI state. This prevents the automated test from accessing and validating the feed elements it needs to check.\n\n### 2. Severity\n**High** - This is blocking users from completing core functionality testing. While the support chat itself may work fine, it's preventing verification of critical feed interactions (liking/unliking posts), which are fundamental user actions in a social sports app.\n\n### 3. Fix Suggestion\nThe support chat overlay should either:\n- **Option 1**: Implement a test mode flag that disables the support chat during automated testing\n- **Option 2**: Add proper z-index management and ensure the support chat can be easily dismissed without interfering with feed interactions\n- **Option 3**: Modify the support chat to appear as a smaller, less intrusive widget (like a bottom-right corner chat bubble) rather than a full overlay\n\nImmediate fix: Add a close/dismiss button to the support overlay and ensure it doesn't auto-open during critical user flows.\n\n### 4. Category\n**ui_bug** - This is a user interface issue where an overlay component is improperly blocking other UI elements and interfering with normal app functionality.",
+      "failures": [
+        {
+          "name": "Unlike restores state",
+          "severity": "WARNING",
+          "reasoning": "L2 FAIL: The support chat overlay is blocking significant portions of the feed interface, preventing proper verification of the feed functionality. The white support dialog covers the main content area and would interfere with user interaction with posts and feed features."
+        }
+      ]
+    },
+    {
+      "page": "GroupDetail",
+      "source": "src/pages/GroupDetail.jsx",
+      "rootCause": "**: The GroupDetail page is showing \"Group not found\" because the test is either accessing the page without a valid group ID in the URL parameters, or the group ID provided doesn't correspond to any existing group in the test database. The code extracts the group ID from URL search parameters (`const groupId = urlParams.get(\"id\")`), and when the database query returns null/undefined, it displays the error state.",
+      "severity": "**: **Blocking** - This prevents users from accessing any group detail pages, which is core functionality for a sports group app.",
+      "fix": "**: This is likely a **test setup issue** rather than a code bug. The test needs to:",
+      "category": "unknown",
+      "fullDiagnosis": "## Diagnosis\n\n**Root cause**: The GroupDetail page is showing \"Group not found\" because the test is either accessing the page without a valid group ID in the URL parameters, or the group ID provided doesn't correspond to any existing group in the test database. The code extracts the group ID from URL search parameters (`const groupId = urlParams.get(\"id\")`), and when the database query returns null/undefined, it displays the error state.\n\n**Severity**: **Blocking** - This prevents users from accessing any group detail pages, which is core functionality for a sports group app.\n\n**Fix suggestion**: This is likely a **test setup issue** rather than a code bug. The test needs to:\n\n1. Ensure a test group exists in the database before navigating to the GroupDetail page\n2. Navigate to the page with a valid group ID parameter (e.g., `/group-detail?id=123`)\n\nExample test setup needed:\n```javascript\n// In the test setup\nconst testGroup = await db.entities.Group.create({\n  name: \"Test Soccer Group\",\n  description: \"Test group\",\n  sport: \"soccer\",\n  creator_email: \"test@example.com\"\n});\n\n// Navigate to the page with the valid ID\nawait page.goto(`/group-detail?id=${testGroup.id}`);\n```\n\n**Category**: **test_issue**\n\nThe code logic is correct - it properly handles the case where a group doesn't exist. The issue is that the test environment isn't providing the necessary test data and proper navigation parameters for the page to function normally.",
+      "failures": [
+        {
+          "name": "GroupDetail page loads",
+          "severity": "WARNING",
+          "reasoning": "L2 FAIL: The page shows 'Group not found' error message, indicating the requested group does not exist or there was an error loading it. This is an error state rather than a functional feature."
+        }
+      ]
+    }
+  ]
+}

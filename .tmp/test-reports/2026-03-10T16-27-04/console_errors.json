@@ -1,0 +1,4348 @@
+[
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/login"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnba%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fmlb%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnhl%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fsoccer%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fmma%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fgolf%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Ftennis%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnfl%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Messages"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Messages"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Forums"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Forums"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/TheVault"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/TheVault"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Coach"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnba%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Onboarding"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Ftennis%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 404 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Explore",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Profile",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed",
+    "viewport": "mobile"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/GroupDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/GroupDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Events"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Forums"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Forums"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Advice"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Advice"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Advice"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Advice"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Discover"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Discover"
+  },
+  {
+    "text": "Failed to generate recommendations: {code: 42703, details: null, hint: Perhaps you meant to reference the column \"groups.created_at\"., message: column groups.created_date does not exist}",
+    "url": "https://sportsphere-titan-one.vercel.app/Discover"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Discover"
+  },
+  {
+    "text": "Failed to generate recommendations: {code: 42703, details: null, hint: Perhaps you meant to reference the column \"groups.created_at\"., message: column groups.created_date does not exist}",
+    "url": "https://sportsphere-titan-one.vercel.app/Discover"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Discover"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Access to fetch at 'https://xjcygntnkjkgvyynldzf.supabase.co/functions/v1/analyzeUserBehavior' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ForYou"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SportHub?sport=Basketball"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SportHub?sport=Basketball"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SportHub?sport=Basketball"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SportHub?sport=Basketball"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SportHub?sport=Basketball"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SportHub?sport=Basketball"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnba%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Leaderboard"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnba%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fmlb%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnfl%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Ftennis%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fgolf%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnhl%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fsoccer%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fmma%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/CoachingSessionDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/CoachingSessionDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/TrainingPlanDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/TrainingPlanDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ScoutingHub"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ScoutingHub"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ScoutingHub"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ScoutingHub"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ScoutingHub"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ScoutingHub"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/SavedContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/AdminContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/AdminContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/AdminContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/AdminContent"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/AdminAnalytics"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/AdminAnalytics"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnfl%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ViewLive?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ViewLive?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ChallengeDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ChallengeDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ChallengeDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ChallengeDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ChallengeDetail?id=test"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ChallengeDetail?id=test"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fnhl%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Access to fetch at 'https://api.allorigins.win/get?url=https%3A%2F%2Fwww.espn.com%2Fespn%2Frss%2Fgolf%2Fnews' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Access to fetch at 'https://xjcygntnkjkgvyynldzf.supabase.co/functions/v1/moderateContent' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.",
+    "url": "https://sportsphere-titan-one.vercel.app/CreatePost"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/CreatePost"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/CreatePost"
+  },
+  {
+    "text": "Post creation failed: {code: PGRST204, details: null, hint: null, message: Could not find the 'mentioned_users' column of 'posts' in the schema cache}",
+    "url": "https://sportsphere-titan-one.vercel.app/CreatePost"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Access to fetch at 'https://xjcygntnkjkgvyynldzf.supabase.co/functions/v1/moderateContent' from origin 'https://sportsphere-titan-one.vercel.app' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: It does not have HTTP ok status.",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: net::ERR_FAILED",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/ProfileSettings"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Groups"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Messages"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Messages"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Messages"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Messages"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 406 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 400 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  },
+  {
+    "text": "Failed to load resource: the server responded with a status of 403 ()",
+    "url": "https://sportsphere-titan-one.vercel.app/Feed"
+  }
+]

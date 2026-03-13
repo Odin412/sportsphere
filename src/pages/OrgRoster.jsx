@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Users, UserPlus, Mail, Search, Shield, ChevronDown, Trash2, Loader2 } from "lucide-react";
@@ -14,7 +15,7 @@ import { Label } from "@/components/ui/label";
 const ROLE_COLORS = { admin: "bg-red-100 text-red-700", coach: "bg-purple-100 text-purple-700", athlete: "bg-blue-100 text-blue-700", parent: "bg-pink-100 text-pink-700" };
 
 export default function OrgRoster() {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [orgId, setOrgId] = useState(null);
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
@@ -24,14 +25,14 @@ export default function OrgRoster() {
   const qc = useQueryClient();
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user) return;
+    (async () => {
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       if (orgs[0]) { setOrgId(orgs[0].id); return; }
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       if (memberships[0]) setOrgId(memberships[0].organization_id);
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const { data: members, isLoading } = useQuery({
     queryKey: ["org-members", orgId],

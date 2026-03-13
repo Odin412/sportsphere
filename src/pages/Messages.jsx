@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
@@ -27,7 +28,7 @@ export default function Messages() {
   const urlParams = new URLSearchParams(window.location.search);
   const convParam = urlParams.get("conv");
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [selectedConv, setSelectedConv] = useState(convParam || null);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -45,7 +46,7 @@ export default function Messages() {
   const typingTimeoutRef = useRef(null);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
+
   }, []);
 
   const { data: conversations, isLoading: convsLoading } = useQuery({

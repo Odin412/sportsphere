@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -28,18 +29,17 @@ const STEPS = [
 ];
 
 export default function BecomeCreator() {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [enabling, setEnabling] = useState(false);
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(u => {
-      setUser(u);
-      setEnabled(!!u.is_creator);
+    if (user) {
+      setEnabled(!!user.is_creator);
       setLoading(false);
-    }).catch(() => { setLoading(false); });
-  }, []);
+    }
+  }, [user]);
 
   const handleBecomeCreator = async () => {
     setEnabling(true);

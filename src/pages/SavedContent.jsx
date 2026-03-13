@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Bookmark, Loader2, Trash2 } from "lucide-react";
@@ -9,10 +10,10 @@ import { createPageUrl } from "@/utils";
 import { toast } from "sonner";
 
 export default function SavedContent() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: savedItems = [], isLoading, refetch } = useQuery({

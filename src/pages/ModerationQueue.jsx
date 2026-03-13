@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
@@ -143,7 +144,7 @@ export default function ModerationQueue() {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: flags = [], isLoading, refetch } = useQuery({

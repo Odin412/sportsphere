@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,7 +32,7 @@ const SPORTS = ["All Sports", "Basketball", "Soccer", "Football", "Tennis", "Run
 
 export default function Forums() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedSport, setSelectedSport] = useState("All Sports");
@@ -45,7 +46,7 @@ export default function Forums() {
   });
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: topics = [], isLoading } = useQuery({

@@ -1,0 +1,57 @@
+{
+  "timestamp": "2026-03-09T21:36:13.534Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "parent"
+  ],
+  "duration_ms": 28982,
+  "summary": {
+    "total": 3,
+    "critical": 0,
+    "warning": 1,
+    "data_issue": 0,
+    "passed": 2,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "parent",
+      "name": "ParentView page loads",
+      "severity": "WARNING",
+      "layers": {
+        "L1": "pass",
+        "L2": "fail",
+        "L3": null
+      },
+      "reasoning": "L2 FAIL: Page shows only a loading spinner on black background with no content loaded. This indicates the feature is stuck in loading state and not displaying any of the expected Parent View content (dashboard, access denied message, or no athlete linked prompt).",
+      "screenshot": "parent_01_parentview_page_loads.png",
+      "duration_ms": 6570
+    },
+    {
+      "phase": "parent",
+      "name": "Parent can view Profile page",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page displays correctly with proper dark theme styling, user information (Test Parent name, email, follower counts), functional buttons (Settings, Edit, Monetization, Logout), appropriate empty states for Featured Highlights and Sport Profiles sections with clear call-to-action messages, and working navigation sidebar. All elements are properly styled and functional.",
+      "screenshot": "parent_02_parent_can_view_profile_page.png",
+      "duration_ms": 9455
+    },
+    {
+      "phase": "parent",
+      "name": "Return to Feed from parent features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page displays properly with real content - user stories with profile pictures at top, functional sport category filters (For You, Following, All, Basketball, Soccer, Football), and a complete post from Marcus Silva with image, timestamp, and interaction options. Navigation and layout are working correctly.",
+      "screenshot": "parent_03_return_to_feed_from_parent_features.png",
+      "duration_ms": 7347
+    }
+  ]
+}

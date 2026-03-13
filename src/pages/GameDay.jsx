@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Radio, Calendar, Trophy, Filter, Eye } from "lucide-react";
@@ -14,12 +15,12 @@ import { SkeletonCard } from "@/components/ui/SkeletonCard";
 const SPORTS_FILTER = ["All", "Baseball", "Basketball", "Soccer", "Football"];
 
 export default function GameDay() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [sportFilter, setSportFilter] = useState("All");
   const [myTeamsOnly, setMyTeamsOnly] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   // Get user's org memberships for "My Teams Only" filter

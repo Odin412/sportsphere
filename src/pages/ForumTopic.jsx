@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -25,7 +26,7 @@ const CATEGORIES = [
 
 export default function ForumTopic() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [replyContent, setReplyContent] = useState("");
   const [editingReplyId, setEditingReplyId] = useState(null);
   const [editContent, setEditContent] = useState("");
@@ -33,7 +34,7 @@ export default function ForumTopic() {
   const topicId = new URLSearchParams(window.location.search).get("id");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: topic } = useQuery({

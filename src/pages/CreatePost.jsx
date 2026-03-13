@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useNavigate } from "react-router-dom";
 import { createPageUrl } from "@/utils";
@@ -14,7 +15,7 @@ import { toast } from "sonner";
 
 export default function CreatePost() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [content, setContent] = useState("");
   const [mediaFiles, setMediaFiles] = useState([]);
   const [mediaPreviews, setMediaPreviews] = useState([]);
@@ -25,7 +26,7 @@ export default function CreatePost() {
   const [videoMeta, setVideoMeta] = useState({});
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => db.auth.redirectToLogin());
+
   }, []);
 
   const handleMediaAdd = async (e) => {

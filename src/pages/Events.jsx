@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -205,7 +206,7 @@ function EventCard({ event, currentUser, onUpdate }) {
 
 export default function Events() {
   const queryClient = useQueryClient();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [sportFilter, setSportFilter] = useState("All Sports");
   const [typeFilter, setTypeFilter] = useState("all");
@@ -218,7 +219,7 @@ export default function Events() {
   const [tab, setTab] = useState("discover");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: allEvents = [], isLoading, refetch } = useQuery({

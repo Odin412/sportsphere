@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,7 +15,7 @@ import { format, formatDistanceToNow } from "date-fns";
 import ContentDigest from "@/components/discover/ContentDigest";
 
 export default function Discover() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [recommendations, setRecommendations] = useState(null);
   const [loadingRecs, setLoadingRecs] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -23,7 +24,7 @@ export default function Discover() {
   const [sortBy, setSortBy] = useState("relevance");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: follows = [] } = useQuery({

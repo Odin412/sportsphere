@@ -1,0 +1,729 @@
+{
+  "timestamp": "2026-03-10T04:54:00.004Z",
+  "totalDuration": 1454835,
+  "tests": [
+    {
+      "name": "Login page renders",
+      "phase": "auth",
+      "duration_ms": 7801,
+      "severity": "PASS"
+    },
+    {
+      "name": "Invalid credentials rejected",
+      "phase": "auth",
+      "duration_ms": 7985,
+      "severity": "PASS"
+    },
+    {
+      "name": "Valid login redirects to Feed",
+      "phase": "auth",
+      "duration_ms": 14474,
+      "severity": "PASS"
+    },
+    {
+      "name": "Session persists on refresh",
+      "phase": "auth",
+      "duration_ms": 14459,
+      "severity": "PASS"
+    },
+    {
+      "name": "Sign-up form has role selection",
+      "phase": "auth",
+      "duration_ms": 9446,
+      "severity": "PASS"
+    },
+    {
+      "name": "Logout actually logs out",
+      "phase": "auth",
+      "duration_ms": 24758,
+      "severity": "PASS"
+    },
+    {
+      "name": "Auth guard blocks Feed when logged out",
+      "phase": "auth",
+      "duration_ms": 13602,
+      "severity": "PASS"
+    },
+    {
+      "name": "Sidebar renders all primary nav",
+      "phase": "navigation",
+      "duration_ms": 11900,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Explore",
+      "phase": "navigation",
+      "duration_ms": 7601,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Reels",
+      "phase": "navigation",
+      "duration_ms": 7021,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to ProPath",
+      "phase": "navigation",
+      "duration_ms": 5894,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Live",
+      "phase": "navigation",
+      "duration_ms": 6527,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Messages",
+      "phase": "navigation",
+      "duration_ms": 5054,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Profile",
+      "phase": "navigation",
+      "duration_ms": 6875,
+      "severity": "PASS"
+    },
+    {
+      "name": "More menu expands",
+      "phase": "navigation",
+      "duration_ms": 7107,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Challenges (secondary)",
+      "phase": "navigation",
+      "duration_ms": 6659,
+      "severity": "PASS"
+    },
+    {
+      "name": "Navigate to Forums (secondary)",
+      "phase": "navigation",
+      "duration_ms": 5660,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed (round-trip)",
+      "phase": "navigation",
+      "duration_ms": 7086,
+      "severity": "PASS"
+    },
+    {
+      "name": "Feed loads with real posts",
+      "phase": "feed",
+      "duration_ms": 21826,
+      "severity": "PASS"
+    },
+    {
+      "name": "Sport filter pills exist",
+      "phase": "feed",
+      "duration_ms": 9968,
+      "severity": "PASS"
+    },
+    {
+      "name": "Sport filter actually filters",
+      "phase": "feed",
+      "duration_ms": 7790,
+      "severity": "PASS"
+    },
+    {
+      "name": "Clear filter restores all posts",
+      "phase": "feed",
+      "duration_ms": 9047,
+      "severity": "PASS"
+    },
+    {
+      "name": "Like button works",
+      "phase": "feed",
+      "duration_ms": 8568,
+      "severity": "PASS"
+    },
+    {
+      "name": "Unlike restores state",
+      "phase": "feed",
+      "duration_ms": 6430,
+      "severity": "WARNING"
+    },
+    {
+      "name": "Post author links to profile",
+      "phase": "feed",
+      "duration_ms": 7977,
+      "severity": "PASS"
+    },
+    {
+      "name": "News widget has content",
+      "phase": "feed",
+      "duration_ms": 10253,
+      "severity": "PASS"
+    },
+    {
+      "name": "ProPathHub page loads",
+      "phase": "athlete",
+      "duration_ms": 7040,
+      "severity": "PASS"
+    },
+    {
+      "name": "GetNoticed page loads with Browse tab",
+      "phase": "athlete",
+      "duration_ms": 9599,
+      "severity": "PASS"
+    },
+    {
+      "name": "GetNoticed sport filter works",
+      "phase": "athlete",
+      "duration_ms": 5230,
+      "severity": "PASS"
+    },
+    {
+      "name": "GetNoticed My Showcase tab",
+      "phase": "athlete",
+      "duration_ms": 8281,
+      "severity": "PASS"
+    },
+    {
+      "name": "TheVault page loads",
+      "phase": "athlete",
+      "duration_ms": 6755,
+      "severity": "PASS"
+    },
+    {
+      "name": "PerformanceHub page loads",
+      "phase": "athlete",
+      "duration_ms": 7688,
+      "severity": "PASS"
+    },
+    {
+      "name": "ScoutCard page loads for athlete",
+      "phase": "athlete",
+      "duration_ms": 14541,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from athlete features",
+      "phase": "athlete",
+      "duration_ms": 6734,
+      "severity": "PASS"
+    },
+    {
+      "name": "AI Coach page loads",
+      "phase": "coach",
+      "duration_ms": 9354,
+      "severity": "PASS"
+    },
+    {
+      "name": "LiveCoaching page loads",
+      "phase": "coach",
+      "duration_ms": 6690,
+      "severity": "PASS"
+    },
+    {
+      "name": "Creator Hub page loads for coach",
+      "phase": "coach",
+      "duration_ms": 8601,
+      "severity": "PASS"
+    },
+    {
+      "name": "Analytics page loads for coach",
+      "phase": "coach",
+      "duration_ms": 6882,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from coach features",
+      "phase": "coach",
+      "duration_ms": 8400,
+      "severity": "PASS"
+    },
+    {
+      "name": "OrgDashboard page loads",
+      "phase": "org",
+      "duration_ms": 17296,
+      "severity": "PASS"
+    },
+    {
+      "name": "OrgRoster page loads",
+      "phase": "org",
+      "duration_ms": 13977,
+      "severity": "PASS"
+    },
+    {
+      "name": "OrgSessions page loads",
+      "phase": "org",
+      "duration_ms": 14771,
+      "severity": "PASS"
+    },
+    {
+      "name": "OrgMessages page loads",
+      "phase": "org",
+      "duration_ms": 13916,
+      "severity": "PASS"
+    },
+    {
+      "name": "VideoReview page loads",
+      "phase": "org",
+      "duration_ms": 14257,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from org features",
+      "phase": "org",
+      "duration_ms": 7149,
+      "severity": "PASS"
+    },
+    {
+      "name": "ParentView page loads",
+      "phase": "parent",
+      "duration_ms": 13848,
+      "severity": "PASS"
+    },
+    {
+      "name": "Parent can view Profile page",
+      "phase": "parent",
+      "duration_ms": 7196,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from parent features",
+      "phase": "parent",
+      "duration_ms": 6252,
+      "severity": "PASS"
+    },
+    {
+      "name": "Athlete onboarding — Step 1 (sport + level)",
+      "phase": "onboarding",
+      "duration_ms": 15858,
+      "severity": "PASS"
+    },
+    {
+      "name": "Athlete onboarding — Walk through steps",
+      "phase": "onboarding",
+      "duration_ms": 15937,
+      "severity": "PASS"
+    },
+    {
+      "name": "Athlete onboarding — Reaches app after completion",
+      "phase": "onboarding",
+      "duration_ms": 18908,
+      "severity": "PASS"
+    },
+    {
+      "name": "Cleanup ephemeral accounts",
+      "phase": "onboarding",
+      "duration_ms": 16731,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile Feed loads with bottom nav",
+      "phase": "mobile",
+      "duration_ms": 13513,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile bottom nav — Explore",
+      "phase": "mobile",
+      "duration_ms": 7164,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile bottom nav — Reels",
+      "phase": "mobile",
+      "duration_ms": 7261,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile bottom nav — Profile",
+      "phase": "mobile",
+      "duration_ms": 7410,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile Create Post button",
+      "phase": "mobile",
+      "duration_ms": 5860,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile Feed — posts are readable",
+      "phase": "mobile",
+      "duration_ms": 9209,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile — no horizontal scroll",
+      "phase": "mobile",
+      "duration_ms": 5574,
+      "severity": "PASS"
+    },
+    {
+      "name": "Mobile — return to Feed from mobile nav",
+      "phase": "mobile",
+      "duration_ms": 5300,
+      "severity": "PASS"
+    },
+    {
+      "name": "Groups page loads",
+      "phase": "community",
+      "duration_ms": 8432,
+      "severity": "PASS"
+    },
+    {
+      "name": "Groups — search bar and category filters visible",
+      "phase": "community",
+      "duration_ms": 3769,
+      "severity": "PASS"
+    },
+    {
+      "name": "GroupDetail page loads",
+      "phase": "community",
+      "duration_ms": 15245,
+      "severity": "WARNING"
+    },
+    {
+      "name": "Events page loads",
+      "phase": "community",
+      "duration_ms": 9706,
+      "severity": "PASS"
+    },
+    {
+      "name": "Events — filters and type pills visible",
+      "phase": "community",
+      "duration_ms": 4681,
+      "severity": "PASS"
+    },
+    {
+      "name": "Notifications page loads",
+      "phase": "community",
+      "duration_ms": 8916,
+      "severity": "PASS"
+    },
+    {
+      "name": "Notifications — filter pills visible",
+      "phase": "community",
+      "duration_ms": 4141,
+      "severity": "PASS"
+    },
+    {
+      "name": "ForumTopic page loads",
+      "phase": "community",
+      "duration_ms": 21888,
+      "severity": "PASS"
+    },
+    {
+      "name": "Advice page loads",
+      "phase": "community",
+      "duration_ms": 16039,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from community features",
+      "phase": "community",
+      "duration_ms": 7678,
+      "severity": "PASS"
+    },
+    {
+      "name": "Discover page loads",
+      "phase": "discovery",
+      "duration_ms": 20811,
+      "severity": "PASS"
+    },
+    {
+      "name": "Discover — filters section visible",
+      "phase": "discovery",
+      "duration_ms": 8133,
+      "severity": "PASS"
+    },
+    {
+      "name": "ForYou page loads",
+      "phase": "discovery",
+      "duration_ms": 12752,
+      "severity": "PASS"
+    },
+    {
+      "name": "ForYou — tabs visible (Recommended, Trending, Discover)",
+      "phase": "discovery",
+      "duration_ms": 5426,
+      "severity": "PASS"
+    },
+    {
+      "name": "TrendingChallenges page loads",
+      "phase": "discovery",
+      "duration_ms": 15831,
+      "severity": "PASS"
+    },
+    {
+      "name": "TrendingChallenges — tabs visible (All Trending, By Sport)",
+      "phase": "discovery",
+      "duration_ms": 3553,
+      "severity": "PASS"
+    },
+    {
+      "name": "SportHub page loads with sport param",
+      "phase": "discovery",
+      "duration_ms": 16046,
+      "severity": "PASS"
+    },
+    {
+      "name": "SportHub — empty sport param shows fallback",
+      "phase": "discovery",
+      "duration_ms": 13314,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from discovery features",
+      "phase": "discovery",
+      "duration_ms": 7736,
+      "severity": "PASS"
+    },
+    {
+      "name": "ProfileSettings page loads",
+      "phase": "settings",
+      "duration_ms": 9104,
+      "severity": "PASS"
+    },
+    {
+      "name": "ProfileSettings — identity tab with form fields",
+      "phase": "settings",
+      "duration_ms": 4801,
+      "severity": "PASS"
+    },
+    {
+      "name": "ProfileSettings — alerts tab loads",
+      "phase": "settings",
+      "duration_ms": 7701,
+      "severity": "PASS"
+    },
+    {
+      "name": "Premium page loads",
+      "phase": "settings",
+      "duration_ms": 16389,
+      "severity": "PASS"
+    },
+    {
+      "name": "Leaderboard page loads",
+      "phase": "settings",
+      "duration_ms": 11156,
+      "severity": "PASS"
+    },
+    {
+      "name": "Leaderboard — period tabs and sport filters visible",
+      "phase": "settings",
+      "duration_ms": 4373,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from settings features",
+      "phase": "settings",
+      "duration_ms": 7664,
+      "severity": "PASS"
+    },
+    {
+      "name": "CreatorAI page loads",
+      "phase": "creator_tools",
+      "duration_ms": 16274,
+      "severity": "PASS"
+    },
+    {
+      "name": "CreatorShop page loads",
+      "phase": "creator_tools",
+      "duration_ms": 16250,
+      "severity": "PASS"
+    },
+    {
+      "name": "BecomeCreator page loads",
+      "phase": "creator_tools",
+      "duration_ms": 17033,
+      "severity": "PASS"
+    },
+    {
+      "name": "BecomeCreator — benefits and steps visible",
+      "phase": "creator_tools",
+      "duration_ms": 4606,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from creator tools",
+      "phase": "creator_tools",
+      "duration_ms": 7690,
+      "severity": "PASS"
+    },
+    {
+      "name": "CoachingSessionDetail page loads",
+      "phase": "coaching_training",
+      "duration_ms": 16163,
+      "severity": "PASS"
+    },
+    {
+      "name": "TrainingPlans page loads",
+      "phase": "coaching_training",
+      "duration_ms": 15756,
+      "severity": "PASS"
+    },
+    {
+      "name": "TrainingPlanDetail page loads",
+      "phase": "coaching_training",
+      "duration_ms": 15631,
+      "severity": "PASS"
+    },
+    {
+      "name": "MyTraining page loads",
+      "phase": "coaching_training",
+      "duration_ms": 16266,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from coaching features",
+      "phase": "coaching_training",
+      "duration_ms": 7380,
+      "severity": "PASS"
+    },
+    {
+      "name": "ScoutingHub page loads",
+      "phase": "athlete_dev",
+      "duration_ms": 10016,
+      "severity": "PASS"
+    },
+    {
+      "name": "UserProfile page loads",
+      "phase": "athlete_dev",
+      "duration_ms": 18861,
+      "severity": "PASS"
+    },
+    {
+      "name": "SavedContent page loads",
+      "phase": "athlete_dev",
+      "duration_ms": 11989,
+      "severity": "PASS"
+    },
+    {
+      "name": "AthleteInsights page loads",
+      "phase": "athlete_dev",
+      "duration_ms": 16464,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from athlete dev features",
+      "phase": "athlete_dev",
+      "duration_ms": 7748,
+      "severity": "PASS"
+    },
+    {
+      "name": "Admin page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 31735,
+      "severity": "PASS"
+    },
+    {
+      "name": "AdminUsers page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 31920,
+      "severity": "PASS"
+    },
+    {
+      "name": "AdminContent page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 27572,
+      "severity": "PASS"
+    },
+    {
+      "name": "AdminAnalytics page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 27728,
+      "severity": "PASS"
+    },
+    {
+      "name": "AdminSettings page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 27146,
+      "severity": "PASS"
+    },
+    {
+      "name": "AdminHealth page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 16193,
+      "severity": "PASS"
+    },
+    {
+      "name": "ModerationQueue page loads or blocks non-admin",
+      "phase": "admin",
+      "duration_ms": 15721,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from admin pages",
+      "phase": "admin",
+      "duration_ms": 16954,
+      "severity": "PASS"
+    },
+    {
+      "name": "CreateReel page loads",
+      "phase": "content_creation",
+      "duration_ms": 16466,
+      "severity": "PASS"
+    },
+    {
+      "name": "UploadVideo page loads",
+      "phase": "content_creation",
+      "duration_ms": 17220,
+      "severity": "PASS"
+    },
+    {
+      "name": "ImportVideos page loads",
+      "phase": "content_creation",
+      "duration_ms": 17714,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from content creation",
+      "phase": "content_creation",
+      "duration_ms": 8048,
+      "severity": "PASS"
+    },
+    {
+      "name": "ViewLive page loads",
+      "phase": "remaining_pages",
+      "duration_ms": 16846,
+      "severity": "PASS"
+    },
+    {
+      "name": "ChallengeDetail page loads",
+      "phase": "remaining_pages",
+      "duration_ms": 15871,
+      "severity": "PASS"
+    },
+    {
+      "name": "Terms page loads",
+      "phase": "remaining_pages",
+      "duration_ms": 14909,
+      "severity": "PASS"
+    },
+    {
+      "name": "Guidelines page loads",
+      "phase": "remaining_pages",
+      "duration_ms": 15284,
+      "severity": "PASS"
+    },
+    {
+      "name": "Return to Feed from remaining pages",
+      "phase": "remaining_pages",
+      "duration_ms": 7303,
+      "severity": "PASS"
+    }
+  ],
+  "stats": {
+    "avgDuration": 11720,
+    "maxDuration": 31920,
+    "minDuration": 3553,
+    "slowTests": [
+      {
+        "name": "Admin page loads or blocks non-admin",
+        "duration_ms": 31735
+      },
+      {
+        "name": "AdminUsers page loads or blocks non-admin",
+        "duration_ms": 31920
+      }
+    ]
+  }
+}

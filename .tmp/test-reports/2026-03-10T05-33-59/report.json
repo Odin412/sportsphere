@@ -1,0 +1,122 @@
+{
+  "timestamp": "2026-03-10T05:36:51.548Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "cross_role"
+  ],
+  "duration_ms": 171166,
+  "summary": {
+    "total": 8,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 8,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "cross_role",
+      "name": "Coach views athlete ScoutCard",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page correctly displays a 'No Sport Profile Found' empty state with appropriate messaging explaining the athlete hasn't set up their ProPath sport profile yet, along with a 'Browse Athletes' action button. This is a valid empty state for a scout card feature.",
+      "screenshot": "cross_role_01_coach_views_athlete_scoutcard.png",
+      "duration_ms": 22921
+    },
+    {
+      "phase": "cross_role",
+      "name": "Coach accesses CreatorHub",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Creator Hub page loads successfully with complete dashboard showing monetization metrics (Total Revenue, Monthly Recurring, Tips Received, Products & Courses), analytics tabs (Analytics, Schedule, VOD Editor, etc.), key stats (Revenue, Followers, Streams, Subscribers), and a follower growth chart. All elements display proper data including $0.00 values for a new creator account, which is expected baseline state rather than an error.",
+      "screenshot": "cross_role_02_coach_accesses_creatorhub.png",
+      "duration_ms": 17701
+    },
+    {
+      "phase": "cross_role",
+      "name": "Org views OrgDashboard",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page displays a proper onboarding/setup state for SportHub Teams with clear welcome message, instructional text, and functional 'Create Organization' button. This is the expected initial state before any organizations are created, not an error or empty state.",
+      "screenshot": "cross_role_03_org_views_orgdashboard.png",
+      "duration_ms": 22194
+    },
+    {
+      "phase": "cross_role",
+      "name": "Org views OrgRoster",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The page shows a proper empty state for organization management with 'No Organization Yet' message and explanation text 'Create or join an organization to manage your team roster.' This is a valid empty state that provides clear guidance to the user, not an error or broken page.",
+      "screenshot": "cross_role_04_org_views_orgroster.png",
+      "duration_ms": 16523
+    },
+    {
+      "phase": "cross_role",
+      "name": "Parent views ParentView dashboard",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Parent View page is functioning correctly, displaying the proper empty state with clear messaging that explains this view is for parents linked to an organization and provides guidance to join an organization as a parent to track child's progress. The page has proper navigation, branding, and a clear call-to-action for the intended user flow.",
+      "screenshot": "cross_role_05_parent_views_parentview_dashboard.png",
+      "duration_ms": 22992
+    },
+    {
+      "phase": "cross_role",
+      "name": "Non-admin blocked from Admin pages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Screen shows completely black/dark content with no visible admin dashboard elements, metrics, or user management features. This indicates proper access control - the non-admin test-athlete account is being blocked from accessing admin content, likely showing a null render during redirect or authorization check.",
+      "screenshot": "cross_role_06_non-admin_blocked_from_admin_pages.png",
+      "duration_ms": 37655
+    },
+    {
+      "phase": "cross_role",
+      "name": "Athlete views coach UserProfile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Shows a functional coach profile page with user 'Test Coach', profile stats (0 followers, 0 following, 0 posts), action buttons (Follow, Message, Advice, Shop), and subscription tiers displayed below. All profile elements are properly rendered and functional.",
+      "screenshot": "cross_role_07_athlete_views_coach_userprofile.png",
+      "duration_ms": 17584
+    },
+    {
+      "phase": "cross_role",
+      "name": "Return to Feed from cross-role tests",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is working correctly with real content - shows user stories at top, functional post creation area, active filter tabs (For You, Following, All, Basketball, Soccer, Football), and displays actual user post from Marcus Silva with image, text content, timestamp, and interactive elements like Follow button. All navigation elements are present and the dark theme is properly applied.",
+      "screenshot": "cross_role_08_return_to_feed_from_cross-role_tests.png",
+      "duration_ms": 7569
+    }
+  ]
+}

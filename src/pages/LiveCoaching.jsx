@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -13,12 +14,12 @@ import CreateSessionDialog from "@/components/coaching/CreateSessionDialog";
 import { format } from "date-fns";
 
 export default function LiveCoaching() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [filter, setFilter] = useState("upcoming");
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   const { data: sessions, isLoading } = useQuery({

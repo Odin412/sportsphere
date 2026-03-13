@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -108,7 +109,7 @@ function PopularAthleteCard({ profile, postCount, likeCount, currentUser }) {
 }
 
 export default function Explore() {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [search, setSearch] = useState("");
   const [sportFilter, setSportFilter] = useState(null);
   const [locationFilter, setLocationFilter] = useState("all");
@@ -116,7 +117,7 @@ export default function Explore() {
   const [showCreateEvent, setShowCreateEvent] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {});
+
   }, []);
 
   // Trending posts

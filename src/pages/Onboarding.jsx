@@ -530,6 +530,7 @@ export default function Onboarding() {
       // Build profile update payload
       const profileUpdate = {
         onboarding_complete: true,
+        role: role,
       };
 
       if (role === "athlete") {
@@ -660,8 +661,8 @@ export default function Onboarding() {
   if (done) {
     const RoleIcon = config.icon;
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-        <div className="text-center space-y-6 max-w-sm">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col p-4 overflow-y-auto">
+        <div className="text-center space-y-6 max-w-sm mx-auto my-auto py-8">
           <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto">
             <Check className="w-10 h-10 text-green-600" />
           </div>
@@ -719,8 +720,8 @@ export default function Onboarding() {
   const RoleIcon = config.icon;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg space-y-5">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col p-4 overflow-y-auto">
+      <div className="w-full max-w-lg space-y-5 mx-auto py-8">
 
         {/* Role pill */}
         <div className="flex items-center justify-between">

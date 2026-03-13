@@ -12,8 +12,25 @@ export const AuthProvider = ({ children }) => {
   const [appPublicSettings] = useState({ id: 'sportsphere', public_settings: {} });
 
   useEffect(() => {
+    let resolved = false;
+
+    // Safety fallback: if Supabase GoTrue gets deadlocked, unblock the UI
+    // and self-heal by clearing any stuck locks from local storage.
+    const timer = setTimeout(() => {
+      if (!resolved) {
+        console.warn('Auth state check timed out, unblocking UI');
+        Object.keys(localStorage).forEach(key => {
+          if (key.startsWith('lock:sb-')) {
+            localStorage.removeItem(key);
+          }
+        });
+        setIsLoadingAuth(false);
+      }
+    }, 3000);
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        resolved = true;
         if (session?.user) {
           // TOKEN_REFRESHED / USER_UPDATED are background events.
           // Don't flash the global loading spinner for them — update silently.
@@ -27,7 +44,10 @@ export const AuthProvider = ({ children }) => {
       }
     );
 
-    return () => subscription.unsubscribe();
+    return () => {
+      clearTimeout(timer);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const loadUserProfile = async (authUser, silent = false) => {
@@ -54,6 +74,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const fetchAndSetProfile = async (authUser) => {
+    const meta = authUser.user_metadata || {};
+    
     // maybeSingle() returns null (not an error) when the row doesn't exist yet.
     const { data: profile } = await supabase
       .from('profiles')
@@ -62,12 +84,13 @@ export const AuthProvider = ({ children }) => {
       .maybeSingle();
 
     if (profile) {
-      setUser({ ...profile, id: authUser.id, email: authUser.email });
+      // DB trigger might have defaulted role to 'athlete', so we enforce the requested role from signup
+      const correctRole = meta.role && profile.onboarding_complete === false ? meta.role : profile.role;
+      setUser({ ...profile, id: authUser.id, email: authUser.email, role: correctRole });
       return;
     }
 
     // No profile yet — try to create one.
-    const meta = authUser.user_metadata || {};
     const { data: newProfile } = await supabase
       .from('profiles')
       .insert({
@@ -98,9 +121,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async (shouldRedirect = true) => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.warn("Error during sign out:", e);
+    }
     setUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem("user_role");
     if (shouldRedirect) {
       window.location.href = '/';
     }
@@ -120,6 +148,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{
       user,
+      setUser,
       isAuthenticated,
       isLoadingAuth,
       isLoadingPublicSettings,

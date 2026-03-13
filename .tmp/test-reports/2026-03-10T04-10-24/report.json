@@ -1,0 +1,83 @@
+{
+  "timestamp": "2026-03-10T04:11:33.656Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "athlete_dev"
+  ],
+  "duration_ms": 68978,
+  "summary": {
+    "total": 5,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 5,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "athlete_dev",
+      "name": "ScoutingHub page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Scouting Hub page is fully functional with crosshair icon, search bar, sport filter chips (All, Basketball, Soccer, etc.), level filter pills (All, Beginner, Intermediate, etc.), and displays 3 athlete profile cards with real data including Jordan Williams (Basketball), Marcus Silva (Soccer), and Emma Chen (Tennis) with their locations, stats, and achievements",
+      "screenshot": "athlete_dev_01_scoutinghub_page_loads.png",
+      "duration_ms": 9947
+    },
+    {
+      "phase": "athlete_dev",
+      "name": "UserProfile page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Profile page is functioning correctly with all key elements: user avatar, display name 'Marcus Silva', follower/following counts (0/0), 20 posts count, Follow/Message/Advice/Shop buttons, favorite sports section showing Soccer Professional, and detailed athlete information including professional level, achievements, and experience. All profile data is properly displayed.",
+      "screenshot": "athlete_dev_02_userprofile_page_loads.png",
+      "duration_ms": 17931
+    },
+    {
+      "phase": "athlete_dev",
+      "name": "SavedContent page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Page shows correct Saved Content empty state with bookmark icon, '0 items saved' counter, 'No saved content yet' message, explanatory text, and 'Explore Content' CTA button on dark theme background",
+      "screenshot": "athlete_dev_03_savedcontent_page_loads.png",
+      "duration_ms": 10856
+    },
+    {
+      "phase": "athlete_dev",
+      "name": "AthleteInsights page loads",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The AI Athlete Insights page is displaying correctly with the expected empty state message 'Select an athlete to view AI insights', along with the sparkle icon and proper page header. This empty state is expected for the feature as mentioned in the requirements.",
+      "screenshot": "athlete_dev_04_athleteinsights_page_loads.png",
+      "duration_ms": 15925
+    },
+    {
+      "phase": "athlete_dev",
+      "name": "Return to Feed from athlete dev features",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "Feed page is properly displaying with real user content - shows story carousel with actual user profiles (Marcus, Zara, Sofia, Diego, Jack), active post from Marcus Silva with soccer content including image and engagement options, proper navigation sidebar, and sports news section. All core feed functionality is working with real data, not empty states.",
+      "screenshot": "athlete_dev_05_return_to_feed_from_athlete_dev_features.png",
+      "duration_ms": 7764
+    }
+  ]
+}

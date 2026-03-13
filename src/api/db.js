@@ -118,19 +118,32 @@ const makeEntity = (tableName) => ({
 // ---------------------------------------------------------------------------
 // Auth
 // ---------------------------------------------------------------------------
+let mePromise = null;
+
 const auth = {
-  me: async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error || !user) throw new Error('Not authenticated');
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-    return { ...profile, id: user.id, email: user.email };
+  me: () => {
+    if (!mePromise) {
+      mePromise = (async () => {
+        try {
+          const { data: { user }, error } = await supabase.auth.getUser();
+          if (error || !user) throw new Error('Not authenticated');
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', user.id)
+            .maybeSingle();
+          return { ...(profile || {}), id: user.id, email: user.email };
+        } catch (e) {
+          mePromise = null;
+          throw e;
+        }
+      })();
+    }
+    return mePromise;
   },
 
   logout: async () => {
+    mePromise = null;
     await supabase.auth.signOut();
     window.location.href = '/';
   },
@@ -149,6 +162,10 @@ const auth = {
       .select()
       .single();
     if (error) throw error;
+    
+    // Invalidate the cache whenever the profile is updated
+    mePromise = Promise.resolve({ ...profile, id: user.id, email: user.email });
+    
     return profile;
   },
 

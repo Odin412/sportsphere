@@ -1,0 +1,135 @@
+{
+  "timestamp": "2026-03-10T05:32:13.382Z",
+  "url": "https://sportsphere-titan-one.vercel.app",
+  "phases": [
+    "interactions"
+  ],
+  "duration_ms": 215503,
+  "summary": {
+    "total": 9,
+    "critical": 0,
+    "warning": 0,
+    "data_issue": 0,
+    "passed": 9,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "phase": "interactions",
+      "name": "Create a post with text content",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The Create Post page is displaying properly with a functional interface. The text input field contains test content '__test_post_1773120523698__Test', Photo/Video attachment options are available, and the 'Publish Post' button is ready for interaction. No error messages, exceptions, or broken layouts are visible.",
+      "screenshot": "interactions_01_create_a_post_with_text_content.png",
+      "duration_ms": 48483
+    },
+    {
+      "phase": "interactions",
+      "name": "Like a post on Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": null
+      },
+      "reasoning": "The Feed page is functioning properly with real content visible. There's a post from Marcus Silva with text content, an image, user avatar, timestamp, sports category tag, and a Follow button. The feed shows proper dark theme styling and all UI elements are properly rendered without errors or blank states.",
+      "screenshot": "interactions_02_like_a_post_on_feed.png",
+      "duration_ms": 17738
+    },
+    {
+      "phase": "interactions",
+      "name": "Comment on a post",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is properly displayed with a comments section expanded on a post. The comment input area is visible with placeholder text 'Add a comment... (type @ to mention)' and a 'Post' button. There's also a posted comment from 'Test Athlete' visible below the input area, showing the feature is working correctly.",
+      "screenshot": "interactions_03_comment_on_a_post.png",
+      "duration_ms": 12629
+    },
+    {
+      "phase": "interactions",
+      "name": "Follow a user from their profile",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Profile page is properly loaded showing Marcus Silva's profile with visible content including profile photo, stats (0 following, 0 followers, 20 posts), action buttons (Follow, Message, Advice, Shop), professional level description, achievements section, and a followers modal overlay. All elements are functional and displaying real data.",
+      "screenshot": "interactions_04_follow_a_user_from_their_profile.png",
+      "duration_ms": 20900
+    },
+    {
+      "phase": "interactions",
+      "name": "Bookmark a post on Feed",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is functioning properly with real posts displayed. Shows a soccer-related post with engagement metrics (10 likes, 4 comments, 2 shares, 2147 views) and a CrossFit post from Zara Mitchell with proper user profile, timestamp, and content. Navigation sidebar is visible and the bookmark icon shows active state as expected. All elements are loading correctly with real data.",
+      "screenshot": "interactions_05_bookmark_a_post_on_feed.png",
+      "duration_ms": 20704
+    },
+    {
+      "phase": "interactions",
+      "name": "Update profile bio in ProfileSettings",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Profile settings page is properly displayed with all expected form fields for social media platforms (Instagram, X/Twitter, TikTok, YouTube, LinkedIn), privacy toggle for comments is functional and enabled, app tutorial section is present with replay button, and save profile button is visible at the bottom. All elements are rendering correctly in the dark theme.",
+      "screenshot": "interactions_06_update_profile_bio_in_profilesettings.png",
+      "duration_ms": 26033
+    },
+    {
+      "phase": "interactions",
+      "name": "Create a group via Groups page",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "The Groups & Clubs page is displayed with the 'You haven't joined any groups yet' empty state, which is an acceptable outcome according to the criteria. The page shows proper navigation, search functionality, category filters, and the discover groups section with appropriate messaging encouraging users to find their sport community.",
+      "screenshot": "interactions_07_create_a_group_via_groups_page.png",
+      "duration_ms": 26433
+    },
+    {
+      "phase": "interactions",
+      "name": "Send a message in Messages",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Messages page is properly loaded and functional with a support chat interface active. Shows SportHub Support chat with AI assistant, quick action buttons (How do I share media?, Translation not working, etc.), and a functional text input field. The page displays real content and is in a working state, not empty or broken.",
+      "screenshot": "interactions_08_send_a_message_in_messages.png",
+      "duration_ms": 20408
+    },
+    {
+      "phase": "interactions",
+      "name": "Cleanup: remove all test data",
+      "severity": "PASS",
+      "layers": {
+        "L1": "pass",
+        "L2": "pass",
+        "L3": "pass"
+      },
+      "reasoning": "Feed page is functioning correctly with real content displayed - shows user stories at top (Marcus, Zara), post creation prompt, sport filter tabs (For You, Following, All, Basketball, Soccer, Football), and a real post from Marcus Silva with soccer content including image, text, timestamp, and follow button. All UI elements are properly rendered in the dark theme.",
+      "screenshot": "interactions_09_cleanup__remove_all_test_data.png",
+      "duration_ms": 16351
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -65,7 +66,7 @@ function StreamCard({ stream, isLive }) {
 
 export default function Live() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [goingLive, setGoingLive] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
   const [vodFile, setVodFile] = useState(null);
@@ -81,7 +82,7 @@ export default function Live() {
   const [filters, setFilters] = useState({ query: "", sport: "all", sort: "recent" });
   const [showGameStream, setShowGameStream] = useState(false);
 
-  useEffect(() => { db.auth.me().then(setUser).catch(() => {}); }, []);
+  useEffect(() => { if (!user) {} }, [user]);
 
   const { data: liveStreams, isLoading: loadingLive, refetch } = useQuery({
     queryKey: ["live-streams"],

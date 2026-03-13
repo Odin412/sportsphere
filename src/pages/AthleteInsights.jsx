@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from '@/lib/AuthContext';
 import { db } from "@/api/db";
 import { useQuery } from "@tanstack/react-query";
 import { Sparkles, TrendingUp, Loader2, RefreshCw, User, Calendar, Dumbbell, Video } from "lucide-react";
@@ -9,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import ReactMarkdown from "react-markdown";
 
 export default function AthleteInsights() {
-  const [user, setUser] = useState(null);
+  const { user, setUser } = useAuth();
   const [orgId, setOrgId] = useState(null);
   const [role, setRole] = useState(null);
   const [selectedAthleteEmail, setSelectedAthleteEmail] = useState(null);
@@ -19,18 +20,18 @@ export default function AthleteInsights() {
   const [genRec, setGenRec] = useState(false);
 
   useEffect(() => {
-    db.auth.me().then(async u => {
-      setUser(u);
-      const orgs = await db.entities.Organization.filter({ owner_email: u.email });
+    if (!user) return;
+    (async () => {
+      const orgs = await db.entities.Organization.filter({ owner_email: user.email });
       if (orgs[0]) { setOrgId(orgs[0].id); setRole("admin"); return; }
-      const memberships = await db.entities.OrgMember.filter({ user_email: u.email });
+      const memberships = await db.entities.OrgMember.filter({ user_email: user.email });
       if (memberships[0]) {
         setOrgId(memberships[0].organization_id);
         setRole(memberships[0].role);
-        if (memberships[0].role === "athlete") setSelectedAthleteEmail(u.email);
+        if (memberships[0].role === "athlete") setSelectedAthleteEmail(user.email);
       }
-    }).catch(() => {});
-  }, []);
+    })();
+  }, [user]);
 
   const { data: athletes } = useQuery({
     queryKey: ["org-athletes-insights", orgId],

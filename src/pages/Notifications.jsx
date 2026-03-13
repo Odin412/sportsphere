@@ -65,6 +65,7 @@ export default function Notifications() {
   const { user } = useAuth();
   const [filter, setFilter] = useState("all");
   const [showSettings, setShowSettings] = useState(false);
+  const [resolvedIds, setResolvedIds] = useState(new Set());
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -179,7 +180,8 @@ export default function Notifications() {
         await db.entities.Follow.delete(follows[0].id);
       }
     }
-    await db.entities.Notification.update(notif.id, { is_read: true, follow_resolved: true });
+    await db.entities.Notification.update(notif.id, { is_read: true });
+    setResolvedIds(prev => new Set([...prev, notif.id]));
     queryClient.invalidateQueries({ queryKey: ["notifications"] });
   };
 
@@ -351,7 +353,7 @@ export default function Notifications() {
                                 <Badge className="bg-stadium-700 text-stadium-400 text-xs">{group.members.length} notifications</Badge>
                               )}
                             </div>
-                            {group.type === "follow_request" && !group.follow_resolved && (
+                            {group.type === "follow_request" && !resolvedIds.has(group.id) && (
                               <div className="flex gap-2 mt-2" onClick={e => e.preventDefault()}>
                                 <Button
                                   size="sm"
@@ -370,7 +372,7 @@ export default function Notifications() {
                                 </Button>
                               </div>
                             )}
-                            {group.type === "follow_request" && group.follow_resolved && (
+                            {group.type === "follow_request" && resolvedIds.has(group.id) && (
                               <p className="text-xs text-stadium-600 mt-1 italic">Request resolved</p>
                             )}
                           </div>

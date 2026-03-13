@@ -119,7 +119,6 @@ export default function UserProfile() {
         actor_avatar: currentUser.avatar_url,
         type: "follow_request",
         message: "wants to follow you",
-        follow_requester_email: currentUser.email,
       });
     }
   };

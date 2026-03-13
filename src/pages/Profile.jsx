@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Plus, Edit2, Trophy, MapPin, Clock, Star, Trash2, Loader2, Camera, LogOut, Settings, TrendingUp, BarChart3, Dumbbell, Sparkles, DollarSign, Crown, Award, Zap, Film, Radio, Video, Users } from "lucide-react";
+import { Plus, Edit2, Trophy, MapPin, Clock, Star, Trash2, Loader2, Camera, LogOut, Settings, TrendingUp, BarChart3, Dumbbell, Sparkles, DollarSign, Crown, Award, Zap, Film, Radio, Video, Users, Bell, X } from "lucide-react";
 import PostCard from "@/components/feed/PostCard";
 import StatInputDialog from "@/components/stats/StatInputDialog";
 import StatsChart from "@/components/stats/StatsChart";
@@ -48,6 +48,8 @@ export default function Profile() {
   const [personalInfo, setPersonalInfo] = useState({});
   const [showMonetization, setShowMonetization] = useState(false);
   const [gridPost, setGridPost] = useState(null);
+  const [followerModal, setFollowerModal] = useState(null); // null | "followers" | "following"
+  const [pendingBannerDismissed, setPendingBannerDismissed] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -123,6 +125,13 @@ export default function Profile() {
     queryKey: ["my-followers", user?.email],
     queryFn: () => db.entities.Follow.filter({ following_email: user.email, status: "accepted" }),
     enabled: !!user,
+  });
+
+  const { data: pendingFollowers = [] } = useQuery({
+    queryKey: ["pending-followers", user?.email],
+    queryFn: () => db.entities.Follow.filter({ following_email: user.email, status: "pending" }),
+    enabled: !!user,
+    staleTime: 30000,
   });
 
   const { data: userPoints } = useQuery({
@@ -296,19 +305,38 @@ export default function Profile() {
 
               {/* Follower / Following counts */}
               <div className="flex items-center gap-4 mt-2">
-                <span className="text-sm">
+                <button
+                  onClick={() => setFollowerModal("followers")}
+                  className="text-sm hover:opacity-80 transition-opacity text-left"
+                >
                   <span className="font-bold text-white">{myFollowers.length}</span>
                   <span className="text-gray-500 ml-1">Followers</span>
-                </span>
-                <span className="text-sm">
+                </button>
+                <button
+                  onClick={() => setFollowerModal("following")}
+                  className="text-sm hover:opacity-80 transition-opacity text-left"
+                >
                   <span className="font-bold text-white">{followedCreators?.length || 0}</span>
                   <span className="text-gray-500 ml-1">Following</span>
-                </span>
+                </button>
                 <span className="text-sm">
                   <span className="font-bold text-white">{myPosts?.length || 0}</span>
                   <span className="text-gray-500 ml-1">Posts</span>
                 </span>
               </div>
+
+              {/* Pending follow requests banner */}
+              {pendingFollowers.length > 0 && !pendingBannerDismissed && (
+                <div className="flex items-center justify-between mt-2 bg-monza/10 border border-monza/30 rounded-lg px-3 py-2">
+                  <Link to={createPageUrl("Notifications")} className="flex items-center gap-2 text-sm text-red-400 hover:text-red-300 transition-colors">
+                    <Bell className="w-4 h-4 flex-shrink-0" />
+                    <span><span className="font-bold">{pendingFollowers.length}</span> {pendingFollowers.length === 1 ? "person wants" : "people want"} to follow you</span>
+                  </Link>
+                  <button onClick={() => setPendingBannerDismissed(true)} className="text-gray-500 hover:text-gray-300 ml-2 flex-shrink-0">
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
 
               {/* Preferred sports + skill level */}
               <div className="flex flex-wrap gap-1.5 mt-2">
@@ -930,6 +958,55 @@ export default function Profile() {
           </div>
         )}
       </div>
+
+      {/* Followers / Following modal */}
+      <Dialog open={!!followerModal} onOpenChange={open => !open && setFollowerModal(null)}>
+        <DialogContent className="sm:max-w-sm bg-stadium-900 border-white/10">
+          <DialogHeader>
+            <DialogTitle className="text-white capitalize">{followerModal}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
+            {followerModal === "followers" && (
+              myFollowers.length === 0
+                ? <p className="text-gray-500 text-sm text-center py-6">No followers yet.</p>
+                : myFollowers.map(f => (
+                  <Link
+                    key={f.id}
+                    to={createPageUrl("UserProfile") + `?email=${f.follower_email}`}
+                    onClick={() => setFollowerModal(null)}
+                    className="flex items-center gap-3 py-2 hover:bg-white/5 rounded-lg px-2 transition-colors"
+                  >
+                    <Avatar className="w-9 h-9">
+                      <AvatarFallback className="bg-monza text-white text-sm font-bold">
+                        {f.follower_email?.[0]?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm text-gray-300 truncate">{f.follower_email}</span>
+                  </Link>
+                ))
+            )}
+            {followerModal === "following" && (
+              (followedCreators?.length || 0) === 0
+                ? <p className="text-gray-500 text-sm text-center py-6">Not following anyone yet.</p>
+                : (followedCreators || []).map(f => (
+                  <Link
+                    key={f.id}
+                    to={createPageUrl("UserProfile") + `?email=${f.following_email}`}
+                    onClick={() => setFollowerModal(null)}
+                    className="flex items-center gap-3 py-2 hover:bg-white/5 rounded-lg px-2 transition-colors"
+                  >
+                    <Avatar className="w-9 h-9">
+                      <AvatarFallback className="bg-monza text-white text-sm font-bold">
+                        {f.following_email?.[0]?.toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm text-gray-300 truncate">{f.following_email}</span>
+                  </Link>
+                ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Grid post modal */}
       {gridPost && (

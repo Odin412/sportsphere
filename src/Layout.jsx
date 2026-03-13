@@ -85,6 +85,18 @@ export default function Layout({ children, currentPageName }) {
     staleTime: 30000,
   });
 
+  // Pending follow requests count (added to bell badge)
+  const { data: pendingFollowCount = 0 } = useQuery({
+    queryKey: ["pending-follow-requests", user?.email],
+    queryFn: async () => {
+      if (!user?.email) return 0;
+      const requests = await db.entities.Follow.filter({ following_email: user.email, status: "pending" });
+      return requests.length;
+    },
+    enabled: !!user?.email,
+    staleTime: 60000,
+  });
+
   // Real-time subscription to invalidate count on new notifications
   useEffect(() => {
     if (!user?.email) return;
@@ -137,9 +149,9 @@ export default function Layout({ children, currentPageName }) {
         <div className="flex items-center gap-3">
           <Link to={createPageUrl("Notifications")} className="relative p-2.5 rounded-lg hover:bg-white/5 transition-colors" aria-label="Notifications">
             <Bell className="w-5 h-5 text-gray-300" />
-            {unreadCount > 0 && (
+            {(unreadCount + pendingFollowCount) > 0 && (
               <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] bg-monza rounded-full text-[10px] font-bold text-white flex items-center justify-center px-1 leading-none">
-                {unreadCount > 99 ? "99+" : unreadCount}
+                {(unreadCount + pendingFollowCount) > 99 ? "99+" : (unreadCount + pendingFollowCount)}
               </span>
             )}
           </Link>

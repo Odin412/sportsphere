@@ -445,3 +445,76 @@ tools/
 | ChallengeDetail | ChallengeDetail.jsx | 11 | TESTED | any |
 | Terms | Terms.jsx | 11 | TESTED | any |
 | Guidelines | Guidelines.jsx | 11 | TESTED | any |
+
+---
+
+## External Tester Report — Antigravity (2026-03-12)
+
+**Tester**: Antigravity (external QA)
+**Environment**: localhost:5173 (local dev server)
+**Scope**: Full user flow, auth, onboarding, multi-role signup
+
+### Issues Found
+
+#### 1. Form Functionality & Validation
+| Issue | Severity | Status |
+|-------|----------|--------|
+| "Create Account" form silent failure on empty fields (early return with no feedback) | High | **FIXED** — toast messages added for each missing field |
+| Role selection workflow delay / failed next-step render | Medium | Pre-existing multi-step animation — not a code bug |
+| `disabled` attribute on buttons blocking HTML5 validation | High | **FIXED** — Login buttons no longer disabled when not loading |
+
+#### 2. UI & Accessibility
+| Issue | Severity | Status |
+|-------|----------|--------|
+| Onboarding `items-center justify-center` cuts Continue button on small screens / keyboard open | High | **FIXED** — removed `my-auto` from inner content div; content flows from top |
+| "Powered by TitanAI" logo invisible on dark backgrounds (`mix-blend-multiply`) | Medium | **FIXED** — `light` prop added; Login passes `light` for white panel |
+| Back arrow click target too small | Medium | **FIXED** — `p-2 -ml-2 rounded-lg` + `aria-label` added |
+
+#### 3. Asset & Resource Errors
+| Issue | Severity | Status |
+|-------|----------|--------|
+| `manifest.json` missing (browser console Syntax error) | Medium | **FIXED** — created `public/manifest.json` with valid PWA JSON |
+| TitanAI logo shows as grey placeholder box on Login | Medium | **FIXED** — `light` prop + removed `mix-blend-multiply` on white backgrounds |
+
+#### 4. Routing & Loading
+| Issue | Severity | Status |
+|-------|----------|--------|
+| Unknown routes (e.g. `/about`) show LandingPage for unauthenticated users | Medium | **FIXED** — catch-all now shows Login |
+| `corsproxy.io` 403 errors blocking SportNewsWidget render | High | **Already fixed** — removed from proxy list; allorigins + codetabs only |
+| `db.auth.me()` race condition / Supabase lock contention → infinite loading | Critical | **Already fixed** — AuthContext: 3s timeout + lock key cleanup + maybeSingle() |
+| Supabase GoTrue `AbortError: Lock broken` | Critical | **Already fixed** — AuthContext self-heals broken locks from localStorage |
+
+#### 5. Code Defects (from Antigravity refactor script)
+| Issue | Severity | Status |
+|-------|----------|--------|
+| Duplicate `const meta` in `AuthContext.fetchAndSetProfile` (SyntaxError — silent new-user profile creation failure) | Critical | **FIXED** |
+| `await` in non-async `useEffect` callbacks across 10 pages (OrgRoster, AthleteInsights, OrgMessages, OrgSessions, ParentView, TrainingPlan*, UploadVideo, VideoReview) | Critical | **FIXED** — wrapped in async IIFE pattern |
+| Malformed closures in Analytics, BecomeCreator, Live, CreatePost, ScoutCard | Critical | **FIXED** — missing parens/brackets corrected |
+
+#### 6. Role/Onboarding Issues (Antigravity-identified, already addressed)
+| Issue | Severity | Status |
+|-------|----------|--------|
+| Coach/Org accounts see Athlete onboarding (DB trigger overrides role) | High | **Already fixed** — AuthContext enforces `meta.role` when `onboarding_complete = false` |
+| Onboarding saves correct role on finish | High | **Already fixed** — `handleFinish` always writes `role` to profile update payload |
+| Onboarding logic loop (redirected back to step 1 after finish) | Medium | **Already fixed** — `localStorage.setItem("ob_${user.id}", "1")` + OnboardingRedirect bypass |
+
+### Fixes Applied (commit `ed12d44`)
+- `src/lib/AuthContext.jsx` — duplicate const meta removed
+- `src/pages/Onboarding.jsx` — layout overflow fixed
+- `src/pages/Analytics.jsx` — malformed useEffect
+- `src/pages/AthleteInsights.jsx` — async IIFE
+- `src/pages/BecomeCreator.jsx` — orphaned .catch()
+- `src/pages/CreatePost.jsx` — unclosed Notification.create() + .then()
+- `src/pages/Live.jsx` — malformed useEffect
+- `src/pages/OrgMessages.jsx` — async IIFE
+- `src/pages/OrgRoster.jsx` — async IIFE
+- `src/pages/OrgSessions.jsx` — async IIFE
+- `src/pages/ParentView.jsx` — async IIFE
+- `src/pages/Profile.jsx` — redundant setUser(u) removed
+- `src/pages/ProfileSettings.jsx` — redundant setUser(u) removed
+- `src/pages/ScoutCard.jsx` — malformed object literals
+- `src/pages/TrainingPlanDetail.jsx` — async IIFE
+- `src/pages/TrainingPlans.jsx` — async IIFE
+- `src/pages/UploadVideo.jsx` — async IIFE
+- `src/pages/VideoReview.jsx` — async IIFE
+- Previous commit (`de42b22`): manifest.json, TitanAI light prop, routing catch-all, back button, form validation toasts

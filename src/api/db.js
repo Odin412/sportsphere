@@ -400,10 +400,21 @@ const entities = {
   Transaction: makeEntity('transactions'),
   Tip: makeEntity('tips'),
   Product: makeEntity('products'),
+  Purchase: makeEntity('purchases'),
 
   // Trainer Portal
   ProgressReport: makeEntity('progress_reports'),
   Milestone: makeEntity('milestones'),
+  AthleteProgress: makeEntity('athlete_progress'),
+  SessionBooking: makeEntity('session_bookings'),
+  SessionMessage: makeEntity('session_messages'),
+
+  // Community
+  GroupPost: makeEntity('group_posts'),
+  GroupReply: makeEntity('group_replies'),
+  ForumReply: makeEntity('forum_replies'),
+  ExternalVideo: makeEntity('external_videos'),
+  StreamQuestion: makeEntity('stream_questions'),
 
   // Other
   FeedPreferences: makeEntity('feed_preferences'),

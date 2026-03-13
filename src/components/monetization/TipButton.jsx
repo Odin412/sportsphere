@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import { toast } from "sonner";
 const PRESET_AMOUNTS = [5, 10, 25, 50, 100];
 
 export default function TipButton({ creator, contextType, contextId, variant = "outline", size = "default" }) {
+  const { user: currentUser } = useAuth();
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -26,7 +28,6 @@ export default function TipButton({ creator, contextType, contextId, variant = "
 
     setLoading(true);
     try {
-      const currentUser = await db.auth.me();
       
       await db.entities.Tip.create({
         from_email: currentUser.email,

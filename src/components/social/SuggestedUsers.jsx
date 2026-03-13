@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -22,12 +23,8 @@ const SPORT_COLORS = {
 };
 
 export default function SuggestedUsers() {
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user: currentUser } = useAuth();
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    db.auth.me().then(setCurrentUser).catch(() => {});
-  }, []);
 
   // Current user's follows
   const { data: myFollows = [] } = useQuery({

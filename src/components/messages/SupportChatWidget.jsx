@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { db } from "@/api/db";
 import { MessageCircle, X, Send, Loader2, ChevronDown } from "lucide-react";
-import titanHelmet from "@/components/branding/Gemini_Generated_Image_frt2vcfrt2vcfrt2.png";
+const titanHelmet = "/titan-helmet.png";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

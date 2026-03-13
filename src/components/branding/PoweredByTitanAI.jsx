@@ -1,10 +1,9 @@
 import React from "react";
-import titanStamp from "./powered by TitanAI.png";
+
+const titanStamp = "/powered-by-titanai.png";
 
 /**
  * Subtle "Powered by TitanAI" branding stamp.
- * mix-blend-multiply eliminates any white/light background from the PNG
- * so the badge looks stamped directly onto whatever surface it sits on.
  */
 export default function PoweredByTitanAI({ variant = "inline", light = false, className = "" }) {
   if (variant === "minimal") {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { db } from "@/api/db";
+import { useAuth } from "@/lib/AuthContext";
 import { createPageUrl } from "@/utils";
 import {
   LayoutDashboard, Users, FileText, ShieldAlert, BarChart2,
@@ -17,15 +18,10 @@ const NAV = [
 ];
 
 export default function AdminLayout({ children, currentPage }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, isLoadingAuth: loading } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [clock, setClock] = useState(new Date());
   const location = useLocation();
-
-  useEffect(() => {
-    db.auth.me().then(setUser).catch(() => {}).finally(() => setLoading(false));
-  }, []);
 
   useEffect(() => {
     const t = setInterval(() => setClock(new Date()), 1000);

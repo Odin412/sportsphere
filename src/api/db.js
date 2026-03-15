@@ -76,7 +76,7 @@ const makeEntity = (tableName) => ({
       .update(data)
       .eq('id', id)
       .select()
-      .single();
+      .maybeSingle();
     if (error) throw error;
     return row;
   },

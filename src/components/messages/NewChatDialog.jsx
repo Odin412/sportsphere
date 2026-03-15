@@ -20,7 +20,7 @@ export default function NewChatDialog({ user, onSelectConversation, onClose }) {
     queryKey: ["all-sport-profiles-chat"],
     queryFn: async () => {
       const [sportProfiles, allUsers] = await Promise.all([
-        db.entities.SportProfile.list("-created_date", 200),
+        db.entities.SportProfile.list("-created_at", 200),
         db.entities.User.list("-created_at", 500),
       ]);
       // Build a map of email → SportProfile

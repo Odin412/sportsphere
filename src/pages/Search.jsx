@@ -82,7 +82,7 @@ export default function SearchPage() {
 
   const { data: sportProfileResults = [] } = useQuery({
     queryKey: ["search-sport-profiles", debouncedQuery],
-    queryFn: () => db.entities.SportProfile.search(debouncedQuery, ["user_name", "sport", "bio", "position"], "-created_date", 30),
+    queryFn: () => db.entities.SportProfile.search(debouncedQuery, ["user_name", "sport", "bio", "position"], "-created_at", 30),
     enabled: isSearching,
   });
 
@@ -109,8 +109,8 @@ export default function SearchPage() {
     queryKey: ["discover-trending-profiles", sportFilter],
     queryFn: async () => {
       const profiles = sportClause
-        ? await db.entities.SportProfile.filter({ sport: sportClause }, "-created_date", 20)
-        : await db.entities.SportProfile.list("-created_date", 20);
+        ? await db.entities.SportProfile.filter({ sport: sportClause }, "-created_at", 20)
+        : await db.entities.SportProfile.list("-created_at", 20);
       return profiles;
     },
     enabled: !isSearching,

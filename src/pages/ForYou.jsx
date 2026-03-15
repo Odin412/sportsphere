@@ -285,7 +285,7 @@ export default function ForYou() {
     queryKey: ["recommended-users", userSports.join(","), user?.email],
     queryFn: async () => {
       const followedEmails = new Set(follows?.map(f => f.following_email) || []);
-      const profiles = await db.entities.SportProfile.list("-created_date", 200);
+      const profiles = await db.entities.SportProfile.list("-created_at", 200);
       const myLevels = new Set(myProfiles?.map(p => p.level).filter(Boolean) || []);
       const others = profiles.filter(p => p.user_email !== user.email && !followedEmails.has(p.user_email));
       const scored = others.map(p => {

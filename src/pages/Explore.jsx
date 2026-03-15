@@ -130,8 +130,8 @@ export default function Explore() {
   const { data: profiles, isLoading: loadingProfiles } = useQuery({
     queryKey: ["explore-profiles", sportFilter],
     queryFn: () => sportFilter
-      ? db.entities.SportProfile.filter({ sport: sportFilter }, "-created_date", 100)
-      : db.entities.SportProfile.list("-created_date", 100),
+      ? db.entities.SportProfile.filter({ sport: sportFilter }, "-created_at", 100)
+      : db.entities.SportProfile.list("-created_at", 100),
   });
 
   // Trending hashtags

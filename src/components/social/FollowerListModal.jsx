@@ -33,7 +33,7 @@ export default function FollowerListModal({ profileEmail, mode, onClose }) {
   // Fetch SportProfiles for all those emails
   const { data: profiles = [], isLoading: loadingProfiles } = useQuery({
     queryKey: ["follow-profiles", emails.join(",")],
-    queryFn: () => db.entities.SportProfile.list("-created_date", 200),
+    queryFn: () => db.entities.SportProfile.list("-created_at", 200),
     enabled: emails.length > 0,
     select: (all) => {
       const emailSet = new Set(emails);

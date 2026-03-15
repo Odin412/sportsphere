@@ -36,7 +36,7 @@ export default function SuggestedUsers() {
   // All sport profiles
   const { data: allProfiles = [], isLoading } = useQuery({
     queryKey: ["all-sport-profiles-suggested"],
-    queryFn: () => db.entities.SportProfile.list("-created_date", 100),
+    queryFn: () => db.entities.SportProfile.list("-created_at", 100),
     enabled: !!currentUser?.email,
   });
 

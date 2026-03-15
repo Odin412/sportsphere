@@ -42,7 +42,7 @@ export default function FeedPreferencesDialog({ user, onClose }) {
 
   const { data: allUsers = [] } = useQuery({
     queryKey: ["all-users-for-follow"],
-    queryFn: () => db.entities.SportProfile.list("-created_date", 50),
+    queryFn: () => db.entities.SportProfile.list("-created_at", 50),
   });
 
   useEffect(() => {

@@ -4,6 +4,7 @@ import { supabase } from "@/api/db";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, Mail, Lock, Zap, Users, Video, Trophy, TrendingUp, Shield, Eye, EyeOff, ChevronLeft, Dumbbell, UserCheck, Building2, Heart, Check } from "lucide-react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
@@ -169,6 +170,11 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [signupDone, setSignupDone] = useState(false);
   const [loginError, setLoginError] = useState("");
+  const [dobMonth, setDobMonth] = useState("");
+  const [dobDay, setDobDay] = useState("");
+  const [dobYear, setDobYear] = useState("");
+  const [tosAccepted, setTosAccepted] = useState(false);
+  const [ageError, setAgeError] = useState("");
 
   const switchToSignup = () => {
     setTab("signup");
@@ -176,6 +182,8 @@ export default function Login() {
     setSelectedRoleCard(null);
     setSelectedRole("");
     setChildName("");
+    setDobMonth(""); setDobDay(""); setDobYear("");
+    setTosAccepted(false); setAgeError("");
   };
 
   const switchToSignin = () => {
@@ -184,6 +192,8 @@ export default function Login() {
     setSelectedRoleCard(null);
     setSelectedRole("");
     setChildName("");
+    setDobMonth(""); setDobDay(""); setDobYear("");
+    setTosAccepted(false); setAgeError("");
   };
 
   const handleRoleCardClick = (card) => {
@@ -219,11 +229,55 @@ export default function Login() {
     setLoading(false);
   };
 
+  const calculateAge = (month, day, year) => {
+    const dob = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+    const today = new Date();
+    let a = today.getFullYear() - dob.getFullYear();
+    const md = today.getMonth() - dob.getMonth();
+    if (md < 0 || (md === 0 && today.getDate() < dob.getDate())) a--;
+    return a;
+  };
+
+  const getDobIso = () => {
+    const y = dobYear.padStart(4, "0");
+    const m = dobMonth.padStart(2, "0");
+    const d = dobDay.padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
+
   const handleSignUp = async (e) => {
     e.preventDefault();
     const isParent = selectedRoleCard?.id === "parent";
     if (!fullName) { toast.error("Please enter your full name."); return; }
     if (isParent && !childName) { toast.error("Please enter your child's name."); return; }
+
+    // DOB validation
+    if (!dobMonth || !dobDay || !dobYear) {
+      toast.error("Please enter your date of birth.");
+      return;
+    }
+    const dobDate = new Date(parseInt(dobYear), parseInt(dobMonth) - 1, parseInt(dobDay));
+    if (isNaN(dobDate.getTime()) || dobDate.getMonth() !== parseInt(dobMonth) - 1) {
+      toast.error("Please enter a valid date of birth.");
+      return;
+    }
+    const userAge = calculateAge(dobMonth, dobDay, dobYear);
+    if (isParent && userAge < 18) {
+      setAgeError("Parents/guardians must be at least 18 years old to create an account.");
+      return;
+    }
+    if (!isParent && userAge < 13) {
+      setAgeError("coppa");
+      return;
+    }
+    setAgeError("");
+
+    // TOS validation
+    if (!tosAccepted) {
+      toast.error("You must accept the Terms of Service and Privacy Policy.");
+      return;
+    }
+
     if (!email) { toast.error("Please enter your email address."); return; }
     if (!password) { toast.error("Please enter a password."); return; }
     if (!selectedRole) { toast.error("Please go back and select your role."); return; }
@@ -232,6 +286,7 @@ export default function Login() {
       return;
     }
     setLoading(true);
+    const dobIso = getDobIso();
     // For parent accounts: the profile belongs to the CHILD (athlete).
     // Parent's name is stored as parent_name; child's name becomes full_name.
     const { data, error } = await supabase.auth.signUp({
@@ -239,8 +294,8 @@ export default function Login() {
       password,
       options: {
         data: isParent
-          ? { full_name: childName, parent_name: fullName, role: "athlete", is_parent_managed: true }
-          : { full_name: fullName, role: selectedRole },
+          ? { full_name: childName, parent_name: fullName, role: "athlete", is_parent_managed: true, date_of_birth: dobIso }
+          : { full_name: fullName, role: selectedRole, date_of_birth: dobIso },
       },
     });
     if (error) {
@@ -254,9 +309,21 @@ export default function Login() {
       // Supabase silent duplicate — email already registered
       toast.error("An account with this email already exists. Try signing in instead.");
     } else if (data?.session) {
+      // Record TOS acceptance (fire-and-forget)
+      supabase.from("legal_agreements").insert([
+        { user_id: data.user.id, agreement_type: "tos", version: "1.0", user_agent: navigator.userAgent },
+        { user_id: data.user.id, agreement_type: "privacy_policy", version: "1.0", user_agent: navigator.userAgent },
+      ]).then(({ error: tosErr }) => { if (tosErr) console.warn("Failed to record TOS:", tosErr); });
       // Auto-confirmed — user is already signed in, redirect
       navigate("/", { replace: true });
     } else {
+      // Email confirmation flow — record TOS after user confirms (best-effort with user id)
+      if (data?.user) {
+        supabase.from("legal_agreements").insert([
+          { user_id: data.user.id, agreement_type: "tos", version: "1.0", user_agent: navigator.userAgent },
+          { user_id: data.user.id, agreement_type: "privacy_policy", version: "1.0", user_agent: navigator.userAgent },
+        ]).then(({ error: tosErr }) => { if (tosErr) console.warn("Failed to record TOS:", tosErr); });
+      }
       setSignupDone(true);
     }
     setLoading(false);
@@ -534,51 +601,148 @@ export default function Login() {
                         required
                       />
                     </div>
+                    {/* Date of Birth */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <Input
-                          id="emailSignup"
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="you@example.com"
-                          className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
+                      <Label className="text-sm font-semibold text-slate-300 lg:text-slate-700">
+                        {selectedRoleCard?.id === "parent" ? "Your Date of Birth" : "Date of Birth"}
+                      </Label>
+                      <div className="grid grid-cols-3 gap-2">
+                        <select
+                          value={dobMonth}
+                          onChange={(e) => { setDobMonth(e.target.value); setAgeError(""); }}
+                          className="h-12 rounded-xl border border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 px-3 text-sm appearance-none"
                           required
-                        />
-                      </div>
-                    </div>
-                    <div className="space-y-1.5">
-                      <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
-                      <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                        <Input
-                          id="passwordSignup"
-                          type={showPassword ? "text" : "password"}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Min. 6 characters"
-                          className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
-                          required
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
-                          aria-label="Toggle password visibility"
+                          aria-label="Birth month"
                         >
-                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
+                          <option value="" disabled>Month</option>
+                          {Array.from({ length: 12 }, (_, i) => (
+                            <option key={i + 1} value={String(i + 1)}>
+                              {new Date(2000, i).toLocaleString("default", { month: "long" })}
+                            </option>
+                          ))}
+                        </select>
+                        <select
+                          value={dobDay}
+                          onChange={(e) => { setDobDay(e.target.value); setAgeError(""); }}
+                          className="h-12 rounded-xl border border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 px-3 text-sm appearance-none"
+                          required
+                          aria-label="Birth day"
+                        >
+                          <option value="" disabled>Day</option>
+                          {Array.from({ length: 31 }, (_, i) => (
+                            <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
+                          ))}
+                        </select>
+                        <select
+                          value={dobYear}
+                          onChange={(e) => { setDobYear(e.target.value); setAgeError(""); }}
+                          className="h-12 rounded-xl border border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 px-3 text-sm appearance-none"
+                          required
+                          aria-label="Birth year"
+                        >
+                          <option value="" disabled>Year</option>
+                          {Array.from({ length: 100 }, (_, i) => {
+                            const year = new Date().getFullYear() - i;
+                            return <option key={year} value={String(year)}>{year}</option>;
+                          })}
+                        </select>
                       </div>
+                      {selectedRoleCard?.id === "parent" && (
+                        <p className="text-xs text-slate-500">Parents/guardians must be 18 or older.</p>
+                      )}
                     </div>
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
-                    >
-                      {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
-                    </Button>
+
+                    {/* COPPA block */}
+                    {ageError === "coppa" && (
+                      <div className="flex items-start gap-3 p-4 rounded-xl bg-red-950/50 border border-red-800">
+                        <Shield className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-bold text-red-300">We're sorry</p>
+                          <p className="text-xs text-red-400 mt-1">
+                            You must be at least 13 years old to create a Sportsphere account.
+                            If you're under 13, ask a parent or guardian to create a Parent account on your behalf.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    {ageError && ageError !== "coppa" && (
+                      <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/50 border border-red-800 text-red-300 text-sm">
+                        <Shield className="w-4 h-4 flex-shrink-0 text-red-400" />
+                        {ageError}
+                      </div>
+                    )}
+
+                    {/* Remaining fields hidden when COPPA blocks */}
+                    {ageError !== "coppa" && (
+                      <>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="emailSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Email</Label>
+                          <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <Input
+                              id="emailSignup"
+                              type="email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              placeholder="you@example.com"
+                              className="pl-9 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="space-y-1.5">
+                          <Label htmlFor="passwordSignup" className="text-sm font-semibold text-slate-300 lg:text-slate-700">Password</Label>
+                          <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                            <Input
+                              id="passwordSignup"
+                              type={showPassword ? "text" : "password"}
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              placeholder="Min. 6 characters"
+                              className="pl-9 pr-10 rounded-xl h-12 border-gray-700 lg:border-slate-200 bg-gray-900 lg:bg-white text-white lg:text-gray-900 placeholder:text-gray-500"
+                              required
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setShowPassword(!showPassword)}
+                              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300 lg:hover:text-slate-600"
+                              aria-label="Toggle password visibility"
+                            >
+                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Terms of Service acceptance */}
+                        <div className="flex items-start gap-3">
+                          <Checkbox
+                            id="tos"
+                            checked={tosAccepted}
+                            onCheckedChange={(checked) => setTosAccepted(checked === true)}
+                            className="mt-0.5 h-5 w-5 rounded border-gray-600 lg:border-slate-300 data-[state=checked]:bg-red-700 data-[state=checked]:border-red-700"
+                          />
+                          <Label htmlFor="tos" className="text-xs text-slate-400 lg:text-slate-500 leading-relaxed cursor-pointer">
+                            I agree to the{" "}
+                            <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline font-semibold">
+                              Terms of Service
+                            </a>{" "}
+                            and{" "}
+                            <a href="/terms" target="_blank" rel="noopener noreferrer" className="text-red-500 hover:underline font-semibold">
+                              Privacy Policy
+                            </a>
+                          </Label>
+                        </div>
+
+                        <Button
+                          type="submit"
+                          disabled={loading}
+                          className="w-full h-12 rounded-xl bg-gradient-to-r from-red-900 to-red-700 hover:from-red-950 hover:to-red-800 text-white font-bold text-sm"
+                        >
+                          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : "Create Account"}
+                        </Button>
+                      </>
+                    )}
                   </form>
                 </motion.div>
               )}

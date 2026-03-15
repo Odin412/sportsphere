@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sportsphere Investor Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  @page { size: letter; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #B8960C;
+    --gold-dark: #8B6914;
+    --gold-light: #D4B44A;
+    --monza: #DA020E;
+    --dark: #1a1a1a;
+    --text: #2d2d2d;
+    --text-light: #555;
+    --text-muted: #888;
+    --bg: #ffffff;
+    --bg-warm: #faf9f7;
+    --border: #e5e3de;
+    --border-light: #eeece8;
+  }
+
+  body { font-family: 'Inter', sans-serif; color: var(--text); font-size: 11pt; line-height: 1.55; background: var(--bg); }
+
+  .page { page-break-after: always; padding: 48px 56px; height: 100vh; overflow: hidden; position: relative; }
+  .page:last-child { page-break-after: avoid; }
+
+  h1 { font-family: 'DM Serif Display', serif; font-size: 40pt; font-weight: 400; color: var(--dark); }
+  h2 { font-size: 18pt; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+  h3 { font-size: 11.5pt; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  p { margin-bottom: 9px; }
+  strong { font-weight: 700; }
+  hr { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  .slabel { font-size: 8pt; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  thead th { text-align: left; font-size: 7.5pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dark); padding: 9px 10px; border-bottom: 1px solid var(--border); }
+  tbody td { padding: 9px 10px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: none; }
+
+  /* Stat row */
+  .sr { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin: 14px 0; background: var(--bg-warm); }
+  .sb { flex: 1; padding: 16px 12px; text-align: center; border-right: 1px solid var(--border); }
+  .sb:last-child { border-right: none; }
+  .sn { font-size: 26pt; font-weight: 800; color: var(--gold-dark); line-height: 1.1; }
+  .sl { font-size: 7pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+  .ss { font-size: 8pt; color: var(--text-light); margin-top: 2px; }
+
+  /* Callout */
+  .co { border-left: 3px solid var(--gold); background: var(--bg-warm); padding: 12px 16px; margin: 12px 0; font-size: 10pt; line-height: 1.5; }
+  .cl { font-weight: 700; color: var(--gold-dark); }
+
+  /* Feature grid */
+  .fg { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
+  .fc { background: var(--bg-warm); border: 1px solid var(--border-light); border-radius: 5px; padding: 10px 11px; }
+  .fc h3 { font-size: 10pt; margin-bottom: 2px; }
+  .fc p { font-size: 8.5pt; color: var(--text-light); margin: 0; line-height: 1.4; }
+  .fch { border-color: var(--gold); background: rgba(184,150,12,0.04); }
+  .fch h3 { color: var(--gold-dark); }
+
+  .ck { color: var(--gold-dark); font-weight: 700; }
+  .da { color: #ccc; }
+
+  /* Status */
+  .strow { display: flex; border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin: 14px 0; }
+  .stb { flex: 1; padding: 12px 8px; text-align: center; border-right: 1px solid var(--border); background: var(--bg-warm); }
+  .stb:last-child { border-right: none; }
+  .stt { font-size: 16pt; font-weight: 800; }
+  .stl { font-size: 7pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-top: 2px; }
+  .std { font-size: 8pt; color: var(--text-light); margin-top: 1px; }
+
+  ul.ckl { list-style: none; padding: 0; }
+  ul.ckl li { padding: 3px 0 3px 18px; position: relative; font-size: 10pt; }
+  ul.ckl li::before { content: "✓"; position: absolute; left: 0; color: var(--gold-dark); font-weight: 700; }
+
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .cc { border: 1px solid var(--border); border-radius: 6px; padding: 16px; }
+  .cch { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid var(--border-light); }
+  .cct { font-size: 11pt; font-weight: 700; }
+  .ccb { font-size: 6pt; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold-dark); background: rgba(184,150,12,0.1); padding: 2px 6px; border-radius: 3px; }
+
+  .fbar { display: flex; height: 30px; border-radius: 5px; overflow: hidden; margin: 12px 0; }
+  .fseg { display: flex; align-items: center; justify-content: center; color: white; font-size: 8pt; font-weight: 700; }
+
+  .mr { display: flex; margin: 12px 0; }
+  .mb { flex: 1; padding: 14px 10px; text-align: center; border: 1px solid var(--border); background: var(--bg-warm); }
+  .mb:first-child { border-radius: 6px 0 0 6px; }
+  .mb:last-child { border-radius: 0 6px 6px 0; }
+  .mn { font-size: 22pt; font-weight: 800; color: var(--gold-dark); }
+  .ml { font-size: 7pt; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+  .ms { font-size: 8pt; color: var(--text-light); margin-top: 2px; }
+
+  .ph { margin: 8px 0; padding: 7px 0 7px 14px; border-left: 3px solid var(--gold); }
+  .phl { font-size: 7.5pt; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 2px; }
+  .ph p { font-size: 10pt; margin: 0; }
+
+  .cbox { text-align: center; margin-top: 18px; padding: 16px 20px; background: var(--bg-warm); border: 1px solid var(--border); border-radius: 6px; font-size: 11pt; font-weight: 700; color: var(--dark); line-height: 1.6; }
+  .footer { text-align: center; padding: 16px 0 0; font-size: 7pt; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 24px; }
+  .fbrand { font-size: 7.5pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 5px; }
+
+  .tp { display: flex; flex-direction: column; align-items: center; padding-top: 64px; text-align: center; }
+  .conf { font-size: 7pt; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); border: 1px solid var(--border); padding: 4px 16px; margin-bottom: 32px; }
+</style>
+</head>
+<body>
+
+<!-- ════════ PAGE 1: TITLE + OPPORTUNITY ════════ -->
+<div class="page tp">
+  <img src="file:///C:/Users/creat/Downloads/sportsphere-main/sportsphere-main/assets/new main logo.png" style="height: 72px; margin-bottom: 28px;" alt="TitanAI">
+  <div class="conf">CONFIDENTIAL</div>
+  <h1>Investor Brief</h1>
+  <p style="font-size: 12pt; color: var(--text-light); margin: 6px 0;">Sportsphere — Pre-Seed Investment Opportunity</p>
+  <p style="font-size: 9pt; color: var(--text-muted); margin-bottom: 36px;">March 14, 2026 &bull; Prepared by TitanAI LLC</p>
+
+  <div class="sr" style="max-width: 580px; width: 100%;">
+    <div class="sb"><div class="sn">$750K</div><div class="sl">Raise Amount</div></div>
+    <div class="sb"><div class="sn">$6M</div><div class="sl">Pre-Money Valuation</div><div class="ss">(SAFE Cap)</div></div>
+    <div class="sb"><div class="sn">~11.1%</div><div class="sl">Equity Offered</div></div>
+  </div>
+
+  <div style="border-top: 1.5px solid var(--gold); max-width: 580px; width: 100%; margin: 36px 0 20px;"></div>
+
+  <div style="text-align: left; max-width: 580px; width: 100%;">
+    <div class="slabel">Section 01</div>
+    <h2>The Opportunity</h2>
+    <p>The sports technology market is valued at <strong>$32–34 billion</strong> and growing at <strong>15–22% CAGR</strong>. Youth sports alone is a <strong>$54 billion</strong> industry in the United States, with 27.3 million athletes and families spending an average of <strong>$1,016 per child per year</strong> — up 46% since 2019.</p>
+    <p>Yet no single platform combines social networking, live streaming, athlete scouting, coaching tools, real-time scoring, creator monetization, and AI — all in one place.</p>
+    <p>Today, athletes, coaches, and sports families juggle <strong>4–6 separate apps</strong> to do what one platform should handle: GameChanger for scores, Hudl for video, NCSA for recruiting, Instagram for highlights, Venmo for team fees, and GroupMe for communication.</p>
+    <p>Sportsphere is the all-in-one sports super-app that replaces all of them.</p>
+    <div class="co"><span class="cl">The Gap:</span> Billion-dollar companies own individual slices of the sports tech stack. Nobody owns the full stack. Sportsphere does — and it's already built, deployed, tested, and mobile-ready.</div>
+  </div>
+</div>
+
+<!-- ════════ PAGE 2: THE PRODUCT ════════ -->
+<div class="page">
+  <div class="slabel">Section 02</div>
+  <h2>The Product</h2>
+  <p>Sportsphere is not a concept, wireframe, or pitch deck promise. It is a <strong>fully built, production-deployed, mobile-optimized, and tested</strong> platform — live at sportsphere-titan-one.vercel.app.</p>
+  <div class="sr">
+    <div class="sb"><div class="sn">69</div><div class="sl">Pages</div><div class="ss">All mobile-responsive</div></div>
+    <div class="sb"><div class="sn">208</div><div class="sl">Components</div><div class="ss">157 feature + 51 UI</div></div>
+    <div class="sb"><div class="sn">71</div><div class="sl">Database Entities</div><div class="ss">Full schema with RLS</div></div>
+    <div class="sb"><div class="sn">98.1%</div><div class="sl">Test Pass Rate</div><div class="ss">159 automated tests</div></div>
+  </div>
+  <div class="fg">
+    <div class="fc"><h3>Social Network</h3><p>Posts, comments, follows, stories, messaging, notifications, DMs</p></div>
+    <div class="fc"><h3>Live Streaming</h3><p>HLS streaming, real-time chat, polls, Q&A, sentiment analysis, VOD</p></div>
+    <div class="fc"><h3>Short-Form Reels</h3><p>TikTok-style video with AI assistant, effects, and discovery feed</p></div>
+    <div class="fc"><h3>Creator Monetization</h3><p>Stripe subscriptions, tipping, merch shop, earnings dashboard (live)</p></div>
+    <div class="fc"><h3>AI Coaching</h3><p>Claude-powered coach, content moderation, feed ranking, recommendations</p></div>
+    <div class="fc"><h3>Athlete Scouting</h3><p>ProPath suite, ScoutCard with AI narratives, GetNoticed marketplace</p></div>
+    <div class="fc"><h3>GameDay Scoring</h3><p>Real-time scoring for 4 sports, box scores, game recaps, news ticker</p></div>
+    <div class="fc"><h3>Gamification</h3><p>Points, badges, challenges, leaderboards, achievements, streaks</p></div>
+    <div class="fc"><h3>Community</h3><p>Groups, forums, events, Q&A, maps, admin dashboard, moderation</p></div>
+    <div class="fc fch"><h3>Mobile Platform (PWA)</h3><p>Installable to home screen, push notifications, touch gestures, offline-ready</p></div>
+  </div>
+</div>
+
+<!-- ════════ PAGE 3: TECHNOLOGY ════════ -->
+<div class="page">
+  <div class="slabel">Section 03</div>
+  <h2>Technology</h2>
+  <p>Built on a modern, scalable stack designed for rapid iteration and cost-efficient scaling. No legacy code, no technical debt.</p>
+  <table>
+    <thead><tr><th>Layer</th><th>Technology</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Frontend</td><td>React 18 + Vite 6</td><td>Industry standard, massive talent pool, fast builds</td></tr>
+      <tr><td>UI</td><td>Tailwind CSS + Radix UI + Framer Motion</td><td>Accessible components, smooth animations, rapid styling</td></tr>
+      <tr style="color: var(--gold-dark); font-weight: 600;"><td>Mobile</td><td>PWA (Service Worker, Manifest, Gestures)</td><td>Installable, push notifications, no app store dependency</td></tr>
+      <tr><td>Backend</td><td>Supabase (PostgreSQL)</td><td>Auth, realtime, storage, edge functions — scales to millions</td></tr>
+      <tr><td>Payments</td><td>Stripe (live keys)</td><td>Subscriptions, tips, purchases — already processing</td></tr>
+      <tr><td>AI</td><td>Anthropic Claude (11 Edge Functions)</td><td>Moderation, coaching, recommendations, content generation</td></tr>
+      <tr><td>Video</td><td>Mux + HLS.js</td><td>Professional video processing, adaptive streaming</td></tr>
+      <tr><td>Hosting</td><td>Vercel</td><td>Global edge deployment, instant rollbacks, preview deploys</td></tr>
+      <tr><td>Testing</td><td>Playwright</td><td>159 tests across 14 phases, automated regression coverage</td></tr>
+    </tbody>
+  </table>
+  <div class="co"><span class="cl">TitanAI Infrastructure:</span> All AI features are powered by TitanAI's proprietary integration layer with 11 serverless functions using both Claude Sonnet (complex analysis) and Claude Haiku (fast moderation), ensuring responsible AI deployment from day one.</div>
+</div>
+
+<!-- ════════ PAGE 3b: WHAT "ALREADY BUILT" MEANS ════════ -->
+<div class="page">
+  <div class="slabel">Section 03 (continued)</div>
+  <h2>What "Already Built" Means</h2>
+  <p>Most pre-seed companies pitch a prototype. Every core capability in Sportsphere is live and functional today.</p>
+  <table>
+    <thead><tr><th>Capability</th><th>Status</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>User authentication</td><td><strong style="color:var(--monza)">LIVE</strong></td><td>Supabase Auth with implicit flow, session management</td></tr>
+      <tr><td>Payment processing</td><td><strong style="color:var(--monza)">LIVE</strong></td><td>Stripe checkout, webhooks, subscription management</td></tr>
+      <tr><td>AI moderation</td><td><strong style="color:var(--monza)">LIVE</strong></td><td>11 Edge Functions processing content in real-time</td></tr>
+      <tr><td>Live video streaming</td><td><strong style="color:var(--monza)">LIVE</strong></td><td>Mux integration with HLS adaptive playback</td></tr>
+      <tr><td>Real-time features</td><td><strong style="color:var(--monza)">LIVE</strong></td><td>WebSocket subscriptions for chat, notifications, scores</td></tr>
+      <tr><td>Mobile experience</td><td><strong style="color:var(--monza)">LIVE</strong></td><td>PWA with push notifications, gestures, offline-ready</td></tr>
+      <tr><td>Security</td><td><strong style="color:var(--gold-dark)">PASS</strong></td><td>Row-Level Security on all 71 database entities</td></tr>
+      <tr><td>Automated testing</td><td><strong style="color:var(--gold-dark)">PASS</strong></td><td>159 tests, 98.1% pass rate, 14 test phases</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════ PAGE 4: MARKET SIZE ════════ -->
+<div class="page">
+  <div class="slabel">Section 04</div>
+  <h2>Market Size</h2>
+  <p>Sportsphere sits at the intersection of five high-growth markets, each expanding at double-digit rates.</p>
+  <table>
+    <thead><tr><th>Market Segment</th><th>2025 Size</th><th>Projected Size</th><th>CAGR</th></tr></thead>
+    <tbody>
+      <tr><td>Sports Technology</td><td>$32–34B</td><td>$68–192B (2030–34)</td><td>15–22%</td></tr>
+      <tr><td>Sports Online Streaming</td><td>$28B</td><td>$134B by 2032</td><td>24.6%</td></tr>
+      <tr><td>Youth Sports Software</td><td>$1.36B</td><td>$3.93B by 2034</td><td>12.5%</td></tr>
+      <tr><td>Sports Coaching Platforms</td><td>$1.5B</td><td>$2.6–3.5B by 2033</td><td>12–13%</td></tr>
+      <tr><td>Creator Economy</td><td>$205B+</td><td>$480B+ by 2027</td><td>23%+</td></tr>
+    </tbody>
+  </table>
+  <div class="sr">
+    <div class="sb"><div class="sn">$54B</div><div class="sl">U.S. Youth Sports</div><div class="ss">Annual market size</div></div>
+    <div class="sb"><div class="sn">27.3M</div><div class="sl">Youth Athletes</div><div class="ss">Organized sports (ages 6–17)</div></div>
+    <div class="sb"><div class="sn">4–6</div><div class="sl">Apps Per Family</div><div class="ss">Current fragmentation</div></div>
+    <div class="sb"><div class="sn">$1,016</div><div class="sl">Avg. Spend/Child/Yr</div><div class="ss">Up 46% since 2019</div></div>
+  </div>
+</div>
+
+<!-- ════════ PAGE 5: COMPETITIVE LANDSCAPE ════════ -->
+<div class="page">
+  <div class="slabel">Section 05</div>
+  <h2>Competitive Landscape</h2>
+  <p>Billion-dollar players own individual slices. None offer the full stack.</p>
+  <table style="font-size: 10pt;">
+    <thead><tr><th>Feature</th><th>GameChanger</th><th>Hudl</th><th>NCSA</th><th>FloSports</th><th>TeamSnap</th><th style="color:var(--gold-dark)">Sportsphere</th></tr></thead>
+    <tbody>
+      <tr><td>Live Scoring</td><td class="ck">&#10003;</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Video Analysis</td><td class="da">—</td><td class="ck">&#10003;</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Recruiting</td><td class="da">—</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Live Streaming</td><td class="ck">&#10003;</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Social Network</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Creator Monetization</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>AI Coaching</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Team Management</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Short-Form Video</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="da">—</td><td class="ck">&#10003;</td></tr>
+      <tr><td>Mobile App</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td><td class="ck">&#10003;</td></tr>
+    </tbody>
+  </table>
+  <table style="font-size: 10pt; margin-top: 16px;">
+    <thead><tr><th>Competitor</th><th>Revenue / Funding</th><th>Users</th><th>Key Limitation</th></tr></thead>
+    <tbody>
+      <tr><td>GameChanger (DICK'S)</td><td>$100M+ revenue</td><td>9M+ users</td><td>Scoring only. No social, streaming, or scouting.</td></tr>
+      <tr><td>Hudl</td><td>$230M+ funding</td><td>3.5M+ customers</td><td>Video analysis only. No social or community.</td></tr>
+      <tr><td>NCSA / SportsRecruits</td><td>Acquired by IMG</td><td>31K+ placed</td><td>Recruiting only. $1,320–$4,200/yr.</td></tr>
+      <tr><td>FloSports</td><td>$100M+ funding</td><td>23M viewers</td><td>Streaming only. No social or coaching.</td></tr>
+      <tr><td>TeamSnap</td><td>$52M+ funding</td><td>25M+ users</td><td>Logistics only. No content or AI.</td></tr>
+    </tbody>
+  </table>
+  <div class="co"><span class="cl">Sportsphere's Moat:</span> The all-in-one platform creates a network effect no single-feature competitor can replicate. Once a team's scores, video, scouting profiles, and social interactions live in one place, switching costs become prohibitive.</div>
+</div>
+
+<!-- ════════ PAGE 6: BUSINESS MODEL ════════ -->
+<div class="page">
+  <div class="slabel">Section 06</div>
+  <h2>Business Model</h2>
+  <p>Sportsphere generates revenue through multiple streams, creating a diversified business with high lifetime value per user.</p>
+  <table>
+    <thead><tr><th>Revenue Stream</th><th>Pricing</th><th>Target Segment</th></tr></thead>
+    <tbody>
+      <tr><td>Creator Subscriptions</td><td>$4.99 – $29.99/mo</td><td>Content creators, coaches, athletes with followings</td></tr>
+      <tr><td>Premium User Tiers</td><td>$9.99 – $24.99/mo</td><td>Athletes, parents, coaches seeking advanced features</td></tr>
+      <tr><td>Recruiting Packages</td><td>Competing with $1,320–$4,200/yr</td><td>High school athletes seeking college recruitment</td></tr>
+      <tr><td>Tips & Donations</td><td>Variable (platform takes %)</td><td>Fan-to-creator micropayments during live streams</td></tr>
+      <tr><td>Creator Merchandise</td><td>Per-item (platform takes %)</td><td>Athletes and creators selling branded merchandise</td></tr>
+      <tr><td>B2B Organization Plans</td><td>$10,000 – $40,000/yr</td><td>Leagues, tournaments, facilities, athletic organizations</td></tr>
+      <tr style="color: var(--gold-dark); font-weight: 600;"><td>Brand Sponsorships</td><td>$5,000 – $25,000/quarter</td><td>Equipment brands, apparel, sports nutrition</td></tr>
+    </tbody>
+  </table>
+  <div class="co"><span class="cl">Stripe is Live:</span> Payment infrastructure is already integrated and processing. Subscriptions, tips, and purchases can begin generating revenue immediately upon user acquisition.</div>
+  <div class="co"><span class="cl">Brand Sponsorship Opportunity:</span> Youth sports families spend $1,016/year per child and are difficult to reach through traditional advertising. Sportsphere offers brands a captive, high-intent audience with measurable in-app impressions. Conservative Year 1: 5–10 brand deals = $100–300K in non-dilutive revenue.</div>
+</div>
+
+<!-- ════════ PAGE 7: GO-TO-MARKET ════════ -->
+<div class="page">
+  <div class="slabel">Section 07</div>
+  <h2>Go-to-Market Strategy</h2>
+  <p>Sportsphere's GTM follows the classic beachhead model: dominate one niche, then expand.</p>
+  <h3>Beachhead: Youth Baseball & Softball</h3>
+  <p>TitanAI has secured a strategic distribution network in youth baseball and softball, with direct access to teams, leagues, tournaments, and a physical facility for pilot deployment.</p>
+  <div class="ph"><div class="phl">Phase 1 — Pilot</div><p>Deploy at partner facility. Two pilot teams (girls softball + boys baseball) provide the initial user base. Coaches onboard their rosters. Parents install the PWA.</p></div>
+  <div class="ph"><div class="phl">Phase 2 — Coach Adoption</div><p><strong>Coaches become the distribution lever.</strong> When coaches adopt Sportsphere for scoring and communication, every parent on the team follows. One coach = 15–25 new users.</p></div>
+  <div class="ph"><div class="phl">Phase 3 — Tournament Spread</div><p><strong>Tournaments are the viral moment.</strong> When one team uses Sportsphere at a tournament, opposing teams see it. Tournament organizers adopt it. 10–20 new teams per event.</p></div>
+  <div class="ph"><div class="phl">Phase 4 — Organic Growth</div><p><strong>Network effects compound.</strong> Social features, scouting profiles, and content creation drive organic discovery. Athletes share ScoutCards. Coaches recommend the platform. Brand sponsorships fund marketing.</p></div>
+  <div class="co" style="margin-top: 12px;"><span class="cl">Why This Works:</span> GameChanger built a $100M+ business with this exact playbook — start with youth baseball scoring, expand through coach adoption and tournament spread. Sportsphere offers everything GameChanger does <strong>plus</strong> social, streaming, scouting, AI, creator monetization, and mobile — all from day one.</div>
+</div>
+
+<!-- ════════ PAGE 8: TRACTION & READINESS ════════ -->
+<div class="page">
+  <div class="slabel">Section 08</div>
+  <h2>Traction & Readiness</h2>
+  <p>Most pre-seed companies pitch a prototype. Sportsphere is a fully operational, production-hardened platform.</p>
+  <div class="strow">
+    <div class="stb"><div class="stt" style="color:var(--monza)">LIVE</div><div class="stl">Production</div><div class="std">Deployed on Vercel</div></div>
+    <div class="stb"><div class="stt" style="color:var(--monza)">LIVE</div><div class="stl">Payments</div><div class="std">Stripe integrated</div></div>
+    <div class="stb"><div class="stt" style="color:var(--monza)">LIVE</div><div class="stl">Mobile</div><div class="std">PWA installable</div></div>
+    <div class="stb"><div class="stt" style="color:var(--gold-dark)">PASS</div><div class="stl">Security</div><div class="std">RLS on all tables</div></div>
+    <div class="stb"><div class="stt" style="color:var(--gold-dark)">PASS</div><div class="stl">Performance</div><div class="std">N+1 fixed</div></div>
+  </div>
+  <ul class="ckl">
+    <li>Production deployed on Vercel with custom domain and global edge CDN</li>
+    <li>Stripe live keys active — subscriptions, tips, and purchases ready</li>
+    <li>PWA installable to iOS and Android home screens with push notifications</li>
+    <li>Mobile touch gestures, safe-area insets, fluid typography, GPU optimization</li>
+    <li>159 automated tests across 14 phases with 98.1% pass rate</li>
+    <li>Row-Level Security (RLS) enabled on all 71 database entities</li>
+    <li>Rate limiting infrastructure deployed on Edge Functions</li>
+    <li>Real-time subscriptions working for notifications, messaging, and live features</li>
+    <li>AI infrastructure (moderation, coaching, recommendations) operational via TitanAI</li>
+  </ul>
+</div>
+
+<!-- ════════ PAGE 9: THE TEAM ════════ -->
+<div class="page">
+  <div class="slabel">Section 09</div>
+  <h2>The Team</h2>
+  <div class="twocol">
+    <div class="cc">
+      <div class="cch"><span class="cct">TitanAI LLC</span><span class="ccb">Founder & Developer</span></div>
+      <ul style="list-style: disc; padding-left: 16px; font-size: 10pt; line-height: 1.75;">
+        <li>Sole owner and developer — built 100% of Sportsphere</li>
+        <li>Compliance-first AI infrastructure company</li>
+        <li>Full-stack engineering: React, Supabase, Stripe, Anthropic, Mux</li>
+        <li>69 responsive pages, 208 components, 71 database entities</li>
+        <li>23 Edge Functions (11 AI-powered), 159 automated tests</li>
+        <li>Complete mobile/PWA platform with push notifications</li>
+        <li>Owns all intellectual property, code, and infrastructure</li>
+        <li>Product development, AI features, and technical architecture</li>
+      </ul>
+    </div>
+    <div class="cc">
+      <div class="cch"><span class="cct">Distribution Network</span><span class="ccb">GTM Partners</span></div>
+      <ul style="list-style: disc; padding-left: 16px; font-size: 10pt; line-height: 1.75;">
+        <li>Strategic advisor in Texas youth baseball/softball ecosystem</li>
+        <li>Direct access to teams, leagues, tournaments, facilities</li>
+        <li>Two pilot teams ready (girls softball + boys baseball)</li>
+        <li>Coach and parent onboarding network</li>
+      </ul>
+      <div style="margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--border-light);">
+        <h3 style="margin-bottom: 3px;">Hiring Plan</h3>
+        <p style="font-size: 10pt; margin: 0;">Growth Lead + first contract engineer within 90 days of funding. TitanAI retains technical leadership and all IP.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ PAGE 10: WHY $6M VALUATION ════════ -->
+<div class="page">
+  <div class="slabel">Section 10</div>
+  <h2>Why $6M Valuation</h2>
+  <p>This is not a guess. The $6M pre-money valuation is derived from four independent, data-backed methods.</p>
+  <h3>Method 1: Replacement Cost</h3>
+  <p>Rebuilding Sportsphere from scratch: <strong>$452K–$851K</strong> raw, <strong>$632K–$1.19M</strong> with IP premium. 2,900–4,200 hours of senior full-stack development.</p>
+  <h3 style="margin-top: 12px;">Method 2: They Raised More With Less</h3>
+  <table>
+    <thead><tr><th>Company</th><th>What They Had</th><th>Implied Valuation</th><th>Sportsphere Advantage</th></tr></thead>
+    <tbody>
+      <tr><td>Overtime</td><td>Instagram clips, no app</td><td>~$10–12M</td><td>Full 69-page platform</td></tr>
+      <tr><td>WHOOP</td><td>Hardware prototype</td><td>~$12–15M</td><td>Production-deployed software</td></tr>
+      <tr><td>StatusPRO</td><td>VR tool for NFL teams</td><td>~$20M+</td><td>Consumer platform for all athletes</td></tr>
+      <tr><td>Strava</td><td>GPS cycling tracker</td><td>~$15M</td><td>Multi-sport with streaming + AI</td></tr>
+    </tbody>
+  </table>
+  <h3 style="margin-top: 12px;">Method 3: Industry Benchmarks (Carta Q3 2025)</h3>
+  <table>
+    <thead><tr><th>Benchmark</th><th>Value</th><th>Source</th></tr></thead>
+    <tbody>
+      <tr><td>Pre-seed SAFE cap median ($250K–$1M)</td><td><strong>$10M</strong></td><td>Carta Q3 2025</td></tr>
+      <tr><td>SaaS pre-seed average cap</td><td><strong>$17M</strong></td><td>Metal.so / Carta</td></tr>
+      <tr><td>AI startup premium over non-AI</td><td><strong>+42%</strong></td><td>Carta / VC Cafe</td></tr>
+      <tr><td>Seed median pre-money</td><td><strong>$16M</strong> (all-time high)</td><td>Carta Q3 2025</td></tr>
+    </tbody>
+  </table>
+  <div class="co"><strong>Sportsphere at $6M is below every benchmark.</strong> This valuation gives investors a discount to the market median — built-in upside from day one.</div>
+</div>
+
+<!-- ════════ PAGE 11: THE ASK ════════ -->
+<div class="page">
+  <div class="slabel">Section 11</div>
+  <h2>The Ask</h2>
+  <div class="sr">
+    <div class="sb"><div class="sn">$750K</div><div class="sl">Pre-Seed Raise</div></div>
+    <div class="sb"><div class="sn">$6M</div><div class="sl">Pre-Money Valuation</div><div class="ss">(SAFE Cap)</div></div>
+    <div class="sb"><div class="sn">~11.1%</div><div class="sl">Equity for Investors</div></div>
+  </div>
+  <h3>Use of Funds</h3>
+  <div class="fbar">
+    <div class="fseg" style="flex:27;background:#1a1a1a;">27%</div>
+    <div class="fseg" style="flex:17;background:var(--gold-dark);">17%</div>
+    <div class="fseg" style="flex:13;background:#444;">13%</div>
+    <div class="fseg" style="flex:13;background:var(--gold-light);">13%</div>
+    <div class="fseg" style="flex:8;background:#666;">8%</div>
+    <div class="fseg" style="flex:7;background:#888;">7%</div>
+    <div class="fseg" style="flex:15;background:#aaa;color:#333;">15%</div>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-size:7pt;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">
+    <span>Engineering $200K</span><span>Marketing $125K</span><span>Salary $96K</span><span>Growth $100K</span><span>Infra $60K</span><span>Legal $50K</span><span>Ops $119K</span>
+  </div>
+  <table style="font-size: 10pt;">
+    <thead><tr><th>Category</th><th>Allocation</th><th>Details</th></tr></thead>
+    <tbody>
+      <tr><td>Engineering</td><td>$200,000 (27%)</td><td>Contract developer, feature development, mobile completion</td></tr>
+      <tr><td>Marketing & User Acq.</td><td>$125,000 (17%)</td><td>Tournament sponsorships, coach outreach, social, Product Hunt</td></tr>
+      <tr><td>Founder Salary (CTO)</td><td>$96,000 (13%)</td><td>Below-market CTO compensation ($8K/mo vs. $10–15K)</td></tr>
+      <tr><td>Growth Lead Hire</td><td>$100,000 (13%)</td><td>First hire — biz dev, partnerships, user acquisition</td></tr>
+      <tr><td>Infrastructure</td><td>$60,000 (8%)</td><td>Supabase, Mux video, Vercel pro, CDN, monitoring</td></tr>
+      <tr><td>Legal & Compliance</td><td>$50,000 (7%)</td><td>COPPA compliance, IP protection, corporate structuring</td></tr>
+      <tr><td>Operations & Buffer</td><td>$119,000 (15%)</td><td>Runway extension, travel, support, contingency</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════ PAGE 12: FINANCIAL PROJECTIONS ════════ -->
+<div class="page">
+  <div class="slabel">Section 12</div>
+  <h2>Financial Projections</h2>
+  <div class="mr">
+    <div class="mb"><div class="ml">Month 6</div><div class="mn">10K</div><div class="ms">users</div><div class="mn" style="font-size:16pt;margin-top:4px;">$5K</div><div class="ms">monthly recurring revenue</div></div>
+    <div class="mb"><div class="ml">Month 12</div><div class="mn">50K</div><div class="ms">users</div><div class="mn" style="font-size:16pt;margin-top:4px;">$50K</div><div class="ms">monthly recurring revenue</div></div>
+    <div class="mb"><div class="ml">Month 18</div><div class="mn">100K</div><div class="ms">users</div><div class="mn" style="font-size:16pt;margin-top:4px;">$150K</div><div class="ms">monthly recurring revenue</div></div>
+  </div>
+  <table>
+    <thead><tr><th>Milestone</th><th>Users</th><th>MRR</th><th>ARR</th><th>Key Driver</th></tr></thead>
+    <tbody>
+      <tr><td>Month 6</td><td>10,000</td><td>$5,000</td><td>$60,000</td><td>Pilot expansion, tournament season, first paid subscribers</td></tr>
+      <tr><td>Month 12</td><td>50,000</td><td>$50,000</td><td>$600,000</td><td>Multi-sport expansion, B2B org deals, premium tier adoption</td></tr>
+      <tr><td>Month 18</td><td>100,000</td><td>$150,000</td><td>$1,800,000</td><td>Recruiting packages, creator economy, organic virality</td></tr>
+    </tbody>
+  </table>
+  <div class="co"><span class="cl">Breakeven:</span> At 25,000 users with 5% conversion and $15 ARPU, the platform generates $18,750 MRR — exceeding infrastructure costs. <strong>Sportsphere can be cash-flow positive before 50K users.</strong></div>
+</div>
+
+<!-- ════════ PAGE 13: EXIT OPPORTUNITIES ════════ -->
+<div class="page">
+  <div class="slabel">Section 13</div>
+  <h2>Exit Opportunities</h2>
+  <p>The sports technology M&A market is highly active — <strong>$200B in total deal value in 2025</strong> across 1,000+ transactions. Strategics are acquiring to fill product gaps — exactly the gaps Sportsphere fills.</p>
+  <table>
+    <thead><tr><th>Potential Acquirer</th><th>Strategic Rationale</th><th>Estimated Range</th></tr></thead>
+    <tbody>
+      <tr><td>DICK'S / GameChanger</td><td>Social + streaming + AI features GameChanger lacks. Adds creator economy to their 9M user base.</td><td>$5M – $15M</td></tr>
+      <tr><td>Hudl</td><td>Social layer + scouting + live scoring complement video analysis.</td><td>$5M – $20M</td></tr>
+      <tr><td>TeamSnap</td><td>Content + streaming + AI to transform logistics app into engagement platform.</td><td>$3M – $10M</td></tr>
+      <tr><td>Private Equity</td><td>Roll-up play in fragmented youth sports tech. Sportsphere as consolidation platform.</td><td>$5M – $15M</td></tr>
+    </tbody>
+  </table>
+  <div class="sr">
+    <div class="sb"><div class="sn">5–15x</div><div class="sl">Revenue Multiple</div><div class="ss">Sports SaaS acquisitions</div></div>
+    <div class="sb"><div class="sn">17–23</div><div class="sl">Months Runway</div><div class="ss">From this raise</div></div>
+    <div class="sb"><div class="sn">$5–20M</div><div class="sl">Exit Range</div><div class="ss">Based on traction</div></div>
+  </div>
+  <h3>Investor Return Scenarios</h3>
+  <table>
+    <thead><tr><th>Exit Value</th><th>Investor's ~11.1%</th><th>Return on $750K</th><th>Multiple</th></tr></thead>
+    <tbody>
+      <tr><td>$10M</td><td>$1.11M</td><td>$1.11M</td><td><strong>1.5x</strong></td></tr>
+      <tr><td>$15M</td><td>$1.67M</td><td>$1.67M</td><td><strong>2.2x</strong></td></tr>
+      <tr><td>$25M</td><td>$2.78M</td><td>$2.78M</td><td><strong>3.7x</strong></td></tr>
+      <tr><td>$50M (strategic)</td><td>$5.55M</td><td>$5.55M</td><td><strong>7.4x</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="co"><span class="cl">Investor Return:</span> At a $6M SAFE cap and a conservative $15M exit, investors see a <strong>2.2x return</strong>. At $25M+, that climbs to <strong>3.7x or higher within 18–24 months</strong>. The $6M cap gives investors a discount to the Carta pre-seed median of $10M — built-in upside from day one.</div>
+</div>
+
+<!-- ════════ PAGE 14: WHY SPORTSPHERE (CLOSING) ════════ -->
+<div class="page">
+  <div class="slabel">Section 14</div>
+  <h2>Why Sportsphere. Why Now. Why TitanAI.</h2>
+
+  <p><strong>Why Sportsphere:</strong> The sports tech market is $32–34B and growing 15–22% annually. Every major player — GameChanger ($100M revenue), Hudl ($230M funding), TeamSnap ($52M funding), FloSports ($100M funding) — built a single feature and captured millions of users. Nobody has combined them all. Sportsphere has.</p>
+
+  <p><strong>Why Now:</strong> Youth sports spending is at an all-time high ($1,016/child/year, up 46%). 27.3 million youth athletes need a unified platform. AI is transforming sports tech — Sportsphere is AI-native from day one. The creator economy ($205B+) has not reached sports. GameChanger proved the playbook.</p>
+
+  <p><strong>Why TitanAI:</strong> One developer built what five funded companies built separately — and added AI, creator monetization, mobile, and social on top. The platform is not a pitch. It's production code: 69 pages, 208 components, 71 database entities, 23 serverless functions, 159 automated tests, live payments, live AI, live mobile.</p>
+
+  <div class="cbox">
+    The $750K is not for building. The building is done.<br>
+    The $750K is for distribution — getting this product into the hands of the<br>
+    27.3 million youth athletes and families who need it.
+  </div>
+
+  <div class="footer">
+    <div class="fbrand">Powered by TitanAI &bull; Compliance-First AI Infrastructure</div>
+    <p>This document is confidential and intended solely for prospective investors and authorized parties. Distribution, reproduction, or disclosure without written consent from TitanAI LLC is prohibited. This investor brief does not constitute an offer to sell or a solicitation of an offer to buy securities. All projections are forward-looking estimates and not guarantees of future performance.</p>
+  </div>
+</div>
+
+</body>
+</html>

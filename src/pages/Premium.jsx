@@ -96,7 +96,14 @@ export default function Premium() {
           cancel_url: `${window.location.origin}/Premium`,
         });
         if (data?.url) {
-          window.location.href = data.url;
+          // Native: open in in-app browser to avoid losing app context
+          const { isNative: native } = await import('@/lib/platform');
+          if (native) {
+            const { Browser } = await import('@capacitor/browser');
+            await Browser.open({ url: data.url });
+          } else {
+            window.location.href = data.url;
+          }
           return;
         }
       }

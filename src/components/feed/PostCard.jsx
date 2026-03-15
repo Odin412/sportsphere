@@ -544,7 +544,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
               <div className="relative">
                 <video
                   src={post.media_urls[currentMediaIndex]}
-                  className="w-full max-h-[480px] object-contain bg-black"
+                  className="w-full max-h-[280px] sm:max-h-[480px] object-contain bg-black"
                   onClick={e => e.stopPropagation()}
                   controls
                 />
@@ -554,7 +554,8 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
                 <img
                   src={post.media_urls[currentMediaIndex]}
                   alt=""
-                  className="w-full max-h-[480px] object-cover"
+                  loading="lazy"
+                  className="w-full max-h-[280px] sm:max-h-[480px] object-cover"
                 />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="bg-black/50 rounded-full p-3">
@@ -602,8 +603,12 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
             onMouseLeave={() => setShowReactionPicker(false)}
           >
             <button
-              onClick={() => currentUser ? handleReaction(myReaction || "❤️") : undefined}
-              className="flex items-center gap-1.5 group"
+              onClick={() => {
+                if (!currentUser) return;
+                setShowReactionPicker(prev => !prev);
+              }}
+              onDoubleClick={() => currentUser && handleReaction(myReaction || "❤️")}
+              className="flex items-center gap-1.5 group touch-target"
             >
               <span className={`text-lg transition-all ${liked ? "scale-110" : "grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100"}`}>
                 {myReaction || "❤️"}
@@ -629,7 +634,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
           {/* Comment */}
           <button
             onClick={commentsDisabled ? undefined : loadComments}
-            className={`flex items-center gap-1.5 group ${commentsDisabled ? "opacity-40 cursor-not-allowed" : ""}`}
+            className={`flex items-center gap-1.5 group touch-target ${commentsDisabled ? "opacity-40 cursor-not-allowed" : ""}`}
             title={commentsDisabled ? "Comments are turned off" : ""}
           >
             <MessageCircle className="w-5 h-5 text-stadium-600 group-hover:text-white transition-colors" />
@@ -638,7 +643,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
 
           {/* Share */}
           {currentUser && (
-            <button onClick={() => setShowShareDialog(true)} className="flex items-center gap-1.5 group">
+            <button onClick={() => setShowShareDialog(true)} className="flex items-center gap-1.5 group touch-target">
               <Share2 className="w-5 h-5 text-stadium-600 group-hover:text-white transition-colors" />
               <span className="text-sm font-medium text-stadium-600">{post.shares || 0}</span>
             </button>
@@ -652,7 +657,7 @@ export default function PostCard({ post, currentUser, onUpdate, onDelete, initia
         </div>
 
         {/* Bookmark */}
-        <button onClick={toggleHighlight} className="group">
+        <button onClick={toggleHighlight} className="group touch-target">
           <Bookmark className={`w-5 h-5 transition-colors ${isHighlighted ? "fill-monza text-monza" : "text-stadium-600 group-hover:text-white"}`} />
         </button>
       </div>

@@ -108,15 +108,25 @@ export default function EnhancedVideoPlayer({
     const deltaX = touchEndX - touchStartX.current;
     const deltaY = touchEndY - touchStartY.current;
     
-    // Swipe detection (horizontal)
     const isHorizontalSwipe = Math.abs(deltaX) > Math.abs(deltaY);
-    
+    const isVerticalSwipe = Math.abs(deltaY) > Math.abs(deltaX);
+
+    // Horizontal swipe
     if (isHorizontalSwipe && Math.abs(deltaX) > swipeThreshold) {
       if (deltaX < 0) {
-        // Swiped left - next video
         window.dispatchEvent(new CustomEvent("reelSwipeNext"));
       } else {
-        // Swiped right - previous video
+        window.dispatchEvent(new CustomEvent("reelSwipePrev"));
+      }
+    }
+
+    // Vertical swipe (for Reels fullscreen navigation)
+    if (isVerticalSwipe && Math.abs(deltaY) > swipeThreshold) {
+      if (deltaY < 0) {
+        // Swiped up - next reel
+        window.dispatchEvent(new CustomEvent("reelSwipeNext"));
+      } else {
+        // Swiped down - previous reel
         window.dispatchEvent(new CustomEvent("reelSwipePrev"));
       }
     }
@@ -164,18 +174,20 @@ export default function EnhancedVideoPlayer({
         </div>
       )}
 
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-slate-950/30 cursor-pointer hover:h-1.5 transition-all group-hover:h-1.5 z-20"
+      {/* Progress Bar — enlarged touch area via padding trick */}
+      <div className="absolute bottom-0 left-0 right-0 py-3 -mb-2 cursor-pointer z-20"
         onClick={handleProgressClick}
       >
-        <div
-          className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-100"
-          style={{ width: `${progressPercent}%` }}
-        />
+        <div className="h-1.5 sm:h-1 bg-slate-950/30 group-hover:h-2 transition-all">
+          <div
+            className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-100"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
       </div>
 
-      {/* Time Display */}
-      <div className="absolute bottom-3 right-3 text-xs text-white/70 font-mono bg-slate-950/40 backdrop-blur-sm px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+      {/* Time Display — visible on tap (touch) + hover (desktop) */}
+      <div className="absolute bottom-4 right-3 text-xs text-white/70 font-mono bg-slate-950/40 backdrop-blur-sm px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity">
         {formatTime(currentTime)} / {formatTime(duration)}
       </div>
     </div>

@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sportsphere — Investor Brief</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --bg: #ffffff;
+    --bg-card: #f7f7f8;
+    --bg-card-alt: #f0f0f2;
+    --border: #e2e2e5;
+    --gold: #a08839;
+    --gold-dim: #8B6914;
+    --gold-glow: rgba(160, 136, 57, 0.10);
+    --red: #DA020E;
+    --green: #22c55e;
+    --text: #333333;
+    --text-dim: #555555;
+    --text-muted: #888888;
+    --white: #111111;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 48px;
+  }
+
+  /* COVER */
+  .cover {
+    text-align: center;
+    padding: 80px 0 60px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 4px 16px;
+    border-radius: 2px;
+    margin-bottom: 32px;
+  }
+
+  .badge-sm {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-dim);
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .cover .subtitle {
+    font-size: 18px;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 24px;
+  }
+
+  .cover .meta {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+  }
+
+  .cover .valuation-highlight {
+    margin-top: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 36px;
+  }
+
+  .cover .valuation-highlight .val-item {
+    text-align: center;
+  }
+
+  .cover .valuation-highlight .val-number {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .cover .valuation-highlight .val-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 6px;
+  }
+
+  .cover .valuation-highlight .val-divider {
+    width: 1px;
+    height: 40px;
+    background: var(--border);
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-number {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 20px;
+    letter-spacing: -0.5px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--white);
+    margin: 28px 0 12px;
+  }
+
+  p {
+    margin-bottom: 16px;
+    color: var(--text);
+    font-size: 15px;
+  }
+
+  /* STAT GRID */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .stat-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .stat-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .stat-box .number {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-box .label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 8px;
+  }
+
+  .stat-box .sublabel {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 4px;
+  }
+
+  /* TABLES */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+
+  th {
+    background: var(--bg-card);
+    color: var(--gold);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 2px solid var(--gold-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  tr:hover td {
+    background: var(--bg-card-alt);
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: var(--gold-glow);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 14px;
+  }
+
+  .callout strong {
+    color: var(--gold);
+  }
+
+  .callout-red {
+    background: rgba(218, 2, 14, 0.08);
+    border-left-color: var(--red);
+  }
+
+  .callout-red strong {
+    color: var(--red);
+  }
+
+  .callout-green {
+    background: rgba(34, 197, 94, 0.08);
+    border-left-color: var(--green);
+  }
+
+  .callout-green strong {
+    color: var(--green);
+  }
+
+  /* COMPARISON */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 24px 0;
+  }
+
+  .comparison-col {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .comparison-col h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comparison-col .tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .tag-gold {
+    color: var(--gold);
+    background: var(--gold-glow);
+  }
+
+  .tag-dim {
+    color: var(--text-muted);
+    background: rgba(113, 113, 122, 0.15);
+  }
+
+  .comparison-col ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .comparison-col li {
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+  }
+
+  .comparison-col li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  .col-gold li::before { background: var(--gold); }
+  .col-dim li::before { background: var(--text-muted); }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+    margin: 24px 0;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 24px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    border: 2px solid #ffffff;
+  }
+
+  .timeline-item .time {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .timeline-item .event {
+    font-size: 14px;
+    color: var(--text);
+    margin-top: 4px;
+  }
+
+  /* PIE / FUND ALLOCATION */
+  .fund-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .fund-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 12px;
+    text-align: center;
+  }
+
+  .fund-item .pct {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .fund-item .fund-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 8px;
+    line-height: 1.3;
+  }
+
+  .fund-item .fund-amount {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  /* PROJECTION BAR */
+  .projection-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .projection-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .projection-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+  }
+
+  .projection-card .proj-period {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--gold);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .projection-card .proj-users {
+    font-size: 36px;
+    font-weight: 800;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .projection-card .proj-users-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+    margin-bottom: 16px;
+  }
+
+  .projection-card .proj-mrr {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .projection-card .proj-mrr-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-top: 4px;
+  }
+
+  /* FEATURE GRID */
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 24px 0;
+  }
+
+  .feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+  }
+
+  .feature-card .feature-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .feature-card .feature-desc {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* LISTS */
+  ul.check {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.check li {
+    padding: 6px 0 6px 24px;
+    position: relative;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  ul.check li::before {
+    content: '\2713';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  ul.bullet {
+    list-style: none;
+    padding: 0;
+  }
+
+  ul.bullet li {
+    padding: 4px 0 4px 20px;
+    position: relative;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  ul.bullet li::before {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* PAGE BREAK */
+  .page-break {
+    border-top: 1px solid var(--border);
+    margin: 48px 0;
+  }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    padding: 48px 0 24px;
+    border-top: 1px solid var(--border);
+    margin-top: 48px;
+  }
+
+  .footer .powered {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .footer .conf {
+    font-size: 11px;
+    color: var(--text-muted);
+    opacity: 0.6;
+  }
+
+  /* COMPETITOR CHECK MATRIX */
+  .check-matrix td.yes {
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .check-matrix td.no {
+    color: var(--text-muted);
+    text-align: center;
+    opacity: 0.4;
+  }
+
+  .check-matrix td.hero {
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+    background: var(--gold-glow);
+  }
+
+  .check-matrix th.hero-col {
+    background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+    color: #ffffff;
+  }
+
+  /* PRINT */
+  @media print {
+    html, body { background: #ffffff !important; color: #333333 !important; }
+    .page { padding: 24px; }
+    .cover { padding: 40px 0 30px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- COVER -->
+  <div class="cover">
+    <div style="margin-bottom: 32px;">
+      <!-- DROP YOUR ACTUAL LOGO into assets/ folder, then update the path below -->
+      <img src="file:///C:/Users/creat/Downloads/sportsphere-main/sportsphere-main/assets/logo.png" alt="Sportsphere" style="height: 80px; width: auto; border-radius: 8px;">
+    </div>
+    <div class="badge">Confidential</div>
+    <h1>Investor Brief</h1>
+    <div class="subtitle">Sportsphere &mdash; Pre-Seed Investment Opportunity</div>
+    <div class="meta">March 12, 2026 &bull; Prepared by TitanAI LLC</div>
+    <div class="valuation-highlight">
+      <div class="val-item">
+        <div class="val-number">$500K</div>
+        <div class="val-label">Raise Amount</div>
+      </div>
+      <div class="val-divider"></div>
+      <div class="val-item">
+        <div class="val-number">$2.5M</div>
+        <div class="val-label">Pre-Money Valuation</div>
+      </div>
+      <div class="val-divider"></div>
+      <div class="val-item">
+        <div class="val-number">16.7%</div>
+        <div class="val-label">Equity Offered</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. THE OPPORTUNITY -->
+  <div class="section">
+    <div class="section-number">Section 01</div>
+    <h2>The Opportunity</h2>
+    <p>The sports technology market is valued at <strong>$31&ndash;34 billion</strong> and growing at 15&ndash;22% CAGR. Youth sports alone is a <strong>$62 billion</strong> industry in the United States. Yet no single platform combines social networking, live streaming, athlete scouting, coaching tools, real-time scoring, creator monetization, and AI &mdash; all in one place.</p>
+    <p>Today, athletes, coaches, and sports families juggle <strong>4&ndash;6 separate apps</strong> to do what one platform should handle: GameChanger for scores, Hudl for video, NCSA for recruiting, Instagram for highlights, Venmo for team fees, and GroupMe for communication.</p>
+    <p>Sportsphere is the all-in-one sports super-app that replaces all of them.</p>
+    <div class="callout">
+      <strong>The Gap:</strong> Billion-dollar companies own individual slices of the sports tech stack. Nobody owns the full stack. Sportsphere does &mdash; and it's already built.
+    </div>
+  </div>
+
+  <!-- 2. THE PRODUCT -->
+  <div class="section">
+    <div class="section-number">Section 02</div>
+    <h2>The Product</h2>
+    <p>Sportsphere is not a concept, wireframe, or pitch deck promise. It is a <strong>fully built, production-deployed, and tested</strong> platform &mdash; live at <span style="color: var(--gold);">sportsphere-titan-one.vercel.app</span>.</p>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="number">69</div>
+        <div class="label">Pages</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">205</div>
+        <div class="label">Components</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">50</div>
+        <div class="label">Database Tables</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">98.1%</div>
+        <div class="label">Test Pass Rate</div>
+        <div class="sublabel">159 automated tests</div>
+      </div>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-card">
+        <div class="feature-title">Social Network</div>
+        <div class="feature-desc">Posts, comments, follows, stories, messaging, notifications, DMs</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Live Streaming</div>
+        <div class="feature-desc">HLS streaming, real-time chat, polls, Q&A, sentiment analysis, VOD</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Short-Form Reels</div>
+        <div class="feature-desc">TikTok-style video with AI assistant, effects, and discovery feed</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Creator Monetization</div>
+        <div class="feature-desc">Stripe subscriptions, tipping, merch shop, earnings dashboard (live)</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">AI Coaching</div>
+        <div class="feature-desc">Claude-powered coach, content moderation, feed ranking, recommendations</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Athlete Scouting</div>
+        <div class="feature-desc">ProPath suite, ScoutCard with AI narratives, GetNoticed marketplace</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">GameDay Scoring</div>
+        <div class="feature-desc">Real-time scoring for 4 sports, box scores, game recaps, news ticker</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Gamification</div>
+        <div class="feature-desc">Points, badges, challenges, leaderboards, achievements, streaks</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-title">Community</div>
+        <div class="feature-desc">Groups, forums, events, Q&A, maps, admin dashboard, moderation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. TECHNOLOGY -->
+  <div class="section">
+    <div class="section-number">Section 03</div>
+    <h2>Technology</h2>
+    <p>Sportsphere is built on a modern, scalable stack designed for rapid iteration and cost-efficient scaling. No legacy code, no technical debt.</p>
+
+    <table>
+      <tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
+      <tr><td>Frontend</td><td>React 18 + Vite 6</td><td>Industry standard, massive talent pool, fast builds</td></tr>
+      <tr><td>UI</td><td>Tailwind CSS + Radix UI + Framer Motion</td><td>Accessible components, smooth animations, rapid styling</td></tr>
+      <tr><td>Backend</td><td>Supabase (PostgreSQL)</td><td>Auth, realtime, storage, edge functions &mdash; scales to millions</td></tr>
+      <tr><td>Payments</td><td>Stripe (live keys)</td><td>Subscriptions, tips, purchases &mdash; already processing</td></tr>
+      <tr><td>AI</td><td>Anthropic Claude</td><td>Moderation, coaching, recommendations, content generation</td></tr>
+      <tr><td>Video</td><td>Mux + HLS.js</td><td>Professional video processing, adaptive streaming</td></tr>
+      <tr><td>Hosting</td><td>Vercel</td><td>Global edge deployment, instant rollbacks, preview deploys</td></tr>
+      <tr><td>Testing</td><td>Playwright</td><td>159 tests across 14 phases, automated regression coverage</td></tr>
+    </table>
+
+    <div class="callout">
+      <strong>TitanAI Infrastructure:</strong> Sportsphere runs on TitanAI's compliance-first AI infrastructure. All AI features &mdash; moderation, coaching, recommendations, and content generation &mdash; are powered by TitanAI's proprietary integration layer, ensuring responsible AI deployment from day one.
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 4. MARKET SIZE -->
+  <div class="section">
+    <div class="section-number">Section 04</div>
+    <h2>Market Size</h2>
+    <p>Sportsphere sits at the intersection of four high-growth markets, each expanding at double-digit rates.</p>
+
+    <table>
+      <tr><th>Market Segment</th><th>2025 Size</th><th>Projected Size</th><th>CAGR</th></tr>
+      <tr><td>Sports Technology</td><td>$31&ndash;34B</td><td>$68&ndash;192B (2030&ndash;34)</td><td>15&ndash;22%</td></tr>
+      <tr><td>Sports Online Streaming</td><td>$28B</td><td>$134B by 2032</td><td>24.6%</td></tr>
+      <tr><td>Youth Sports Software</td><td>$1.36B</td><td>$3.93B by 2034</td><td>12.5%</td></tr>
+      <tr><td>Sports Coaching Platforms</td><td>$581M</td><td>$3.35B by 2033</td><td>24.5%</td></tr>
+    </table>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="number">$62B</div>
+        <div class="label">U.S. Youth Sports</div>
+        <div class="sublabel">Annual market size</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">45M+</div>
+        <div class="label">Youth Athletes</div>
+        <div class="sublabel">Organized sports in U.S.</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">4&ndash;6</div>
+        <div class="label">Apps Per Family</div>
+        <div class="sublabel">Current fragmentation</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">24.5%</div>
+        <div class="label">Coaching CAGR</div>
+        <div class="sublabel">Fastest-growing segment</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. COMPETITIVE LANDSCAPE -->
+  <div class="section">
+    <div class="section-number">Section 05</div>
+    <h2>Competitive Landscape</h2>
+    <p>Billion-dollar players own individual slices. None offer the full stack.</p>
+
+    <table class="check-matrix">
+      <tr>
+        <th>Feature</th>
+        <th>GameChanger</th>
+        <th>Hudl</th>
+        <th>NCSA</th>
+        <th>FloSports</th>
+        <th>TeamSnap</th>
+        <th class="hero-col">Sportsphere</th>
+      </tr>
+      <tr>
+        <td>Live Scoring</td>
+        <td class="yes">&check;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Video Analysis</td>
+        <td class="no">&mdash;</td>
+        <td class="yes">&check;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Recruiting</td>
+        <td class="no">&mdash;</td>
+        <td class="yes">&check;</td>
+        <td class="yes">&check;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Live Streaming</td>
+        <td class="yes">&check;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="yes">&check;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Social Network</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Creator Monetization</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>AI Coaching</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Team Management</td>
+        <td class="yes">&check;</td>
+        <td class="yes">&check;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="yes">&check;</td>
+        <td class="hero">&check;</td>
+      </tr>
+      <tr>
+        <td>Short-Form Video</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="no">&mdash;</td>
+        <td class="hero">&check;</td>
+      </tr>
+    </table>
+
+    <table>
+      <tr><th>Competitor</th><th>Revenue / Funding</th><th>Users</th><th>Key Limitation</th></tr>
+      <tr><td>GameChanger (DICK'S)</td><td>$100M+ revenue</td><td>9M+ users</td><td>Scoring only. No social, streaming, or scouting.</td></tr>
+      <tr><td>Hudl</td><td>$225M+ funding</td><td>6M+ users</td><td>Video analysis only. No social or community.</td></tr>
+      <tr><td>NCSA / SportsRecruits</td><td>Acquired by IMG Academy</td><td>2M+ profiles</td><td>Recruiting only. $1,500&ndash;$4,200/yr per athlete.</td></tr>
+      <tr><td>FloSports</td><td>$100M+ funding</td><td>Niche audiences</td><td>Streaming only. No social, coaching, or tools.</td></tr>
+      <tr><td>TeamSnap</td><td>$45M+ funding</td><td>25M+ users</td><td>Logistics only. No content, streaming, or AI.</td></tr>
+    </table>
+
+    <div class="callout">
+      <strong>Sportsphere's Moat:</strong> The all-in-one platform creates a network effect no single-feature competitor can replicate. Once a team's scores, video, scouting profiles, and social interactions live in one place, switching costs become prohibitive.
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 6. BUSINESS MODEL -->
+  <div class="section">
+    <div class="section-number">Section 06</div>
+    <h2>Business Model</h2>
+    <p>Sportsphere generates revenue through multiple streams, creating a diversified business with high lifetime value per user.</p>
+
+    <table>
+      <tr><th>Revenue Stream</th><th>Pricing</th><th>Target Segment</th></tr>
+      <tr><td>Creator Subscriptions</td><td>$4.99 &ndash; $29.99/mo</td><td>Content creators, coaches, athletes with followings</td></tr>
+      <tr><td>Premium User Tiers</td><td>$9.99 &ndash; $24.99/mo</td><td>Athletes, parents, coaches seeking advanced features</td></tr>
+      <tr><td>Recruiting Packages</td><td>Competing with $1,500 &ndash; $4,200/yr</td><td>High school athletes seeking college recruitment</td></tr>
+      <tr><td>Tips &amp; Donations</td><td>Variable (platform takes %)</td><td>Fan-to-creator micropayments during live streams</td></tr>
+      <tr><td>Creator Merchandise</td><td>Per-item (platform takes %)</td><td>Athletes and creators selling branded merchandise</td></tr>
+      <tr><td>B2B Organization Plans</td><td>$10,000 &ndash; $40,000/yr</td><td>Leagues, tournaments, facilities, athletic organizations</td></tr>
+    </table>
+
+    <div class="callout-green callout">
+      <strong>Stripe is Live:</strong> Payment infrastructure is already integrated and processing. Subscriptions, tips, and purchases can begin generating revenue immediately upon user acquisition.
+    </div>
+  </div>
+
+  <!-- 7. GO-TO-MARKET -->
+  <div class="section">
+    <div class="section-number">Section 07</div>
+    <h2>Go-to-Market Strategy</h2>
+    <p>Sportsphere's GTM strategy follows the classic beachhead model: dominate one niche, then expand.</p>
+
+    <h3>Beachhead: Youth Baseball &amp; Softball</h3>
+    <p>Andrew Collazo brings an embedded distribution network in youth baseball and softball, with direct access to teams, leagues, tournaments, and a physical facility for pilot deployment. His Texas A&amp;M alumni network adds collegiate credibility and access.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="time">Phase 1 &mdash; Pilot</div>
+        <div class="event"><strong>Deploy at Andrew's facility.</strong> Two pilot teams (girls softball + boys baseball) provide the initial user base. Coaches onboard their rosters. Parents download the app.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">Phase 2 &mdash; Coach Adoption</div>
+        <div class="event"><strong>Coaches become the distribution lever.</strong> When coaches adopt Sportsphere for scoring and communication, every parent on the team follows. One coach = 15&ndash;25 new users.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">Phase 3 &mdash; Tournament Spread</div>
+        <div class="event"><strong>Tournaments are the viral moment.</strong> When one team uses Sportsphere at a tournament, opposing teams see it. Tournament organizers adopt it. 10&ndash;20 new teams per event.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="time">Phase 4 &mdash; Organic Growth</div>
+        <div class="event"><strong>Network effects compound.</strong> Social features, scouting profiles, and content creation drive organic discovery. Athletes share ScoutCards. Coaches recommend the platform.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Why This Works:</strong> GameChanger built a $100M+ business with this exact playbook &mdash; start with youth baseball scoring, expand through coach adoption and tournament spread. Sportsphere offers everything GameChanger does plus social, streaming, scouting, AI, and monetization.
+    </div>
+  </div>
+
+  <!-- 8. TRACTION & READINESS -->
+  <div class="section">
+    <div class="section-number">Section 08</div>
+    <h2>Traction &amp; Readiness</h2>
+    <p>Most pre-seed companies pitch a prototype. Sportsphere is a fully operational, production-hardened platform.</p>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="number" style="color: var(--green);">LIVE</div>
+        <div class="label">Production</div>
+        <div class="sublabel">Deployed on Vercel</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" style="color: var(--green);">LIVE</div>
+        <div class="label">Payments</div>
+        <div class="sublabel">Stripe integrated</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" style="color: var(--green);">PASS</div>
+        <div class="label">Security</div>
+        <div class="sublabel">RLS on all tables</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" style="color: var(--green);">PASS</div>
+        <div class="label">Performance</div>
+        <div class="sublabel">N+1 fixed, optimized</div>
+      </div>
+    </div>
+
+    <ul class="check">
+      <li>Production deployed on Vercel with custom domain and global edge CDN</li>
+      <li>Stripe live keys active &mdash; subscriptions, tips, and purchases ready</li>
+      <li>15 bot accounts and 157 seeded posts for realistic launch experience</li>
+      <li>159 automated tests across 14 phases with 98.1% pass rate</li>
+      <li>Row-Level Security (RLS) enabled on all 50 database tables</li>
+      <li>Rate limiting infrastructure deployed on Edge Functions</li>
+      <li>N+1 query optimizations, code splitting, and performance hardening complete</li>
+      <li>Error boundaries, subscription cleanup, and crash guards implemented</li>
+      <li>Real-time subscriptions working for notifications, messaging, and live features</li>
+      <li>AI infrastructure (moderation, coaching, recommendations) operational via TitanAI</li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- 9. THE TEAM -->
+  <div class="section">
+    <div class="section-number">Section 09</div>
+    <h2>The Team</h2>
+
+    <div class="comparison">
+      <div class="comparison-col col-gold">
+        <h4>TitanAI LLC <span class="tag tag-gold">CTO / Back of House</span></h4>
+        <ul>
+          <li>Sole owner and developer &mdash; built 100% of Sportsphere</li>
+          <li>Compliance-first AI infrastructure company</li>
+          <li>Full-stack engineering: React, Supabase, Stripe, Anthropic, Mux</li>
+          <li>69 pages, 205 components, 50 database tables</li>
+          <li>159 automated tests, security hardening, performance optimization</li>
+          <li>Owns all intellectual property and infrastructure</li>
+          <li>Responsible for product development, AI features, and technical architecture</li>
+        </ul>
+      </div>
+      <div class="comparison-col col-dim">
+        <h4>Andrew Collazo <span class="tag tag-dim">Front of House</span></h4>
+        <ul>
+          <li>Business development and community growth</li>
+          <li>Youth sports network: teams, leagues, tournaments</li>
+          <li>Texas A&amp;M alumni &mdash; collegiate credibility and access</li>
+          <li>Facility access for pilot deployment</li>
+          <li>Two pilot teams ready (girls softball + boys baseball)</li>
+          <li>Coach and parent onboarding network</li>
+          <li>Responsible for user acquisition, partnerships, and fundraising</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Hiring Plan:</strong> First engineering hire planned within 90 days of funding. Mobile app (React Native) development begins immediately. TitanAI LLC retains technical leadership and architectural control.
+    </div>
+  </div>
+
+  <!-- 10. THE ASK -->
+  <div class="section">
+    <div class="section-number">Section 10</div>
+    <h2>The Ask</h2>
+
+    <div class="stat-grid-3">
+      <div class="stat-box">
+        <div class="number">$500K</div>
+        <div class="label">Pre-Seed Raise</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">$2.5M</div>
+        <div class="label">Pre-Money Valuation</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">16.7%</div>
+        <div class="label">Equity for Investors</div>
+      </div>
+    </div>
+
+    <h3>Use of Funds</h3>
+
+    <div class="fund-grid">
+      <div class="fund-item">
+        <div class="pct">40%</div>
+        <div class="fund-label">Engineering</div>
+        <div class="fund-amount">$200K</div>
+      </div>
+      <div class="fund-item">
+        <div class="pct">25%</div>
+        <div class="fund-label">Marketing &amp; User Acq.</div>
+        <div class="fund-amount">$125K</div>
+      </div>
+      <div class="fund-item">
+        <div class="pct">15%</div>
+        <div class="fund-label">Infrastructure</div>
+        <div class="fund-amount">$75K</div>
+      </div>
+      <div class="fund-item">
+        <div class="pct">10%</div>
+        <div class="fund-label">Legal / COPPA</div>
+        <div class="fund-amount">$50K</div>
+      </div>
+      <div class="fund-item">
+        <div class="pct">10%</div>
+        <div class="fund-label">Operations</div>
+        <div class="fund-amount">$50K</div>
+      </div>
+    </div>
+
+    <table>
+      <tr><th>Category</th><th>Allocation</th><th>Details</th></tr>
+      <tr><td>Engineering</td><td>$200,000 (40%)</td><td>Mobile app (React Native), hire first engineer, feature development</td></tr>
+      <tr><td>Marketing &amp; User Acquisition</td><td>$125,000 (25%)</td><td>Tournament sponsorships, coach outreach, social campaigns, Product Hunt</td></tr>
+      <tr><td>Infrastructure Scaling</td><td>$75,000 (15%)</td><td>Supabase scaling, Mux video costs, Vercel pro, CDN, monitoring</td></tr>
+      <tr><td>Legal &amp; Compliance</td><td>$50,000 (10%)</td><td>COPPA compliance (youth users), IP protection, corporate structuring</td></tr>
+      <tr><td>Operations</td><td>$50,000 (10%)</td><td>Customer support, content moderation, office/travel, miscellaneous</td></tr>
+    </table>
+  </div>
+
+  <!-- 11. FINANCIAL PROJECTIONS -->
+  <div class="section">
+    <div class="section-number">Section 11</div>
+    <h2>Financial Projections</h2>
+
+    <div class="projection-grid">
+      <div class="projection-card">
+        <div class="proj-period">Month 6</div>
+        <div class="proj-users">10K</div>
+        <div class="proj-users-label">Users</div>
+        <div class="proj-mrr">$5K</div>
+        <div class="proj-mrr-label">Monthly Recurring Revenue</div>
+      </div>
+      <div class="projection-card">
+        <div class="proj-period">Month 12</div>
+        <div class="proj-users">50K</div>
+        <div class="proj-users-label">Users</div>
+        <div class="proj-mrr">$50K</div>
+        <div class="proj-mrr-label">Monthly Recurring Revenue</div>
+      </div>
+      <div class="projection-card">
+        <div class="proj-period">Month 18</div>
+        <div class="proj-users">100K</div>
+        <div class="proj-users-label">Users</div>
+        <div class="proj-mrr">$150K</div>
+        <div class="proj-mrr-label">Monthly Recurring Revenue</div>
+      </div>
+    </div>
+
+    <table>
+      <tr><th>Milestone</th><th>Users</th><th>MRR</th><th>ARR</th><th>Key Driver</th></tr>
+      <tr><td>Month 6</td><td>10,000</td><td>$5,000</td><td>$60,000</td><td>Pilot expansion, tournament season, first paid subscribers</td></tr>
+      <tr><td>Month 12</td><td>50,000</td><td>$50,000</td><td>$600,000</td><td>Multi-sport expansion, B2B org deals, premium tier adoption</td></tr>
+      <tr><td>Month 18</td><td>100,000</td><td>$150,000</td><td>$1,800,000</td><td>Recruiting packages, creator economy, organic virality</td></tr>
+    </table>
+
+    <div class="callout">
+      <strong>Acquisition Target:</strong> At 25,000+ active users with proven retention and revenue, Sportsphere enters the acquisition conversation with strategic acquirers. Sports tech M&amp;A hit <strong>$200 billion</strong> in 2025.
+    </div>
+  </div>
+
+  <!-- 12. EXIT OPPORTUNITIES -->
+  <div class="section">
+    <div class="section-number">Section 12</div>
+    <h2>Exit Opportunities</h2>
+    <p>The sports technology M&amp;A market is highly active. Strategics are acquiring to fill product gaps &mdash; exactly the gaps Sportsphere fills.</p>
+
+    <table>
+      <tr><th>Potential Acquirer</th><th>Strategic Rationale</th><th>Estimated Range</th></tr>
+      <tr><td>DICK'S Sporting Goods / GameChanger</td><td>Social + streaming + AI features GameChanger lacks. Adds creator economy to their 9M user base.</td><td>$2M &ndash; $10M</td></tr>
+      <tr><td>Hudl</td><td>Social layer + scouting + live scoring complement video analysis. Full-stack sports platform.</td><td>$3M &ndash; $15M</td></tr>
+      <tr><td>TeamSnap</td><td>Content + streaming + AI features to transform logistics app into engagement platform.</td><td>$1M &ndash; $5M</td></tr>
+      <tr><td>Private Equity</td><td>Roll-up play in fragmented youth sports tech. Sportsphere as the consolidation platform.</td><td>$2M &ndash; $8M</td></tr>
+    </table>
+
+    <div class="stat-grid">
+      <div class="stat-box">
+        <div class="number">$200B</div>
+        <div class="label">Sports Tech M&amp;A</div>
+        <div class="sublabel">Total deal value, 2025</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">5&ndash;15x</div>
+        <div class="label">Revenue Multiple</div>
+        <div class="sublabel">Sports SaaS acquisitions</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">18&ndash;24</div>
+        <div class="label">Months to Exit</div>
+        <div class="sublabel">Target timeline</div>
+      </div>
+      <div class="stat-box">
+        <div class="number">$2&ndash;15M</div>
+        <div class="label">Exit Range</div>
+        <div class="sublabel">Based on traction</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Investor Return:</strong> At a $2.5M pre-money valuation and a conservative $5M exit, early investors see a <strong>2x return</strong>. At a $10M+ strategic acquisition driven by user traction and revenue, that return climbs to <strong>3&ndash;5x within 18&ndash;24 months</strong>.
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="powered">Powered by TitanAI &bull; Compliance-First AI Infrastructure</div>
+    <div class="conf">This document is confidential and intended solely for prospective investors and authorized parties. Distribution, reproduction, or disclosure without written consent from TitanAI LLC is prohibited. This investor brief does not constitute an offer to sell or a solicitation of an offer to buy securities. All projections are forward-looking estimates and not guarantees of future performance.</div>
+  </div>
+
+</div>
+</body>
+</html>

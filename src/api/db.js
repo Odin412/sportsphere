@@ -3,6 +3,12 @@
  * Replaces all base44 SDK references.
  */
 import { createClient } from '@supabase/supabase-js';
+import { isNative } from '@/lib/platform';
+
+// Native apps use a custom URL scheme for auth callbacks
+const redirectTo = isNative
+  ? 'sportsphere://auth-callback'
+  : window.location.origin;
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -11,6 +17,7 @@ export const supabase = createClient(
     auth: {
       flowType: 'implicit',
       detectSessionInUrl: true,
+      redirectTo,
     },
   }
 );
@@ -426,6 +433,9 @@ const entities = {
   BotScheduledTask: makeEntity('bot_scheduled_tasks'),
   DiagnosticEvent: makeEntity('diagnostic_events'),
   SystemHealthSnapshot: makeEntity('system_health_snapshots'),
+
+  // Legal / Compliance
+  LegalAgreement: makeEntity('legal_agreements'),
 };
 
 // ---------------------------------------------------------------------------

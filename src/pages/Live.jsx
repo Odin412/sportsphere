@@ -23,7 +23,7 @@ const SPORTS = ["Basketball", "Soccer", "Football", "Baseball", "Tennis", "Track
 function StreamCard({ stream, isLive }) {
   return (
     <Link to={createPageUrl("ViewLive") + `?id=${stream.id}`} className="group">
-      <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden hover:shadow-lg hover:border-red-200 transition-all">
+      <div className="glass-card rounded-xl overflow-hidden hover:border-white/20 transition-all">
         <div className={`relative h-44 ${isLive ? "bg-gradient-to-br from-red-600 to-orange-500" : "bg-gradient-to-br from-slate-700 to-slate-900"}`}>
           <div className="absolute inset-0 flex items-center justify-center">
             <PlayCircle className="w-14 h-14 text-white/60 group-hover:text-white/90 group-hover:scale-110 transition-all" />
@@ -49,14 +49,14 @@ function StreamCard({ stream, isLive }) {
           <div className="flex items-center gap-2 mb-2">
             <Avatar className="w-7 h-7 flex-shrink-0">
               <AvatarImage src={stream.host_avatar} />
-              <AvatarFallback className="text-[10px] bg-slate-200">{stream.host_name?.[0]}</AvatarFallback>
+              <AvatarFallback className="text-[10px] bg-stadium-800 text-white">{stream.host_name?.[0]}</AvatarFallback>
             </Avatar>
-            <p className="text-xs font-semibold text-slate-600 truncate">{stream.host_name}</p>
+            <p className="text-xs font-semibold text-stadium-400 truncate">{stream.host_name}</p>
           </div>
-          <h3 className="font-bold text-slate-900 text-sm line-clamp-2 mb-1.5">{stream.title}</h3>
+          <h3 className="font-bold text-white text-sm line-clamp-2 mb-1.5">{stream.title}</h3>
           <div className="flex items-center gap-1.5 flex-wrap">
             {stream.sport && <Badge variant="secondary" className="text-xs px-2">{stream.sport}</Badge>}
-            {stream.is_premium && <Badge className="bg-amber-100 text-amber-700 text-xs px-2"><Crown className="w-2.5 h-2.5 mr-1" />Premium</Badge>}
+            {stream.is_premium && <Badge className="bg-amber-500/20 text-amber-400 text-xs px-2"><Crown className="w-2.5 h-2.5 mr-1" />Premium</Badge>}
           </div>
         </div>
       </div>

@@ -8,6 +8,14 @@ module.exports = {
   			display: ['"Chakra Petch"', 'sans-serif'],
   			body: ['Inter', 'sans-serif'],
   		},
+  		fontSize: {
+  			'fluid-xs': 'clamp(0.6875rem, 0.625rem + 0.25vw, 0.75rem)',
+  			'fluid-sm': 'clamp(0.8125rem, 0.75rem + 0.25vw, 0.875rem)',
+  			'fluid-base': 'clamp(0.875rem, 0.8rem + 0.3vw, 1rem)',
+  			'fluid-lg': 'clamp(1rem, 0.9rem + 0.4vw, 1.125rem)',
+  			'fluid-xl': 'clamp(1.125rem, 1rem + 0.5vw, 1.25rem)',
+  			'fluid-2xl': 'clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem)',
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',

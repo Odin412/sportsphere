@@ -13,6 +13,7 @@ import { formatDistanceToNow } from "date-fns";
 import SharePostDialog from "../messages/SharePostDialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import EnhancedVideoPlayer from "../video/EnhancedVideoPlayer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter } from "@/components/ui/drawer";
 
 export default function ReelCard({ item, currentUser, isActive }) {
   const queryClient = useQueryClient();
@@ -432,15 +433,14 @@ export default function ReelCard({ item, currentUser, isActive }) {
         </div>
       )}
 
-      {/* Comments Drawer */}
-      {showComments && !commentsDisabled && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gray-950/98 backdrop-blur-2xl border-t border-gray-800 rounded-t-3xl max-h-[60vh] overflow-hidden flex flex-col z-20">
-          <div className="p-4 border-b border-gray-800 flex items-center justify-between">
-            <h3 className="font-bold text-white text-lg">Comments ({comments.length})</h3>
-            <button onClick={() => setShowComments(false)} className="text-gray-400 hover:text-white text-sm">✕</button>
-          </div>
-          
-          <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      {/* Comments Drawer (Vaul — drag-to-dismiss, scroll lock) */}
+      <Drawer open={showComments && !commentsDisabled} onOpenChange={setShowComments}>
+        <DrawerContent className="bg-gray-950 border-gray-800 max-h-[70vh]">
+          <DrawerHeader className="border-b border-gray-800">
+            <DrawerTitle className="text-white">Comments ({comments.length})</DrawerTitle>
+          </DrawerHeader>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-[120px]">
             {comments.map(comment => (
               <div key={comment.id} className="flex gap-3">
                 <Avatar className="w-8 h-8 flex-shrink-0">
@@ -461,12 +461,12 @@ export default function ReelCard({ item, currentUser, isActive }) {
           </div>
 
           {currentUser && (
-            <div className="p-4 border-t border-gray-800 bg-gray-900/90">
+            <DrawerFooter className="border-t border-gray-800 bg-gray-900/90" style={{ paddingBottom: 'calc(1rem + var(--safe-bottom))' }}>
               <div className="flex gap-2">
                 <Input
                   value={newComment}
                   onChange={e => setNewComment(e.target.value)}
-                  onKeyPress={e => e.key === "Enter" && handleComment()}
+                  onKeyDown={e => e.key === "Enter" && handleComment()}
                   placeholder="Add a comment..."
                   className="flex-1 bg-gray-800 border-gray-700 text-white rounded-2xl"
                 />
@@ -477,10 +477,10 @@ export default function ReelCard({ item, currentUser, isActive }) {
                   Post
                 </Button>
               </div>
-            </div>
+            </DrawerFooter>
           )}
-        </div>
-      )}
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

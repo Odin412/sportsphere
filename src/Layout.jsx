@@ -17,6 +17,8 @@ import SupportChatWidget from "./components/messages/SupportChatWidget";
 import PushNotificationBanner from "./components/notifications/PushNotificationBanner";
 import AppTour from "./components/onboarding/AppTour";
 import PoweredByTitanAI from "./components/branding/PoweredByTitanAI";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
+import InstallPrompt from "./components/pwa/InstallPrompt";
 
 const DiagnosticPanel = lazy(() => import("./components/diagnostics/DiagnosticPanel"));
 
@@ -54,13 +56,13 @@ const SECONDARY_NAV = [
   { name: "Settings", page: "ProfileSettings", icon: Settings },
 ];
 
-// Mobile bottom bar — 5 items only (center is Create button)
+// Mobile bottom bar — 5 items (center is Create button, last is "More" drawer)
 const MOBILE_BOTTOM = [
   { name: "Home", page: "Feed", icon: Home },
   { name: "Explore", page: "Explore", icon: Compass },
   null, // placeholder for center Create button
   { name: "Reels", page: "Reels", icon: Flame },
-  { name: "Profile", page: "Profile", icon: User },
+  { name: "More", page: null, icon: Menu }, // opens drawer
 ];
 
 export default function Layout({ children, currentPageName }) {
@@ -68,6 +70,7 @@ export default function Layout({ children, currentPageName }) {
   const { tier, isPro, isElite } = useSubscriptionTier();
   const location = useLocation();
   const [moreOpen, setMoreOpen] = useState(false);
+  const [mobileMoreOpen, setMobileMoreOpen] = useState(false);
   const queryClient = useQueryClient();
 
   // Unread notification count for bell badge
@@ -127,12 +130,13 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-stadium-950 text-white font-body">
+      <InstallPrompt />
       <RecommendationNotification user={user} />
       <SupportChatWidget user={user} />
       <PushNotificationBanner user={user} />
 
       {/* ── TOP HEADER ─────────────────────────────────────────────── */}
-      <header className="fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4 bg-stadium-950/95 backdrop-blur-xl border-b border-white/10 lg:left-64">
+      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 bg-stadium-950/95 border-b border-white/10 lg:left-64 lg:backdrop-blur-xl" style={{ height: `calc(3.5rem + var(--safe-top))`, paddingTop: 'var(--safe-top)' }}>
         {/* Logo — visible on mobile only (desktop logo is in sidebar) */}
         <Link to={createPageUrl("Feed")} className="flex items-center gap-2 lg:hidden">
           <img
@@ -267,7 +271,7 @@ export default function Layout({ children, currentPageName }) {
       </aside>
 
       {/* ── PAGE CONTENT ────────────────────────────────────────────── */}
-      <main className="pt-14 pb-20 lg:pl-64 lg:pb-8 min-h-screen">
+      <main className="lg:pl-64 lg:pb-8 min-h-screen" style={{ paddingTop: 'calc(3.5rem + var(--safe-top))', paddingBottom: 'calc(5rem + var(--safe-bottom))' }}>
         {children}
       </main>
 
@@ -282,7 +286,7 @@ export default function Layout({ children, currentPageName }) {
       <AppTour userRole={user?.role || localStorage.getItem("user_role") || "athlete"} />
 
       {/* ── MOBILE BOTTOM NAV ───────────────────────────────────────── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 h-16 flex items-center bg-stadium-950/95 backdrop-blur-xl border-t border-white/10">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 flex items-center bg-stadium-950/95 border-t border-white/10 lg:backdrop-blur-xl" style={{ height: `calc(4rem + var(--safe-bottom))`, paddingBottom: 'var(--safe-bottom)' }}>
         {MOBILE_BOTTOM.map((item, i) => {
           // Center create button
           if (item === null) {
@@ -298,6 +302,23 @@ export default function Layout({ children, currentPageName }) {
           }
 
           const { name, page, icon: Icon } = item;
+
+          // "More" button opens a drawer instead of navigating
+          if (page === null) {
+            return (
+              <button
+                key="more"
+                onClick={() => setMobileMoreOpen(true)}
+                className="flex-1 flex flex-col items-center justify-center gap-1 py-2"
+              >
+                <Icon className={`w-6 h-6 ${mobileMoreOpen ? "text-monza" : "text-stadium-600"}`} />
+                <span className={`text-[10px] font-semibold ${mobileMoreOpen ? "text-monza" : "text-stadium-600"}`}>
+                  {name}
+                </span>
+              </button>
+            );
+          }
+
           const active = isActive(page);
           return (
             <Link
@@ -306,7 +327,10 @@ export default function Layout({ children, currentPageName }) {
               data-tour={`mobile-${page.toLowerCase()}`}
               className="flex-1 flex flex-col items-center justify-center gap-1 py-2"
             >
-              <Icon className={`w-6 h-6 ${active ? "text-monza" : "text-stadium-600"}`} />
+              <div className="relative">
+                <Icon className={`w-6 h-6 ${active ? "text-monza" : "text-stadium-600"}`} />
+                {active && <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-monza" />}
+              </div>
               <span className={`text-[10px] font-semibold ${active ? "text-monza" : "text-stadium-600"}`}>
                 {name}
               </span>
@@ -314,6 +338,50 @@ export default function Layout({ children, currentPageName }) {
           );
         })}
       </nav>
+
+      {/* ── MOBILE "MORE" DRAWER ──────────────────────────────────── */}
+      <Drawer open={mobileMoreOpen} onOpenChange={setMobileMoreOpen}>
+        <DrawerContent className="bg-stadium-900 border-stadium-700 max-h-[75vh]">
+          <DrawerHeader className="border-b border-white/10">
+            <DrawerTitle className="text-white">More</DrawerTitle>
+          </DrawerHeader>
+          <div className="overflow-y-auto p-3 space-y-0.5">
+            {/* Profile link */}
+            <Link
+              to={createPageUrl("Profile")}
+              onClick={() => setMobileMoreOpen(false)}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-all ${
+                isActive("Profile") ? "bg-monza text-white" : "text-stadium-400 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <User className="w-5 h-5 flex-shrink-0" />
+              Profile
+            </Link>
+            {/* All secondary nav items */}
+            {SECONDARY_NAV.map(({ name, page, icon: Icon }) => (
+              <Link
+                key={page}
+                to={createPageUrl(page)}
+                onClick={() => setMobileMoreOpen(false)}
+                className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  isActive(page) ? "bg-monza text-white" : "text-stadium-400 hover:text-white hover:bg-white/5"
+                }`}
+              >
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                {name}
+              </Link>
+            ))}
+            {/* Sign out */}
+            <button
+              onClick={() => { logout(); setMobileMoreOpen(false); }}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-stadium-600 hover:text-monza hover:bg-white/5 transition-all w-full"
+            >
+              <X className="w-4 h-4" />
+              Sign Out
+            </button>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 }

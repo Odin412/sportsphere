@@ -28,6 +28,7 @@ import { createPageUrl } from "@/utils";
 import FeedPagination, { PAGE_SIZE } from "@/components/feed/FeedPagination";
 import { motion } from "framer-motion";
 import { SkeletonPostCard } from "@/components/ui/SkeletonCard";
+import usePullToRefresh from "@/hooks/usePullToRefresh";
 
 const SPORTS_LIST = [
   { name: "Basketball", emoji: "🏀" },
@@ -58,6 +59,11 @@ export default function Feed() {
   const [feedTab, setFeedTab] = useState("forYou");
   const [storySession, setStorySession] = useState(null);
   const resetPage = () => setPage(1);
+
+  // Pull-to-refresh for mobile
+  const { containerRef: pullRef, isRefreshing, pullDistance } = usePullToRefresh({
+    onRefresh: () => refetch(),
+  });
 
   const { data: preferences } = useQuery({
     queryKey: ["feed-preferences", user?.email],
@@ -142,11 +148,19 @@ export default function Feed() {
 
   return (
     <motion.div
+      ref={pullRef}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.15, ease: "linear" }}
       className="max-w-[1140px] mx-auto px-4 py-4 pb-20 md:pb-4"
     >
+      {/* Pull-to-refresh indicator */}
+      {(pullDistance > 0 || isRefreshing) && (
+        <div className="flex justify-center items-center py-3 -mt-2 mb-2 lg:hidden" style={{ opacity: Math.min(pullDistance / 80, 1) }}>
+          <Loader2 className={`w-5 h-5 text-monza ${isRefreshing ? "animate-spin" : ""}`} />
+          <span className="text-xs text-stadium-400 ml-2">{isRefreshing ? "Refreshing..." : "Pull to refresh"}</span>
+        </div>
+      )}
       <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_296px] lg:gap-6 lg:items-start">
 
         {/* ── LEFT COLUMN — main feed ───────────────────────────────── */}
@@ -163,7 +177,7 @@ export default function Feed() {
             <div className="flex-1 overflow-hidden py-2">
               <div className="flex items-center animate-ticker-slide whitespace-nowrap" style={{ animationDuration: "28s" }}>
                 {[...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
-                  <span key={i} className="text-[11px] text-stadium-300 font-medium px-5 border-r border-white/10 last:border-0 flex-shrink-0">
+                  <span key={i} className="text-xs text-stadium-300 font-medium px-5 border-r border-white/10 last:border-0 flex-shrink-0">
                     {item}
                   </span>
                 ))}

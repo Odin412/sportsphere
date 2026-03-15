@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
 import { motion } from "framer-motion";
 import { SkeletonReelGrid } from "@/components/ui/SkeletonCard";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Reels() {
   const { user } = useAuth();
@@ -18,6 +19,7 @@ export default function Reels() {
   const [showPreferences, setShowPreferences] = useState(false);
   const [reelTab, setReelTab] = useState("all"); // "all" | "hype" | "following"
   const scrollRef = useRef(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
 
@@ -294,14 +296,32 @@ export default function Reels() {
                     className="relative aspect-[9/16] bg-gray-900 rounded-xl overflow-hidden group cursor-pointer text-left"
                   >
                     {src ? (
-                      <video
-                        src={src}
-                        className="w-full h-full object-cover"
-                        muted
-                        autoPlay
-                        loop
-                        playsInline
-                      />
+                      isMobile ? (
+                        /* Mobile: static poster + play icon (saves bandwidth) */
+                        <div className="w-full h-full bg-stadium-900 flex items-center justify-center relative">
+                          <video
+                            src={src}
+                            className="w-full h-full object-cover"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="bg-black/40 rounded-full p-3">
+                              <Play className="w-6 h-6 text-white fill-white" />
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <video
+                          src={src}
+                          className="w-full h-full object-cover"
+                          muted
+                          autoPlay
+                          loop
+                          playsInline
+                        />
+                      )
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center p-3">
                         <p className="text-white text-xs font-semibold text-center line-clamp-5 leading-snug">{item.content}</p>
@@ -350,7 +370,8 @@ export default function Reels() {
           {/* Back button */}
           <button
             onClick={() => setActiveReelIndex(null)}
-            className="absolute top-4 left-4 z-[210] bg-black/60 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+            className="absolute left-4 z-[210] bg-black/60 hover:bg-black/80 text-white p-2 rounded-full backdrop-blur-sm transition-colors"
+            style={{ top: 'calc(1rem + var(--safe-top))' }}
           >
             <ArrowLeft className="w-5 h-5" />
           </button>

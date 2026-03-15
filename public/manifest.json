@@ -3,6 +3,8 @@
   "short_name": "Sportsphere",
   "description": "The sports community and streaming platform",
   "start_url": "/",
+  "scope": "/",
+  "id": "/",
   "display": "standalone",
   "background_color": "#0a0f1a",
   "theme_color": "#DA020E",
@@ -21,5 +23,25 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["sports", "social", "entertainment"]
+  "categories": ["sports", "social", "entertainment"],
+  "shortcuts": [
+    {
+      "name": "New Post",
+      "short_name": "Post",
+      "url": "/CreatePost",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Messages",
+      "short_name": "Chat",
+      "url": "/Messages",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Reels",
+      "short_name": "Reels",
+      "url": "/Reels",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "base44-app",
+  "name": "sportsphere",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,9 +10,23 @@
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc -p ./jsconfig.json",
     "preview": "vite preview",
-    "deploy": "vercel --prod 2>&1 | tee /tmp/deploy.log && DEPLOY_URL=$(grep -oE 'sportsphere-main-[a-z0-9]+-kcapers108-gmailcoms-projects\\.vercel\\.app' /tmp/deploy.log | head -1) && echo \"Aliasing $DEPLOY_URL\" && vercel alias set \"$DEPLOY_URL\" sportsphere-titan-one.vercel.app"
+    "deploy": "vercel --prod 2>&1 | tee /tmp/deploy.log && DEPLOY_URL=$(grep -oE 'sportsphere-main-[a-z0-9]+-kcapers108-gmailcoms-projects\\.vercel\\.app' /tmp/deploy.log | head -1) && echo \"Aliasing $DEPLOY_URL\" && vercel alias set \"$DEPLOY_URL\" sportsphere-titan-one.vercel.app",
+    "cap:build": "vite build && npx cap sync",
+    "cap:ios": "vite build && npx cap sync ios && npx cap open ios",
+    "cap:android": "vite build && npx cap sync android && npx cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/browser": "^8.0.2",
+    "@capacitor/cli": "^8.2.0",
+    "@capacitor/core": "^8.2.0",
+    "@capacitor/haptics": "^8.0.1",
+    "@capacitor/ios": "^8.2.0",
+    "@capacitor/keyboard": "^8.0.1",
+    "@capacitor/push-notifications": "^8.0.2",
+    "@capacitor/splash-screen": "^8.0.1",
+    "@capacitor/status-bar": "^8.0.1",
     "@hello-pangea/dnd": "^17.0.0",
     "@hookform/resolvers": "^4.1.2",
     "@radix-ui/react-accordion": "^1.2.3",

@@ -1,0 +1,387 @@
+
+
+CONFIDENTIAL
+Partnership Proposal
+Sportsphere Platform — Equity & Operating Agreement
+March 13, 2026 • Prepared by TitanAI LLC
+TitanAI LLC
+DEVELOPER • BACK OF HOUSE
+×
+Andrew Collazo
+CONTRIBUTOR • FRONT OF HOUSE
+
+SECTION 01
+Executive Summary
+This proposal outlines the terms of engagement between TitanAI LLC ("Developer") and
+Andrew Collazo ("Contributor") regarding the Sportsphere sports community platform.
+TitanAI LLC has developed Sportsphere from an initial concept into a fully functional,
+production-grade application comprising 69 pages, 205 components, 50 database tables,
+and a comprehensive AI-powered feature suite. The platform is live, deployed, and tested
+with a 98.1% automated test pass rate.
+This document defines the scope of work completed, its market value, the respective
+contributions of each party, and the proposed terms for an ongoing milestone-based equity
+partnership.
+Key Principle: TitanAI LLC retains 100% ownership of all intellectual property, code, and
+infrastructure. Andrew Collazo receives 35% equity upon signing, reflecting his concept,
+network, and commitment to the Front of House role. He can earn an additional 15% (to 50%)
+through measurable business milestones.
+
+SECTION 02
+What Has Been Built
+Sportsphere is a full-featured sports community and streaming platform — the only all-in-one
+solution combining social networking, live streaming, creator monetization, athlete scouting,
+coaching tools, and AI-powered features in a single platform.
+69
+PAGES
+205
+COMPONENTS
+50
+DATABASE
+TABLES
+159
+AUTOMATED
+TESTS
+
+Core Feature Suite
+CATEGORYFEATURES
+Social NetworkPosts, comments, follows, stories, messaging, notifications, DMs
+Live StreamingHLS streaming, real-time chat, polls, Q&A, sentiment analysis, VOD
+Short-Form VideoTikTok-style reels with AI assistant, effects, discovery
+Creator
+Monetization
+Stripe subscriptions, tipping, merchandise shop, earnings dashboard
+AI FeaturesAI Coach, content moderation, feed ranking, recommendations, Scout
+Card narratives
+Athlete
+Development
+ProPath suite, Scout Card, training streaks, stat tracking, video
+telestration
+Recruiting &
+Scouting
+GetNoticed marketplace, ScoutCard search, coach scouting hub
+Live SportsGameDay real-time scoring (4 sports), box scores, game recaps, news
+ticker
+GamificationPoints, badges, challenges, leaderboards, achievements
+CommunityGroups, forums, events, Q&A, maps integration
+Admin &
+Moderation
+Admin dashboard, content moderation queue, user management,
+analytics
+PremiumSubscription tiers, paywall gates, feature access control
+
+Technology Stack
+LAYERTECHNOLOGY
+FrontendReact 18, Vite 6, Tailwind CSS, Radix UI (25+ components), Framer Motion
+BackendSupabase (PostgreSQL, Edge Functions, Auth, Realtime, Storage)
+PaymentsStripe (live keys — subscriptions, tips, purchases)
+AIAnthropic Claude (moderation, coaching, recommendations, content generation)
+VideoMux + HLS.js (processing, streaming, playback)
+HostingVercel (production deployed, custom domain)
+TestingPlaywright (159 tests, 14 phases, 98.1% pass rate)
+
+SECTION 03
+Contribution Analysis
+For transparency, the following comparison documents the respective contributions to the
+Sportsphere platform as of this date.
+TitanAI LLC DEVELOPERAndrew Collazo CONTRIBUTOR
+Built 100% of production codebase from
+scratch
+69 pages, 205 components, 50
+database entities
+Full Supabase backend architecture
+(auth, RLS, realtime)
+Stripe payment integration (live)
+AI feature suite (Claude integration via
+Edge Functions)
+159 automated tests across 14 phases
+Production deployment, CI/CD,
+monitoring
+Security hardening (RLS on all tables,
+rate limiting)
+Performance optimization (N+1 fixes,
+code splitting)
+15 seeded bot accounts + 157 posts for
+launch
+All hosting, API, and infrastructure costs
+paid
+TitanAI branding and chatbot integration
+Original concept and vision for
+Sportsphere
+Base44 no-code scaffold (auto-
+generated, not production-grade)
+Domain knowledge in youth sports
+(baseball, softball)
+Access to coaching network and league
+contacts
+Texas A&M alumni network and
+affiliation
+Facility access for pilot site
+Girls softball team (pilot group)
+8u boys baseball team (pilot group)
+GameChanger user (competitor
+knowledge)
+Zero lines of production code
+Zero capital invested
+No formal agreement to date
+
+Summary: Andrew Collazo contributed the initial concept and a no-code scaffold generated
+via the Base44 visual builder. TitanAI LLC rebuilt the entire platform from the ground up on
+production-grade infrastructure, created 205 custom components, integrated 6 major third-
+party services, and built comprehensive testing, security, and deployment infrastructure. All
+development costs have been borne by TitanAI LLC.
+
+SECTION 04
+Market Valuation
+Development Replacement Cost
+The cost to hire a professional team to rebuild the current Sportsphere platform from scratch:
+FEATURE SETESTIMATED COST
+Social network (feed, profiles, follows, messaging)$50,000 – $100,000
+Live streaming infrastructure$100,000 – $200,000
+AI features (moderation, coaching, recommendations)$50,000 – $100,000
+Coaching tools + video telestration$30,000 – $50,000
+Payment / monetization (Stripe integration)$20,000 – $40,000
+Athlete development suite (ProPath)$30,000 – $50,000
+GameDay real-time scoring$20,000 – $30,000
+Maps, analytics, admin, community$30,000 – $50,000
+Total Rebuild Cost
+$330,000 – $620,000
+Startup Valuation Benchmarks
+STAGEVALUATION RANGEREQUIREMENTS
+Current (MVP, pre-revenue)$1M – $3MWorking product, feature breadth
+10K+ active users$3M – $10MUser traction, retention metrics
+100K+ users, $1M ARR$10M – $30MSeries A territory
+
+Total Addressable Market
+MARKET SEGMENT2025 SIZEPROJECTEDCAGR
+Sports Technology$31–34B$68–192B (2030–34)15–22%
+Sports Online Streaming$28B$134B by 203224.6%
+Youth Sports Software$1.36B$3.93B by 203412.5%
+Sports Coaching Platforms$581M$3.35B by 203324.5%
+
+SECTION 05
+Intellectual Property
+All intellectual property associated with the Sportsphere platform is owned exclusively by
+TitanAI LLC. This includes but is not limited to:
+Non-Negotiable: Under standard work-for-hire and independent development doctrine, all
+rights belong to TitanAI LLC as the creator of the software. No IP is transferred or shared
+under this agreement. "Powered by TitanAI" branding remains on the platform regardless of
+equity structure.
+All source code, components, and application architecture✓
+Database schemas, API integrations, and serverless functions✓
+AI models, prompts, and inference pipelines✓
+UI/UX design, branding assets, and visual identity✓
+Test suites, deployment configurations, and CI/CD pipelines✓
+User data, analytics, and platform metrics✓
+The TitanAI brand, trademarks, and associated assets✓
+
+SECTION 06
+Proposed Equity Structure
+TitanAI LLC proposes a milestone-based equity partnership that rewards Andrew Collazo
+for measurable business results. Starting equity reflects the value of his concept, network,
+and commitment. Additional equity is earned, not granted.
+Starting Position: 65 / 35
+TitanAI 65%Andrew 35%
+Reflects $330K–$620K in development + all IPConcept + network + Front of House commitment
+Andrew receives 35% upon execution of this agreement, reflecting his original concept,
+youth sports network, facility access, and full-time commitment to Front of House
+operations. TitanAI retains 65%, reflecting the $330K–$620K development investment, all IP
+ownership, and ongoing Back of House operations.
+
+SECTION 06 (CONTINUED)
+Path to 50/50: Milestone-Based Vesting
+Andrew can earn an additional 15 percentage points of equity (from 35% to 50%) by hitting
+the following business milestones. Each milestone is verified using data from Supabase and
+Stripe — platforms owned and controlled by TitanAI LLC. No milestone vests until
+independently verified at the quarterly review.
++4%
+TOTAL: 39%
+Milestone 1: 500 Users From Network
+Drive 500 registered, active users to the platform through personal network,
+league contacts, and coaching connections.
+Verified by: Supabase auth.users table — registered accounts with activity
++3%
+TOTAL: 42%
+Milestone 2: 2,000 Users + 5 Leagues Onboarded
+Scale to 2,000 active users and onboard 5 organized leagues or tournaments
+onto the platform.
+Verified by: Supabase user count + Organization entity records
++3%
+TOTAL: 45%
+Milestone 3: 10,000 Users + Tournament Partnerships
+Scale to 10,000 active users with tournament partnerships generating organic
+growth through seasonal play.
+Verified by: Supabase user count + signed partnership documentation
++5%
+TOTAL: 50%
+Milestone 4: Capital Raise or Revenue Milestone
+Close a fundraise of $250K+ into the company OR generate $50K+ ARR through
+platform subscriptions and monetization. This final milestone requires bringing
+capital or proving sustainable revenue.
+Verified by: Stripe revenue dashboard OR signed investment agreement + bank deposit
+
+Equity at Each Stage
+STAGE
+TITANAI
+LLC
+ANDREW
+COLLAZO
+TRIGGER
+Starting (upon
+signing)
+65%35%Agreement executed + facility
+pilot launched
+After 500 users61%39%500 active users from his network
+After 2K users58%42%2,000 users + 5 leagues
+onboarded
+After 10K users55%45%10,000 users + tournament
+partnerships
+Full 50/5050%50%$250K fundraise closed OR $50K
+ARR
+Final Position: 50 / 50
+TitanAI 50%Andrew 50%
+Back of House • Product • AI • InfrastructureFront of House • Users • Revenue • Partnerships
+
+SECTION 07
+Roles & Responsibilities
+TitanAI LLC BACK OF HOUSEAndrew Collazo FRONT OF HOUSE
+Product development and engineering
+AI infrastructure and feature
+development
+Database, hosting, and deployment
+Security, performance, and reliability
+Technical architecture decisions (veto
+power)
+API integrations and third-party services
+Automated testing and quality assurance
+Data analytics and platform metrics
+All infrastructure and API costs
+User acquisition and community growth
+League, team, and tournament
+partnerships
+Fundraising and investor relations
+Public-facing representation and pitches
+Coach and parent onboarding
+Sports content strategy and curation
+Customer support and feedback
+collection
+Marketing, social media, and outreach
+Pilot programs at his facility and leagues
+
+SECTION 08
+Andrew's Network & Distribution Value
+Andrew Collazo's primary value beyond the initial concept is his embedded position in the
+youth sports ecosystem. These are not theoretical connections — they represent provable
+distribution channels.
+ASSETVALUE TO SPORTSPHERE
+Girls softball teamInstant pilot group — players, parents, coaches all onboard
+8u boys baseball
+team
+Second pilot, different sport = proves multi-sport viability
+League connectionsDirect path to bulk user acquisition (leagues = hundreds of users
+each)
+Tournament
+connections
+Tournaments are GameChanger's bread and butter — this is how
+we compete
+Coach networkCoaches are the distribution lever — they tell parents what app to
+use
+Texas A&M affiliationCredibility, access to collegiate athletes, potential university
+partnership
+Facility accessPhysical pilot site for "Powered by Sportsphere" events
+GameChanger userKnows the competitor's weaknesses firsthand, can articulate why
+Sportsphere is better
+Growth Strategy: Andrew pilots Sportsphere with his own teams → coaches see it and adopt
+it → tournament organizers offer it to all teams → word of mouth spreads → organic growth
+to 10K+ users → pre-seed or acquisition conversation.
+
+SECTION 09
+Protections & Governance
+Verification Protocol
+Quarterly reviews (every 90 days) — both parties review the milestone ledger✓
+Data-driven — pulled directly from Supabase and Stripe, no self-reporting✓
+Automatic vesting — if milestone is met, equity vests per this agreement✓
+Disputes — go to a pre-agreed mediator✓
+
+Key Protections
+CLAUSEDETAIL
+IP OwnershipTitanAI LLC retains 100% of all IP regardless of equity split
+Technical VetoTitanAI has final say on all technical and architectural decisions
+TitanAI Branding"Powered by TitanAI" branding remains on platform permanently
+ForfeitureIf Andrew misses all milestones for two consecutive quarters (6
+months of zero progress), unvested equity is forfeited
+Non-CompeteAndrew agrees not to develop or fund a competing platform for 2 years
+Anti-DilutionIf fundraising occurs, both parties dilute proportionally
+Acquisition
+Acceleration
+If company is acquired, all milestones accelerate — Andrew receives
+full earned equity at time of sale
+Drag-Along / Tag-
+Along
+Both parties must agree to any acquisition (mutual consent)
+No Equity Until
+Signed
+Zero equity vests until this agreement is fully executed by both parties
+Data Source
+Control
+TitanAI owns every data source used to verify milestones (Supabase +
+Stripe)
+
+SECTION 10
+Go-to-Market Timeline
+WEEK 1–2
+Legal & Foundation — Sign this agreement. Engage startup attorney. Document sweat equity.
+COPPA compliance review.
+WEEK 3–4
+Pilot Launch — Deploy Sportsphere at Andrew's facility. Onboard softball + baseball teams.
+Andrew begins coach outreach.
+MONTH 2
+Network Activation — Andrew onboards league contacts. Target 500 users. Launch on
+Product Hunt. Activate Stripe subscriptions.
+MONTH 3–4
+Revenue & Growth — Hit 2,000 users. Onboard 5 leagues. Begin pre-seed fundraise ($500K at
+$2.5M valuation).
+MONTH 5–6
+Scale — Target 10,000 users. Tournament partnerships. Mobile app development begins. Hire
+first engineer.
+
+SECTION 11
+Competitive Advantage
+No existing platform combines all of Sportsphere's features. Athletes currently need 4–6
+separate apps. We are the all-in-one sports super-app.
+COMPETITORWHAT THEY DOWHAT THEY LACK
+GameChangerScoring, team
+management
+No social, no streaming, no scouting, no
+monetization
+HudlVideo analysisNo social, no streaming, no community
+NCSA /
+SportsRecruits
+Recruiting ($1,500–
+$4,200/yr)
+Recruiting only, no content, no
+streaming
+FloSportsNiche streamingNo social, no coaching, no scouting
+TeamSnapTeam logisticsNo content, no streaming, no AI
+SportsphereAll of the above + AI-powered features + creator monetization
+SECTION 12
+Next Steps
+Notice: TitanAI LLC will pause further feature development on Sportsphere until this
+agreement is fully executed. No equity is granted, no partnership is formed, and no
+commitments are made until both parties sign.
+Review: Andrew Collazo to review this proposal and confirm acceptance of terms
+Legal review: Both parties engage counsel to draft binding agreement ($500–$1,500)
+Execution: Sign formal agreement within 30 days
+Pilot: Deploy Sportsphere at Andrew's facility for upcoming season
+Commencement: Begin collaborative go-to-market execution per timeline above
+
+TitanAI LLC
+OWNER / MANAGING MEMBER
+BACK OF HOUSE • CTO
+Date: _______________
+Andrew Collazo
+PARTNER / FRONT OF HOUSE
+BUSINESS DEVELOPMENT • COMMUNITY
+Date: _______________
+POWERED BY TITANAI • COMPLIANCE-FIRST AI INFRASTRUCTURE
+This document is confidential and intended solely for the named parties. Distribution, reproduction, or disclosure without
+written consent from TitanAI LLC is prohibited.

@@ -1,5 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { supabase } from '@/api/db';
+import { isNative } from '@/lib/platform';
+import { initPushNotifications } from '@/lib/pushNotifications';
 
 const AuthContext = createContext();
 
@@ -70,6 +72,11 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setAuthError(null);
       setIsLoadingAuth(false);
+
+      // Initialize native push notifications after auth (Capacitor only)
+      if (isNative && authUser?.id) {
+        initPushNotifications(authUser.id, supabase).catch(() => {});
+      }
     }
   };
 
@@ -99,6 +106,7 @@ export const AuthProvider = ({ children }) => {
         full_name: meta.full_name || '',
         avatar_url: meta.avatar_url || '',
         role: meta.role || 'athlete',
+        date_of_birth: meta.date_of_birth || null,
         ...(meta.parent_name ? { parent_name: meta.parent_name } : {}),
         ...(meta.is_parent_managed ? { is_parent_managed: true } : {}),
       })

@@ -1,0 +1,406 @@
+
+
+SECTION 01
+The Opportunity
+The sports technology market is valued at $31–34 billion and growing at 15–22% CAGR. Youth
+sports alone is a $62 billion industry in the United States. Yet no single platform combines social
+networking, live streaming, athlete scouting, coaching tools, real-time scoring, creator monetization,
+and AI — all in one place.
+Today, athletes, coaches, and sports families juggle 4–6 separate apps to do what one platform
+should handle: GameChanger for scores, Hudl for video, NCSA for recruiting, Instagram for
+highlights, Venmo for team fees, and GroupMe for communication.
+Sportsphere is the all-in-one sports super-app that replaces all of them.
+The Gap: Billion-dollar companies own individual slices of the sports tech stack. Nobody owns the
+full stack. Sportsphere does — and it's already built.
+SECTION 02
+CONFIDENTIAL
+Investor Brief
+Sportsphere — Pre-Seed Investment Opportunity
+March 12, 2026 • Prepared by TitanAI LLC
+$500K
+RAISE AMOUNT
+$2.5M
+PRE-MONEY VALUATION
+16.7%
+EQUITY OFFERED
+
+The Product
+Sportsphere is not a concept, wireframe, or pitch deck promise. It is a fully built, production-
+deployed, and tested platform — live at sportsphere-titan-one.vercel.app.
+69
+PAGES
+205
+COMPONENTS
+50
+DATABASE TABLES
+98.1%
+TEST PASS RATE
+159 automated tests
+Social Network
+Posts, comments, follows, stories,
+messaging, notifications, DMs
+Live Streaming
+HLS streaming, real-time chat,
+polls, Q&A, sentiment analysis,
+VOD
+Short-Form Reels
+TikTok-style video with AI
+assistant, effects, and discovery
+feed
+Creator Monetization
+Stripe subscriptions, tipping,
+merch shop, earnings dashboard
+(live)
+AI Coaching
+Claude-powered coach, content
+moderation, feed ranking,
+recommendations
+Athlete Scouting
+ProPath suite, ScoutCard with AI
+narratives, GetNoticed
+marketplace
+GameDay Scoring
+Real-time scoring for 4 sports,
+box scores, game recaps, news
+ticker
+Gamification
+Points, badges, challenges,
+leaderboards, achievements,
+streaks
+Community
+Groups, forums, events, Q&A,
+maps, admin dashboard,
+moderation
+SECTION 03
+Technology
+Sportsphere is built on a modern, scalable stack designed for rapid iteration and cost-efficient
+scaling. No legacy code, no technical debt.
+LAYERTECHNOLOGYWHY
+FrontendReact 18 + Vite 6Industry standard, massive talent pool, fast builds
+
+UITailwind CSS + Radix UI + Framer
+Motion
+Accessible components, smooth animations,
+rapid styling
+BackendSupabase (PostgreSQL)Auth, realtime, storage, edge functions — scales
+to millions
+PaymentsStripe (live keys)Subscriptions, tips, purchases — already
+processing
+AIAnthropic ClaudeModeration, coaching, recommendations,
+content generation
+VideoMux + HLS.jsProfessional video processing, adaptive
+streaming
+HostingVercelGlobal edge deployment, instant rollbacks,
+preview deploys
+TestingPlaywright159 tests across 14 phases, automated regression
+coverage
+TitanAI Infrastructure: Sportsphere runs on TitanAI's compliance-first AI infrastructure. All AI
+features — moderation, coaching, recommendations, and content generation — are powered by
+TitanAI's proprietary integration layer, ensuring responsible AI deployment from day one.
+SECTION 04
+Market Size
+Sportsphere sits at the intersection of four high-growth markets, each expanding at double-digit
+rates.
+MARKET SEGMENT2025 SIZEPROJECTED SIZECAGR
+Sports Technology$31–34B$68–192B (2030–34)15–22%
+
+Sports Online Streaming$28B$134B by 203224.6%
+Youth Sports Software$1.36B$3.93B by 203412.5%
+Sports Coaching Platforms$581M$3.35B by 203324.5%
+$62B
+U.S. YOUTH
+SPORTS
+Annual market size
+45M+
+YOUTH ATHLETES
+Organized sports in U.S.
+4–6
+APPS PER FAMILY
+Current fragmentation
+24.5%
+COACHING CAGR
+Fastest-growing
+segment
+SECTION 05
+Competitive Landscape
+Billion-dollar players own individual slices. None offer the full stack.
+FEATUREGAMECHANGERHUDLNCSAFLOSPORTSTEAMSNAPSPORTSPHERE
+Live Scoring✓✓
+Video
+Analysis
+✓✓
+Recruiting✓✓✓
+Live
+Streaming
+✓✓✓
+Social
+Network
+✓
+Creator
+Monetization
+✓
+AI Coaching✓
+————
+————
+———
+———
+—————
+—————
+—————
+
+Team
+Management
+✓✓✓✓
+Short-Form
+Video
+✓
+COMPETITOR
+REVENUE /
+FUNDING
+USERSKEY LIMITATION
+GameChanger
+(DICK'S)
+$100M+ revenue9M+ usersScoring only. No social,
+streaming, or scouting.
+Hudl$225M+ funding6M+ usersVideo analysis only. No social or
+community.
+NCSA /
+SportsRecruits
+Acquired by IMG
+Academy
+2M+ profilesRecruiting only. $1,500–$4,200/yr
+per athlete.
+FloSports$100M+ fundingNiche
+audiences
+Streaming only. No social,
+coaching, or tools.
+TeamSnap$45M+ funding25M+ usersLogistics only. No content,
+streaming, or AI.
+Sportsphere's Moat: The all-in-one platform creates a network effect no single-feature competitor
+can replicate. Once a team's scores, video, scouting profiles, and social interactions live in one place,
+switching costs become prohibitive.
+SECTION 06
+Business Model
+Sportsphere generates revenue through multiple streams, creating a diversified business with high
+lifetime value per user.
+REVENUE STREAMPRICINGTARGET SEGMENT
+——
+—————
+
+Creator
+Subscriptions
+$4.99 – $29.99/moContent creators, coaches, athletes with
+followings
+Premium User Tiers$9.99 – $24.99/moAthletes, parents, coaches seeking
+advanced features
+Recruiting PackagesCompeting with $1,500 –
+$4,200/yr
+High school athletes seeking college
+recruitment
+Tips & DonationsVariable (platform takes %)Fan-to-creator micropayments during live
+streams
+Creator
+Merchandise
+Per-item (platform takes %)Athletes and creators selling branded
+merchandise
+B2B Organization
+Plans
+$10,000 – $40,000/yrLeagues, tournaments, facilities, athletic
+organizations
+Stripe is Live: Payment infrastructure is already integrated and processing. Subscriptions, tips, and
+purchases can begin generating revenue immediately upon user acquisition.
+SECTION 07
+Go-to-Market Strategy
+Sportsphere's GTM strategy follows the classic beachhead model: dominate one niche, then
+expand.
+Beachhead: Youth Baseball & Softball
+Andrew Collazo brings an embedded distribution network in youth baseball and softball, with direct
+access to teams, leagues, tournaments, and a physical facility for pilot deployment. His Texas A&M
+alumni network adds collegiate credibility and access.
+PHASE 1 — PILOT
+Deploy at Andrew's facility. Two pilot teams (girls softball + boys baseball) provide the initial user
+base. Coaches onboard their rosters. Parents download the app.
+PHASE 2 — COACH ADOPTION
+
+Why This Works: GameChanger built a $100M+ business with this exact playbook — start with youth
+baseball scoring, expand through coach adoption and tournament spread. Sportsphere offers
+everything GameChanger does plus social, streaming, scouting, AI, and monetization.
+SECTION 08
+Traction & Readiness
+Most pre-seed companies pitch a prototype. Sportsphere is a fully operational, production-hardened
+platform.
+LIVE
+PRODUCTION
+Deployed on Vercel
+LIVE
+PAYMENTS
+Stripe integrated
+PASS
+SECURITY
+RLS on all tables
+PASS
+PERFORMANCE
+N+1 fixed, optimized
+Coaches become the distribution lever. When coaches adopt Sportsphere for scoring and
+communication, every parent on the team follows. One coach = 15–25 new users.
+PHASE 3 — TOURNAMENT SPREAD
+Tournaments are the viral moment. When one team uses Sportsphere at a tournament, opposing
+teams see it. Tournament organizers adopt it. 10–20 new teams per event.
+PHASE 4 — ORGANIC GROWTH
+Network effects compound. Social features, scouting profiles, and content creation drive organic
+discovery. Athletes share ScoutCards. Coaches recommend the platform.
+Production deployed on Vercel with custom domain and global edge CDN✓
+Stripe live keys active — subscriptions, tips, and purchases ready✓
+15 bot accounts and 157 seeded posts for realistic launch experience✓
+159 automated tests across 14 phases with 98.1% pass rate✓
+Row-Level Security (RLS) enabled on all 50 database tables✓
+Rate limiting infrastructure deployed on Edge Functions✓
+N+1 query optimizations, code splitting, and performance hardening complete✓
+Error boundaries, subscription cleanup, and crash guards implemented✓
+
+SECTION 09
+The Team
+TitanAI LLC CTO / BACK OF HOUSEAndrew Collazo FRONT OF HOUSE
+Hiring Plan: First engineering hire planned within 90 days of funding. Mobile app (React Native)
+development begins immediately. TitanAI LLC retains technical leadership and architectural control.
+SECTION 10
+The Ask
+Real-time subscriptions working for notifications, messaging, and live features✓
+AI infrastructure (moderation, coaching, recommendations) operational via TitanAI✓
+Sole owner and developer — built 100% of
+Sportsphere
+Compliance-first AI infrastructure company
+Full-stack engineering: React, Supabase,
+Stripe, Anthropic, Mux
+69 pages, 205 components, 50 database
+tables
+159 automated tests, security hardening,
+performance optimization
+Owns all intellectual property and
+infrastructure
+Responsible for product development, AI
+features, and technical architecture
+Business development and community
+growth
+Youth sports network: teams, leagues,
+tournaments
+Texas A&M alumni — collegiate credibility
+and access
+Facility access for pilot deployment
+Two pilot teams ready (girls softball + boys
+baseball)
+Coach and parent onboarding network
+Responsible for user acquisition,
+partnerships, and fundraising
+
+$500K
+PRE-SEED RAISE
+$2.5M
+PRE-MONEY VALUATION
+16.7%
+EQUITY FOR INVESTORS
+Use of Funds
+40%
+ENGINEERING
+$200K
+25%
+MARKETING &
+USER ACQ.
+$125K
+15%
+INFRASTRUCTURE
+$75K
+10%
+LEGAL / COPPA
+$50K
+10%
+OPERATIONS
+$50K
+CATEGORYALLOCATIONDETAILS
+Engineering$200,000
+(40%)
+Mobile app (React Native), hire first engineer, feature
+development
+Marketing & User
+Acquisition
+$125,000
+(25%)
+Tournament sponsorships, coach outreach, social
+campaigns, Product Hunt
+Infrastructure Scaling$75,000 (15%)Supabase scaling, Mux video costs, Vercel pro, CDN,
+monitoring
+Legal & Compliance$50,000 (10%)COPPA compliance (youth users), IP protection,
+corporate structuring
+Operations$50,000 (10%)Customer support, content moderation, office/travel,
+miscellaneous
+SECTION 11
+Financial Projections
+MONTH 6
+10K
+USERS
+MONTH 12
+50K
+USERS
+MONTH 18
+100K
+USERS
+
+MILESTONEUSERSMRRARRKEY DRIVER
+Month 610,000$5,000$60,000Pilot expansion, tournament season, first
+paid subscribers
+Month 1250,000$50,000$600,000Multi-sport expansion, B2B org deals,
+premium tier adoption
+Month 18100,000$150,000$1,800,000Recruiting packages, creator economy,
+organic virality
+Acquisition Target: At 25,000+ active users with proven retention and revenue, Sportsphere enters
+the acquisition conversation with strategic acquirers. Sports tech M&A hit $200 billion in 2025.
+SECTION 12
+Exit Opportunities
+The sports technology M&A market is highly active. Strategics are acquiring to fill product gaps —
+exactly the gaps Sportsphere fills.
+POTENTIAL ACQUIRERSTRATEGIC RATIONALE
+ESTIMATED
+RANGE
+DICK'S Sporting Goods /
+GameChanger
+Social + streaming + AI features GameChanger
+lacks. Adds creator economy to their 9M user base.
+$2M – $10M
+HudlSocial layer + scouting + live scoring complement
+video analysis. Full-stack sports platform.
+$3M – $15M
+TeamSnapContent + streaming + AI features to transform
+logistics app into engagement platform.
+$1M – $5M
+$5K
+MONTHLY RECURRING
+REVENUE
+$50K
+MONTHLY RECURRING
+REVENUE
+$150K
+MONTHLY RECURRING
+REVENUE
+
+Private EquityRoll-up play in fragmented youth sports tech.
+Sportsphere as the consolidation platform.
+$2M – $8M
+$200B
+SPORTS TECH M&A
+Total deal value, 2025
+5–15x
+REVENUE MULTIPLE
+Sports SaaS acquisitions
+18–24
+MONTHS TO EXIT
+Target timeline
+$2–15M
+EXIT RANGE
+Based on traction
+Investor Return: At a $2.5M pre-money valuation and a conservative $5M exit, early investors see a
+2x return. At a $10M+ strategic acquisition driven by user traction and revenue, that return climbs to
+3–5x within 18–24 months.
+POWERED BY TITANAI • COMPLIANCE-FIRST AI INFRASTRUCTURE
+This document is confidential and intended solely for prospective investors and authorized parties. Distribution, reproduction, or
+disclosure without written consent from TitanAI LLC is prohibited. This investor brief does not constitute an offer to sell or a solicitation of
+an offer to buy securities. All projections are forward-looking estimates and not guarantees of future performance.

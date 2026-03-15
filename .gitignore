@@ -34,3 +34,10 @@ dist-ssr
 
 .env
 .vercel
+
+# Capacitor native projects (generated, large)
+android/
+ios/
+
+# Temporary work files
+.tmp/
